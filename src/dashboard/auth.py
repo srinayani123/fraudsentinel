@@ -2,6 +2,10 @@
 
 Handles email/password sign-in, sign-up, Google OAuth (PKCE flow), and
 password reset through Supabase.
+
+Redirect URLs are read from APP_BASE_URL env var, falling back to
+http://localhost:8501 for local development. In production (HF Spaces),
+APP_BASE_URL is set to the public Space URL.
 """
 
 from __future__ import annotations
@@ -14,6 +18,15 @@ from dotenv import load_dotenv
 from supabase import Client, create_client
 
 load_dotenv()
+
+
+# ----------------------------------------------------------------------
+# Base URL the app is served from. Used as the redirect target for OAuth
+# and password-reset flows. Defaults to localhost for dev; in production
+# (e.g., HF Spaces) set APP_BASE_URL to the public URL.
+# ----------------------------------------------------------------------
+def _get_base_url() -> str:
+    return os.getenv("APP_BASE_URL", "http://localhost:8501").rstrip("/")
 
 
 def _get_supabase_config():
@@ -97,7 +110,7 @@ def sign_in_with_google() -> Optional[str]:
     try:
         response = client.auth.sign_in_with_oauth({
             "provider": "google",
-            "options": {"redirect_to": "http://localhost:8501"},
+            "options": {"redirect_to": _get_base_url()},
         })
         return response.url
     except Exception as e:
@@ -110,7 +123,7 @@ def send_password_reset(email: str) -> tuple[bool, str]:
     if not client:
         return False, "Supabase not configured"
     try:
-        client.auth.reset_password_email(email, {"redirect_to": "http://localhost:8501"})
+        client.auth.reset_password_email(email, {"redirect_to": _get_base_url()})
         return True, "Password reset email sent. Check your inbox."
     except Exception as e:
         return False, f"Reset failed: {e}"

@@ -1,10 +1,10 @@
 # ============================================================================
 # FraudSentinel — Hugging Face Spaces Dockerfile
 # ============================================================================
-# Target platform: Hugging Face Spaces (Docker SDK)
+# Target: Hugging Face Spaces (Docker SDK)
 # Required port: 7860 (HF Spaces convention; auto-mapped to public HTTPS)
-# Base: Python 3.11 slim — small, has libstdc++ for xgboost/torch
-# Build time: ~10-15 min on HF servers (torch + xgboost + chromadb are heavy)
+# Base: Python 3.11 slim
+# Build time: ~10-15 min on HF servers
 # ============================================================================
 
 FROM python:3.11-slim
@@ -12,11 +12,11 @@ FROM python:3.11-slim
 # ----------------------------------------------------------------------------
 # System dependencies
 # ----------------------------------------------------------------------------
-# build-essential: needed for any pip wheels that compile from source
+# build-essential: needed for pip wheels that compile from source
 # git: needed if any pip install pulls from a git URL
 # curl: useful for healthcheck and debugging
 # libgomp1: required by xgboost (OpenMP runtime)
-# ca-certificates: required for HTTPS calls to Anthropic / Supabase / etc.
+# ca-certificates: required for HTTPS to Anthropic / Supabase / etc.
 # ----------------------------------------------------------------------------
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
@@ -27,53 +27,51 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # ----------------------------------------------------------------------------
-# Set up a non-root user (HF Spaces requirement)
-# HF Spaces runs containers as user 1000 by default, NOT root.
-# Files we want the app to write to (cache, ChromaDB) must be writable by 1000.
+# Install Python deps as ROOT into system site-packages.
+# This avoids the --user / sys.path mismatch where the streamlit CLI shim is
+# on PATH but the streamlit package isn't on Python's import path.
 # ----------------------------------------------------------------------------
-RUN useradd -m -u 1000 user
+WORKDIR /app
+
+COPY requirements-hf.txt /app/
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements-hf.txt
+
+# ----------------------------------------------------------------------------
+# Now create the non-root user that HF Spaces requires (UID 1000).
+# /app is owned by user so the app can read/write runtime files.
+# ----------------------------------------------------------------------------
+RUN useradd -m -u 1000 user && \
+    chown -R user:user /app
+
 USER user
 ENV HOME=/home/user \
-    PATH=/home/user/.local/bin:$PATH \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONNOUSERSITE=1
+    PYTHONPATH=/app
 
-WORKDIR $HOME/app
-
-# ----------------------------------------------------------------------------
-# Python dependencies
-# ----------------------------------------------------------------------------
-# Copy requirements first to leverage Docker layer caching — if requirements
-# don't change, this layer is cached and rebuilds are much faster
-# ----------------------------------------------------------------------------
-COPY --chown=user:user requirements-hf.txt ./
-RUN pip install --user --no-cache-dir --upgrade pip && \
-    pip install --user --no-cache-dir -r requirements-hf.txt
+WORKDIR /app
 
 # ----------------------------------------------------------------------------
-# Application code
+# Copy application code (after pip install for layer caching).
 # ----------------------------------------------------------------------------
-# Copy the rest of the app. .dockerignore excludes .venv, notebooks, mlruns,
-# raw data, tests, etc. — see .dockerignore for the full list.
-# ----------------------------------------------------------------------------
-COPY --chown=user:user . ./
+COPY --chown=user:user . /app/
 
 # ----------------------------------------------------------------------------
-# Pre-warm: download embedding model so first user request isn't slow
-# bge-base-en-v1.5 is ~440MB; downloading it at build time means cold-start
-# users don't wait for the download.
+# Pre-warm: download embedding model so first user request isn't slow.
+# bge-base-en-v1.5 is ~440MB — downloading at build time means cold-start
+# users don't wait. Failure here is non-fatal (will download on first use).
 # ----------------------------------------------------------------------------
 RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('BAAI/bge-base-en-v1.5')" || echo "Pre-warm skipped (will download on first use)"
 
 # ----------------------------------------------------------------------------
-# Create writable dirs the app expects
+# Create writable runtime dirs.
 # ----------------------------------------------------------------------------
-RUN mkdir -p $HOME/app/data/cache && \
-    mkdir -p $HOME/app/models/chroma_db
+RUN mkdir -p /app/data/cache && \
+    mkdir -p /app/models/chroma_db
 
 # ----------------------------------------------------------------------------
-# Streamlit config — disable telemetry and CORS for embedded use
+# Streamlit runtime config.
 # ----------------------------------------------------------------------------
 ENV STREAMLIT_SERVER_PORT=7860 \
     STREAMLIT_SERVER_ADDRESS=0.0.0.0 \
@@ -81,21 +79,22 @@ ENV STREAMLIT_SERVER_PORT=7860 \
     STREAMLIT_SERVER_ENABLE_CORS=false \
     STREAMLIT_SERVER_ENABLE_XSRF_PROTECTION=true \
     STREAMLIT_BROWSER_GATHER_USAGE_STATS=false \
-    STREAMLIT_SERVER_FILE_WATCHER_TYPE=none \
-    PYTHONPATH=/home/user/app
+    STREAMLIT_SERVER_FILE_WATCHER_TYPE=none
 
 # ----------------------------------------------------------------------------
-# Healthcheck — HF Spaces uses this to know when the app is ready
+# Healthcheck — HF uses this to detect when the app is ready.
 # ----------------------------------------------------------------------------
 HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
     CMD curl --fail http://localhost:7860/_stcore/health || exit 1
 
 # ----------------------------------------------------------------------------
-# Run
+# Run.
+# Use `python -m streamlit` (not bare `streamlit`) to guarantee the right
+# Python interpreter and import path.
 # ----------------------------------------------------------------------------
 EXPOSE 7860
 
-CMD ["streamlit", "run", "src/dashboard/app.py", \
+CMD ["python", "-m", "streamlit", "run", "src/dashboard/app.py", \
      "--server.port=7860", \
      "--server.address=0.0.0.0", \
      "--server.headless=true", \
