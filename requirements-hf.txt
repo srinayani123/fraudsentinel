@@ -2,44 +2,57 @@
 # FraudSentinel — Hugging Face Spaces requirements
 # ============================================================================
 # Production-only deps. No mlflow, jupyter, kaggle, dev/test tools.
-# Versions pinned for reproducible builds.
+# All versions pinned to match the working local environment so HF Spaces
+# builds the exact same dependency tree that works in development.
 # ============================================================================
 
 # ---- Core data ----
-pandas==2.2.3
+pandas==2.2.2
 numpy==1.26.4
-pyarrow==16.1.0
+pyarrow==24.0.0
 
 # ---- ML models ----
 xgboost==2.0.3
-scikit-learn==1.5.2
+scikit-learn==1.4.2
 shap==0.46.0
 
-# ---- Deep learning ----
-# CPU-only torch — HF Spaces free tier doesn't have GPU, this saves ~2GB
-torch==2.4.1 --index-url https://download.pytorch.org/whl/cpu
-# Fallback if the above index fails on HF (rare):
-# torch==2.4.1+cpu
+# ---- Deep learning (CPU-only torch — HF Spaces free tier doesn't have GPU) ----
+torch==2.2.2 --index-url https://download.pytorch.org/whl/cpu
 
 # ---- Embeddings ----
-sentence-transformers==3.0.1
-transformers==4.44.2
+sentence-transformers==2.7.0
+transformers==4.57.6
+tokenizers==0.22.2
 
 # ---- Vector store ----
-chromadb==0.5.5
+chromadb==0.5.0
+chroma-hnswlib==0.7.3
 
 # ---- LLM ----
-anthropic==0.39.0
+anthropic==0.97.0
 
 # ---- Web framework ----
-streamlit==1.39.0
-plotly==5.24.1
+streamlit==1.35.0
+plotly==5.22.0
+altair==5.3.0
 
-# ---- Auth ----
+# ---- Auth (Supabase + family — all version-locked together at 2.29.0) ----
 supabase==2.29.0
+supabase-auth==2.29.0
+supabase-functions==2.29.0
+storage3==2.29.0
+postgrest==2.29.0
+realtime==2.29.0
+
+# ---- Config ----
 python-dotenv==1.0.1
 
-# ---- API (optional — keeps FastAPI surface available if needed) ----
-fastapi==0.115.0
-uvicorn==0.30.6
-pydantic==2.9.2
+# ---- API (optional, keeps FastAPI surface available) ----
+fastapi==0.111.0
+uvicorn==0.30.1
+pydantic==2.13.3
+pydantic-core==2.46.3
+
+# ---- HTTP ----
+httpx==0.28.1
+requests==2.32.2
