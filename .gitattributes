@@ -3,4 +3,5 @@ models/*.pt filter=lfs diff=lfs merge=lfs -text
 models/*.pkl filter=lfs diff=lfs merge=lfs -text
 models/chroma_db/** filter=lfs diff=lfs merge=lfs -text
 data/samples/*.parquet filter=lfs diff=lfs merge=lfs -text
+models/*.npz filter=lfs diff=lfs merge=lfs -text
 *.npz filter=lfs diff=lfs merge=lfs -text
