@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_010",
+  "title": "$0 Trial Validation Chain Preceding Card Testing Campaigns",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster uses stolen card credentials to enroll in multiple $0.00 trial subscriptions across streaming, software, and digital service merchants to validate card status before monetization. Pattern shows systematic $0 authorization sweeps across 8-15 merchants within 45-90 minutes, targeting services with instant trial activation (Spotify, Adobe trials, VPN services). The $0 transactions generate auth-only holds that confirm card validity, BIN characteristics, and fraud detection sensitivity without triggering amount-based alerts. Typically followed 2-6 hours later by high-value card-not-present fraud attempts at different merchants once validation is complete. The trial signups show rotating P_emaildomain values from disposable email providers while card1, addr1, and dist1 remain constant. MCC codes cluster in 5815 (digital goods), 7372 (software services), and 4899 (cable/streaming), all known for frictionless $0 trial policies.",
+  "indicators": [
+    "TransactionAmt == $0.00 for 8-15 consecutive transactions within 45-90 minute window on same card1",
+    "MCC diversity shows 3+ distinct categories: 5815, 7372, 4899, 5968 within single session",
+    "P_emaildomain changes 6+ times across transactions while card1/addr1/dist1 remain identical",
+    "card1_txn_count_1hr spikes from 0 to 12+ all at $0.00, followed by 2-6 hour gap before next activity",
+    "ProductCD always 'W' or 'C' (web/online services), no physical goods or in-person transactions",
+    "Disposable email domains present: guerrillamail, temp-mail, 10minutemail in 70%+ of P_emaildomain values",
+    "addr1 and dist1 show no variation despite 10+ different merchant IDs and email changes"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card is used for 8-15 zero-dollar trial signups across streaming, software, and VPN services within 45-90 minutes, each with a different disposable email address but identical billing details. After a 2-6 hour quiet period, the same card attempts high-value purchases at unrelated merchants.",
+  "reasoning": "Fraudsters use free trials to test if stolen cards are active and unblocked without triggering fraud alerts on dollar amounts. The rapid email rotation with static card details reveals they're validating multiple stolen credentials before cashing out with expensive fraudulent purchases.",
+  "indicator_explanations": [
+    "Card is hitting trial signup pages repeatedly with zero-dollar authorizations",
+    "Attacker tests card across unrelated merchant categories in one sitting",
+    "Email address rotates constantly while card and location stay frozen",
+    "Card suddenly fires off a dozen free trials then goes silent",
+    "All activity is digital subscriptions, no physical purchases or stores",
+    "Most email addresses are temporary burner services built for fraud",
+    "Shipping and distance fields never change despite merchant and email rotation"
+  ]
+}

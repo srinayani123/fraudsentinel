@@ -1,0 +1,27 @@
+{
+  "id": "case_device_takeover_019",
+  "title": "Clean-Behavior Device Takeover with Fresh Device-Card Pairing and Missing Historical Context",
+  "pattern": "device_takeover",
+  "narrative": "A fraudster leverages stolen cardholder credentials to initiate a transaction from a completely new device that has never interacted with the card before. The behavioral profile appears entirely legitimate: transaction amount falls within the cardholder's normal spending range, velocity remains moderate, the purchase occurs during standard business hours, and email addresses match expected patterns. However, critical device identity features reveal the fraud surface. The device-card pairing counter registers zero, indicating this is the first-ever interaction between this specific device and payment instrument. Additionally, device-level aggregation counters show abnormally low values inconsistent with an established cardholder's typical hardware usage patterns. Engineered identity verification features flag mismatches between the device fingerprint and historical cardholder profiles. The fraudster operates from their own compromised hardware while mimicking normal transaction characteristics, creating a clean behavioral signature that masks the underlying account takeover.",
+  "indicators": [
+    "D1 = 0 indicating first-ever device-card pairing with no historical interaction",
+    "D10 < 10 showing minimal device-level transaction history counter aggregation",
+    "card1_amt_zscore between -1.0 and +1.0 demonstrating amount within cardholder's typical spending pattern",
+    "D4 < 15 indicating device has low cumulative activity counter inconsistent with established cardholder",
+    "V200 > 5.8 (p90 threshold) flagging engineered identity verification mismatch signal",
+    "card1_txn_count_24h < 8 showing normal velocity without suspicious transaction clustering",
+    "D15 < 30 revealing limited device-level payment method diversity counter below established user baseline"
+  ],
+  "indicator_explanations": [
+    "The device has never been seen with this card before in any transaction",
+    "Device shows very little historical transaction activity in the system records",
+    "Purchase amount fits perfectly within the cardholder's normal spending habits",
+    "Device activity counter is far too low for an established cardholder's typical hardware",
+    "Identity verification model detects mismatch between device fingerprint and cardholder profile",
+    "Transaction frequency appears normal with no rapid-fire purchasing behavior",
+    "Device shows limited payment method history inconsistent with a longtime cardholder"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Fraudster uses stolen credentials from a never-before-seen device while keeping transaction amounts, timing, and velocity within the victim's normal patterns. Device identity counters and verification features expose the takeover despite clean behavioral signals.",
+  "reasoning": "Legitimate cardholders conduct transactions from devices they have used before, building device-card pairing history. A zero device-card counter combined with low device-level aggregations and identity verification mismatches—while all behavioral metrics remain normal—indicates credential theft where the attacker operates from their own hardware."
+}

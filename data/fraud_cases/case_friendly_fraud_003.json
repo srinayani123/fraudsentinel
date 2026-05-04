@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_003",
+  "title": "Full-Term Subscription Exploitation with Strategic Chargeback Timing",
+  "pattern": "friendly_fraud",
+  "narrative": "Cardholder enrolls in premium subscription service ($49.99-$199.99 monthly), maintains active usage throughout entire billing cycle, then disputes final charge 28-30 days post-transaction as 'unauthorized' or 'service not received.' Pattern shows consistent login activity, content downloads, or API calls throughout subscription period. Fraudster maximizes value extraction by disputing only after consuming full month of service. Often targets digital services with high marginal delivery cost but difficult-to-prove usage (streaming, SaaS, online courses). Device fingerprints match across all authenticated sessions. Chargeback filed strategically within 30-day window when merchant liability highest and usage logs may be incomplete. Repeat offenders cycle through multiple merchants in same vertical (MCC 5815, 5968, 7372) with 45-90 day gaps between disputes.",
+  "indicators": [
+    "TransactionAmt between $49.99-$199.99 for recurring subscription ProductCD='S' or 'W'",
+    "Chargeback filed exactly 28-30 days post-transaction (optimal dispute window)",
+    "card1_txn_count_30d shows 3-8 similar subscription charges to different merchants in MCC 5815/5968/7372",
+    "Device fingerprint matches 15+ authenticated login sessions during disputed billing period",
+    "Time between subscription transactions averages 45-90 days (cooling off period between targets)",
+    "P_emaildomain is established provider (gmail.com, yahoo.com) with account age >180 days",
+    "No failed authentication attempts or password resets during active subscription period"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Customer actively uses a premium subscription service throughout the entire billing period—showing consistent logins, downloads, or API activity—then files a chargeback at day 28-30 claiming the charge was unauthorized or service not received. The pattern repeats across multiple similar merchants with 45-90 day gaps between disputes.",
+  "reasoning": "The fraudster intentionally consumes the full value of the service before disputing the payment, exploiting merchant liability windows and the difficulty of proving digital service usage. Authentic login sessions and zero authentication issues prove the cardholder knowingly used the service, making the 'unauthorized' claim demonstrably false.",
+  "indicator_explanations": [
+    "Subscription price hits the sweet spot where chargebacks often succeed without deep investigation",
+    "Dispute timing exploits the window where merchants have weakest chargeback defense documentation",
+    "Cardholder is strategically rotating through multiple subscription services to spread the fraud",
+    "User actively logged in throughout billing period then falsely claims unauthorized subscription",
+    "Fraudster waits months between targets to avoid pattern detection across merchant complaints",
+    "Legitimate-looking email from major provider with established history strengthens fake dispute credibility",
+    "Account shows zero security issues proving user had full control during disputed period"
+  ]
+}

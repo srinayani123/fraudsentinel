@@ -1,0 +1,27 @@
+{
+  "id": "case_device_takeover_016",
+  "title": "Headless Browser Automation with Stolen Credentials and Clean Behavioral Profile",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster uses stolen cardholder credentials but operates from an automated headless browser environment (Puppeteer, Selenium, PhantomJS) to execute transactions. The cardholder's typical spending behavior is replicated perfectly—amounts match historical patterns, velocity stays within normal bounds, transactions occur during regular daytime hours, and email domains align. However, device fingerprinting reveals browser automation signatures that genuine cardholders never exhibit. The D-fields expose characteristics of scripted environments: unusual browser configurations, missing or spoofed user-agent components, absent interaction timings, and device properties inconsistent with organic human browsing. Despite behavioral mimicry, the automation leaves forensic traces in device telemetry that distinguish it from legitimate cardholder sessions originating from recognized personal devices.",
+  "indicators": [
+    "D1 = 0 indicating first-time device-card pairing despite transaction appearing behaviorally normal",
+    "D10 > 200 (p90 threshold), elevated device timedelta feature flagging automation timing patterns",
+    "D15 > 300 (p90 threshold), high device-browser configuration score indicating headless environment signatures",
+    "card1_amt_zscore between -1.2 and +1.2, amount fits cardholder historical spending pattern to avoid detection",
+    "D4 < 10 (below p25), unusually low device interaction count suggesting scripted rather than organic user behavior",
+    "TransactionAmt between 50-180 (interquartile range), mid-range amount consistent with account's typical profile",
+    "card1_txn_count_24h < 12 with emails_match=1 and txn_hour between 9-20, all behavioral signals appearing legitimate"
+  ],
+  "indicator_explanations": [
+    "The card has never been used from this device in transaction history",
+    "Device timing telemetry shows patterns consistent with automated script execution rather than human interaction",
+    "Browser configuration fingerprint matches known signatures of headless automation tools like Puppeteer or Selenium",
+    "Transaction amount falls within the cardholder's normal spending range to blend in",
+    "Device shows abnormally few user interactions suggesting programmatic control rather than manual browsing",
+    "Amount selected is mid-range for this account avoiding suspiciously high or low transaction values",
+    "Transaction velocity email matching and time-of-day all appear normal masking the device-level fraud"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Fraudster replicates cardholder's spending behavior perfectly using stolen credentials but operates from a headless browser environment. Device fingerprinting exposes automation signatures that genuine cardholders never generate despite behavioral signals appearing completely legitimate.",
+  "reasoning": "Legitimate cardholders do not transact from headless browser automation tools. The presence of automation signatures combined with first-time device-card pairing indicates credential theft where the fraudster has replicated behavioral patterns but cannot mask the technical fingerprint of their scripted environment."
+}

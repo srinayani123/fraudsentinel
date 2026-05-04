@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_027",
+  "title": "Fresh Domain Synthetic Identity with Gradual Trust Building",
+  "pattern": "synthetic_identity",
+  "narrative": "A synthetic identity leverages a newly registered email domain (under 90 days old) to establish credibility through calculated spending progression. The fraudster initiates account with low-value purchases ($15-45) across common MCCs (5411 grocery, 5912 pharmacy) for the first 7-14 days, maintaining 2-3 transactions daily. After establishing baseline card1_txn_count_7d of 18-25, they pivot to aggressive spending: transaction amounts jump from $40 average to $650-1200 within 48 hours, targeting high-resale categories (electronics MCC 5732, jewelry MCC 5944). The P_emaildomain shows WHOIS registration date within 60-90 days of first transaction. Shipping addresses rotate (3+ distinct addr1 values) while billing remains constant. AVS mismatches increase from 0% to 40%+ during the bust-out phase, and dist1 (distance between addresses) spikes to 150+ miles.",
+  "indicators": [
+    "P_emaildomain registration age under 90 days at account creation",
+    "card1_amt_zscore jumps from <0.5 to >3.0 within 48-hour window",
+    "card1_txn_count_1d increases from 2-3 baseline to 8-12 during bust-out",
+    "3+ distinct addr1 values used across transaction history with same card1",
+    "TransactionAmt progression: 7-day average $38, then 48-hour spike to $850+ mean",
+    "dist1 values exceed 150 miles between consecutive transactions",
+    "AVS mismatch rate transitions from 0% (days 1-10) to 35-50% (days 11-15)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A new email domain (registered within 90 days) shows controlled low-value spending ($15-45) for 1-2 weeks, then suddenly jumps to high-ticket purchases ($650-1200) with rotating shipping addresses and increasing AVS mismatches.",
+  "reasoning": "The fraudster builds artificial payment history to pass velocity checks and credit limits, then executes a coordinated bust-out targeting resellable goods before the synthetic identity collapses or chargebacks arrive.",
+  "indicator_explanations": [
+    "Email domain was created recently, suggesting fabricated identity setup",
+    "Purchase amounts suddenly explode far beyond the established spending pattern",
+    "Daily transaction frequency spikes dramatically during the bust-out phase",
+    "Multiple different billing addresses are cycled through with same card",
+    "Spending average rockets from modest baseline to luxury-tier amounts suddenly",
+    "Transactions appear in locations impossibly far apart in rapid succession",
+    "Address verification failures surge after initial clean period of matches"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_023",
+  "title": "Cross-Border E-Commerce Reshipping Mule Pattern with Disposable Email Infrastructure",
+  "pattern": "geo_anomaly",
+  "narrative": "Fraudster purchases high-value electronics ($800-$1,500 TransactionAmt) using compromised cards with U.S. billing addresses but ships to residential addresses in package-forwarding hubs (Miami FL, Laredo TX, Blaine WA). Transactions show billing country USA (addr1) while R_emaildomain indicates temporary email services (mailinator, guerrillamail, temp-mail) recently created. The dist1 feature shows 2,000-4,000 km separation between billing and shipping coordinates. Fraudster targets ProductCD 'W' (electronics) exclusively, places orders during U.S. business hours (txn_hour 9-17) to appear legitimate, but card1 shows no prior cross-border shipping history in card1_addr_country_count trailing 30 days. Orders funnel through 2-3 different merchants (distinct MIDs) within 48 hours, all destined for the same reshipping facility before international forwarding.",
+  "indicators": [
+    "TransactionAmt consistently $800-$1,500 targeting ProductCD 'W' electronics",
+    "dist1 value exceeds 2,000 km between billing addr1 and shipping coordinates",
+    "R_emaildomain matches disposable email providers (mailinator, guerrillamail, 10minutemail)",
+    "card1_addr_country_count = 1 (USA only) but shipping to known package-forwarding zip codes",
+    "Multiple MIDs (2-3 merchants) used within 48-hour window, identical shipping address",
+    "All transactions during txn_hour 9-17, is_night = 0 to mimic legitimate buyer behavior",
+    "Email domain registration age < 72 hours per WHOIS lookup correlation"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "High-value electronics purchases ($800-$1,500) ship to package-forwarding hubs thousands of kilometers from the U.S. billing address, using newly created disposable email accounts and cards with no history of cross-border shipping.",
+  "reasoning": "Criminals use stolen U.S. cards to buy electronics for international resale, routing through reshipping services to obscure the final destination and avoid direct international shipping flags that would trigger fraud detection.",
+  "indicator_explanations": [
+    "Purchases cluster in mid-range electronics price bracket typical of resale fraud",
+    "Billing and shipping locations are separated by international shipping distances",
+    "Email comes from temporary throwaway service that self-destructs after hours",
+    "Card registered domestically but ships to addresses known for package forwarding",
+    "Same delivery address receives packages from different stores within two days",
+    "Transactions occur only during business hours to appear like normal shopping",
+    "Email domain was registered within the last three days before purchase"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_022",
+  "title": "Distributed Micro-Merchant Card Validation Through Sub-Dollar Test Network",
+  "pattern": "card_testing",
+  "narrative": "Fraudster validates stolen card portfolio by spreading $0.50-$0.99 authorization tests across 15-40 different micro-merchants (MCC 5734, 5816, 5999) within a 6-hour window. Each merchant processes exactly 1-3 cards before fraudster rotates to next MID, avoiding single-merchant velocity triggers. Transactions show identical device fingerprints but varying P_emaildomain across merchants (gmail.com, yahoo.com, outlook.com rotation). Pattern emerges at card BIN level: same card1 prefix (first 6 digits) hitting 8+ distinct merchant IDs with TransactionAmt consistently under $1.00. Typically occurs during 22:00-04:00 UTC (is_night=1). Successful validations followed 18-36 hours later by full fraud monetization at high-value merchants. Card1_txn_count_24h shows 12-35 attempts. Dist1 values range 1500-8000km indicating VPN/proxy rotation. ProductCD consistently shows 'W' (web-based). No AVS or CVV failures during test phaseâ€”fraudster has full card data.",
+  "indicators": [
+    "Same card1 (BIN+last4) appears across 8+ distinct MIDs within 6 hours",
+    "TransactionAmt ranges $0.50-$0.99 with 85%+ transactions in this band",
+    "card1_txn_count_6h between 12-35 with no single MID seeing >3 attempts",
+    "is_night=1 for 90%+ of test transactions (22:00-04:00 UTC window)",
+    "P_emaildomain rotates across 4+ free providers while DeviceInfo remains constant",
+    "dist1 variance >1000km across transaction sequence indicating geo-hopping",
+    "ProductCD='W' exclusively with MCC codes 5734/5816/5999 (digital goods micro-merchants)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "The same card hits 8 or more different small online merchants with charges between $0.50 and $0.99 within a few hours, all from the same device but using different email addresses. These micro-transactions happen mostly at night and show wildly varying geographic locations despite identical device fingerprints.",
+  "reasoning": "The fraudster is testing a batch of stolen cards to see which ones still work before attempting larger purchases. By spreading tiny charges across many merchants and rotating emails and locations, they avoid triggering any single merchant's fraud detection while validating the full card data before the real theft.",
+  "indicator_explanations": [
+    "Single card hits numerous different merchants in rapid succession across hours",
+    "Nearly all purchases cluster in the sub-dollar testing sweet spot",
+    "Activity spreads thinly across merchants to avoid per-merchant velocity flags",
+    "Testing activity concentrates in overnight hours when monitoring may be lighter",
+    "Email address changes repeatedly while device fingerprint stays locked",
+    "Transactions bounce across wildly distant geographic locations during the sequence",
+    "All purchases target digital goods merchants vulnerable to automated micro-tests"
+  ]
+}

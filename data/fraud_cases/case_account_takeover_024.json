@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_024",
+  "title": "Address Injection Followed by High-Value Rush Purchase Pattern",
+  "pattern": "account_takeover",
+  "narrative": "Attacker gains account credentials and immediately adds a new shipping address (dist1 > 500km from historical addr1), then places a single high-value order ($800-$2,500) within 15-45 minutes to that fresh address. The legitimate account typically shows 6-18 months of purchase history with consistent delivery locations (addr1 entropy < 0.3) and average order values $45-$120. The fraudulent transaction occurs during off-hours (txn_hour between 01:00-05:00 local time) when legitimate user is typically inactive. Product selection shifts dramatically to high-resale electronics (ProductCD = 'C' or 'H') versus historical clothing/household purchases. Card verification passes (CVV match, AVS partial) because attacker uses saved payment method, but session features show new device fingerprint and IP geolocation mismatch of 800+ miles from P_emaildomain registration country.",
+  "indicators": [
+    "New R_emaildomain or addr1 added to account within 60 minutes before transaction",
+    "dist1 value exceeds 500km from historical median delivery location",
+    "TransactionAmt 4.5x-15x higher than card1_amt_mean from prior 90 days",
+    "Transaction occurs during txn_hour outside user's historical 95th percentile activity window",
+    "Device fingerprint (DeviceInfo hash) appears for first time on account",
+    "ProductCD category shift from historical modal category",
+    "Time delta between address addition and purchase < 45 minutes"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A previously consistent account suddenly adds a new shipping address over 500km away, then within 15-45 minutes places a single order worth 4.5-15x their normal spending during unusual hours (1-5 AM), shipping high-resale electronics to the new address from a device never seen before on the account.",
+  "reasoning": "Criminals who steal credentials want to monetize quickly before the victim notices, so they rush a high-value order to an address they control, targeting resellable goods like electronics that can be fenced for cash — the speed, distance, value spike, and device change together reveal someone other than the account owner is making the purchase.",
+  "indicator_explanations": [
+    "Account's email or shipping address was just changed moments before purchase",
+    "Delivery destination is hundreds of miles from where this user normally ships",
+    "Purchase amount is vastly larger than this card's typical spending pattern",
+    "Transaction happens at an unusual hour for this account's activity rhythm",
+    "Account is suddenly being accessed from a completely new device",
+    "Purchase category doesn't match what this user normally buys",
+    "Attacker moved fast from hijacking account to rushing through expensive order"
+  ]
+}

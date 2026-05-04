@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_021",
+  "title": "Post-Consumption Dispute: Strategic Chargeback After Premium Content Access",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster subscribes to premium streaming or digital content service at $14.99-$49.99 monthly, maintains active account for 28-45 days consuming content heavily, then initiates chargeback claiming unauthorized transaction. Pattern shows legitimate payment behavior initiallyâ€”subscription auto-renews 1-2 cycles, user logs 40+ sessions totaling 80+ hours content consumption. On day 32-43, cardholder disputes all charges as fraud despite documented account activity. TransactionAmt shows consistent monthly recurring pattern. Card shows no prior chargeback history across merchants, making dispute appear credible to issuer. Fraudster exploits subscription merchant reluctance to contest chargebacks with detailed usage logs. addr1 remains stable, P_emaildomain matches legitimate provider (gmail.com, yahoo.com). Device fingerprints show iPhone/Android app usage throughout period. MCC 5968 (continuity subscriptions) makes chargebacks particularly painful as merchants face higher representment burden.",
+  "indicators": [
+    "TransactionAmt = $14.99-$49.99 recurring monthly charges, 2-3 successful auto-renewals before dispute",
+    "Chargeback filed 32-43 days after initial subscription, after 40+ documented login sessions",
+    "card1_chargeback_count = 0 prior disputes across all merchants in 12-month lookback",
+    "ProductCD = 'W' (web/digital service) with MCC 5968 or 7922 (streaming/digital content)",
+    "addr1 and P_emaildomain stable across all transactions, no velocity flags during active period",
+    "Dispute reason code 10.4 (fraud) despite device fingerprint consistency across 28-45 day period",
+    "Content consumption logged: 80+ hours streaming or 200+ article views before chargeback initiation"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A customer subscribes to a streaming or digital content service, uses it heavily for 4-6 weeks with 40+ logins and 80+ hours of consumption, then disputes all charges as unauthorized fraud despite stable account details and consistent device usage throughout.",
+  "reasoning": "The fraudster exploits the chargeback system to get free premium content—they intentionally consume the service knowing they'll claim fraud later, betting the merchant won't fight back with usage logs because subscription disputes have high representment costs.",
+  "indicator_explanations": [
+    "Monthly subscription charges cycle successfully multiple times before any complaint",
+    "Customer disputes after extensively using the service for over a month",
+    "Cardholder has clean payment history with no previous chargeback patterns",
+    "Transaction involves streaming or digital content services purchased online",
+    "Customer details remain unchanged throughout subscription indicating legitimate account control",
+    "Claims fraud despite using same device consistently throughout entire subscription period",
+    "Heavy content consumption documented before declaring the charges unauthorized"
+  ]
+}

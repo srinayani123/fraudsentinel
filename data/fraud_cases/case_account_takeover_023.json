@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_023",
+  "title": "Phone Swap Prelude: Contact Update Masking Immediate High-Value Withdrawal",
+  "pattern": "account_takeover",
+  "narrative": "Attacker gains account credentials and immediately updates the registered phone number to block 2FA alerts, then rushes to extract value before victim notices. Pattern shows phone change timestamp within 15-45 minutes before first fraudulent transaction, typically a $400-$900 digital goods purchase or P2P transfer. The takeover sequence often includes failed login attempts from new device_id in preceding 2-6 hours, followed by successful login after phone swap. Transactions post-phone-change show mismatched geolocation: dist1 values exceeding 500km between billing addr1 and transaction IP location. Card velocity spikes dramatically: card1_txn_count_24hr jumps from baseline 0-2 to 4-8 transactions. Fraudster prioritizes low-friction channelsâ€”ProductCD 'W' for digital wallets or 'C' for card-not-present with stored CVV. Email domain remains unchanged (legitimate P_emaildomain) but R_emaildomain often shifts to burner domains for receipts.",
+  "indicators": [
+    "Phone number change logged 15-45 minutes before first suspicious transaction",
+    "dist1 > 500km between registered addr1 and transaction IP geolocation",
+    "card1_txn_count_24hr increases from 0-2 baseline to 4-8 transactions post-phone-change",
+    "TransactionAmt concentration in $400-$900 range for digital goods (ProductCD 'W' or 'C')",
+    "2-5 failed login attempts from new device_id in 2-6 hours preceding phone update",
+    "R_emaildomain switches to disposable/temporary email services while P_emaildomain stays constant",
+    "First transaction occurs during is_night=1 hours (txn_hour 22-05) despite account's daytime usage history"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A phone number change occurs 15-45 minutes before a burst of 4-8 transactions totaling $400-$900, often for digital goods, with the transaction IP located 500+ km from the billing address. Failed logins from a new device precede the phone swap, and receipt emails route to temporary domains while the primary email stays unchanged.",
+  "reasoning": "The attacker has stolen login credentials and updates the phone number to silence two-factor authentication alerts, creating a narrow window to drain funds before the legitimate owner notices. The rushed sequence—credential stuffing attempts, phone swap, immediate high-value purchases from a distant location—reveals an orchestrated takeover designed to maximize extraction speed.",
+  "indicator_explanations": [
+    "Phone number was just changed moments before the fraud burst started",
+    "Transaction originates from a location nowhere near the registered billing address",
+    "Card suddenly wakes up with flurry of transactions after being dormant",
+    "Amounts cluster in sweet spot for gift cards and digital goods",
+    "Multiple failed logins from unknown device preceded the account changes",
+    "Recipient email flips to burner service while purchaser email stays the same",
+    "Account suddenly transacts at night despite owner's established daytime shopping pattern"
+  ]
+}

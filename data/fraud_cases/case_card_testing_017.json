@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_017",
+  "title": "Charity MCC Micro-Donation Card Validation with Escalation Pattern",
+  "pattern": "card_testing",
+  "narrative": "Fraudsters exploit charitable organizations (MCC 8398, 8641) with their historically lower fraud controls and reluctance to dispute small donations. Attack begins with 8-15 micro-donations of $1.00-$3.00 across multiple charity merchants within 45-90 minutes, testing card validity with minimal risk of immediate blocks. Successful cards show immediate escalation: within 2-6 hours, the same card attempts $200-$800 purchases at high-risk MCCs (5735 music stores, 5815 digital goods, 5941 sporting goods). The charity transactions cluster in late-night hours (00:00-05:00 UTC) when fraud teams have reduced coverage. Email domains are temporary services (mailinator.com, guerrillamail.com) with card1_txn_count_1day jumping from 0 to 12-18. Distance between billing (dist1) and merchant shows 800+ miles, while P_emaildomain and R_emaildomain mismatch in 95% of cases.",
+  "indicators": [
+    "8-15 transactions to MCC 8398/8641 merchants with TransactionAmt between $1.00-$3.00 within 45-90 minute window",
+    "card1_txn_count_1day increases from 0 to 12+ with charity MCCs comprising first 8-15 transactions chronologically",
+    "Escalation pattern: $200-$800 purchases at MCC 5735/5815/5941 within 2-6 hours after initial charity donations",
+    "85%+ of charity test transactions occur during txn_hour 0-5 (00:00-05:00 UTC)",
+    "P_emaildomain matches temporary email services (mailinator, guerrillamail, tempmail) in 90%+ of transactions",
+    "dist1 exceeds 800 miles between billing address and charity merchant location",
+    "card1_amt_zscore spikes from <0.5 during testing phase to >3.5 during exploitation phase"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple small donations ($1-$3) to charities within 90 minutes, followed within hours by large purchases ($200-$800) at digital goods or sporting goods merchants using the same card. Charity transactions cluster in overnight hours with temporary email addresses and distant billing locations.",
+  "reasoning": "Criminals use charity donations as low-risk card validation because nonprofits rarely flag small gifts, then immediately exploit confirmed-valid cards for high-value fraudulent purchases before the cardholder notices unauthorized activity.",
+  "indicator_explanations": [
+    "Card makes rapid-fire micro-donations to charities to test if it works",
+    "Card goes from dormant to suddenly active with charity donations leading the burst",
+    "After donation tests succeed, card pivots to expensive electronics or clothing purchases",
+    "Testing donations happen in the dead of night when victims are asleep",
+    "Email address comes from temporary disposable email services used once and discarded",
+    "Billing address is hundreds of miles away from the charity merchant locations",
+    "Spending amount jumps from tiny test amounts to massively abnormal high-value purchases"
+  ]
+}

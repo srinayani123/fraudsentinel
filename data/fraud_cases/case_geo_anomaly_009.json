@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_009",
+  "title": "Tor Exit Node Laundering with Rotating Residential Proxies",
+  "pattern": "geo_anomaly",
+  "narrative": "Fraudster uses compromised card to make 8-12 low-value transactions ($23-$89) over 72 hours, originating from 4-6 different Tor exit nodes in Netherlands, Germany, and Romania while billing address shows California. Transaction metadata reveals residential IP classifications but with abnormal TTL values and missing browser fingerprint consistency. Purchases target digital goods (ProductCD='W') from merchants with lax fraud controls. P_emaildomain rotates between privacy-focused providers (protonmail, tutanota) created within 48 hours of first transaction. The fraudster maintains consistent device_name values but UserAgent strings mismatch the claimed OS. Pattern emerges when card1_country_count reaches 4+ within 48-hour window while dist1 (distance between billing/IP) exceeds 8,000 km consistently. Chargeback rates for similar Tor-origin transactions at these MIDs historically exceed 78%.",
+  "indicators": [
+    "dist1 > 8000 km on all transactions with P_emaildomain in ['protonmail.com', 'tutanota.com', 'mailfence.com']",
+    "card1_country_count >= 4 within 48-hour window, all EU countries with known Tor exit nodes",
+    "TransactionAmt between $23-$89, ProductCD='W', targeting 3+ different MIDs with MCC 5816 or 5968",
+    "IP classification shows 'residential' but TCP TTL values inconsistent (64, 128, 255 mixed)",
+    "P_emaildomain account age < 72 hours from email_creation_date for 100% of transactions",
+    "device_name consistent but UserAgent OS mismatch (claims Windows, headers show Linux kernel)",
+    "card1_txn_count_24h reaches 6+ with zero AVS or CVV match failures"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple small purchases ($23-$89) for digital goods originate from 4+ European countries within 48 hours while the card's billing address is in California, with distances consistently exceeding 8,000 km. The transactions show residential IP classifications but reveal mismatched device fingerprints—consistent device names paired with conflicting operating systems and abnormal network signatures.",
+  "reasoning": "The fraudster is using stolen card details with Tor exit nodes and residential proxies to disguise their true location and evade basic geo-blocking, while privacy email domains created within 72 hours prevent victim notification. The combination of impossible geographic velocity, technical inconsistencies in device data, and targeting of merchants with weak fraud controls indicates deliberate carding activity designed to maximize approval rates before chargebacks hit.",
+  "indicator_explanations": [
+    "Card travels extreme distances while using privacy-focused encrypted email services",
+    "Card hops across multiple European countries known for Tor infrastructure",
+    "Small digital purchases spread across multiple merchants in same category",
+    "IP claims residential origin but network fingerprints show proxy rotation",
+    "Email account was created within last three days for every transaction",
+    "Device fingerprint stays constant but operating system details contradict each other",
+    "Card processes multiple transactions without triggering any verification failures"
+  ]
+}

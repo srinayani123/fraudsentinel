@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_012",
+  "title": "Rapid Address Injection Before High-Value Purchase Pattern",
+  "pattern": "account_takeover",
+  "narrative": "Attacker gains account credentials and immediately adds a new shipping address (addr1 changes within account history), then places a $800-2400 order within 15-90 minutes to the newly added location. The dist1 value (distance between billing and shipping) typically exceeds 500km, often crossing state lines. Card velocity shows normal monthly spend of $200-400, then sudden spike with card1_amt_zscore above 3.5. The new address often has addr1_txn_count_1day = 1 (first transaction ever to that location). Email domain remains unchanged (legitimate customer's email), but ProductCD shifts to high-resale items like electronics (ProductCD = 'W' for physical goods). Purchase occurs during off-hours for account's historical pattern, with txn_hour showing 2-5 AM when customer typically transacts 9 AM-9 PM. No failed authentication attempts visible in transaction data, suggesting credential stuffing success.",
+  "indicators": [
+    "addr1 different from historical shipping address with dist1 > 500km",
+    "TransactionAmt $800-2400 when card1_amt_30day_avg < $450",
+    "card1_amt_zscore > 3.5 indicating deviation from spending pattern",
+    "addr1_txn_count_1day = 1 and addr1_txn_count_7day = 1",
+    "Time gap between address add and purchase: 15-90 minutes",
+    "txn_hour between 02:00-05:00 when historical txn_hour mode is 09:00-21:00",
+    "ProductCD = 'W' with high-resale category when historical purchases show different product mix"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A shipping address is added to an account and immediately used for a high-value purchase ($800-2400) to a location over 500km away, often during unusual hours (2-5 AM) when the cardholder normally shops during daytime. The transaction amount is 3.5+ standard deviations above the account's typical monthly spending pattern.",
+  "reasoning": "The attacker used stolen credentials to access a legitimate account, added their own shipping address, and rushed to complete a fraudulent order before the real customer notices. The tight timing window (15-90 minutes), geographic distance, spending spike, and odd-hour activity reveal the urgency and intent to intercept high-resale goods before account recovery occurs.",
+  "indicator_explanations": [
+    "Shipping address is suddenly hundreds of miles away from cardholder's normal location",
+    "Purchase amount is nearly triple the card's typical monthly spending average",
+    "Transaction size is extremely abnormal compared to this cardholder's spending baseline",
+    "Brand new shipping address with no transaction history on the account",
+    "Address was added to account just minutes before the large purchase",
+    "Transaction happens in the middle of the night outside cardholder's normal hours",
+    "High-resale item purchased when cardholder normally buys completely different product types"
+  ]
+}

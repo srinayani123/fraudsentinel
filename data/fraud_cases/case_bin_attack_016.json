@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_016",
+  "title": "BIN Attack Camouflaged Through Retailer Account Creation Velocity",
+  "pattern": "bin_attack",
+  "narrative": "Fraudsters exploit legitimate e-commerce signup flows to test 40-80 card numbers within a 90-minute window, masquerading as new customer registrations. Each transaction appears as a low-value ($0.50-$2.99) account verification charge or digital wallet add, typical of retailer onboarding processes. All attempts share identical P_emaildomain (temp-mail.org or similar disposable services), same addr1 postal code, and sequential card1 values suggesting systematic BIN enumeration. Transactions cluster in off-peak hours (txn_hour 2-5 AM) when fraud monitoring is reduced. The fraudster rotates through 8-12 distinct R_emaildomain values to avoid single-recipient flags, but dist1 remains constant at 0-15km from a consistent IP geolocation. Successful validations are followed 2-6 hours later by higher-value transactions ($150-$400) at different merchants using the same card1 values.",
+  "indicators": [
+    "40-80 transactions with sequential card1 values within 90-minute window, same addr1 and P_emaildomain",
+    "TransactionAmt consistently $0.50-$2.99, all flagged as ProductCD 'W' (digital wallet adds)",
+    "P_emaildomain matches disposable service (temp-mail.org, guerrillamail.com), R_emaildomain rotates across 8-12 domains",
+    "All transactions during txn_hour 2-5 AM, is_night=1, from same dist1 radius <15km",
+    "card1_txn_count_1day spikes to 40+ for new cards with card1_amt_zscore <0.5 on initial attempts",
+    "Validated card1 values reappear 2-6 hours later with TransactionAmt $150-$400 at unrelated MCCs",
+    "AVS mismatch rate >70% across the cohort despite shared addr1 postal code"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "40-80 small charges ($0.50-$2.99) hit the same retailer within 90 minutes during early morning hours (2-5 AM), all using sequential card numbers, the same shipping address, and disposable email domains. The validated cards then appear 2-6 hours later making larger purchases ($150-$400) at different merchants.",
+  "reasoning": "Criminals are systematically testing stolen or generated card numbers through a retailer's account creation flow to identify which cards are active and valid, then immediately using the working cards for higher-value fraud before the victims notice.",
+  "indicator_explanations": [
+    "Sequential card numbers are being tested from the same address and email",
+    "All amounts are tiny wallet-add tests checking if cards are live",
+    "Fraudster uses throwaway sender email but rotates through many receiving domains",
+    "Attack runs overnight from a tight geographic area during low-monitoring hours",
+    "Fresh cards suddenly see 40+ transactions despite amounts barely changing from baseline",
+    "Cards that passed validation return hours later for big-ticket fraud purchases",
+    "Most addresses fail verification despite sharing the same postal code marker"
+  ]
+}

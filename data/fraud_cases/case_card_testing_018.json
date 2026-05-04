@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_018",
+  "title": "Foreign Exchange Micro-Charge Card Validation via Currency Conversion Fees",
+  "pattern": "card_testing",
+  "narrative": "Fraudsters exploit international merchant accounts to validate stolen cards using sub-$1 transactions in exotic currencies (Thai Baht, Indonesian Rupiah, Philippine Peso) where the currency conversion generates a 0.01-0.03 USD charge but the base amount rounds to zero. Attackers test 40-120 cards within 90 minutes through the same MID, each transaction showing TransactionAmt between 0.28-0.89 in foreign currency but card1_amt_zscore near zero due to conversion. The merchant category (MCC 5816 or 7999) appears legitimate but has no prior transaction history. All attempts originate from VPN exit nodes (dist1 values clustering in 3-5 discrete ranges) with mismatched billing countries. Cards passing this test face immediate high-value fraud within 2-8 hours, typically CNP transactions exceeding $800.",
+  "indicators": [
+    "TransactionAmt between 0.28-0.89 in non-USD currency (THB/IDR/PHP) with post-conversion USD < 0.05",
+    "40-120 unique card1 values through single MID within 90-minute window",
+    "card1_amt_zscore between -0.3 and +0.2 despite multiple attempts per card",
+    "dist1 clustering in 3-5 distinct values (300-850km, 2100-2400km, 8500-9200km) indicating VPN infrastructure",
+    "MCC 5816 (digital goods) or 7999 (recreation) with merchant account age < 14 days",
+    "R_emaildomain mismatches card BIN country for 85%+ of transactions",
+    "Successful cards show high-value CNP transactions (TransactionAmt > 800) within 2-8 hours"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Dozens of cards are tested through a new merchant account using tiny foreign currency transactions (under $1 in Thai Baht, Rupiah, or Pesos) that convert to pennies in USD, all within 90 minutes from clustered VPN locations with mismatched billing countries. Cards that pass this validation show major fraudulent purchases over $800 within hours.",
+  "reasoning": "Criminals use exotic currency conversions to fly under fraud detection thresholds while testing if stolen cards are active and unblocked, exploiting the fact that sub-dollar amounts trigger fewer alerts. The immediate high-value fraud on validated cards confirms these micro-charges are purely reconnaissance for a larger organized card theft operation.",
+  "indicator_explanations": [
+    "Tiny foreign currency amounts convert to pennies, hiding validation attempts in noise",
+    "Dozens of different cards cycle through one merchant in under two hours",
+    "Purchase amounts stay suspiciously close to each card's normal spending pattern",
+    "Transactions cluster at fixed distances matching known VPN server locations",
+    "Brand-new merchant account processing high-risk digital or entertainment goods",
+    "Email domains don't match the countries where the cards were issued",
+    "Successfully validated cards get hammered with large purchases within hours"
+  ]
+}

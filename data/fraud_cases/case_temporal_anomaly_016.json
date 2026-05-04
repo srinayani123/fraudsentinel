@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_016",
+  "title": "Synthetic End-of-Cycle Bust-Out with Billing Date Exploitation",
+  "pattern": "temporal_anomaly",
+  "narrative": "Fraudster exploits knowledge of cardholder's statement closing date (typically 28th-31st) to execute a concentrated bust-out immediately after legitimate monthly recurring charges post. A compromised card showing 18 months of stable $800-1200/month usage suddenly processes $4,800 in transactions over 72 hours starting on day 29. The attacker layers charges to mimic bill-pay season: three utility-MCC transactions ($340, $285, $410) followed by high-ticket electronics and gift cards. Legitimate cardholder has card1_txn_count_30d of 8-12 historically; compromised period shows 23 transactions in 3 days. TransactionAmt pattern shifts from median $67 to $180-650 range. P_emaildomain changes from stable gmail.com to a disposable domain on transaction 4. The fraud capitalizes on detection lag during statement generation when velocity alerts may be suppressed and cardholder attention is lowest before bill arrives.",
+  "indicators": [
+    "card1_txn_count_72hr jumps to 18-25 when historical 72hr maximum is 4",
+    "Transaction cluster begins within 48 hours after day 28-31 of billing cycle",
+    "TransactionAmt_mean for end-of-month window is 3.2x to 4.7x the card's 6-month average",
+    "P_emaildomain switches from stable historical value to temporary/disposable domain mid-cluster",
+    "Initial 2-4 transactions use utility/telecom MCCs (4814, 4899) as cover before high-value items",
+    "card1_amt_zscore exceeds 3.5 for cluster while individual transactions stay under $700",
+    "dist1 (distance between billing/shipping addresses) increases from consistent 0-5km to 850+ km"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card with 18 months of steady $800-1200 monthly spending suddenly shows 23 transactions over 3 days right after the statement closing date, with amounts jumping from a $67 median to $180-650 and the email domain switching to a disposable address mid-spree.",
+  "reasoning": "The fraudster times the attack immediately after legitimate monthly bills post, betting the cardholder won't notice until the statement arrives days later and that velocity alerts are suppressed during billing cycle transitions, allowing them to maximize stolen funds before detection.",
+  "indicator_explanations": [
+    "Card suddenly shows 5-6 times more activity than ever seen before",
+    "Attack launches right after billing cycle closes before statement generates",
+    "Average purchase amount spikes to three or four times normal spending",
+    "Email switches from legitimate address to throwaway service during spree",
+    "First purchases mimic normal bills then pivot to expensive merchandise",
+    "Spending pattern is statistically extreme while keeping each charge moderate",
+    "Shipping address jumps hundreds of miles away from established billing location"
+  ]
+}

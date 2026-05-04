@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_005",
+  "title": "Cross-Merchant Synthetic Identity Fragment Mosaic Attack",
+  "pattern": "synthetic_identity",
+  "narrative": "Fraudster constructs synthetic identity by strategically spreading identity components across 8-15 merchants over 45-90 days, each merchant seeing partial data that appears legitimate in isolation. First wave uses email/billing address at low-risk MCCs (5411 grocery, 5912 pharmacy) with card1_txn_count_7d = 1-2, amounts $18-$47. Second wave introduces shipping address at MCC 5732/5734 electronics retailers, dist1 values 850-2200km from billing, amounts climbing to $120-$280. Final bust-out phase hits 3-5 high-value merchants (MCC 5399, 5541) within 72 hours, card1_txn_count_24h spikes to 7-12, card1_amt_zscore exceeds 3.8, all using the now-established email/address combination. The synthetic's addr1 appears valid at each merchant independently, but cross-merchant analysis reveals no transaction history predating the 90-day window and impossible geographic velocity between dist1 calculations across the merchant sequence.",
+  "indicators": [
+    "card1 has transactions at 8+ distinct MIDs within 90 days with card1_txn_count_lifetime < 95 days",
+    "dist1 values between consecutive transactions exceed 800km for 40%+ of transaction pairs",
+    "card1_txn_count_7d increases from 1-2 to 7-12 within final 72-hour period",
+    "P_emaildomain and addr1 combination has zero transaction history beyond 90-day lookback window",
+    "MCC progression moves from low-risk (5411, 5912, 5541) to high-risk (5399, 5732) categories within 60 days",
+    "card1_amt_zscore spikes from 0.3-0.9 baseline to 3.5+ in final transaction cluster",
+    "TransactionAmt escalates from $18-$47 range to $240-$890 range across merchant sequence"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A payment card appears at 8+ different merchants over 90 days with no prior history, showing impossible geographic jumps (800+ km between purchases) and a sudden spike from 1-2 weekly transactions to 7-12 in 24 hours. The email and address combination exists nowhere in historical data, and spending escalates from small grocery purchases to high-value electronics in the final 72 hours.",
+  "reasoning": "The fraudster is building credibility for a fake identity by scattering small, normal-looking purchases across many merchants before the final cash-out. Real customers have transaction history beyond 90 days and don't teleport between distant locations or suddenly change their spending behavior this drastically—this coordinated escalation signals a planned synthetic identity bust-out.",
+  "indicator_explanations": [
+    "Card hits many different merchants rapidly despite being brand new",
+    "Transactions ping-pong across impossible geographic distances between purchases",
+    "Card usage explodes from occasional to frenzied in final days",
+    "Email and address pairing appears freshly fabricated with no purchase history",
+    "Spending pattern shifts from groceries to electronics liquidation merchants",
+    "Final transactions are drastically larger than card's established spending pattern",
+    "Purchase amounts escalate from small tests to high-value cashout attempts"
+  ]
+}

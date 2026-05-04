@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_029",
+  "title": "Batch Settlement Window Velocity Exploitation with Amount Stepping",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster exploits merchant batch settlement timing by executing rapid-fire transactions in the 30-45 minute window before typical end-of-day settlement (often 23:00-23:45 local merchant time). Attack begins with $47-$89 test transactions, then escalates to $340-$480 range within 8-12 minutes once authorization success confirmed. Fraudster targets merchants with known daily batch cycles (gas stations MCC 5541, convenience stores MCC 5499) where auth holds clear at settlement rather than real-time. Pattern shows card1_txn_count_6h jumping from 0 to 9-14 transactions, all within txn_hour 22-23. Transactions cluster at 3-4 different merchants within same geographic addr1, suggesting route planning. The card1_amt_zscore spikes from baseline 0.2 to 4.8+ as amounts escalate. Fraudster banks on delayed merchant reconciliation post-settlement allowing maximum extraction before card blocking.",
+  "indicators": [
+    "9-14 transactions within 35-minute window, all occurring txn_hour 22-23",
+    "Amount progression pattern: 2-3 txns $47-$89, then 6-9 txns $340-$480",
+    "card1_txn_count_6h increases from 0 to 9-14 with no prior history",
+    "All transactions at MCC 5541 or 5499 merchants within same addr1 region",
+    "card1_amt_zscore escalates from <1.0 to >4.5 within 15-minute span",
+    "Transactions cluster within 45 minutes before typical 23:00-00:00 batch settlement window",
+    "dist1 values show 8-25 mile progression suggesting planned geographic route"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple transactions rapidly escalate from small test amounts ($47-$89) to larger charges ($340-$480) at gas stations or convenience stores, all clustered in the late evening hours (10pm-midnight) across nearby locations within a single region.",
+  "reasoning": "The attacker is racing against the merchant's end-of-day settlement window, knowing that authorization holds won't immediately deduct funds and betting they can maximize stolen value before the card gets blocked during overnight reconciliation.",
+  "indicator_explanations": [
+    "Card suddenly fires 9-14 transactions in late-night half-hour burst",
+    "Purchases start small to test limits then jump to high-dollar amounts",
+    "Card goes from completely dormant to intense activity in six hours",
+    "All hits target gas stations or convenience stores in same neighborhood",
+    "Spending amounts spike from normal to extreme within quarter-hour",
+    "Attack timed to complete just before midnight batch processing cutoff",
+    "Transactions march across 8-25 miles like following a planned route"
+  ]
+}

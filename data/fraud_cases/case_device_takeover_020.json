@@ -1,0 +1,25 @@
+{
+  "id": "case_device_takeover_020",
+  "title": "Desktop-Only Cardholder Suddenly Transacting from Mobile Device",
+  "pattern": "device_takeover",
+  "narrative": "A fraudster has compromised the credentials of a cardholder who exclusively uses desktop browsers for online purchases. The attacker initiates transactions from a mobile device, creating a stark device-class mismatch. The cardholder's typical transaction amounts, timing, and email patterns are replicated from historical data, making behavioral signals appear legitimate. However, device features reveal this is the first mobile-originated transaction for this card, with device fingerprints showing no historical relationship. The D4 and D10 fields capture device-level temporal features that expose the sudden shift in device category, while D1 confirms the device has never been paired with this payment method. Mobile user-agent strings and screen resolution attributes further contradict the cardholder's established desktop-only profile. This pattern exploits credential theft where the fraudster cannot replicate the victim's hardware environment, believing mobile transactions will blend into normal e-commerce activity.",
+  "indicators": [
+    "D1 = 0 indicating first-time pairing between this device and card",
+    "D10 < 5 (below p25), device temporal feature shows minimal historical device activity with this card",
+    "DeviceType = mobile while card1_device_type_mode = desktop (historical baseline contradiction)",
+    "D4 < 3 (below p25), device-day counter inconsistent with established desktop usage pattern",
+    "card1_amt_zscore between -0.8 and +0.8, amount fits normal spending range masking device mismatch",
+    "V258 > 4.2 (p85), Vesta engineered feature flagging device-class transition anomaly"
+  ],
+  "indicator_explanations": [
+    "The device has never been used with this card before despite cardholder history",
+    "Device shows very limited activity history contradicting the cardholder's regular transaction pattern",
+    "Transaction originates from mobile device but cardholder exclusively uses desktop computers",
+    "Device-day activity counter is far below what regular desktop usage would establish",
+    "Purchase amount matches cardholder's typical spending preventing amount-based detection",
+    "Engineered feature detects unusual shift in device category relative to cardholder baseline"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Credential-compromise fraud where a desktop-only cardholder's stolen credentials are used from a mobile device for the first time, with amounts and timing appearing normal but device features revealing the platform mismatch.",
+  "reasoning": "Legitimate cardholders maintain consistent device-class patterns; a sudden shift from exclusive desktop usage to mobile without any historical mobile transactions indicates credential theft where the fraudster cannot replicate the victim's hardware environment."
+}

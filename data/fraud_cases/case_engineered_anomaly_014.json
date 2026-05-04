@@ -1,0 +1,27 @@
+{
+  "id": "case_engineered_anomaly_014",
+  "title": "Clean-Behavior Fraud with V200 Transaction-Sequence Encoding Anomaly",
+  "pattern": "engineered_anomaly",
+  "narrative": "Fraudster executes transactions that maintain normal spending patterns, regular timing, and consistent device behavior to avoid behavioral detection systems. The transaction amounts fall within cardholder norms, velocity appears unremarkable, and email/identity fields match expected patterns. However, Vesta's V200 engineered feature—which encodes complex transaction-sequence relationships across multiple dimensions including card-address pairings, temporal patterns, and cross-merchant behaviors—registers significant elevation. This composite signal captures subtle fraud indicators that emerge only when analyzing how this specific transaction fits within broader historical patterns across the payment ecosystem. The fraudster may be cycling through previously-verified card-BIN combinations or replaying transaction structures from legitimate patterns, creating surface-level normalcy while the underlying sequence geometry reveals coordinated synthetic activity. The V200 elevation specifically flags that while individual transaction attributes appear clean, the multi-dimensional relationship pattern deviates from genuine cardholder transaction graphs.",
+  "indicators": [
+    "V200 > 6.0 (p90 threshold), indicating engineered transaction-sequence anomaly",
+    "TransactionAmt_card1_mean_ratio between 0.7 and 1.3, amount within cardholder historical average",
+    "C1 < 25 (below p50), card-transaction counter shows moderate recent activity",
+    "D1 > 50, established device-card pairing with sufficient history",
+    "addr1_P_emaildomain match = 1, billing address and email domain historically linked",
+    "V258 > 150 (elevated), composite identity-verification score flags profile inconsistency",
+    "dist1 < 100 km, billing-shipping distance within normal geographic range"
+  ],
+  "indicator_explanations": [
+    "Vesta sequence model detects an unusual pattern in how this transaction relates to historical ecosystem data",
+    "Transaction amount aligns perfectly with the cardholder's typical spending behavior",
+    "Card shows normal recent usage frequency without suspicious velocity spikes",
+    "The device and card have been used together many times previously",
+    "Email domain has been consistently associated with this billing address historically",
+    "Identity verification composite reveals subtle mismatches invisible in individual fields",
+    "Shipping destination falls within expected geographic proximity to billing address"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Transaction appears completely normal across all visible behavioral dimensions—amount, velocity, device history, and identity fields all align with legitimate patterns. The fraud signal exists exclusively in V200's multi-dimensional sequence encoding, which detects that this transaction's relationship pattern across the broader payment ecosystem deviates from genuine cardholder behavior despite individual attribute normalcy.",
+  "reasoning": "Sophisticated fraudsters can replicate individual transaction characteristics that pass behavioral checks, but cannot authentically reproduce the complex multi-feature relationship patterns that emerge from genuine cardholder behavior across time and merchants. V200's elevation while all direct behavioral signals remain clean indicates the transaction geometry—how it relates to historical patterns across cards, merchants, addresses, and devices—matches known synthetic activity structures rather than organic spending evolution."
+}

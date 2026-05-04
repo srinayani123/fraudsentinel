@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_017",
+  "title": "Shift-Change Exploit: Coordinated Burst During Analyst Transition Window",
+  "pattern": "temporal_anomaly",
+  "narrative": "Fraudsters exploit the 30-minute handoff period between fraud analyst shifts (typically 2:45-3:15 AM EST and 2:45-3:15 PM EST) when response capacity drops 40-60%. Attack involves 18-35 transactions clustered within a 22-minute window, targeting the same merchant category (MCC 5411 grocery or 5912 drugstore) with amounts between $287-$349 to stay below manual review thresholds. Card velocity explodes from baseline 1.2 txns/day to 23 transactions across 4-6 different merchant IDs within the shift-change period. Attackers use this timing because automated rules fire slower during shift turnover, and human review queues accumulate without immediate triage. Pattern appears 2-3 times weekly, always within 8 minutes of documented shift boundaries, suggesting insider knowledge or systematic probing of response-time patterns.",
+  "indicators": [
+    "18-35 transactions from same card1 clustered in 18-25 minute window starting 2:45 AM/PM EST (txn_hour shows 2-3 or 14-15)",
+    "card1_txn_count_24hr jumps from <3 baseline to 20+ within single burst period",
+    "All transactions same MCC (5411 or 5912), amounts $287-$349 to avoid $350 manual review trigger",
+    "Burst timing within 8 minutes of known shift-change windows (02:45-03:15 or 14:45-15:15 EST)",
+    "4-6 distinct merchant IDs (card1_merchant_count_1hr = 4-6) all same category, unusual for legitimate user",
+    "Pattern recurs 2-3x weekly, always aligned to same time windows Â±10 minutes",
+    "card1_amt_zscore spikes to 4.5+ during burst versus 0.8 baseline prior 7 days"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card suddenly fires 18-35 transactions in a 22-minute burst during analyst shift changes (around 3 AM or 3 PM EST), all at grocery or drugstore merchants with amounts just under $350. The card goes from 1-2 transactions per day to over 20 in a single window, hitting 4-6 different store locations in the same category.",
+  "reasoning": "Fraudsters exploit the handoff period when fraud team capacity drops and alert queues pile up without immediate review. The precise timing alignment with shift boundaries multiple times per week, combined with amounts calibrated to avoid manual review thresholds, indicates deliberate coordination to maximize approvals before analysts can respond.",
+  "indicator_explanations": [
+    "Attack concentrates transactions into narrow window targeting known shift transitions",
+    "Card activity explodes from quiet baseline to sustained high-volume assault",
+    "All purchases stay just under manual review threshold at same merchant type",
+    "Timing precisely exploits handoff gaps when analysts change shifts",
+    "Card hits multiple merchants in same category unlike normal single-location shopping",
+    "Attack repeats on schedule targeting the same vulnerable time windows weekly",
+    "Purchase amounts during burst are dramatically larger than cardholder's normal pattern"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_engineered_anomaly_008",
+  "title": "V-Cluster Automated Script Pattern: Transaction-Sequence Fingerprint Anomaly",
+  "pattern": "engineered_anomaly",
+  "narrative": "This pattern manifests when multiple Vesta engineered features simultaneously flag transaction-sequence characteristics consistent with automated scripting or bot activity, despite all raw behavioral indicators appearing normal. The transaction amounts, timing, velocity, and identity fields show no individual red flags—amounts fit the cardholder's profile, velocity is unremarkable, email and address match historical patterns. However, composite V-features designed to detect multi-dimensional transaction fingerprints reveal signatures of non-human interaction patterns. Features like V258 (sequence entropy), V280 (temporal clustering coefficient), V305 (interaction interval variance), and V307 (session boundary detection) collectively encode patterns invisible to manual review. This represents fraud where attackers have successfully replicated normal behavioral baselines but cannot mask the mechanical precision and micro-timing artifacts of scripted transaction generation. The fraud operation uses stolen credentials with accurate PII but executes transactions through automation that leaves detectable signatures in feature-interaction space.",
+  "indicators": [
+    "V258 > 8.5 (p95), elevated transaction-sequence entropy score",
+    "V280 < 0.15 (p10), abnormally low temporal clustering coefficient",
+    "V305 > 12.0 (p90), high interaction interval variance metric",
+    "V307 = 1 indicating session-boundary anomaly detected by Vesta model",
+    "V320 > 0.85 (p95), elevated composite automation-likelihood score",
+    "C1 between 15-40 (normal range), card counter shows typical activity level",
+    "TransactionAmt_zscore between -0.8 and +0.8, amount within cardholder spending pattern"
+  ],
+  "indicator_explanations": [
+    "Transaction sequencing shows entropy patterns inconsistent with natural human shopping behavior",
+    "Timing intervals between actions cluster too tightly for manual keyboard entry",
+    "Variation in interaction delays suggests programmatic rather than human cadence",
+    "Session structure contains boundaries that indicate automated session management",
+    "Composite feature combining multiple timing and interaction signals flags automation",
+    "Card usage frequency appears normal and raises no velocity concerns",
+    "Transaction amount fits the cardholder's historical spending range perfectly"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Multiple Vesta engineered features simultaneously detect transaction-sequence fingerprints consistent with scripted automation, while all raw behavioral signals—amount, velocity, timing, identity fields—appear completely normal and raise no individual fraud flags.",
+  "reasoning": "Fraudsters using stolen credentials can replicate normal amounts and identity data, but automated transaction scripts leave detectable micro-timing and interaction-pattern signatures that composite V-features encode. When multiple V-fields flag sequence anomalies while behavioral features remain clean, it indicates credential compromise with scripted execution."
+}

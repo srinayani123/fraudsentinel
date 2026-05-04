@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_016",
+  "title": "Coordinated Bot Ticketing Rush Using Compromised Card Portfolio",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudsters deploy automated bots to mass-purchase event tickets within minutes of on-sale time, using 15-40 stolen cards from the same BIN range. Transactions cluster in 90-180 second bursts targeting high-demand concerts or sporting events, typically $185-$425 per ticket with 2-4 tickets per transaction. Cards show zero prior purchase history with the merchant (MID). All transactions originate from 2-3 residential proxy IP addresses with identical user-agent strings and ProductCD='C' for entertainment. Email domains follow auto-generated patterns (gmail accounts created same week). The operation completes before fraud detection triggers, with tickets immediately listed on resale platforms. Chargebacks surface 12-18 days post-event when cardholders notice unauthorized charges.",
+  "indicators": [
+    "15-40 unique card1 values within 90-180 second window, all targeting same event/ProductCD",
+    "TransactionAmt concentrated $185-$425 per ticket, 2-4 quantity, total $370-$1700 per card",
+    "card1_txn_count_lifetime = 1 for all cards (first-time use at merchant)",
+    "2-3 distinct addr1 (IP addresses) with identical device signatures across entire card set",
+    "P_emaildomain shows gmail/yahoo accounts with creation timestamps within 72 hours of transaction",
+    "All transactions occur within 3 minutes of event inventory release timestamp",
+    "dist1 (distance between billing/IP) exceeds 500km for 80%+ of transactions"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Within 90-180 seconds of ticket sales opening, 15-40 different stolen cards from the same bank all purchase the exact same event tickets through 2-3 IP addresses using identical device fingerprints, with every card being used for the first time at this merchant.",
+  "reasoning": "Fraudsters use bots to scalp high-demand tickets with a portfolio of compromised cards before security systems can react, then immediately resell the tickets while the real cardholders remain unaware until chargebacks appear weeks later.",
+  "indicator_explanations": [
+    "Large batch of different cards hits identical target within tight time window",
+    "Purchase amounts cluster in typical ticket price range with consistent quantities",
+    "Every card in the burst is making its first purchase ever",
+    "Multiple cards share identical device fingerprints from just a few IP addresses",
+    "Email accounts were created days before attack suggesting pre-planned coordination",
+    "Attack synchronized precisely with high-demand inventory becoming available for sale",
+    "Billing addresses don't match cardholder locations shown by IP geolocation"
+  ]
+}

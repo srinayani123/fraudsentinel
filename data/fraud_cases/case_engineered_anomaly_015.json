@@ -1,0 +1,25 @@
+{
+  "id": "case_engineered_anomaly_015",
+  "title": "Card-Merchant Category Pairing Never Observed in Historical Context",
+  "pattern": "engineered_anomaly",
+  "narrative": "Fraudster uses a compromised card at a merchant category (MCC) where the legitimate cardholder has never transacted, but the amount and timing look completely normal. The transaction itself appears routine — matching the cardholder's typical spending range, occurring during normal hours, no velocity spikes. However, Vesta engineered features capture that this specific card-MCC pairing represents an unprecedented interaction pattern. V307 flags the card has never been used in this merchant category across its entire transaction history. V280 indicates the merchant category itself is statistically rare for this card issuer BIN. V201 captures that the card-merchant-amount triplet has never occurred. The behavioral profile looks legitimate because fraudsters deliberately selected an amount and timing that fit the cardholder's patterns, but they couldn't replicate the cardholder's established merchant-category preferences. This is CNP fraud where the attacker has card details and some profile knowledge but lacks visibility into the cardholder's actual merchant-category usage history.",
+  "indicators": [
+    "V307 > 8 (p95), engineered feature flagging card has zero historical transactions in this merchant category",
+    "V280 > 5 (p90), feature indicating merchant category is highly unusual for this card's issuing BIN",
+    "V201 > 4 (p85), card-merchant-amount combination never previously observed",
+    "C1 within 10-45 range (normal card-counter aggregation, no velocity anomaly)",
+    "card1_amt_zscore between -1.2 and +1.0 (amount fits cardholder's typical spending pattern)",
+    "D1 > 200 (established device-card pairing with extensive history)"
+  ],
+  "indicator_explanations": [
+    "The card has never been used in this type of merchant category before",
+    "This merchant category is extremely rare for cards from this issuer",
+    "The specific combination of card, merchant, and amount has never occurred together",
+    "Card activity levels are normal with no unusual velocity patterns",
+    "Transaction amount fits within the cardholder's expected spending range",
+    "The device and card have a long established relationship together"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Card used at a merchant category where it has never transacted before, but amount and timing appear completely normal. Behavioral signals are clean while engineered features flag unprecedented card-merchant-category pairing.",
+  "reasoning": "Legitimate cardholders exhibit stable merchant-category preferences over time. When a card suddenly appears in a completely new merchant category despite normal amount and timing, it indicates the fraudster has card details but cannot replicate the cardholder's established spending patterns across merchant types."
+}

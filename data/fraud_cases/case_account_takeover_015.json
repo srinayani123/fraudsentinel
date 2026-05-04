@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_015",
+  "title": "Credential Stuffing Reactivation: Dormant Account Sudden High-Value CNP Burst",
+  "pattern": "account_takeover",
+  "narrative": "Attacker successfully credential-stuffs a dormant account (no transactions in 180+ days) and immediately initiates a spending spree before the legitimate cardholder notices. Within 72 hours of reactivation, the compromised account executes 8-15 card-not-present transactions totaling $2,800-$6,500, exclusively targeting digital goods or gift card merchants (ProductCD='W' or 'C', MCC 5816/5967). The attacker often changes the shipping address (addr1 mismatch from historical pattern, dist1 exceeding 500km from previous transactions). Email domain remains unchanged but device_id and browser fingerprints are completely new. Transactions cluster in non-business hours (is_night=1, txn_hour between 23:00-04:00) with tight temporal spacingâ€”typically 6-12 minutes apart. The card1_txn_count_24hr spikes from 0 to 12+ while card1_amt_zscore exceeds 4.5 standard deviations above the account's historical baseline.",
+  "indicators": [
+    "Account dormancy period exceeds 180 days before sudden transaction activity resumes",
+    "8-15 CNP transactions within 72 hours totaling $2,800-$6,500, all ProductCD='W' or 'C'",
+    "addr1 shows new shipping address with dist1>500km from historical transaction locations",
+    "card1_txn_count_24hr jumps from 0 to 12+ transactions with 6-12 minute intervals",
+    "All transactions occur during is_night=1 window (txn_hour 23:00-04:00)",
+    "device_id and browser fingerprints have no match to account's historical device patterns",
+    "card1_amt_zscore exceeds 4.5 standard deviations above account's pre-dormancy spending baseline"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A previously dormant account (180+ days inactive) suddenly executes 8-15 card-not-present transactions worth $2,800-$6,500 within 72 hours, all targeting digital goods or gift cards during late-night hours with completely new device fingerprints and a shipping address 500+ km from historical locations.",
+  "reasoning": "Attackers use stolen credentials to hijack inactive accounts because owners are less likely to notice fraudulent activity quickly, then rapidly monetize access by purchasing easily resellable digital goods before detection, with the device and location changes confirming unauthorized access rather than legitimate customer behavior.",
+  "indicator_explanations": [
+    "Account sat completely idle for six months then suddenly springs to life",
+    "Attacker rushes through a dozen digital purchases worth thousands in three days",
+    "Shipping address is hundreds of miles from where this account normally transacts",
+    "Card goes from zero activity to rapid-fire transactions every few minutes",
+    "All purchases happen in the middle of the night when owner likely sleeps",
+    "Device and browser have never been used by this account before",
+    "Purchase amounts are drastically higher than the account's normal spending pattern"
+  ]
+}

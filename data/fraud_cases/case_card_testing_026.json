@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_026",
+  "title": "App Store Micro-Transaction Card Validation via Sequential ProductCD Testing",
+  "pattern": "card_testing",
+  "narrative": "Fraudsters validate stolen card credentials through iTunes/Google Play $0.99 digital content purchases before executing larger fraud. Pattern exhibits 8-15 micro-transactions ($0.99-$1.99) within 45-90 minute window, all ProductCD='C' (digital goods), originating from same device_id but cycling through 4-6 distinct card1 values. Transactions show identical P_emaildomain (often 'icloud.com' or 'gmail.com') with freshly created accounts (account_age < 48 hours). The validator_phase uses automated scripts creating consistent txn_hour clustering (typically 02:00-05:00 UTC, is_night=1) and identical dist1 values (card-to-address distance). Successful validations (no immediate decline) are followed 6-18 hours later by high-value fraud on validated cards at different MCCs. Key differentiator: card1_txn_count_24h shows 0 prior history for each card, addr1 matches a known VPN exit node, and C_hour_velocity (digital goods per hour) exceeds 12 within the validation window.",
+  "indicators": [
+    "8-15 transactions at $0.99-$1.99, all ProductCD='C', within 45-90 minute window from same device_id",
+    "4-6 distinct card1 values cycled through sequential transactions, each showing card1_txn_count_24h = 0",
+    "P_emaildomain account_age < 48 hours, typically 'icloud.com' or 'gmail.com' with random alphanumeric prefix",
+    "txn_hour clustering between 02:00-05:00 UTC (is_night=1) with C_hour_velocity > 12 transactions",
+    "Identical dist1 values across all transactions indicating static billing address, addr1 matches VPN infrastructure",
+    "No AVS/CVV mismatch flags during validation phase, followed by high-value fraud 6-18 hours later on same card1 values",
+    "TransactionAmt standard deviation < 0.15 across validation set, card1_amt_zscore remains near zero during testing phase"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A burst of 8-15 low-value app store purchases ($0.99-$1.99) hitting the same device in under 90 minutes, cycling through 4-6 different cards that have never been used before, all from a brand-new email account during overnight hours.",
+  "reasoning": "Criminals use cheap digital goods as low-risk test transactions to identify which stolen cards are still active and unblocked, then use those validated cards hours later for high-value purchases elsewhere.",
+  "indicator_explanations": [
+    "Attacker runs batch of tiny app purchases to verify cards work without triggering alerts",
+    "Multiple stolen cards tested in sequence, each appearing for first time on the platform",
+    "Brand-new throwaway email account created just before the validation run begins",
+    "Testing occurs during dead-of-night hours when fraud monitoring may be less responsive",
+    "All transactions share identical billing location tied to VPN or proxy infrastructure",
+    "Cards pass initial validation cleanly then get hammered with large fraud shortly after",
+    "Purchase amounts stay robotically consistent showing automated scripted testing behavior"
+  ]
+}

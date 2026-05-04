@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_013",
+  "title": "Synthetic AU Abuse: Ghost Authorized User on Aged Thin-File Account",
+  "pattern": "synthetic_identity",
+  "narrative": "A synthetic identity with minimal credit history (2-4 months seasoning, $500-800 limit) suddenly adds an authorized user. Within 72 hours, both cards exhibit coordinated high-velocity activity across different merchant categories. The primary cardholder maintains low spend ($15-40 utilities, gas) while the AU card processes $200-450 transactions at electronics retailers, digital goods merchants (MCC 5816, 5732), and crypto on-ramps. The AU card shows distinct device fingerprints (different card1 values) but identical billing address (addr1 match, dist1=0). Total account utilization spikes from 15% to 92% within one week. Pattern peaks with simultaneous CNP purchases: primary at $38 streaming service, AU at $487 electronics, both within 4-minute window. Email domains differ (P_emaildomain: burner services like guerrillamail, R_emaildomain: synthetic match). Bust-out completes when both cards hit decline threshold, typically 8-12 days post-AU addition.",
+  "indicators": [
+    "card1_txn_count_7d jumps from 2-3 to 18+ after AU addition within 72-hour window",
+    "Primary card avg transaction $22-45, AU card avg $285-520 same period",
+    "addr1 identical but card1, DeviceInfo, P_emaildomain all differ between primary/AU",
+    "Account utilization 15-25% baseline, spikes to 85-98% within 5-7 days of AU activation",
+    "AU card shows 3+ transactions at MCC 5732/5816 (electronics/software) within first 48 hours",
+    "Simultaneous transactions (txn_hour delta <8 minutes) from cards with dist1=0 but different DeviceInfo",
+    "Total account age 60-120 days at AU addition, previous monthly spend <$200"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A barely-used credit account suddenly adds an authorized user, then both cards rapidly rack up charges in different spending patterns—the original card stays small (utilities, gas under $50) while the new AU card hits electronics and crypto merchants for $200-500 transactions, all shipping to the same address but from different devices.",
+  "reasoning": "Fraudsters layer a fake authorized user onto a synthetic identity they've been quietly aging, then coordinate a fast bust-out before the issuer catches on—the mismatched spending profiles and devices reveal two criminal operators draining credit they never intend to repay.",
+  "indicator_explanations": [
+    "Transaction frequency explodes immediately after authorized user is added to account",
+    "New user spends ten times more per transaction than primary cardholder",
+    "Same billing address but different card, device, and email between users",
+    "Credit line suddenly maxed out within a week of adding user",
+    "New user immediately buys high-value electronics and digital goods",
+    "Two cards transact simultaneously from same location using different devices",
+    "Young account with minimal spending history suddenly adds authorized user"
+  ]
+}

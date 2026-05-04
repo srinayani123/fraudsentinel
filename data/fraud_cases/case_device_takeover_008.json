@@ -1,0 +1,27 @@
+{
+  "id": "case_device_takeover_008",
+  "title": "VPN-Masked Device Takeover with Clean Behavioral Profile",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster operates from a compromised device or uses stolen session credentials, concealing their true location through VPN or proxy services. The device appears legitimate with normal aging metrics, but network-level identity verification fails or shows inconsistencies. Transaction amounts and timing align perfectly with the cardholder's established patterns, making behavioral detection impossible. The fraud surface is revealed through identity resolution mismatches between stated billing location and detected network origin, combined with device-level features indicating proxy usage. Card counters show moderate activity consistent with regular use, but engineered features flag the network obfuscation. This pattern exploits the gap between clean behavioral signals and compromised network identity.",
+  "indicators": [
+    "D1 between 30 and 150 (p75-p90 range), indicating device has transaction history",
+    "D10 > 220 (above p90), elevated device-network distance metric flagging proxy usage",
+    "D15 > 350 (above p90), high value on Vesta network identity feature",
+    "card1_amt_zscore between -1.0 and +1.0, amount fits cardholder baseline",
+    "dist1 > 5000 km while addr1 and card_addr match, indicating VPN location spoofing",
+    "C1 between 20 and 60, card counter shows normal established usage pattern",
+    "V283 > 0.75 (p90 of engineered network features), flagging IP reputation anomaly"
+  ],
+  "indicator_explanations": [
+    "The device shows normal aging with prior transaction history on the system",
+    "Network distance calculations reveal unusually large geographic discrepancies suggesting proxy",
+    "Vesta network identity feature shows high risk score for connection origin",
+    "Transaction amount falls within the cardholder's typical spending range",
+    "Billing address matches card on file but transaction originates from distant VPN endpoint",
+    "Card activity counter indicates regular established cardholder usage patterns",
+    "Engineered IP reputation feature flags the network connection as suspicious"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Device appears legitimate with normal history, and transaction behavior matches cardholder patterns perfectly, but network-level features reveal VPN or proxy usage concealing the fraudster's true location while identity verification shows geographic inconsistencies.",
+  "reasoning": "Legitimate cardholders rarely use VPN services for everyday transactions, especially when behavioral patterns appear completely normal. The combination of clean device aging, perfect behavioral fit, but failed network identity verification indicates a sophisticated fraudster operating through stolen credentials while masking their location."
+}

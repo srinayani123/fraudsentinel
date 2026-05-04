@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_019",
+  "title": "Frankenstein Identity: Valid-But-Never-Married Data Elements Create New Person",
+  "pattern": "synthetic_identity",
+  "narrative": "Fraudster assembles identity from legitimate but unrelated data fragmentsâ€”real SSN from data breach, real address from skip-tracing site, real phone from previous account, newly created email. Each element validates individually (SSN passes Equifax soft pull, address confirms via USPS, phone has 3-year history) but combination never existed together. Account opens with $47 initial deposit, lies dormant 45-60 days establishing aged history. First transaction is $892 purchase at electronics MCC 5732, followed by $1,340 and $2,105 within 72 hours. Key tell: P_emaildomain creation date (domain_registration_days < 90) contradicts phone_age_days > 1100. Address shows 12+ previous occupants in credit bureau data (addr1_occupant_count high) but zero shared transaction history with the SSN. Card velocity explodes from 0 to 11 transactions in 96 hours after dormancy.",
+  "indicators": [
+    "P_emaildomain registration < 90 days while phone_age_days > 1000 (temporal mismatch)",
+    "addr1_occupant_count > 10 with zero shared SSN transaction history",
+    "Account dormant 45-60 days then card1_txn_count_7d jumps from 0 to 8+",
+    "First three transactions: $892, $1340, $2105 all at electronics/jewelry MCCs within 72 hours",
+    "SSN soft-pull passes but SSN + addr1 combination returns zero credit tradelines",
+    "dist1 (billing-to-IP distance) > 500 km on activation but < 5 km on fraud transactions",
+    "card1_amt_zscore leaps from 0.1 to 4.8+ within first week of activity"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "All identity components validate individually (SSN passes checks, address confirms via USPS, phone has multi-year history), but the specific combination of SSN, address, phone, and email has never appeared together in any credit tradeline or transaction history. The newly-registered email domain (under 90 days old) contradicts the aged phone (3+ years), and the address shows 10+ previous occupants with zero overlap to this SSN.",
+  "reasoning": "The fraudster is stitching together real but unrelated data pieces stolen from breaches and public records to bypass individual validation checks while creating a person who never existed. After establishing legitimacy through a dormancy period, they rapidly drain value through high-dollar electronics purchases before the synthetic identity's internal contradictions trigger fraud detection.",
+  "indicator_explanations": [
+    "New email paired with old phone suggests identity components were stitched together",
+    "Address houses many residents but none share transaction history with this identity",
+    "Account sits idle then suddenly explodes with dense transaction activity",
+    "Opening purchases are high-value items easily resold for cash within days",
+    "Social Security number validates alone but has no credit history at this address",
+    "Activation occurs from distant location but fraud happens near the billing address",
+    "Spending pattern rockets from normal to extreme in the account's first week"
+  ]
+}

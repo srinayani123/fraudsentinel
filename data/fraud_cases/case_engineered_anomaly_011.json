@@ -1,0 +1,27 @@
+{
+  "id": "case_engineered_anomaly_011",
+  "title": "Multi-Dimensional Vesta Feature Cluster Anomaly with Clean Transaction Behavior",
+  "pattern": "engineered_anomaly",
+  "narrative": "This pattern identifies fraud through coordinated anomalies across multiple Vesta engineered features (V258, V280, V305) that flag simultaneously despite completely normal raw behavioral signals. The transaction appears legitimate in amount, velocity, timing, and email matching, but Vesta's composite risk models detect complex multi-feature interactions indicating synthetic identity construction or account manipulation. V258 flags identity verification discrepancies, V280 captures device-fingerprint sequence anomalies, and V305 identifies billing-address validation inconsistencies. When these three engineered features elevate together while behavioral indicators remain clean, it suggests sophisticated fraud operations using tested credentials with manipulated underlying identity vectors that only machine-learned feature interactions can detect. The fraudster has normalized the visible transaction characteristics but cannot mask the engineered feature signatures.",
+  "indicators": [
+    "V258 > 75 (p90 threshold), Vesta identity-verification composite feature elevated",
+    "V280 > 85 (p90 threshold), device-fingerprint sequence feature flagged",
+    "V305 > 68 (p90 threshold), billing-address validation feature anomalous",
+    "All three V-fields (V258, V280, V305) exceed p75 simultaneously, multi-feature cluster activation",
+    "TransactionAmt Z-score between -0.8 and +0.8, amount within normal cardholder range",
+    "C1 < 35 (below p50), card-level activity counter indicates low historical usage",
+    "D1 between 150-450 days, device-card pairing shows established but not recent relationship"
+  ],
+  "indicator_explanations": [
+    "Vesta's identity verification composite score shows significant discrepancies in the identity components",
+    "Device fingerprint sequence analysis flags unusual patterns in how the device is being used",
+    "Billing address validation logic detects inconsistencies not visible in raw address fields",
+    "Multiple Vesta risk models are flagging simultaneously despite no single obvious red flag",
+    "Transaction amount fits perfectly within the cardholder's normal spending pattern",
+    "Card usage frequency appears low to moderate with no velocity concerns",
+    "Device and card have been paired for months suggesting legitimate historical relationship"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Transaction exhibits normal spending amount, appropriate velocity, and established device-card relationship, but three distinct Vesta engineered features (V258, V280, V305) flag simultaneously. The multi-feature cluster activation reveals fraud invisible to raw behavioral analysis.",
+  "reasoning": "When multiple independent Vesta composite features elevate together while all behavioral signals remain clean, it indicates sophisticated fraud using validated credentials with manipulated identity components. The fraudster has mastered visible transaction patterns but cannot evade machine-learned multi-dimensional feature interactions."
+}

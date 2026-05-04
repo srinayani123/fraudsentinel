@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_003",
+  "title": "Email-Password Cascade ATO with Immediate High-Value Digital Goods Purchase",
+  "pattern": "account_takeover",
+  "narrative": "Attacker gains initial access through credential stuffing or phishing, immediately changes account email to a disposable domain (tempmail, guerrillamail), then triggers password reset within 2-8 minutes. Within 15-45 minutes of password change, a purchase of $200-$800 digital goods (ProductCD=W or C) is made using a stored card. The transaction occurs from a new IP geolocation (dist1 >500km from historical addr1) and displays velocity anomalies: card1_txn_count_24h jumps from 0-2 to 5+, while P_emaildomain switches from established provider to disposable. Transaction typically occurs during off-hours for legitimate user's timezone (is_night=1 when historical txn_hour shows daytime preference). Card AVS mismatch rate increases from 0% to 100% on this transaction. No CVV re-entry despite stored payment method change in merchant system logs.",
+  "indicators": [
+    "P_emaildomain changes from established provider to disposable domain within 2-8 minutes before transaction",
+    "dist1 value exceeds 500km between current transaction addr1 and 30-day historical median addr1",
+    "card1_txn_count_24h increases from 0-2 baseline to 5+ attempts within 45-minute window",
+    "TransactionAmt between $200-$800 for ProductCD=W or C following 12+ hour account dormancy",
+    "is_night=1 for transaction when 90%+ of historical txn_hour values fall in daytime range (8-20)",
+    "AVS response changes from Y (match) in historical data to N (no match) on current transaction",
+    "Time delta between last legitimate transaction and current transaction exceeds 48 hours with intervening login from new device fingerprint"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Account email switches to a disposable domain (tempmail, guerrillamail), followed by password reset within minutes, then a $200-$800 digital goods purchase from a new location 500+ km away using a stored card with mismatched billing address.",
+  "reasoning": "The attacker has seized control of the account and is racing to extract value before the victim notices—changing credentials to lock out the owner, then immediately draining stored payment methods for high-value items that can be quickly resold or monetized.",
+  "indicator_explanations": [
+    "Account email suddenly switches to a throwaway provider minutes before purchase",
+    "Transaction originates from a location wildly distant from cardholder's usual area",
+    "Card suddenly shows burst of attempts after being quiet or inactive",
+    "High-dollar digital goods purchase follows long period of account silence",
+    "Transaction hits during off-hours when cardholder typically shops during daytime",
+    "Billing address verification fails when it previously matched on legitimate transactions",
+    "Long gap since last real purchase with new unknown device accessing account"
+  ]
+}

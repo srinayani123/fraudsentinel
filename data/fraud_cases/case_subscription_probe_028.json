@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_028",
+  "title": "Multi-Account Subscription Bundling with Single Card Funding",
+  "pattern": "subscription_probe",
+  "narrative": "A fraudster uses one compromised card to fund 8-15 separate subscription accounts within a 45-90 minute window, creating artificial account diversity to evade single-user velocity limits. Each account uses a unique email address (often sequentially numbered or with +tag variations like user+sub1@domain.com through user+sub15@domain.com) but identical billing address (addr1). All transactions are ProductCD='W' (subscription) at $9.99-$14.99 each, totaling $120-$200 across the card. The P_emaildomain shows 8+ unique emails but R_emaildomain and card1 remain constant. Fraudster exploits trial-to-paid conversion windows where platforms batch-process subscriptions with minimal friction. Transactions cluster in txn_hour 2-4 AM (is_night=1), avoiding business hours when fraud teams actively monitor. The card1_txn_count_24h spikes from 0 to 12+ while card1_amt_zscore exceeds 3.5 due to unusual cumulative spend for a single cardholder in subscription MCC 5968.",
+  "indicators": [
+    "card1_txn_count_1h between 8-15 with identical card1 but 8+ unique P_emaildomain values",
+    "All transactions ProductCD='W' with TransactionAmt=$9.99-$14.99, total card1 spend $120-$200 in 45-90 minutes",
+    "P_emaildomain shows sequential pattern (e.g., +sub1, +sub2) or numbered variations while addr1 and R_emaildomain constant",
+    "txn_hour concentrated in 2-4 AM window with is_night=1 for 100% of transactions",
+    "card1_amt_zscore > 3.5 indicating abnormal cumulative subscription spend for cardholder profile",
+    "dist1 (distance between billing/shipping) = 0 for all transactions despite multiple account creations",
+    "All transactions to same merchant MID within MCC 5968 (continuity/subscription services)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "One payment card funds 8-15 separate subscription accounts in under 90 minutes, each with a unique email address (often sequentially numbered like user+sub1, user+sub2) but identical billing details, with all transactions occurring between 2-4 AM and totaling $120-$200 in $9.99-$14.99 charges.",
+  "reasoning": "The fraudster exploits a stolen card during off-hours to create artificial account diversity that bypasses single-user velocity limits, using email variations to appear as multiple legitimate customers while the shared payment card and billing address reveal coordinated fraudulent subscription enrollment.",
+  "indicator_explanations": [
+    "Single card funds many different email accounts in tight time window",
+    "All purchases are low-value subscriptions clustering around ten dollars per transaction",
+    "Email addresses follow mechanical naming patterns while billing details stay frozen",
+    "All activity occurs during overnight hours when legitimate users rarely subscribe",
+    "Total subscription spending is far above this cardholder's normal behavior",
+    "Billing and shipping addresses match perfectly across all supposedly different accounts",
+    "Every transaction hits the same subscription merchant in rapid succession"
+  ]
+}

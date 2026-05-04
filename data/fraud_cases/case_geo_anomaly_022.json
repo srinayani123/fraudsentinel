@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_022",
+  "title": "Compromised Card Physical Swipe in High-Risk Tourism Corridor",
+  "pattern": "geo_anomaly",
+  "narrative": "A legitimate US-issued card with consistent domestic chip-and-PIN history suddenly registers a physical card-present transaction at a luxury resort in Bali, Indonesia. The $847 transaction occurs 16 hours after the cardholder's last verified purchase in Seattle. No airline or travel booking preceded this geographic leap. The transaction shows proper EMV chip authentication but the merchant category code (MCC 7011, lodging) contradicts the account's 18-month pattern of suburban grocery and fuel purchases. The dist1 feature registers 8,742 miles from billing address. Within 72 hours, three additional CP transactions appear in Bangkok and Phuket totaling $2,340, all at jewelry merchants (MCC 5944) during local overnight hours (txn_hour 2-4 AM). The card's addr1 hash remains unchanged while P_emaildomain shows no travel confirmation emails.",
+  "indicators": [
+    "First international CP transaction after 400+ consecutive domestic-only purchases",
+    "Geographic leap of 8,700+ miles (dist1) within 16-hour window from last verified transaction",
+    "MCC category shift from routine (5411 grocery, 5541 fuel) to luxury/tourism (7011, 5944) with no travel bookings",
+    "Four CP transactions across three cities in 72 hours totaling $3,187 in region with known card cloning infrastructure",
+    "Transaction times clustered in local early morning hours (txn_hour 2-4 AM) inconsistent with cardholder's historical 7 AM-9 PM pattern",
+    "No corresponding airline purchase (MCC 4511) or travel agency charge (MCC 4722) in preceding 30 days",
+    "card1_country_diversity jumps from 1.0 to 4.0 within single week"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A US card with 18 months of domestic grocery and gas purchases suddenly shows physical chip transactions in Bali, Bangkok, and Phuket totaling $3,187 across luxury resorts and jewelry stores—all occurring 8,700+ miles from home with no preceding airline or hotel bookings. The purchases cluster at 2-4 AM local time and span three countries in 72 hours.",
+  "reasoning": "Criminals cloned the physical card in a region with known skimming infrastructure and are racing to extract maximum value before the cardholder notices. The legitimate owner is still in Seattle—the impossible travel timeline, absence of any travel bookings, and overnight spending at high-value merchants reveal the card is in a fraudster's hands, not the cardholder's wallet.",
+  "indicator_explanations": [
+    "Card suddenly used internationally after hundreds of domestic-only transactions",
+    "Card appears thousands of miles away impossibly fast from last use",
+    "Spending shifts from everyday stores to luxury tourist spots without warning",
+    "Multiple physical swipes across distant cities in known card-cloning hotspot region",
+    "Transactions happen in middle of night contrary to cardholder's daytime habits",
+    "International purchases occur without any preceding flight or travel agency bookings",
+    "Card suddenly used in multiple countries after being single-country forever"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_002",
+  "title": "Midnight Velocity Spike During Cardholder Sleep Window",
+  "pattern": "temporal_anomaly",
+  "narrative": "Compromised card executes 7-12 transactions between 02:00-05:00 local time (derived from addr1 timezone) after 60+ days of zero night activity. Legitimate cardholder has established daytime-only pattern (08:00-22:00, 94% of historical transactions). Attack window shows card1_txn_count_3hr jumping from baseline 0.2 to 9, all CNP transactions to digital goods merchants (ProductCD='W'). Transaction amounts cluster tightly ($47-$63 range, card1_amt_zscore consistently 0.3-0.8 suggesting testing behavior). Shipping address (addr1) differs from billing for first time in account history. P_emaildomain switches from established gmail.com to disposable domain. All transactions clear AVS mismatch (addr1 != R_emaildomain geolocation by 800+ miles per dist1). Pattern suggests attacker operating from different timezone exploiting cardholder's predictable sleep schedule to maximize undetected fraud window before morning discovery.",
+  "indicators": [
+    "7-12 transactions concentrated in 02:00-05:00 window with is_night=1 after 60+ day history of zero night transactions",
+    "card1_txn_count_3hr spikes from baseline 0.2 to 9.0 within single overnight session",
+    "Transaction amounts tightly clustered $47-$63 with card1_amt_zscore between 0.3-0.8 across all overnight transactions",
+    "P_emaildomain switches to disposable/temporary domain after 200+ transactions using same established domain",
+    "dist1 shows 800+ mile discrepancy between new addr1 and R_emaildomain geolocation",
+    "All transactions target ProductCD='W' (digital goods) with identical MCC 5816 after cardholder's 90-day history shows zero digital purchases",
+    "Cardholder's established transaction pattern shows 94% of activity in 08:00-22:00 window with zero 02:00-05:00 precedent"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A compromised card suddenly executes 7-12 transactions between 2-5 AM in the cardholder's local timezone after two months of zero nighttime activity, all targeting digital goods with tightly clustered amounts ($47-$63) and a new disposable email domain. The shipping address and email geolocation are now 800+ miles apart, while the cardholder's normal pattern shows 94% of purchases happen between 8 AM-10 PM.",
+  "reasoning": "The attacker is exploiting the cardholder's predictable sleep schedule to maximize the fraud window before morning discovery, operating from a different timezone and testing transaction limits with similar amounts before the victim wakes up. The switch to digital goods, disposable email, and mismatched geographic signals indicate deliberate evasion of fraud controls during hours when the legitimate cardholder cannot intervene.",
+  "indicator_explanations": [
+    "Card suddenly bursts into activity during graveyard hours after months of daytime-only use",
+    "Overnight transaction rate explodes from nearly zero to nine per three-hour block",
+    "All overnight purchases fall in suspiciously narrow dollar range unlike cardholder's typical spread",
+    "Email domain abruptly switches to disposable service after hundreds of purchases from stable address",
+    "New billing address is hundreds of miles from the email provider's registered location",
+    "Card pivots entirely to digital goods after three months of never buying them",
+    "Cardholder historically shops during waking hours but attack hits deep in sleep window"
+  ]
+}

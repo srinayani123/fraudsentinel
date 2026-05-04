@@ -1,0 +1,27 @@
+{
+  "id": "case_engineered_anomaly_009",
+  "title": "Engineered Velocity Feature Spike with Clean Raw Transaction Counts",
+  "pattern": "engineered_anomaly",
+  "narrative": "This pattern represents fraud where Vesta's engineered velocity features detect sophisticated anomalies that raw transaction counts completely miss. The fraudster operates within normal behavioral boundaries — amounts are typical, timing is standard, device usage appears legitimate, and raw velocity counts show no escalation. However, V-field engineered features which aggregate complex cross-dimensional velocity patterns (combining card, address, device, and identity attributes in ways analysts cannot replicate) spike dramatically. V307 and V320 in particular capture multi-feature interaction velocities that remain invisible when examining individual dimensions. The model recognizes coordinated activity across identity elements that share hidden relationships, while each element's standalone metrics remain unremarkable. This represents the pure 'model sees what analysts cannot' fraud surface — where composite feature engineering reveals attack patterns that evade traditional rule-based detection entirely.",
+  "indicators": [
+    "V307 > 4.5 (p95+ range), engineered multi-dimensional velocity feature elevated",
+    "V320 > 3.8 (p90+ range), composite identity-device velocity aggregation flagged",
+    "C13 between 1 and 4 (normal raw card count range), no behavioral velocity signal",
+    "V258 > 2.2 (above median), cross-entity relationship velocity indicator elevated",
+    "D1 between 30 and 180 (established device-card history), device appears legitimate",
+    "V280 > 1.8 (p75+ range), temporal sequence pattern feature showing anomaly",
+    "TransactionAmt_card1_zscore between -1.0 and +1.5 (in-pattern spending range)"
+  ],
+  "indicator_explanations": [
+    "Composite velocity feature combining multiple identity dimensions shows unusual acceleration pattern",
+    "Engineered aggregation linking device and identity attributes flags coordinated activity",
+    "Raw card transaction count remains within normal range showing no velocity spike",
+    "Feature capturing relationships between entities detects hidden velocity across linked identities",
+    "Device has established history with the card indicating legitimate-appearing usage pattern",
+    "Temporal sequencing feature identifies unusual ordering of transaction attributes over time",
+    "Transaction amount fits cardholder's normal spending pattern masking the fraud activity"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Fraud detected exclusively through engineered velocity features that aggregate complex multi-dimensional patterns, while all raw behavioral metrics including transaction counts, amounts, and device history remain completely normal and unremarkable.",
+  "reasoning": "When sophisticated engineered features spike dramatically while raw velocity counts stay normal, it indicates fraud operations carefully managing individual behavioral signals while inadvertently creating detectable patterns in cross-dimensional feature spaces that only composite machine-learning features can capture."
+}

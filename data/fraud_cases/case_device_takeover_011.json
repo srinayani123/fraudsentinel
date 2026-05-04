@@ -1,0 +1,25 @@
+{
+  "id": "case_device_takeover_011",
+  "title": "First-Time Browser-OS Fingerprint with Matching Behavioral Profile",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster has compromised cardholder credentials and operates from their own device using a browser and operating system combination never associated with this card. The attacker carefully mimics the victim's spending patterns—amounts remain within the cardholder's normal range, transaction velocity stays low, and purchase timing occurs during regular daytime hours. Email addresses match existing account records, creating a clean behavioral surface. However, the device fingerprint reveals a fundamental identity mismatch: the browser-OS pairing (D10) has never been seen on this card before, while simultaneously the device itself (D1) may show prior usage with other cards. This combination of a virgin browser-OS fingerprint with otherwise normal behavior indicates credential theft where the fraudster maintains operational security by avoiding behavioral red flags but cannot mask their unfamiliar hardware and software environment.",
+  "indicators": [
+    "D10 = 0 indicating browser-OS combination never seen with this card",
+    "D1 > 50 (p75-p90 range) showing device has transacted with multiple other cards",
+    "card1_amt_zscore between -1.0 and +1.0 indicating amount fits cardholder's spending pattern",
+    "D4 > 80 (above p75) revealing multiple email addresses associated with this device",
+    "card1_txn_count_24h < 10 showing low transaction velocity",
+    "emails_match = 1 with P_emaildomain matching prior transactions on record"
+  ],
+  "indicator_explanations": [
+    "This specific browser and operating system pairing has never been used with this card",
+    "The device fingerprint shows history of transactions across many different payment cards",
+    "Transaction amount falls squarely within the cardholder's typical spending baseline",
+    "Device has been associated with numerous different email addresses across its transaction history",
+    "Recent transaction velocity remains well below suspicious thresholds for this cardholder",
+    "Email domain matches previous legitimate purchases and account registration records"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Compromised credentials used from fraudster's device with a browser-OS combination never seen on the card. Behavioral signals appear completely normal while device fingerprint reveals the fundamental identity mismatch.",
+  "reasoning": "Legitimate cardholders rarely change their browser-OS combination without prior device history on the card. When a virgin browser-OS fingerprint appears alongside a device that has serviced many other cards and emails, it indicates stolen credentials being used from an attacker's established fraud infrastructure despite careful behavioral mimicry."
+}

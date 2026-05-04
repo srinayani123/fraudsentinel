@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_007",
+  "title": "Prepaid BIN Velocity Exploitation with Low-Value Sequential Testing",
+  "pattern": "bin_attack",
+  "narrative": "Fraudsters exploit prepaid card BINs (typically 4XXX or 5XXX ranges with low cardholder liability) by executing sequential low-value transactions to maximize approval rates before cards are reported. Attack begins with $3-15 test transactions at digital goods merchants (MCC 5816, 5968) using cards from same IIN range, all within 15-30 minute windows. Once approved, perpetrators escalate to $45-95 purchases at retailers with instant fulfillment. Prepaid BINs lack robust fraud monitoring, enabling 8-15 successful transactions per card before detection. Attackers rotate through 20-40 cards from identical BIN, all shipping to 2-3 drop addresses within same postal code. P_emaildomain shows disposable services (mailinator, guerrillamail), R_emaildomain is null or mismatched. Transactions cluster in late-night hours (txn_hour 23-4) when fraud teams are understaffed. Total bust-out per BIN ranges $4K-12K before merchant flags the pattern.",
+  "indicators": [
+    "card1 prefix matches 8-15 other cards in 24hr window, all from same 6-digit BIN with prepaid indicator",
+    "TransactionAmt sequence: 3-5 transactions under $20, then 4-8 transactions $45-95 within same session",
+    "card1_txn_count_24hr shows 8-15 transactions with card1_amt_zscore remaining under 2.0 to avoid velocity triggers",
+    "addr1 (shipping zip) shared by 12-40 different card1 values, R_emaildomain is null for 70%+ of transactions",
+    "ProductCD=W (digital wallet loads) or C (computer products) with dist1 under 50km despite IP geolocation showing 800+ km distance",
+    "txn_hour between 23-04 for 65%+ of transactions, is_night=1, with identical device fingerprints across 6+ card1 values",
+    "P_emaildomain from disposable providers with account creation timestamp within 48hrs of first transaction"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple prepaid cards from the same BIN make clusters of small test purchases ($3-15) at digital goods merchants, then quickly escalate to mid-value transactions ($45-95), all shipping to just 2-3 addresses and using throwaway email accounts during late-night hours.",
+  "reasoning": "Criminals exploit prepaid cards' weaker fraud controls by testing stolen card numbers with tiny purchases to confirm they work, then rapidly draining them before the cardholder or issuer can react, cycling through dozens of cards to maximize theft before the merchant blocks the pattern.",
+  "indicator_explanations": [
+    "Same prepaid card bin spawns a dozen lookalike cards within one day",
+    "Starts with tiny test charges then escalates to medium-value purchases",
+    "Card racks up many transactions while keeping amounts unremarkable to bypass alerts",
+    "Dozens of different cards ship to the same address with missing email domains",
+    "Digital wallet or computer purchases show device closer than the IP suggests",
+    "Activity clusters late night with same device controlling multiple stolen cards",
+    "Email account was created days ago using temporary provider services"
+  ]
+}

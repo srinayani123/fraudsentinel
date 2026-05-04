@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_004",
+  "title": "Corporate Email Masking with Sequential Gift Card Cashout Pattern",
+  "pattern": "email_risk",
+  "narrative": "Fraudster uses legitimate corporate P_emaildomain (fortune500company.com) during checkout but routes digital goods to burner R_emaildomain on free providers. Pattern shows 8-12 transactions over 48-72 hours, each $50-$500 targeting ProductCD='W' (digital goods) or gift cards. P_emaildomain remains constant (corporate) while R_emaildomain cycles through 4-6 newly created Gmail/Yahoo accounts registered within 7 days. Card velocity shows card1_txn_count_24hr jumping from 0 to 11 transactions. Transactions cluster in off-hours (txn_hour between 22:00-04:00 local time based on addr1 timezone). dist1 shows 850+ miles between billing and delivery coordinates. AVS returns partial matches (zip only). Same device fingerprint across all transactions despite rotating recipient emails.",
+  "indicators": [
+    "P_emaildomain is established corporate/enterprise domain while R_emaildomain rotates across 4-6 free email providers",
+    "8-12 transactions in 48-72 hour window, each $50-$500, all ProductCD='W' or gift card MCC codes",
+    "R_emaildomain accounts created within 7 days of first transaction per domain registration lookup",
+    "card1_txn_count_24hr increases from 0 to 11+ with identical P_emaildomain throughout",
+    "Transactions concentrated in txn_hour 22:00-04:00 range with is_night=1 flag",
+    "dist1 exceeds 850 miles between billing addr1 and shipping coordinates",
+    "Identical DeviceInfo hash across all transactions despite 4-6 different R_emaildomain values"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A legitimate corporate email is used for payment, but digital goods or gift cards are delivered to multiple newly created free email accounts (Gmail, Yahoo) that rotate with each transaction. All purchases come from the same device during late-night hours, with billing and delivery addresses separated by 850+ miles.",
+  "reasoning": "The fraudster is exploiting a stolen corporate payment credential while masking the cashout destination through burner email accounts. The high-frequency purchasing of easily monetized digital goods to disposable addresses, combined with off-hours activity and geographic distance, indicates systematic theft rather than legitimate corporate procurement.",
+  "indicator_explanations": [
+    "Purchaser email looks corporate while recipient emails cycle through throwaway services",
+    "Sequential medium-value purchases all target gift cards over two-day window",
+    "Recipient email accounts were registered just days before these transactions",
+    "Card suddenly fires eleven transactions after zero activity using same purchaser email",
+    "All purchases happen during late-night hours when monitoring is lightest",
+    "Shipping destination is hundreds of miles away from the billing address",
+    "Same device fingerprint used despite rotating through multiple recipient email accounts"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_engineered_anomaly_019",
+  "title": "Merchant-Category Code Pattern Exploitation Via Composite V-Field Encoding",
+  "pattern": "engineered_anomaly",
+  "narrative": "Fraudsters exploit specific merchant-MCC combinations that circumvent fraud controls through strategic pairing of legitimate-appearing merchant categories with payment processors known for weak authentication. The Vesta V-field composite features detect this pattern by encoding multi-dimensional merchant metadata that reveals coordinated abuse across seemingly unrelated MCCs. Individual behavioral signals appear completely normal: amounts fit cardholder spending profiles, velocity remains within expected ranges, and timing matches legitimate shopping patterns. However, V280 (merchant-category interaction encoding) and V307 (processor-merchant risk composite) fire simultaneously, indicating the transaction routes through a merchant-processor combination historically associated with fraud rings. V320 further flags the specific MCC-BIN pairing as high-risk based on industrywide pattern matching invisible to traditional rules. The card may have legitimate history, the device may be clean, but the merchant infrastructure itself encodes the fraud signal through complex feature interactions that only composite V-fields can detect.",
+  "indicators": [
+    "V280 > 0.75 (p85 threshold), elevated merchant-category interaction composite indicating risky MCC pairing",
+    "V307 > 0.82 (p90 threshold), processor-merchant risk composite flagging known weak-authentication combination",
+    "V320 > 0.68 (p80 threshold), BIN-MCC interaction feature detecting high-risk payment-method category pairing",
+    "card1_amt_zscore between -1.2 and +1.0, amount within normal cardholder spending range masking the merchant risk",
+    "C1 < 35 (below p50 of fraud transactions), card-counter aggregation shows normal card activity level",
+    "D1 > 15 indicating established device-card relationship with legitimate transaction history",
+    "V201 > 0.58 (p75 threshold), secondary merchant-metadata composite confirming the infrastructure anomaly pattern"
+  ],
+  "indicator_explanations": [
+    "The merchant category code pairing triggers a risk flag for coordinated abuse patterns",
+    "The payment processor and merchant combination matches known weak authentication infrastructure",
+    "The card network type and merchant category create a high-risk interaction signature",
+    "Transaction amount fits the cardholder's normal spending behavior without any escalation flags",
+    "Card activity counter shows typical usage levels with no velocity concerns",
+    "The device has significant legitimate history with this card showing established pairing",
+    "Additional merchant metadata features confirm the suspicious infrastructure combination detected"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Fraud routed through specific merchant-processor-MCC combinations that exploit weak authentication infrastructure while maintaining completely normal behavioral signals. Only detectable through Vesta composite features encoding complex merchant metadata interactions.",
+  "reasoning": "Fraudsters deliberately select merchant-processor combinations with historically weak fraud controls, allowing them to maintain normal transaction patterns while exploiting infrastructure vulnerabilities. The V-field composites detect these coordinated merchant-pattern combinations that individual behavioral features cannot reveal."
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_010",
+  "title": "Blocklisted Email Domain with Rapid Card Rotation and High-Value Digital Goods",
+  "pattern": "email_risk",
+  "narrative": "Fraudster uses email domain flagged on commercial threat intelligence feeds (Spamhaus DBL, PhishTank) to register multiple accounts in 72-hour window. Pattern shows P_emaildomain matching known botnet C2 infrastructure or freshly-registered typosquat domains. Attacker cycles through 8-12 different card1 values with same email, targeting digital ProductCD (C, H) with TransactionAmt between $78-$299. Transactions cluster in 4-6 hour bursts during US overnight hours (txn_hour 2-6), each card attempted 1-3 times before abandonment. All purchases ship to same addr1 with dist1 under 50km from cardholder billing despite P_emaildomain geolocating to Eastern Europe. Card1_txn_count_24h never exceeds 3 per BIN, staying under basic velocity thresholds while email accumulates 40+ total transactions. CVV match rate 100% suggests full card details, not card-testing.",
+  "indicators": [
+    "P_emaildomain present on Spamhaus DBL or similar commercial blocklist at transaction time",
+    "8-12 unique card1 values associated with single P_emaildomain within 72 hours",
+    "TransactionAmt concentrated $78-$299 for ProductCD C or H (digital goods)",
+    "Txn_hour between 2-6 AM Eastern with 85%+ of email's transactions in this window",
+    "Dist1 under 50km despite P_emaildomain IP geolocation 5000+ km from addr1",
+    "Card1_txn_count_24h stays 1-3 per card while P_emaildomain accumulates 40+ total transactions",
+    "CVV_match_rate 100% across all cards with zero declines for invalid CVV"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single email address from a known malicious domain (spam/phishing blocklist) registers multiple accounts and uses 8-12 different cards within 72 hours, all purchasing digital goods in the $78-$299 range during overnight hours. Each card is used only 1-3 times while the email racks up 40+ total transactions, all with perfect CVV matches and shipping to the same address despite the email domain originating from Eastern Europe.",
+  "reasoning": "The fraudster is exploiting stolen card details (likely from a data breach given the perfect CVV matches) while hiding behind a disposable email domain already flagged for malicious activity. By rotating cards frequently and keeping each card's transaction count low, they evade basic velocity rules while the blocklisted email and geographic mismatch reveal they're operating a professional card monetization operation targeting easy-to-resell digital products.",
+  "indicator_explanations": [
+    "Email domain is flagged by commercial spam or fraud blocklists",
+    "Same email address cycles through many different cards in three days",
+    "Purchase amounts cluster in sweet spot for digital goods fraud",
+    "Activity concentrated in overnight hours when monitoring is lightest",
+    "Billing address distance conflicts with email account's true location",
+    "Each card used sparingly while email racks up dozens of transactions",
+    "Every CVV passes perfectly suggesting cards come with full data"
+  ]
+}

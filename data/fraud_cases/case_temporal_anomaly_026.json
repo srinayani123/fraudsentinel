@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_026",
+  "title": "Commute-Time Location Spoofing with Geofence Violation Pattern",
+  "pattern": "temporal_anomaly",
+  "narrative": "Card used for $47.82 gas station purchase at 7:42 AM on Tuesday, matching cardholder's typical weekday morning transaction time (txn_hour=7, hist_commute_flag=1). However, dist1 shows 847 miles from registered addr1, while historical morning transactions cluster within 15-mile radius. Card holder's linked P_emaildomain shows corporate domain with known office location. Fraudster exploited temporal predictability: analyzed 90-day pattern showing 87% of Tuesday 7-8 AM transactions at specific MCC 5541/5812 merchants along route. Card1_txn_count_24hr shows this as isolated event (count=1) versus normal commute pattern of 2-3 small purchases. AVS mismatch with billing ZIP. No device_id match to previous morning transactions. Fraudster likely purchased stolen card data including transaction history timestamps, then tested card at time when legitimate holder would be distracted during actual commute, betting on temporal pattern recognition overriding geographic anomaly in automated systems.",
+  "indicators": [
+    "txn_hour matches 90-day commute pattern (7-8 AM weekdays) with 85%+ historical consistency",
+    "dist1 shows 847 miles from addr1 while historical same-hour transactions average <15 miles",
+    "card1_txn_count_24hr=1 versus historical morning pattern of 2-3 clustered transactions",
+    "device_id null or new, no match to any previous txn_hour=7-8 transactions in 180-day window",
+    "MCC matches historical morning pattern (5541/5812) but merchant_id has zero transaction history",
+    "AVS response 'N' with billing ZIP mismatch while P_emaildomain suggests corporate cardholder with stable address",
+    "TransactionAmt $47.82 within normal range but card1_amt_zscore=-0.3 indicates slightly below typical morning spend"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A purchase occurs at the cardholder's usual commute time (7-8 AM on a weekday) and matches their typical merchant category, but the location is 847 miles away from their registered address instead of the normal 15-mile radius, with no matching device ID and an isolated transaction count versus the usual 2-3 morning purchases.",
+  "reasoning": "The fraudster studied the cardholder's 90-day transaction history to identify their predictable morning routine, then timed the fraudulent purchase to coincide with the legitimate commute window when the victim would be distracted and automated systems might overlook the geographic impossibility due to temporal pattern matching.",
+  "indicator_explanations": [
+    "Transaction hits usual morning commute time when cardholder is predictably active",
+    "Location is suddenly hundreds of miles away from the home address",
+    "Only one transaction this morning instead of the usual coffee-gas cluster",
+    "Device has never appeared during cardholder's established morning routine window",
+    "Merchant category fits morning pattern but this specific merchant is brand new",
+    "Billing address fails verification despite cardholder having corporate stable address history",
+    "Amount is slightly lower than typical morning purchases for this cardholder"
+  ]
+}

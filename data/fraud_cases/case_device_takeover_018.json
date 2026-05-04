@@ -1,0 +1,25 @@
+{
+  "id": "case_device_takeover_018",
+  "title": "Device Timezone Mismatch with Stolen Credentials on Clean Transaction Pattern",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster uses stolen card credentials from their own device located in a fundamentally different timezone than the cardholder's billing country. The transaction amount, velocity, and timing appear normal for the legitimate cardholder, masking the fraud. However, device metadata reveals timezone incongruence with billing address geography. The D1 value of zero confirms this is the first transaction pairing this specific device with the card. Additional D-field aggregations show the device has abnormally high historical transaction counts inconsistent with a personal device. The fraudster operates during their local daytime hours which happen to align with the cardholder's normal hours, creating temporal plausibility. Card-level counters remain within expected ranges. Email matching passes validation. The core fraud signal resides entirely in device identity features and timezone-geography inconsistency, while all behavioral indicators present as legitimate cardholder activity.",
+  "indicators": [
+    "D1 = 0 indicating first-time device-card pairing with no prior history",
+    "D10 > 150 (above p90=219.30), device timezone offset inconsistent with billing country",
+    "D4 > 200 (well above p90=297.20), device has excessive prior transaction history",
+    "card1_amt_zscore between -1.0 and +1.0, amount within cardholder's typical range",
+    "card1_txn_count_24h < 10, velocity appears normal for this cardholder",
+    "D15 > 250 (above p90=346.30), device browser-timezone combination flags geographic anomaly"
+  ],
+  "indicator_explanations": [
+    "This specific device has never been used with this card before today",
+    "Device reports timezone that does not match the cardholder's billing country region",
+    "This device has a transaction history suggesting commercial or compromised use",
+    "Purchase amount fits perfectly within the cardholder's normal spending pattern",
+    "Transaction frequency over the past day matches expected cardholder behavior",
+    "Browser and timezone metadata combination indicates device is geographically inconsistent with account"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Stolen credentials used from fraudster's device in wrong timezone while maintaining clean transaction velocity, amount, and timing patterns. Device fields reveal geographic and pairing inconsistencies despite behavioral normalcy.",
+  "reasoning": "Legitimate cardholders use consistent devices in their home timezone. A never-seen device with timezone mismatching billing geography combined with high device transaction history indicates credential theft, even when fraudster mimics normal spending behavior."
+}

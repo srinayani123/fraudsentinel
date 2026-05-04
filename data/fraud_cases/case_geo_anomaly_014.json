@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_014",
+  "title": "Cross-Border Gift Card Laundering via Freight Forwarders",
+  "pattern": "geo_anomaly",
+  "narrative": "Fraudster purchases high-denomination gift cards ($500-$2500 TransactionAmt) using compromised US-issued cards, shipping to freight forwarding addresses in Miami or Delaware while billing shows European cardholders. Typical pattern: 3-6 transactions within 72 hours, all ProductCD='C' (card_not_present), shipping to same US addr1 but R_emaildomain shows '.de' or '.uk' domains. The dist1 (distance between billing and shipping) exceeds 4000km consistently. Transactions cluster between 02:00-06:00 UTC (is_night=1 for US, daytime for EU). Card velocity spikes dramatically: card1_txn_count_24hr jumps from 0-1 to 5-8, while card1_amt_zscore exceeds 3.5. AVS typically returns 'N' (no match) or 'Z' (zip only). Freight forwarders then reship consolidated packages internationally, converting stolen funds to portable value.",
+  "indicators": [
+    "dist1 exceeds 4000km with R_emaildomain showing European TLD (.de, .uk, .fr) and US shipping addr1",
+    "ProductCD='C' with TransactionAmt between $500-$2500, consistent with gift card denominations",
+    "card1_txn_count_24hr increases from â‰¤1 to 5-8 transactions within 72-hour window",
+    "card1_amt_zscore > 3.5 indicating purchase amounts far exceed cardholder's normal spending",
+    "Transactions occur during is_night=1 for US timezone (02:00-06:00 UTC) despite European billing",
+    "AVS mismatch with response code 'N' or 'Z', billing address does not verify",
+    "Shipping addr1 matches known freight forwarder locations in Miami FL (33166, 33178) or Wilmington DE (19801, 19850)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "European-issued cards make multiple high-value purchases ($500-$2500) shipped to US freight forwarder addresses in Miami or Delaware, with billing-to-shipping distances exceeding 4000km and European email domains. Transactions cluster in overnight US hours with card velocity spiking from 0-1 to 5-8 purchases within 72 hours and address verification failures.",
+  "reasoning": "Criminals use stolen European cards to buy gift cards at US addresses because freight forwarders consolidate and reship packages internationally, converting stolen funds into untraceable portable value. The extreme geographic mismatch, overnight timing, sudden velocity spike, and AVS failures indicate the cardholder has no legitimate reason to ship high-value items to a US commercial reshipper.",
+  "indicator_explanations": [
+    "Billing location is thousands of miles from shipping address across international border",
+    "Transaction amount matches typical gift card denominations in bulk purchase range",
+    "Card suddenly shifts from quiet to burst of activity within three days",
+    "Purchase size is dramatically larger than cardholder's typical spending pattern",
+    "Transactions happen during US nighttime hours despite European billing address",
+    "Billing address fails verification checks with the card issuer",
+    "Shipping destination matches known package forwarding service hubs"
+  ]
+}

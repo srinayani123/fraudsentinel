@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_011",
+  "title": "Cross-Merchant Enumeration Burst with Geographic Scatter Pattern",
+  "pattern": "velocity_attack",
+  "narrative": "Compromised card tested across 8-12 different merchants within 45-75 minutes, each transaction $15-$89 to stay below manual review thresholds. Fraudster systematically enumerates merchant acceptance before attempting larger frauds elsewhere. Transactions span 4+ merchant category codes (often gas stations MCC 5541, fast food MCC 5814, digital goods MCC 5816, convenience stores MCC 5499) with no geographic clusteringâ€”dist1 values exceed 500km between consecutive purchases. All transactions CNP with identical device_id but rotating P_emaildomain across free providers. Card shows zero prior transaction history (card1_txn_count_1day = 0 before burst). Transaction amounts deliberately vary by $3-$8 to appear organic. Burst terminates abruptly after 55-80 minutes, suggesting automated testing script with timeout. Card1_amt_zscore spikes to 8+ during window.",
+  "indicators": [
+    "card1_txn_count_1hr >= 8 with unique MIDs each transaction",
+    "TransactionAmt range $15-$89, no amount repeated exactly",
+    "4+ distinct MCC codes within single hour window",
+    "dist1 > 500km between consecutive transactions (impossible travel)",
+    "P_emaildomain changes 3+ times within burst, all free providers",
+    "card1_txn_count_7day = 0 before burst initiation",
+    "card1_amt_zscore > 7.5 during burst period"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card with no recent history suddenly fires 8-12 transactions across different merchant types in under 75 minutes, with impossibly large distances between purchases and rotating email domains on each attempt.",
+  "reasoning": "The fraudster is testing a stolen card's validity and spending limits across multiple merchants before selling the card data or using it for larger purchases, using geographic impossibility and email rotation to evade detection.",
+  "indicator_explanations": [
+    "Card hits eight different merchants in one hour with no repeats",
+    "Amounts vary strategically to avoid triggering fixed-threshold fraud rules",
+    "Purchases jump between four unrelated business categories during the burst",
+    "Transactions appear in locations too far apart to travel between legitimately",
+    "Email address cycles through multiple free providers during the attack",
+    "Card showed zero activity for a week before suddenly bursting",
+    "Spending amounts are extremely abnormal compared to card's historical behavior"
+  ]
+}

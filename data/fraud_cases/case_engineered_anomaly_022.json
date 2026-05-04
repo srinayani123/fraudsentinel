@@ -1,0 +1,27 @@
+{
+  "id": "case_engineered_anomaly_022",
+  "title": "Multi-Vector Vesta Anomaly Cluster: V258-V280-V305 Concurrent Flagging Pattern",
+  "pattern": "engineered_anomaly",
+  "narrative": "This pattern represents sophisticated fraud hidden entirely within Vesta's engineered feature space, where three specific V-fields (V258, V280, V305) simultaneously flag anomalies despite normal behavioral presentation. The transaction appears legitimate across all standard fraud signals: amount fits cardholder baseline, velocity is unremarkable, device-card pairing shows history, and timing falls within normal hours. However, Vesta's proprietary composite features detect structural anomalies in the transaction's multi-dimensional fingerprint. V258 captures payment-instrument consistency patterns, V280 encodes cross-session identity coherence, and V305 reflects transaction-graph positioning. When all three spike together above their respective 90th percentiles while behavioral signals remain clean, it indicates the fraudster has successfully mimicked surface-level legitimacy but cannot replicate the deep transactional DNA that Vesta's feature engineering captures. This cluster pattern often appears in account-takeover scenarios where attackers control genuine credentials but operate from subtly different behavioral contexts.",
+  "indicators": [
+    "V258 > 4.5 (p90 threshold), flagging payment-instrument consistency anomaly",
+    "V280 > 3.8 (p90 threshold), elevated cross-session identity coherence score",
+    "V305 > 5.2 (p90 threshold), transaction-graph positioning outlier detected",
+    "D1 >= 5 indicating established device-card relationship, not first-time pairing",
+    "card1_amt_zscore between -1.0 and +1.0, amount within normal cardholder range",
+    "C1 <= 45 (below p75), card-counter aggregation shows typical activity level",
+    "TransactionHour between 9 and 20, normal daytime transaction timing"
+  ],
+  "indicator_explanations": [
+    "Payment instrument shows unusual consistency pattern compared to historical cardholder behavior",
+    "Identity verification signals across multiple sessions reveal subtle coherence breaks",
+    "Transaction's position within the broader payment network graph appears anomalous",
+    "Device has been paired with this card multiple times previously",
+    "Purchase amount fits perfectly within the cardholder's typical spending range",
+    "Card activity frequency appears completely normal for this customer",
+    "Transaction occurs during standard business hours matching cardholder patterns"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Transaction exhibits perfect behavioral legitimacy across amount, velocity, device history, and timing, but three critical Vesta engineered features (V258, V280, V305) simultaneously spike above 90th percentile thresholds. The fraudster replicates surface patterns but cannot fake the deep multi-dimensional transaction fingerprint.",
+  "reasoning": "When multiple independent Vesta composite features flag simultaneously while all behavioral signals remain clean, it indicates sophisticated fraud where attackers control legitimate credentials but operate from a subtly different contextual environment. The V-field cluster captures multi-feature interactions invisible to direct observation, revealing fraud through pattern-space anomalies rather than individual metric violations."
+}

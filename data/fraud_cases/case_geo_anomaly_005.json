@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_005",
+  "title": "Eastern European Card to West African Shipping Drop Pattern",
+  "pattern": "geo_anomaly",
+  "narrative": "Cardholder presents legitimate European-issued card (BIN 4462xx, 5134xx) with Polish or Romanian billing address, but ships high-value electronics ($800-$2,200 per transaction) to Nigeria, Ghana, or Kenya. Orders placed between 02:00-06:00 UTC when European cardholders typically sleep. Email domains are free providers (gmail.com, yahoo.com) rather than regional ISPs. The card shows clean 90-day history with domestic transactions averaging $45-$120, then suddenly 3-6 international shipments within 72 hours. Ship-to name rarely matches cardholder name on file. Fraudster exploits stolen card data before legitimate holder notices, using freight forwarders or accomplices at destination. Product category shifts from groceries/fuel (MCC 5411, 5541) to consumer electronics (MCC 5732, 5946). Distance between billing addr1 and shipping R_addr1 exceeds 4,500 km (dist1 feature). Pattern terminates when card issuer blocks international transactions or cardholder disputes charges.",
+  "indicators": [
+    "dist1 > 4500 km between billing and shipping coordinates",
+    "TransactionAmt $800-$2,200 for ProductCD = 'W' (physical goods)",
+    "card1_txn_count_24hr shows 3-6 transactions versus 90-day baseline of 8-12 monthly",
+    "txn_hour between 2-6 (is_night=1) for European BIN with African R_addr1 country code",
+    "P_emaildomain and R_emaildomain both free providers (gmail, yahoo, outlook) not matching card BIN country",
+    "card1_amt_zscore > 3.5 (current transaction amount far exceeds historical mean)",
+    "MCC code shift from 5411/5541 (groceries/fuel) to 5732/5946 (electronics) within same card1 session"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A European payment card with months of small domestic purchases suddenly makes multiple high-value electronics orders shipping to West Africa during European night hours, using free email providers and mismatched recipient names.",
+  "reasoning": "Fraudsters exploit stolen card details before the legitimate cardholder wakes up and notices, rushing expensive goods to overseas accomplices or freight forwarders who can liquidate electronics quickly in destination markets.",
+  "indicator_explanations": [
+    "Card billing address is thousands of kilometers from shipping destination",
+    "High-value electronics purchase shipped internationally to unfamiliar region",
+    "Card suddenly active multiple times today versus typical monthly usage",
+    "European card used overnight to ship goods to African address",
+    "Both buyer and recipient use free email providers mismatched to card country",
+    "Purchase amount dramatically exceeds cardholder's normal spending pattern",
+    "Card switches from everyday purchases to expensive electronics within hours"
+  ]
+}

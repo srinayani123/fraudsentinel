@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_007",
+  "title": "SIM Swap Account Takeover with Immediate High-Value Liquidation",
+  "pattern": "account_takeover",
+  "narrative": "Fraudster ports victim's phone number to new SIM card, intercepts SMS-based 2FA codes, and gains account access within 2-4 hours of the swap. Pattern shows legitimate account dormancy (no transactions 14+ days), then sudden burst of 3-8 transactions totaling $2,400-$8,500 within 90 minutes of first post-swap login. Transactions cluster in digital goods (ProductCD='W' or 'C') and peer-to-peer platforms where funds can be quickly extracted. Geolocation shifts dramatically: addr1 changes to new state/region, dist1 jumps 800+ miles from historical pattern. Device fingerprint completely new (different browser, OS, screen resolution). Transactions occur during victim's typical sleep hours (txn_hour between 1-5 AM in victim's timezone). Card CVV failures may appear as fraudster tests stored payment methods. Email remains unchanged but password reset timestamp aligns with transaction start. Chargeback filed within 48 hours once victim regains phone access.",
+  "indicators": [
+    "Account dormant 14+ days, then 3-8 transactions worth $2,400-$8,500 in 90-minute window",
+    "addr1 geographic shift with dist1 > 800 miles from historical transaction locations",
+    "Complete device fingerprint change (new browser/OS/resolution) coinciding with transaction burst",
+    "Transactions concentrated in digital goods (ProductCD 'W'/'C') or P2P transfer platforms",
+    "txn_hour between 1-5 AM in victim's established timezone pattern",
+    "Password reset event timestamp within 30 minutes before first fraudulent transaction",
+    "card1_txn_count_24hr spikes from 0 to 5+ after extended inactivity period"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A long-dormant account suddenly springs to life with multiple high-value purchases of digital goods or peer-to-peer transfers, all happening in the middle of the night from a completely new device and location hundreds of miles away. The flurry of activity happens within 90 minutes and is often preceded by a password reset.",
+  "reasoning": "The fraudster has hijacked the victim's phone number to intercept security codes, allowing them to break into the account and immediately drain value before the victim wakes up and notices. The focus on digital goods and P2P platforms reveals intent to quickly convert stolen funds into untraceable assets before the account is locked.",
+  "indicator_explanations": [
+    "Inactive account suddenly springs to life with multiple expensive purchases in quick succession",
+    "Transactions appear hundreds of miles away from where the cardholder normally shops",
+    "Completely different device accessing the account than ever used before",
+    "Purchases target easily-liquidated items like gift cards or person-to-person money transfers",
+    "Activity happens in the middle of the night when victim is likely asleep",
+    "Account credentials were reset moments before the fraudulent spending spree started",
+    "Card goes from zero activity to frantic usage after weeks of silence"
+  ]
+}

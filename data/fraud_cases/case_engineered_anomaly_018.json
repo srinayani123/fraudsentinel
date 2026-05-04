@@ -1,0 +1,27 @@
+{
+  "id": "case_engineered_anomaly_018",
+  "title": "Session-Cookie Sequence Anomaly Detected via Vesta Engineered Features",
+  "pattern": "engineered_anomaly",
+  "narrative": "Fraudsters exploit stolen session tokens or cookie-replay attacks to mimic legitimate browsing behavior, bypassing standard authentication. The raw transaction appears completely normal: amounts fit the cardholder profile, timing is typical daytime activity, email domains match historical patterns, and device characteristics show no obvious red flags. However, Vesta's engineered V-fields encode subtle session-sequence anomalies invisible in raw features. V307 captures cookie-lifespan inconsistencies where the session age doesn't align with device history. V320 flags browser-fingerprint mutations that suggest cookie transplantation across environments. V280 detects navigation-path deviations from typical user journeys. These composite signals reveal session hijacking or cookie-stuffing attacks where fraudsters replay valid authentication tokens in contexts that subtly violate expected session-behavior patterns. The model detects what analysts cannot directly observe: multi-dimensional session-integrity violations encoded across Vesta's proprietary feature space.",
+  "indicators": [
+    "V307 > 4.5 (p85), elevated cookie-session lifespan inconsistency score",
+    "V320 > 3.8 (p80), browser-fingerprint mutation indicator suggesting cookie transplantation",
+    "V280 > 5.2 (p90), navigation-path deviation from typical user journey",
+    "V305 between 2.0-4.0, mid-range session-context score masking anomaly",
+    "D1 > 0 AND D1 < 180 (device seen before but cookie-sequence mismatch)",
+    "card1_amt_zscore between -1.0 and +1.0 (amount within normal range)",
+    "V201 > 3.5 (p75), session-event sequence timing anomaly"
+  ],
+  "indicator_explanations": [
+    "Cookie session duration does not match the expected lifespan for this device history",
+    "Browser fingerprint shows characteristics inconsistent with the original session environment",
+    "User navigation pattern deviates from typical click-paths for this merchant category",
+    "Session context score falls in ambiguous range requiring deeper feature inspection",
+    "Device is recognized but the cookie sequence breaks expected continuity patterns",
+    "Transaction amount fits cardholder's normal spending range providing behavioral camouflage",
+    "Timing between session events reveals subtle sequencing inconsistencies"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Session or cookie-replay attack where stolen authentication tokens enable transactions that look behaviorally normal but violate encoded session-integrity patterns. Vesta engineered features capture cookie-lifespan mismatches, browser-fingerprint mutations, and navigation-path deviations invisible in raw transaction data.",
+  "reasoning": "Fraudsters using hijacked sessions can mimic legitimate user behavior in all observable dimensions, but cannot perfectly replicate the complex multi-feature session-continuity patterns Vesta encodes. The V-field anomalies reveal session-context violations that indicate token theft or cookie manipulation despite clean surface behavior."
+}

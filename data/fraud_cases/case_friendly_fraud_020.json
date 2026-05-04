@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_020",
+  "title": "Serial Delivery Dispute Abuser with Progressive Order Value Escalation",
+  "pattern": "friendly_fraud",
+  "narrative": "Customer establishes legitimacy through 3-5 small purchases ($15-$45) over 30-45 days with no disputes, then escalates to high-value physical goods ($200-$600) which are systematically disputed 15-21 days post-delivery. Pattern shows identical ship-to address across all orders (addr1 consistency), same card fingerprint (card1), but disputes filed only after tracking confirms delivery. Chargebacks cite 'item not received' despite carrier proof-of-delivery. Transaction amounts show deliberate progression: initial orders cluster $20-$40, then sudden jump to $250+ range. Dispute rate on orders >$150 approaches 85-95%, while sub-$50 orders show 0% disputes. Time-to-dispute averages 18.3 days, precisely outside standard merchant evidence collection window but within chargeback rights period.",
+  "indicators": [
+    "card1_txn_count_7day = 0 for orders <$50, then card1_txn_count_30day shows 3-5 prior purchases",
+    "TransactionAmt progression: 3+ orders at $15-$45, followed by orders at $200-$600 within 60-day window",
+    "addr1 and card1 consistent across 100% of purchases, R_emaildomain unchanged",
+    "Dispute filing window: 15-21 days post-transaction for high-value orders only",
+    "Chargeback rate >80% for TransactionAmt >$150, 0% for TransactionAmt <$50",
+    "ProductCD shifts from 'C' or 'H' (low-value) to 'W' (physical goods) at escalation point",
+    "No AVS or CVV failures across transaction history, suggesting legitimate cardholder"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Customer makes 3-5 small purchases ($15-$45) without issues over 30-45 days, then suddenly orders high-value items ($200-$600) using the same card and address, disputing 85-95% of orders over $150 exactly 15-21 days after delivery confirmation while never disputing the smaller orders.",
+  "reasoning": "The cardholder is deliberately building purchase history to appear trustworthy before exploiting chargeback rights on expensive items they've already received, timing disputes to fall outside the merchant's evidence window while falsely claiming non-delivery despite carrier proof.",
+  "indicator_explanations": [
+    "Account appears dormant recently but shows established purchase history over last month",
+    "Order values climb steadily from cheap items to expensive purchases over two months",
+    "Shipping address and payment method never change across all transactions",
+    "Customer waits two to three weeks before disputing only the expensive orders",
+    "Most orders over one-fifty dollars get disputed, cheap orders never challenged",
+    "Buyer switches from digital or virtual items to high-value physical merchandise",
+    "All security checks pass cleanly indicating the real cardholder is making purchases"
+  ]
+}

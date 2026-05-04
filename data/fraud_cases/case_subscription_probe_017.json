@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_017",
+  "title": "Subscription Multi-Account Bundling with Single Payment Instrument",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster creates 8-15 separate subscription accounts within a 2-4 hour window, all funded by the same stolen card to maximize extraction before detection. Each account registers with unique but algorithmically-similar email addresses (sequential numbers or single-character variations in P_emaildomain). Transaction amounts cluster tightly around $9.99-$14.99 introductory offers across streaming, gaming, or SaaS merchants (ProductCD='W' or 'C'). The card shows zero prior history with these merchants but suddenly exhibits card1_txn_count_1day jumping from 0 to 12+. All registrations share identical addr1 and dist1=0, indicating same device/location. Accounts often activate during off-hours (is_night=1, txn_hour between 1-5 AM in merchant timezone) to delay merchant review. The fraudster extracts content, credentials, or resale access before the cardholder disputes. This bundling approach differs from velocity testing by completing full account setups rather than authorization probes.",
+  "indicators": [
+    "card1_txn_count_1day increases from 0 to 8-15 transactions within 2-4 hours",
+    "All transactions share identical addr1 and dist1=0 despite different P_emaildomain values",
+    "P_emaildomain shows sequential pattern: user001@domain.com through user015@domain.com",
+    "TransactionAmt tightly clustered: 85%+ fall within $2 range (e.g., $9.99-$11.99)",
+    "card1_amt_zscore remains <0.5 per transaction but cumulative daily amount exceeds cardholder's typical monthly spend",
+    "70%+ of transactions occur during is_night=1 hours (txn_hour 1-5 AM)",
+    "ProductCD limited to 1-2 categories despite multiple merchant IDs"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single payment card creates 8-15 new subscription accounts within hours, all using similar email patterns (user001@domain.com through user015@domain.com) and identical shipping addresses, with transaction amounts clustering tightly around $9.99-$14.99. The card has no prior merchant history but suddenly shows 12+ transactions in one day, often registered during overnight hours.",
+  "reasoning": "The fraudster uses a stolen card to rapidly set up multiple accounts before the cardholder notices, extracting content access or credentials for resale rather than testing the card. The tight clustering of amounts, identical locations despite different emails, and off-hours timing reveal coordinated abuse designed to maximize extraction before inevitable chargebacks.",
+  "indicator_explanations": [
+    "Card suddenly fires off a dozen transactions after being dormant all day",
+    "Same billing address and distance for all transactions despite different email accounts",
+    "Email addresses follow a numbered sequence pattern suggesting mass account creation",
+    "Transaction amounts are nearly identical, clustering around a single subscription price point",
+    "Individual charges seem normal but the day's total dwarfs typical monthly spending",
+    "Most activity happens in the dead of night when cardholder is likely asleep",
+    "Purchases limited to one or two product types across different merchant accounts"
+  ]
+}

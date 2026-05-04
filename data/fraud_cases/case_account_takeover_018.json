@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_018",
+  "title": "Chained Recovery Email Takeover Leading to Downstream Account Compromise",
+  "pattern": "account_takeover",
+  "narrative": "Attacker gains control of a victim's secondary email account (often older webmail addresses like Yahoo, AOL, Hotmail) that was registered as the recovery option for their primary financial accounts. The compromised recovery email shows no transaction activity itself but is used to trigger password resets on 3-8 linked accounts within a 12-36 hour window. Fraudster then accesses merchant accounts and initiates 6-15 purchases totaling $800-$2,400 using stored payment methods. P_emaildomain changes from gmail.com or outlook.com to the compromised recovery domain mid-sequence. Transactions cluster in 90-180 minute bursts across digital goods (ProductCD='W') and gift cards. Device fingerprints shift completely with new id_30/id_31 values and different browser/OS combinations despite using victim's saved cards. The card1_txn_count_7day jumps from baseline 2-3 to 12+ transactions while addr1 and dist1 remain consistent with victim's legitimate profile, creating contradictory signals.",
+  "indicators": [
+    "P_emaildomain switches from premium provider to webmail (yahoo.com, aol.com, hotmail.com) mid-session after 18-48 months of consistency",
+    "Password reset events on 3-8 accounts within 12-36 hour window preceding transaction spike",
+    "card1_txn_count_7day increases from baseline 2-3 to 12+ while addr1/dist1 remain unchanged",
+    "Complete device fingerprint rotation: new id_30, id_31, DeviceType, DeviceInfo values despite using stored payment methods",
+    "6-15 transactions totaling $800-$2,400 in 90-180 minute bursts focused on ProductCD='W' and gift card MCCs",
+    "TransactionAmt clustering at merchant-specific maximums: $249.99, $499.99, $999.99 per purchase",
+    "All transactions occur 2-6 hours after final password reset event with 100% CNP channel"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "The victim's email domain suddenly switches to an old webmail provider (Yahoo, AOL, Hotmail) after years of stability, followed by 6-15 rapid transactions using saved payment methods but from completely different devices. Transaction volume spikes from 2-3 to 12+ per week while the billing address stays the same, creating contradictory signals.",
+  "reasoning": "The attacker compromised an old recovery email to reset passwords across multiple accounts, then drains stored payment methods before the victim notices. The device mismatch with familiar billing details reveals someone else is using the victim's legitimate credentials and cards.",
+  "indicator_explanations": [
+    "Email suddenly switches to free webmail after years of corporate or premium service",
+    "Multiple password resets cascade across linked accounts before the shopping spree",
+    "Transaction volume explodes while shipping address stays identical to cardholder's home",
+    "Entirely new device appears but uses saved cards and addresses from victim",
+    "Tight burst of purchases targeting digital goods and convertible gift cards",
+    "Every purchase maxes out at store-specific limits to avoid manual review",
+    "Shopping spree starts hours after account control is solidified through password changes"
+  ]
+}

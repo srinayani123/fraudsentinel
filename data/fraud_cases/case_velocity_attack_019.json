@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_019",
+  "title": "Batch Settlement Window Velocity Exploitation with Hourly Clustering",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster monitors merchant batch processing schedules and executes velocity bursts during known settlement windows when fraud monitoring systems experience delayed updates. Attacker compromises card credentials and creates 15-22 transactions between 11:00 PM - 1:00 AM targeting merchants with end-of-day batch settlements. TransactionAmt ranges $87-$134 to stay under common review thresholds. Pattern exploits the 2-4 hour gap before batch processing completes and velocity counters refresh. Fraudster uses ProductCD 'W' (digital goods) from single addr1 with varying dist1 values suggesting VPN rotation. Typically targets 3-4 different merchants sharing same MID processor to maximize settlement window overlap. Card1_txn_count_1day shows normal 1-2 daily transactions historically, then spike to 18+ overnight.",
+  "indicators": [
+    "card1_txn_count_3hr exceeds 12 transactions during 23:00-02:00 window",
+    "All transactions occur within 90-minute window preceding merchant batch cutoff time",
+    "TransactionAmt consistency: standard deviation under $18 across burst (87-134 range)",
+    "card1_txn_count_30day historical average 1.3, current 24hr shows 18+ transactions",
+    "3-4 distinct merchant IDs sharing common payment processor batch schedule",
+    "dist1 varies 50+ km between transactions within same hour suggesting geolocation spoofing",
+    "txn_hour exclusively 23, 0, or 1 with is_night=1 for entire sequence"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card shows 12+ transactions squeezed into a 90-minute window between 11 PM and 2 AM, all for digital goods with amounts between $87–$134, hitting multiple merchants that share the same processor's end-of-day batch cutoff.",
+  "reasoning": "The fraudster exploits the 2–4 hour lag before batch settlement completes and velocity counters refresh, racing to cash out stolen card credentials before fraud alerts trigger—deliberately timing the burst when monitoring systems are blind to real-time velocity.",
+  "indicator_explanations": [
+    "Card hits a dozen transactions in the late-night settlement window",
+    "All activity crammed into the narrow window before batch processing",
+    "Transaction amounts are suspiciously uniform across the entire burst",
+    "Card that typically does one transaction monthly suddenly fires eighteen",
+    "Multiple merchants tied to the same payment processor schedule",
+    "Card appears at locations fifty kilometers apart within the hour",
+    "All activity happens exclusively in the late-night settlement hours"
+  ]
+}

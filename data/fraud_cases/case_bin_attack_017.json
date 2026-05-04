@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_017",
+  "title": "Cross-Merchant BIN Sweep Testing for Weak Authorization Controls",
+  "pattern": "bin_attack",
+  "narrative": "Fraudsters systematically test a sequential BIN range (e.g., 423456XXXXXX through 423456XX9999) across 15-30 different merchants within a 90-minute window to identify which merchant IDs have weak authorization controls or lax fraud filters. Each card number is tested once per merchant with small authorization probes ($1.00-$4.99 TransactionAmt values). Attackers use a single P_emaildomain (often disposable services like guerrillamail or temp-mail) across all test transactions, with identical addr1 and dist1 values despite varying merchant MCCs. The pattern creates a distinctive signature: card1 values increment sequentially within the same BIN range, each appearing at 12-25 unique MIDs during late-night hours (txn_hour 23-04), all declining or approving within seconds. Successful authorizations at specific merchants then trigger high-value fraud attempts within 6-12 hours using validated card numbers.",
+  "indicators": [
+    "Sequential card1 values within same 8-digit BIN tested across 15+ distinct MIDs in under 120 minutes",
+    "All transactions have TransactionAmt between $1.00-$4.99 with identical P_emaildomain across different merchants",
+    "85%+ of transactions occur during is_night=1 window (txn_hour between 23-05)",
+    "card1_txn_count_MID equals 1 while card1_txn_count_global reaches 18-30 within 2-hour span",
+    "Identical addr1 and dist1 values used across merchants with varying MCCs (5411, 5732, 5999, 7999)",
+    "card1_amt_zscore remains flat near 0 during testing phase, then spikes to 3+ within 12 hours for validated cards",
+    "No CVV match variation across merchants (consistent CVV2 pass or fail per sequential card number)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Sequential card numbers from the same BIN are tested once at 15-30 different merchants within 90 minutes, all using tiny amounts ($1-5), the same email domain, and identical billing details despite different merchant types. The testing happens late at night, and each card hits many merchants but only once per merchant.",
+  "reasoning": "Attackers are probing to find which merchants have weak fraud filters before committing larger fraud. The sequential card generation, cross-merchant spread, and disposable email reveal they're systematically mapping vulnerabilities rather than making legitimate purchases, then exploiting the weakest targets with validated card numbers.",
+  "indicator_explanations": [
+    "Sequential card numbers from same bank are tested across many different merchants quickly",
+    "All test charges are tiny amounts using same throwaway email across unrelated stores",
+    "Nearly all activity happens during overnight hours when monitoring is weakest",
+    "Each card hits one merchant once but racks up attempts across many merchants",
+    "Same shipping address and location data reused across completely different merchant types",
+    "Test amounts stay normal then suddenly spike once attacker finds cards that work",
+    "CVV response is identical across merchants showing attacker has full card data"
+  ]
+}

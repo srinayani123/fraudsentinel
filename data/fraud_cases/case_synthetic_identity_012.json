@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_012",
+  "title": "Frankenstein Identity Synthetic - Real SSN with Fabricated PII Layering",
+  "pattern": "synthetic_identity",
+  "narrative": "A fraudster combines a legitimate SSN (often from a child or elderly victim) with entirely fabricated name, address, and contact information to create a synthetic identity. The account builds credit over 4-6 months with small authorized user tradelines ($300-$800 limits) before attempting a bust-out. Transaction pattern shows initial organic behavior: $12-$45 purchases at grocery/gas MCCs, then sudden shift to high-value electronics ($1,200-$2,800) and gift card loads ($500 exact amounts). The R_emaildomain switches from a 6-month-old Gmail to a newly created ProtonMail 48 hours before bust-out. Card velocity jumps from 2-3 monthly transactions to 8+ in 72 hours. The dist1 (distance between billing/shipping) explodes from consistent 0-5km to 850+ km as goods ship to freight forwarders. addr1 shows no prior transaction history across the network despite 6+ month account age.",
+  "indicators": [
+    "card1_txn_count_7d increases from 0-1 baseline to 8+ transactions within 72 hours",
+    "TransactionAmt pattern: 90+ days of $12-$85 purchases, then sudden $1,200-$2,800 electronics transactions",
+    "R_emaildomain age <14 days while account age shows 180+ days in bureau data",
+    "dist1 metric shifts from consistent <5km to 800+ km in final transaction cluster",
+    "addr1 shows zero historical footprint in transaction network despite 6-month seasoning period",
+    "Gift card ProductCD transactions in exact $500 increments clustered within 6-hour window",
+    "card1_amt_zscore jumps from -0.3 baseline to +3.8 during bust-out phase"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A real Social Security Number is paired with completely fake personal details—name, address, email—to build a credit profile over 4-6 months with small purchases, then suddenly shifts to large electronics buys and gift card loads while the email changes and shipping distances spike from local to 850+ km.",
+  "reasoning": "The fraudster uses a stolen SSN (often from a child or elderly victim) to pass identity checks while controlling all contact points, building trust with small transactions before cashing out through high-value goods shipped to freight forwarders, indicating premeditated theft rather than legitimate spending.",
+  "indicator_explanations": [
+    "Card goes from dormant to hyperactive with sudden transaction surge",
+    "Small purchases establish trust before massive electronics fraud hit",
+    "Email address is brand new despite account claiming months of history",
+    "Final transactions appear hundreds of miles from established location pattern",
+    "Address has no transaction history despite supposedly existing for months",
+    "Exact dollar gift card purchases clustered tightly suggest monetization phase",
+    "Spending amount explodes to extreme deviation after establishing normal baseline"
+  ]
+}

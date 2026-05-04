@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_004",
+  "title": "Refund-Recharge Cycling to Artificially Inflate Transaction Volume and Revenue Recognition",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster exploits merchant refund processing to create artificial transaction volume. Pattern begins with 8-12 legitimate-appearing purchases ($45-$85 each, ProductCD='W' for digital goods) from same card within 90 minutes. Merchant processes refunds within 2-4 hours. Immediately after each refund posts, fraudster initiates new purchase at slightly higher amount ($50-$95), creating upward spiral. Cycle repeats 3-5 times over 18-36 hours. Each iteration shows card1_txn_count_1hr jumping from baseline 2 to 6-9, then resetting post-refund. TransactionAmt creeps upward 8-15% per cycle. Fraudster uses consistent P_emaildomain (often gmail.com) but rotates addr1 values across 3-4 ZIP codes. Final cycle typically involves bust-out: $400-$800 purchase with no subsequent refund request. Refund requests show identical R_emaildomain to purchase emails, suggesting single-actor control of both sides.",
+  "indicators": [
+    "3-5 complete purchase-refund-repurchase cycles within 36 hours on single card",
+    "TransactionAmt increases 8-15% with each cycle iteration",
+    "card1_txn_count_1hr spikes to 6-9 then drops to 0-1 post-refund, repeating pattern",
+    "Refund processing time consistently 2-4 hours, new purchase within 15 minutes of refund posting",
+    "P_emaildomain matches R_emaildomain across all transactions (single-party control)",
+    "Final transaction in sequence 4-9x larger than cycle average with no refund request",
+    "addr1 rotates across 3-4 different ZIP codes while maintaining same card and email"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single card makes 8-12 small purchases, requests refunds within hours, then immediately repurchases at slightly higher amounts—repeating this cycle 3-5 times over 36 hours with transaction amounts climbing 8-15% each round, culminating in one large final purchase with no refund request.",
+  "reasoning": "The fraudster manipulates refund processing to artificially inflate transaction volume and test merchant controls, using each refund to reset velocity limits before pushing slightly higher amounts, ultimately executing a bust-out purchase once confidence in the merchant's lax oversight is established.",
+  "indicator_explanations": [
+    "Card cycles through buy-refund-rebuy loop multiple times in rapid succession",
+    "Each new purchase amount creeps higher than the previous cycle",
+    "Transaction count surges then flatlines after refunds in repeating waves",
+    "Refunds process quickly and new purchases fire immediately after posting",
+    "Same email controls both purchase and refund sides of transactions",
+    "Final purchase is dramatically larger with no subsequent refund requested",
+    "Billing address changes repeatedly while card and email stay constant"
+  ]
+}

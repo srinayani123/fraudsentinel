@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_007",
+  "title": "Serial Free-Trial Harvester with Email Domain Rotation Pattern",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster systematically exploits 7-day or 30-day free trials across multiple subscription services using rotating temporary email domains. Actor creates accounts with 8-15 different services within 48 hours, always canceling 12-24 hours before trial expiration. Pattern shows consistent card instrument (card1) paired with sequential email variations across disposable domains (guerrillamail.com, temp-mail.org, 10minutemail.net). TransactionAmt always $0.00 for authorization holds, but card1_txn_count_7d reaches 12-18 distinct merchants. Each signup occurs during late-night hours (txn_hour 23-04) suggesting automated scripting. ProductCD consistently shows 'W' (online services). P_emaildomain cycles through 5+ temporary providers while billing addr1 remains constant. The velocity of trial signups (6+ per day) combined with zero actual paid conversions flags systematic abuse rather than legitimate shopping behavior.",
+  "indicators": [
+    "card1_txn_count_7d between 12-18 with all TransactionAmt = $0.00 authorization holds",
+    "P_emaildomain shows 5+ distinct temporary/disposable email providers within 48-hour window",
+    "100% of transactions occur during txn_hour 23-04 (late night/early morning)",
+    "Cancellation requests submitted 12-24 hours before each trial expiration across all merchants",
+    "addr1 and dist1 remain constant while P_emaildomain rotates on every transaction",
+    "ProductCD = 'W' across all transactions with 8-15 unique merchant IDs (MIDs)",
+    "Zero conversions to paid subscriptions despite 12+ trial activations in 7-day period"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single payment card generates 12-18 authorization holds across different merchants within 7 days, all at $0.00, using 5+ rotating disposable email domains while keeping the same billing address. All activity occurs between 11 PM and 4 AM, and every trial is canceled just before expiration with zero paid conversions.",
+  "reasoning": "The actor is systematically extracting free value from multiple services without ever intending to pay, using automation and temporary emails to circumvent trial limits. The late-night clustering, email rotation with static address, and perfect cancellation timing reveal deliberate abuse rather than a customer exploring legitimate options.",
+  "indicator_explanations": [
+    "Card is used repeatedly for zero-dollar trial authorizations with no real purchases",
+    "Email address cycles through multiple disposable providers in rapid succession",
+    "Activity happens exclusively in overnight hours when fraud teams are offline",
+    "Trials are systematically canceled right before billing would actually occur",
+    "Physical location stays fixed while email identity changes with each signup",
+    "Same product type purchased from many different merchants in short timeframe",
+    "Not a single trial converts to paying subscription despite heavy usage"
+  ]
+}

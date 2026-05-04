@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_001",
+  "title": "Graveyard Shift Breakout on Established Daytime-Only Card",
+  "pattern": "temporal_anomaly",
+  "narrative": "A credit card with 8+ months of consistent daytime shopping history (transactions clustered 9am-7pm, avg $67, primarily grocery/retail MCCs 5411, 5912) suddenly executes 4-6 transactions between 2:47am-4:22am totaling $1,840-$2,300. These overnight purchases target high-resale categories: electronics (MCC 5732), luxury goods, or digital wallets. The card1_txn_count_24hr spikes from baseline 1.2 to 6 within the window. TransactionAmt jumps to $380-$520 per transaction, card1_amt_zscore exceeding 3.8. AVS and CVV pass, suggesting stolen full card data rather than card-not-present probing. The addr1 remains consistent but dist1 shows 0km (same billing/shipping), unusual for legitimate late-night emergency purchases which typically show geographic variance. No prior is_night=1 flags in 240+ day history.",
+  "indicators": [
+    "Zero transactions with txn_hour between 0-6 in prior 240+ days, then 4-6 consecutive overnight hits",
+    "card1_amt_zscore jumps from 0.8 baseline to 3.8+ during 2-5am window",
+    "TransactionAmt increase from $45-85 historical average to $380-$520 per transaction",
+    "card1_txn_count_24hr spikes from 1.2 mean to 6 within 90-minute window",
+    "MCC shift from grocery/gas (5411, 5541) to electronics/luxury (5732, 5944, 5999)",
+    "dist1=0 for all overnight transactions despite high-value purchases",
+    "All overnight transactions show is_night=1 flag with no prior night activity in card history"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card with 8+ months of daytime-only shopping suddenly fires 4-6 transactions between 2-5am, each $380-$520, targeting electronics and luxury goods—while the cardholder's billing and shipping addresses match exactly. Transaction volume spikes sixfold and amount z-scores exceed 3.8, all with passing AVS/CVV.",
+  "reasoning": "Fraudsters with stolen full card data exploit the overnight window when cardholders are asleep and less likely to notice alerts, racing to extract maximum value before the account is frozen. Legitimate cardholders don't suddenly break an 8-month daytime pattern for high-value electronics shipped to their own address at 3am—that's a thief using valid credentials.",
+  "indicator_explanations": [
+    "Card suddenly active overnight after months of exclusive daytime-only usage",
+    "Purchase amounts spike dramatically during the middle-of-night burst",
+    "Transaction values jump to 5-8x the cardholder's normal spending level",
+    "Card racks up a day's worth of transactions in ninety minutes",
+    "Purchases shift from everyday essentials to high-value electronics and luxury goods",
+    "All overnight purchases show identical location despite being high-ticket items",
+    "Overnight activity flag triggers with zero historical nighttime transaction pattern"
+  ]
+}

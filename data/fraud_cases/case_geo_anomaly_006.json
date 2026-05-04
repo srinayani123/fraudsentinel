@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_006",
+  "title": "Ghost Traveler: Card-Present Transactions Across Incompatible Geographies Without Transit Records",
+  "pattern": "geo_anomaly",
+  "narrative": "Compromised card credentials used for in-person purchases across 3+ countries within 72 hours with no corresponding airline, hotel, or rental car transactions in the pattern. Fraudster network physically skims cards then distributes to accomplices internationally who make rapid card-present purchases before victim notices. Typical sequence: Card used legitimately in US Monday morning, then Wednesday shows CP transactions in Poland ($847 electronics), Thailand ($623 luxury goods), and Brazil ($1,290 jewelry) with zero travel-category MCCs (4511, 3xxx, 7011) between events. All transactions use correct PIN from skimming device. The dist1 values exceed 8,000km between consecutive transactions yet card1_txn_count_6hr remains under issuer velocity limits by coordinating timing across time zones.",
+  "indicators": [
+    "3+ card-present transactions across countries >5,000km apart within 72-hour window",
+    "Zero transactions in travel MCCs (airlines 4511, hotels 7011, car rental 3xxx-7xxx) between geographic jumps",
+    "All transactions card-present with successful PIN verification despite impossible travel times",
+    "dist1 geographic distance >8,000km between consecutive transactions with <24hr time separation",
+    "card1_txn_count_24hr stays under 8 transactions by spacing purchases across UTC time zones",
+    "TransactionAmt clustering in $600-$1,500 range at electronics/jewelry merchants (MCC 5732, 5944)",
+    "addr1 billing address remains constant while transaction countries change 3+ times in pattern"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Card-present transactions with correct PIN appear in 3+ countries over 5,000km apart within 72 hours, yet no airline, hotel, or car rental purchases exist between these locations. Geographic distances exceed 8,000km between purchases made less than 24 hours apart.",
+  "reasoning": "A skimmed card and PIN are physically distributed to accomplices in different countries who make synchronized in-person purchases before the victim notices. The absence of travel transactions proves the cardholder didn't actually travel, while correct PIN usage from skimming devices allows the fraud to bypass basic security checks.",
+  "indicator_explanations": [
+    "Card appears in multiple distant countries faster than humanly possible travel",
+    "No airline, hotel, or rental bookings exist between the distant locations",
+    "PIN entered correctly at physical terminals despite impossible geographic leaps",
+    "Purchases occur thousands of miles apart with no time for travel",
+    "Transaction volume stays deceptively low by spreading purchases across time zones",
+    "Amounts concentrate in high-value electronics and jewelry purchase range consistently",
+    "Billing address never changes while card physically appears across continents"
+  ]
+}

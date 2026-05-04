@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_001",
+  "title": "Impossible Travel: Domestic to International Card-Present Sequence Within 60 Minutes",
+  "pattern": "geo_anomaly",
+  "narrative": "Cardholder completes a legitimate chip-authenticated transaction at a domestic merchant (MCC 5411 grocery, $47.82, AVS match, CVV match), then 38 minutes later a card-present transaction posts from a high-risk international jurisdiction (Thailand MCC 5812 restaurant, $312.45). The distance between locations exceeds 8,000 miles, requiring supersonic travel. The domestic transaction shows typical cardholder behavior: matches hist_addr1, normal txn_hour (14:00 local), ProductCD code 'W' for wallet purchase. The international transaction triggers dist1 value over 9000 km, different R_emaildomain suffix, and card1_txn_count_1hr jumps from 1 to 4. No IP geolocation data suggests VPN use on the domestic side. This represents physical card cloning with the clone used abroad while genuine card remains in cardholder possession, exploiting the EMV chip data harvested via skimmer or compromised terminal.",
+  "indicators": [
+    "Two card-present transactions separated by 8000+ miles occurring within 60-minute window",
+    "First transaction shows full AVS/CVV match with historical addr1 and typical merchant category",
+    "Second transaction dist1 value exceeds 9000 km with high-risk country code",
+    "card1_txn_count_1hr increases from 1 to 4+ between the two anchor transactions",
+    "International transaction amount ($300+) exceeds domestic baseline by 5x+ standard deviations",
+    "R_emaildomain differs between transactions or shows generic free provider on international leg",
+    "No browser/device fingerprint continuity between transaction pairs"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A chip card is used successfully at a familiar domestic location, then the same card appears at a merchant over 8,000 miles away in a high-risk country within an hour—physically impossible without supersonic travel. The international transaction shows a different email domain and a sudden spike in card activity.",
+  "reasoning": "Criminals cloned the physical card using a skimmer or compromised terminal, then used the clone abroad for high-value purchases while the genuine card remains with the victim. The impossible geography proves two different people are using copies of the same card simultaneously.",
+  "indicator_explanations": [
+    "Card physically swipes thousands of miles apart within the same hour",
+    "First swipe looks legitimate with address and merchant matching cardholder history",
+    "Second transaction originates from distant high-risk international location",
+    "Card suddenly fires multiple transactions after the international swipe appears",
+    "International purchase amount dramatically exceeds what this card normally spends",
+    "Email address changes or switches to generic provider for overseas transaction",
+    "Different device and browser used with no digital continuity between swipes"
+  ]
+}

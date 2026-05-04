@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_019",
+  "title": "Sequential CVV Brute-Force with Incremental Amount Testing Pattern",
+  "pattern": "card_testing",
+  "narrative": "Fraudster possesses valid card number and expiration date but lacks correct CVV code, systematically testing CVV combinations across low-value transactions. Attack begins with 3-8 failed authorization attempts (decline code 'N' for CVV mismatch) within 15-30 minutes, each transaction $1.00-$4.99 at digital goods merchants (ProductCD='W' or 'C'). Upon successful CVV match, fraudster immediately executes 2-4 higher-value purchases ($45-$180) within 5 minutes at different merchant categories. Card1_txn_count_1hr shows 6-12 total attempts, with card1_amt_zscore jumping from -1.8 to +2.3 post-success. P_emaildomain often matches temporary services (guerrillamail.com, tempmail.net). Distance between billing and transaction (dist1) frequently exceeds 500km. Successful transaction timestamps cluster tightly (txn_hour unchanged, within same 10-minute window), indicating automated progression from testing to monetization phase.",
+  "indicators": [
+    "3-8 declined transactions with CVV mismatch code within 15-30 minute window, all under $5.00",
+    "Card1_txn_count_1hr between 6-12 attempts with identical card number but varying CVV submission patterns",
+    "Immediate velocity spike: 2-4 approved transactions $45-$180 within 5 minutes following first successful authorization",
+    "Card1_amt_zscore increases from negative (-1.5 to -1.8) during testing to strongly positive (+2.0 to +2.5) after CVV confirmation",
+    "P_emaildomain matches disposable email services in 70%+ of testing transactions",
+    "Dist1 exceeds 500km between billing address and transaction geolocation during monetization phase",
+    "ProductCD shifts from 'W' or 'C' during testing to 'H' or 'R' (higher-value categories) immediately post-success"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple low-dollar transactions under $5 fail with CVV mismatch codes within 15-30 minutes, followed immediately by a cluster of 2-4 higher-value purchases ($45-$180) within 5 minutes once a transaction succeeds. The card transaction count spikes to 6-12 attempts in one hour while the amount z-score jumps from negative to strongly positive after the breakthrough.",
+  "reasoning": "The fraudster has stolen card details but is missing the correct CVV code, so they systematically guess CVV combinations using cheap test purchases until one authorizes, then rapidly drain funds before the cardholder notices. The shift from testing tiny amounts to immediate high-value purchases reveals automation designed to monetize the compromised card before it's blocked.",
+  "indicator_explanations": [
+    "Attacker is probing for the correct CVV with tiny charges to avoid detection",
+    "Same card gets hammered repeatedly with different security codes in rapid succession",
+    "Fraudster immediately pivots to larger purchases once they crack the correct CVV",
+    "Transaction amounts jump from tiny test charges to unusually large purchases instantly",
+    "Throwaway email addresses dominate the testing phase transactions",
+    "Billing and transaction locations are impossibly far apart during the cash-out",
+    "Attacker switches from low-value test categories to expensive goods once validated"
+  ]
+}

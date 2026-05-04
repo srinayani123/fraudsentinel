@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_008",
+  "title": "Bundled Free Trial Harvesting via Serial Account Registration",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster exploits promotional free trial periods by creating 15-40 distinct user accounts within 2-6 hours using a single payment card. Each account triggers a $0.00 or $1.00 authorization hold but provides immediate access to premium content or downloadable assets during trial period. Email domains rotate through temporary services (mailinator.com, guerrillamail.com, 10minutemail.com) with sequential username patterns. Physical address field (addr1) remains constant or uses minor variations like apt numbers. Fraudster rapidly extracts valueâ€”downloads, data scraping, content duplicationâ€”before trial expires, then abandons all accounts. Card shows card1_txn_count_1day jumping from 2 to 38 transactions, all ProductCD='W' (web subscription), all targeting same merchant MID. R_emaildomain shows 12+ unique domains while billing address stays identical. Authorization amounts uniformly $0.00-$1.00, but merchant loses provisioning costs and content protection.",
+  "indicators": [
+    "card1_txn_count_1day increases by 15-40 transactions within 6-hour window",
+    "All transactions share identical addr1 but P_emaildomain shows 10+ distinct temporary email providers",
+    "TransactionAmt uniformly $0.00, $0.50, or $1.00 across all account creations",
+    "ProductCD='W' with same MerchantID across all transactions, 100% authorization approval rate",
+    "R_emaildomain entropy exceeds 3.5 bits while dist1 (address-to-IP distance) remains constant or null",
+    "Sequential txn_hour clustering: 85%+ of registrations occur within 4-hour block",
+    "card1_amt_zscore remains near zero due to nominal authorization amounts masking volume abuse"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single payment card creates 15-40 accounts within hours, each using different temporary email providers but the same billing address, triggering only $0-$1 authorization holds for free trial subscriptions.",
+  "reasoning": "The fraudster is mass-harvesting free trial access to steal premium content or data before trials expire, using throwaway email accounts to circumvent one-account-per-customer limits while the nominal authorization amounts avoid triggering transaction value alerts.",
+  "indicator_explanations": [
+    "Same card suddenly creates dozens of accounts in a single sitting",
+    "All registrations use one address but cycle through burner email services",
+    "Every charge is a trivial amount typical of trial validations",
+    "Attacker targets one merchant repeatedly with perfect approval success rate",
+    "Email addresses vary wildly but registrations come from same physical location",
+    "Account creation blitz happens in concentrated time block then stops",
+    "Tiny authorization amounts fly under spending anomaly detection thresholds"
+  ]
+}

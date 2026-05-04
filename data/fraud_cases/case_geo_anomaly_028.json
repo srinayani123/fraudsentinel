@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_028",
+  "title": "Cross-Border E-Commerce Abuse with Persistent IP-Country Mismatch",
+  "pattern": "geo_anomaly",
+  "narrative": "Fraudster uses residential proxy network to maintain consistent foreign IP geolocation while targeting domestic merchants. Card issued in United States with billing address in Texas (addr1: 78701), but all transactions originate from Romanian IP addresses (dist1 > 8500 km) across 72-hour period. Attacker makes 8 purchases totaling $3,240 from online retailers, exclusively hitting ProductCD 'W' (web/digital goods) merchants. All transactions occur during US business hours (txn_hour 9-17) despite Romanian timezone being 7 hours ahead, suggesting automated scripting. P_emaildomain shows temporary email service (guerrillamail.com), while card holder's R_emaildomain is legitimate Gmail account. CVV matches on all attempts but AVS fails consistently. This pattern exploits merchants with relaxed geo-verification policies for digital goods, where physical shipping constraints don't apply.",
+  "indicators": [
+    "IP country differs from card billing country across 8+ consecutive transactions spanning 48-72 hours",
+    "dist1 consistently exceeds 8000 km for all transactions in sequence",
+    "ProductCD exclusively 'W' (digital/web goods) with TransactionAmt between $180-$650 per transaction",
+    "All transactions during card-country business hours despite IP timezone offset of 6+ hours",
+    "P_emaildomain matches temporary/disposable service while R_emaildomain is established provider",
+    "CVV match rate 100% but AVS mismatch rate 100% across entire sequence",
+    "card1_txn_count_24hr increases from 0 to 8+ with zero historical international activity"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A cardholder's billing address is in one country (e.g., Texas), but every transaction comes from IP addresses thousands of kilometers away (e.g., Romania) over multiple days, targeting only digital goods merchants. All purchases happen during the cardholder's local business hours despite the IP being in a drastically different timezone, and the purchaser email is a disposable service while the cardholder uses a legitimate provider.",
+  "reasoning": "The fraudster is using stolen card details with a proxy network to mask their true location, deliberately targeting digital goods that don't require physical shipping and choosing merchants with weak geo-checks. The timezone manipulation, disposable email, perfect CVV matches with consistent AVS failures, and sudden burst of international activity all indicate the attacker is scripting automated purchases before the cardholder notices and reports the card stolen.",
+  "indicator_explanations": [
+    "Buyer's internet location contradicts card's home country across days of purchases",
+    "Every transaction shows massive geographic separation suggesting overseas fraud operation",
+    "Purchases target easily resold digital goods within profitable resale price band",
+    "Transactions arrive during cardholder's local hours despite attacker's distant timezone",
+    "Purchaser email is throwaway service while recipient email is legitimate provider",
+    "Card security code matches perfectly but billing address fails every time",
+    "Card suddenly shows international purchase burst with no prior cross-border history"
+  ]
+}

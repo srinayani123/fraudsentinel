@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_028",
+  "title": "Post-Breach BIN Range Exploitation with Incremental Testing Phase",
+  "pattern": "bin_attack",
+  "narrative": "A newly compromised BIN range (typically first 8 digits) exhibits coordinated testing followed by rapid monetization. Fraudsters acquire a batch of cards from a single breach source and systematically test them before executing larger purchases. The pattern shows 15-40 cards from the same IIN (e.g., 442673XX) appearing within a 6-12 hour window, initially making small authorization attempts ($1-$9.99) at low-risk merchants (MCC 5999, 5818), then escalating to high-value CNP transactions ($200-$800) at electronics or gaming merchants within 90 minutes of successful test. Cards share no legitimate linkageâ€”different addr1 values, mixed P_emaildomain patterns (often temporary email services), and dist1 indicating impossible geographic separation between billing/shipping. The BIN shows card1_txn_count_1day jumping from baseline 2-5 to 150+ transactions, with 70%+ occurring during is_night=1 hours. TransactionAmt distribution shifts dramatically from normal patterns for that issuer.",
+  "indicators": [
+    "15-40 unique card numbers from same 8-digit BIN prefix appearing within 6-12 hour window",
+    "Two-stage pattern: initial $1-$9.99 test transactions followed by $200-$800+ purchases within 90 minutes per card",
+    "card1_txn_count_1day for the BIN range exceeds 150 transactions versus typical baseline of 2-5 per day",
+    "70%+ of transactions occur during is_night=1 with txn_hour concentrated in 1-6 AM range",
+    "addr1 diversity score >0.85 indicating no geographic clustering despite same BIN source",
+    "P_emaildomain shows 60%+ temporary/disposable email services (guerrillamail, tempmail, 10minutemail)",
+    "dist1 values average >500km between billing/shipping addresses with multiple international destinations"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A batch of 15-40 cards sharing the same 8-digit BIN suddenly appears within hours, first making small test purchases under $10, then escalating to high-value transactions ($200-$800) within 90 minutes if the test succeeds. The cards show no legitimate connection—different addresses, disposable emails, impossible geographic separations—and the BIN's daily transaction volume spikes from 2-5 to over 150 transactions, mostly at night.",
+  "reasoning": "Fraudsters have acquired a fresh batch of stolen cards from the same data breach and are systematically validating which ones still work before draining their limits. The coordinated two-stage approach—test then exploit—combined with temporary emails and mismatched geography reveals organized criminals monetizing compromised payment data rather than legitimate cardholders making independent purchases.",
+  "indicator_explanations": [
+    "Dozens of cards from the same bank batch hit the system in rapid succession",
+    "Each card follows the test-then-exploit pattern: small probe followed by major charge",
+    "The entire bank range generates wildly more transactions than any legitimate cardholder baseline",
+    "Attack executes during graveyard shift when fraud monitoring coverage is weakest",
+    "Cards from same bank are used across completely scattered geographic locations",
+    "Attacker uses throwaway email addresses to register the stolen card numbers",
+    "Shipping and billing locations span different countries with massive geographic separation"
+  ]
+}

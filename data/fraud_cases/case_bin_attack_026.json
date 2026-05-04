@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_026",
+  "title": "Sequential PAN Enumeration Attack via Incremental Card Testing",
+  "pattern": "bin_attack",
+  "narrative": "Fraudster systematically tests sequential card numbers from a compromised BIN range, incrementing the last 4-6 digits to discover valid PANs. A merchant processing 47 declined transactions in 22 minutes observed card1 values increasing by 1-3 units per attempt (e.g., ending 4501, 4502, 4504, 4507). All transactions originated from identical P_emaildomain (tempmail.org), same addr1 hash, and used small probe amounts ($1.00-$2.99) to minimize fraud losses. The attacker cycled through 3 different ProductCD values (C, H, W) to avoid single-product velocity blocks. Card metadata showed consistent card4 (Visa), card6 (debit), and dist1 values below 50km, suggesting bot operation from single location. CVV mismatch rate exceeded 78%, indicating guessed security codes. The attack window concentrated in txn_hour 2-4 UTC, typical of automated scripting during low-activity periods when fraud monitoring may be reduced.",
+  "indicators": [
+    "Card1 values increment sequentially by 1-5 units across 40+ attempts within 30-minute window",
+    "Uniform TransactionAmt range $1.00-$2.99 across 85%+ of test transactions",
+    "Single P_emaildomain hash used for all attempts with disposable email provider pattern",
+    "CVV decline rate above 75% indicating systematic guessing of card6 security codes",
+    "Identical addr1 and dist1 (<50km) across entire transaction sequence",
+    "Concentrated txn_hour pattern in 2-4 hour window during off-peak UTC hours",
+    "Same card4 and card6 values maintained while card1 increments systematically"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Card numbers ending in sequential digits (4501, 4502, 4504) with identical email domain, address, and location, all using small amounts under $3. Over 75% show CVV declines, concentrated in a brief time window during off-peak hours.",
+  "reasoning": "The attacker is systematically guessing valid card numbers by incrementing digits within a stolen BIN range, using low amounts to test which cards are active before committing larger fraud. Sequential numbering, high CVV failure rate, and automated timing expose this as enumeration rather than legitimate purchases.",
+  "indicator_explanations": [
+    "Card numbers are being tested in numerical sequence with tiny increments",
+    "All transactions use identical small dollar amounts to avoid detection thresholds",
+    "Same throwaway email address is reused across the entire testing sequence",
+    "Most attempts fail on CVV suggesting attacker is guessing security codes",
+    "All test transactions originate from the same geographic location or device",
+    "Activity clusters in narrow off-hours window when monitoring is weakest",
+    "Card type and issuer stay constant while primary account numbers increment"
+  ]
+}

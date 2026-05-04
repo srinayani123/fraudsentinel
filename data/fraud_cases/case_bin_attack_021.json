@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_021",
+  "title": "Luhn-Algorithm BIN Expansion with Sequential Card6 Iteration",
+  "pattern": "bin_attack",
+  "narrative": "Fraudster generates mathematically valid card numbers using Luhn checksum algorithm, targeting a single BIN prefix while incrementing the card6 field systematically. A merchant processor observes 47 declined transactions over 22 minutes, all sharing identical BIN (first 6 digits) but varying in positions 7-12, with card6 values incrementing sequentially (1, 2, 3, 4, etc.). All attempts originate from single IP (dist1=0 across all), same P_emaildomain (tempmail-style), and identical addr1. TransactionAmt locked at $1.00 for validation testing. Card1_txn_count_1day shows 0 for all attempts, confirming never-seen cards. Approval rate 0% with consistent auth decline code 05 (do not honor). Time between attempts ranges 18-35 seconds, suggesting automated script with modest throttling. ProductCD remains 'W' (digital wallet funding) across sequence.",
+  "indicators": [
+    "40+ transactions sharing identical first 6 digits (BIN) with sequential variation in positions 7-15",
+    "Card6 field increments linearly (1, 2, 3...) across transaction sequence within 20-30 minute window",
+    "100% decline rate with uniform auth response code (typically 05, 14, or 51)",
+    "Dist1=0 and identical P_emaildomain across all attempts indicating single device/session",
+    "TransactionAmt fixed at $1.00-$5.00 for all validation attempts",
+    "Card1_txn_count_1day=0 for every card number tried",
+    "Inter-transaction timing 15-45 seconds suggesting scripted automation with rate limiting"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A merchant sees dozens of declined $1 transactions in under 30 minutes, all using the same bank identification number (first 6 digits) but with card6 values that increment by one each time (1, 2, 3, 4...), all from the same IP address and disposable email domain.",
+  "reasoning": "The attacker is generating fake but mathematically valid card numbers using the Luhn algorithm to find active accounts within a specific bank's card range, testing each generated number with small-dollar purchases to avoid detection while hunting for valid credentials to exploit later.",
+  "indicator_explanations": [
+    "Attacker is systematically testing card numbers from the same issuing bank",
+    "Sequential counter reveals automated generation of card variations in order",
+    "Every single attempt is rejected with the same decline reason code",
+    "All attempts originate from one device and email address in same session",
+    "Low fixed dollar amounts used to minimize loss during card validation sweep",
+    "None of these generated card numbers have any legitimate transaction history",
+    "Consistent timing gaps between attempts indicate bot with deliberate throttling"
+  ]
+}

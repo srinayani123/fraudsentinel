@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_012",
+  "title": "Weekend Breach Pattern on Strictly Business-Hours Card with Geographic Shift",
+  "pattern": "temporal_anomaly",
+  "narrative": "A corporate purchasing card with 47 weekday transactions over 90 days (Monday-Friday, 8AM-6PM only, avg $312, MCC 5943/5411 office supplies) suddenly processes four transactions Saturday morning between 2:13AM-4:47AM. Amounts escalate: $89.50, $247.00, $531.00, $899.99. All four are CNP with ProductCD 'W' (digital goods) versus historical 'C' (card-present). The card1_txn_count_weekend feature jumps from 0 to 4. P_emaildomain shifts from corporate domain to generic 'gmail.com'. Geographic dist1 shows 487km from card's historical addr1 centroid. The txn_hour distribution completely inverts: 100% of historical activity in hours 8-18, new transactions all in hours 2-4. Card AVS shows 'N' mismatch versus historical 'Y' match rate of 100%.",
+  "indicators": [
+    "card1_txn_count_weekend increases from 0 to 4 after 47 consecutive weekday-only transactions over 90 days",
+    "All four new transactions occur during is_night=1 hours (2:13AM-4:47AM Saturday) versus historical 8AM-6PM weekday pattern",
+    "ProductCD switches from 100% 'C' (card-present) to 'W' (digital goods) for all weekend transactions",
+    "P_emaildomain changes from corporate domain to 'gmail.com' with no historical generic email usage",
+    "dist1 geographic distance of 487km from card's historical addr1 transaction centroid",
+    "Transaction amounts escalate sequentially: $89.50, $247.00, $531.00, $899.99 within 2.5-hour window",
+    "AVS mismatch rate jumps to 100% ('N' responses) versus historical 100% 'Y' match rate over 47 transactions"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A business card used exclusively for weekday office supply purchases (Monday-Friday, 8AM-6PM) suddenly fires four transactions on a Saturday morning between 2-4AM, all for escalating amounts of digital goods from a location 487km away, with a personal email replacing the corporate domain and all address verifications failing.",
+  "reasoning": "An attacker who compromised the card details is rushing to extract value during off-hours when the cardholder and fraud monitoring are less likely to notice, switching to untraceable digital goods that can be instantly monetized before the breach is detected.",
+  "indicator_explanations": [
+    "Card suddenly transacts on weekends after months of weekday-only activity",
+    "Transactions shift to middle-of-night hours versus daytime business pattern",
+    "Purchase type flips from in-person swipes to online digital goods",
+    "Corporate email replaced with generic consumer email provider",
+    "Transactions originate far outside the card's established geographic zone",
+    "Purchase amounts climb rapidly in a short timeframe burst",
+    "Address verification starts failing after perfect historical match record"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_025",
+  "title": "Subscription Cascade Attack with Sequential Trial Abuse and Mixed MCCs",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster exploits a compromised card by rapidly enrolling in 8-15 subscription services within 45-90 minutes, focusing on low-value trial periods ($0.99-$9.99) across streaming, fitness, gaming, and SaaS platforms. Attack begins with 2-3 legitimate-appearing subscriptions at recognized merchants (MCC 5815, 7372), then accelerates to obscure subscription boxes and niche services. Each transaction uses identical card1 but rotates through 3-4 P_emaildomains (temporary email services like guerrillamail, 10minutemail) to bypass merchant fraud filters. Fraudster exploits the 24-48 hour settlement window before victim notices, knowing most subscriptions won't bill full amount until day 7-30. TransactionAmt stays under $15 to avoid velocity thresholds, but aggregate hourly spend reaches $80-120. Pattern terminates abruptly after final high-value annual subscription ($79.99-$199.99) at productivity software merchant.",
+  "indicators": [
+    "card1_txn_count_1hr between 8-15 with ProductCD='W' (subscription/digital goods) exclusively",
+    "P_emaildomain shows 3+ distinct temporary email providers within single card1 session",
+    "TransactionAmt standard deviation <$8 for first 70% of transactions, then spike to $79-$199",
+    "MCC diversity: 4+ different subscription categories (5815, 7372, 7995, 5968) in under 90 minutes",
+    "card1_addr1_nunique=1 but P_emaildomain_nunique â‰¥3, indicating email rotation on static billing address",
+    "dist1 (distance between billing/IP) remains consistent <50km while email domains change",
+    "Final transaction TransactionAmt exceeds median of prior transactions by 8-15x within same session"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card rapidly signs up for 8-15 subscriptions in 45-90 minutes, using the same billing details but rotating through 3+ temporary email domains. Transaction amounts stay under $15 until a final spike to $79-$199 for an annual subscription.",
+  "reasoning": "The fraudster tests a stolen card across multiple low-value trials to avoid detection, using disposable emails to bypass merchant controls. The abrupt termination after one high-value annual charge shows intent to maximize extraction before the victim detects unauthorized activity.",
+  "indicator_explanations": [
+    "Card hits subscription services repeatedly in a concentrated hour-long window",
+    "Email address switches between multiple disposable providers during the spree",
+    "Small consistent charges suddenly jump to much larger amounts late in session",
+    "Card hits four different subscription merchant types in rapid succession",
+    "Billing address stays fixed while email rotates through different providers",
+    "Physical location remains constant despite changing email domains across transactions",
+    "Final purchase amount explodes to ten times the earlier transaction sizes"
+  ]
+}

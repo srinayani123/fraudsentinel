@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_014",
+  "title": "Subscription Trial Enumeration with Cancellation Before First Billing Cycle",
+  "pattern": "card_testing",
+  "narrative": "Fraudsters exploit free trial periods on streaming services, SaaS platforms, or meal kit subscriptions to validate stolen cards without triggering actual charges. They register accounts with ProductCD 'S' (subscription), authorize $0.00 or $1.00 verification holds that reverse within 24-48 hours, then immediately cancel before the first billing cycle. Attackers cycle through 15-40 card numbers per session using temporary email domains (guerrillamail, tempmail, 10minutemail in P_emaildomain) and randomized addr1 values. The cards showing successful authorizations are marked as live for later fraud. Legitimate users rarely cancel within the first hour of signup, but these patterns show account creation and cancellation timestamps within 8-15 minutes. The fraudster may test multiple ProductCD types simultaneously, but subscription services provide the longest delay before actual payment collection, making them ideal for low-risk validation.",
+  "indicators": [
+    "TransactionAmt exactly $0.00 or $1.00 with ProductCD='S' and card1_txn_count_24hr between 12-45",
+    "P_emaildomain matches disposable email providers (10minutemail.com, guerrillamail, tempmail.net) across 85%+ of attempts",
+    "Account cancellation timestamp within 15 minutes of signup for 70%+ of new subscriptions",
+    "addr1 shows high cardinality with 20+ unique values across card1 attempts in 2-hour window",
+    "All transactions occur during is_night=1 hours (22:00-06:00 local) with identical browser fingerprint",
+    "card1_amt_zscore remains below 0.3 due to consistent low-amount authorizations",
+    "dist1 (distance between billing and shipping) exceeds 500km for 60%+ of transactions despite ProductCD='S' requiring no physical delivery"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple subscription signups with $0-$1 authorization amounts using disposable email domains, followed by cancellations within 8-15 minutes of account creation, with 20+ unique billing addresses across attempts in a 2-hour window.",
+  "reasoning": "Attackers use free trial periods to validate stolen card numbers without triggering actual charges, marking successfully authorized cards as live for future high-value fraud while avoiding detection through immediate cancellations.",
+  "indicator_explanations": [
+    "Card is being tested with micro-charges across dozens of subscription trials in one day",
+    "Most signups use throwaway email services to avoid future contact",
+    "Subscriptions are cancelled immediately after signup before any real billing occurs",
+    "Billing address rotates wildly across attempts suggesting fake address generation",
+    "All activity happens overnight using the same browser to avoid detection",
+    "Transaction amounts cluster tightly at authorization-test levels with no variation",
+    "Billing and shipping locations are impossibly far apart for digital-only subscriptions"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "case_bin_attack_009",
+  "title": "Co-Branded Airline/Hotel Card BIN Exploitation via Compromised Test Accounts",
+  "pattern": "bin_attack",
+  "narrative": "Fraudsters exploit co-branded credit card BINs (airline/hotel rewards cards) by targeting test or dormant accounts within specific IIN ranges. Attack involves 8-15 transactions over 2-4 hours at travel MCCs (4511, 4722, 3501-3999) with amounts clustering near $287-$412 to avoid single-transaction limits. Attackers leverage legitimate P_emaildomains matching card issuer partnerships (e.g., united.com, marriott.com) but pair with mismatched R_emaildomains (temp mail services). Transactions show card1_txn_count_1day jumping from 0 to 12+, all originating from 2-3 addr1 values despite dist1 showing 850+ miles between claimed billing and shipping. CVV match rate near 100% suggests full card data compromise. Timing concentrated in is_night=1 windows (txn_hour 1-5) when fraud monitoring may be reduced. ProductCD always 'W' (website) despite merchant being travel aggregator.",
+  "indicators": [
+    "card1 first 6 digits match co-branded issuer BIN, card1_txn_count_1day = 0 before attack then 8-15 within 4 hours",
+    "TransactionAmt clusters $287-$412 across 80%+ of transactions, all at MCC 4511/4722/3501-3999",
+    "P_emaildomain matches card partnership brand but R_emaildomain is guerrillamail.com, tempmail.net, or similar",
+    "dist1 > 850 miles while addr1 repeats across 70%+ of burst transactions",
+    "txn_hour concentrated 1-5 AM (is_night=1) with card1_amt_zscore jumping from -0.2 to 4.8+ within session",
+    "CVV2 match rate 95-100% but AVS shows partial/no match on 60%+ of transactions"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A burst of 8-15 travel purchases ($287-$412 each) hits a co-branded airline or hotel card in the middle of the night, all from the same shipping address despite the billing address being 850+ miles away. The purchaser email matches the card brand's partner domain, but the recipient email is a temporary mail service.",
+  "reasoning": "Fraudsters have stolen full card details (including CVV) from a dormant rewards account and are racing to buy travel services before the cardholder notices, using the brand-matching email to appear legitimate while shipping to a controlled address and hiding behind reduced overnight monitoring.",
+  "indicator_explanations": [
+    "Co-branded card appears dormant then erupts with rapid transactions in single session",
+    "Purchase amounts cluster in narrow band hitting travel merchant categories repeatedly",
+    "Billing email matches card brand but reply address uses disposable provider",
+    "Transactions span huge geographic range while shipping to identical repeated address",
+    "Attack unfolds in dead-of-night hours with amounts spiking far above card baseline",
+    "CVV verification succeeds perfectly but billing addresses fail verification consistently"
+  ]
+}

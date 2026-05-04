@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_020",
+  "title": "Customer Service Device Authorization Hijack via Social Engineering",
+  "pattern": "account_takeover",
+  "narrative": "Fraudster calls customer support claiming device access issues, convincing agent to whitelist a new device fingerprint. Within 90 minutes of the service call, transactions emerge from the newly-authorized device showing geographic inconsistency: original account shows 47 transactions from addr1=Chicago over 8 months, new device immediately transacts from addr1=Miami with dist1>1100km. The fraudster rapidly escalates purchase amounts: first transaction $89 (testing), second $347, then three transactions of $899-$1240 within 4 hours, all targeting high-resale ProductCD='W' electronics. Card velocity spikes from historical 2.1 transactions/day to 8 transactions in 6 hours. The new device shows DeviceInfo string never previously associated with this card1, and P_emaildomain switches from original gmail.com to a newly-added protonmail.com alias. CVV and AVS match perfectly because fraudster obtained full card details during account compromise phase before the service call.",
+  "indicators": [
+    "New DeviceInfo string appears within 2 hours of customer service interaction timestamp",
+    "Geographic jump: dist1 exceeds 800km between last legitimate transaction and first new-device transaction",
+    "Transaction velocity: card1_txn_count_24hr jumps from baseline 0-3 to 6+ transactions",
+    "Amount escalation pattern: first transaction <$100, subsequent transactions 3-12x larger within 4-hour window",
+    "P_emaildomain change to privacy-focused provider (protonmail, tutanota) within 48 hours of new device authorization",
+    "ProductCD concentration: 75%+ of new-device transactions target 'W' (electronics) or 'C' (high-value categories)",
+    "Perfect CVV/AVS match despite sudden behavioral deviation indicating full account credential access"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A new device begins transacting on an account within hours of a customer service call, originating from a location over 800km away from the account's historical activity, with transaction amounts rapidly escalating from under $100 to over $1000 within hours.",
+  "reasoning": "The fraudster socially engineers support staff to whitelist their device, then exploits full account access to rapidly extract value before detection, targeting high-resale electronics while the authorization window remains open.",
+  "indicator_explanations": [
+    "Brand new device shows up right after the cardholder called support",
+    "Card suddenly used hundreds of miles from its normal location",
+    "Daily transaction count spikes dramatically above the cardholder's usual pattern",
+    "Purchases start small then rapidly escalate to much larger amounts",
+    "Email address switched to a secure provider often used for anonymity",
+    "Fraudster focuses overwhelmingly on high-value electronics or premium goods",
+    "All security checks pass cleanly despite completely abnormal purchasing behavior"
+  ]
+}

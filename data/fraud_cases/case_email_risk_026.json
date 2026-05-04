@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_026",
+  "title": "Machine-Generated Email Identifiers with Rapid Account Creation and Low-Value Testing",
+  "pattern": "email_risk",
+  "narrative": "Fraudsters deploy automated scripts to generate throwaway email accounts using random alphanumeric strings (e.g., x7k9m2qw@gmail.com, p4n8v1zr@yahoo.com) for card testing and low-value purchases. These emails lack human naming patternsâ€”no words, names, or recognizable sequences. A typical burst involves 15-30 accounts created within 90 minutes, each attempting $3.99-$9.99 transactions on digital goods (ProductCD='W'). The P_emaildomain is often freemail (gmail, yahoo, outlook), while R_emaildomain remains null or mismatched. Transactions cluster in late-night hours (txn_hour 1-5 AM), suggesting automated execution. Email entropy exceeds 3.8 bits per character, and card1_txn_count_24hr stays at 1-2 per card to evade velocity triggers. Successful tests escalate to $200-$500 purchases within 6 hours using the same card/email pair. AVS and CVV responses initially match to establish trust before bust-out phase.",
+  "indicators": [
+    "P_emaildomain local part entropy >3.8 bits/char with no dictionary words or common name patterns",
+    "15-30 unique P_emaildomain accounts created within 90-minute window sharing addr1 or device fingerprint",
+    "Initial TransactionAmt $3.99-$9.99 on ProductCD='W', followed by $200-$500 charges within 6 hours on same card",
+    "78% of transactions occur txn_hour 1-5 AM with is_night=1",
+    "R_emaildomain null or mismatched to P_emaildomain in 85%+ of transactions",
+    "card1_txn_count_24hr remains â‰¤2 per card despite multiple email variations",
+    "AVS_match=Y and CVV_match=M in first 1-3 test transactions, then declines or partial matches in escalation phase"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Automated scripts create 15-30 accounts with random-string emails (high entropy, no real names) within 90 minutes, attempting small purchases ($4-$10) on digital goods during late-night hours, then rapidly escalating to larger charges using the same cards.",
+  "reasoning": "Fraudsters test stolen card validity with low-dollar transactions that fly under fraud thresholds, then immediately exploit confirmed cards for high-value purchases before detection—throwaway emails and tight timing prevent victim notification and maximize theft window.",
+  "indicator_explanations": [
+    "Email address looks randomly generated with no recognizable human naming patterns",
+    "Dozens of new email accounts created in rapid succession from same address or device",
+    "Small test purchases followed by sudden jump to much larger amounts on same card",
+    "Activity concentrated in middle-of-night hours when fraud monitoring is weakest",
+    "Recipient email missing or doesn't match purchaser in vast majority of transactions",
+    "Each card used only once or twice despite churning through many email accounts",
+    "Initial transactions pass verification checks then subsequent attempts start failing or degrading"
+  ]
+}

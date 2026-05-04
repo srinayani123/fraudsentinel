@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_032",
+  "title": "Distributed Micro-Merchant Card Validation via Low-Value Digital Goods",
+  "pattern": "card_testing",
+  "narrative": "Fraudster uses stolen card credentials to conduct systematic validation across 8-15 different small digital goods merchants within a 90-minute window. Each test transaction ranges $0.99-$2.99 targeting ProductCD='W' (digital wallet top-ups) or ProductCD='C' (digital content). Attackers exploit merchants with weak velocity controls and instant authorization feedback. Pattern shows card1_txn_count_1hr jumping from 0 to 12+, all transactions under $3.00, and merchant diversity indicated by 8+ unique MIDs. Transactions originate from single IP (dist1=0 across attempts) but hit merchants in different geographic regions. All attempts use identical P_emaildomain (often disposable like 'guerrillamail.com') with randomly generated local parts. Successful validations are immediately followed by higher-value fraud at established e-commerce sites within 2-4 hours, creating a clear two-phase attack signature.",
+  "indicators": [
+    "card1_txn_count_1hr â‰¥ 8 with 100% of TransactionAmt between $0.99-$2.99",
+    "8+ unique merchant IDs (MIDs) contacted within 90-minute window",
+    "dist1=0 indicating identical device/IP across all micro-transactions",
+    "ProductCD exclusively 'W' or 'C' during testing phase",
+    "P_emaildomain matches disposable email provider list (guerrillamail, tempmail, 10minutemail)",
+    "card1_amt_zscore shows sudden spike from baseline <0.5 to >3.0",
+    "Time gap of 2-4 hours between testing cluster and first high-value transaction ($100+)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card is used for 8-12 tiny purchases ($0.99-$2.99) across different digital goods merchants within 90 minutes, all from the same device but hitting merchants in varied locations. The email is disposable (guerrillamail, tempmail), and 2-4 hours later the same card attempts a much larger purchase at a mainstream retailer.",
+  "reasoning": "Criminals test stolen cards with small amounts at merchants with weak fraud controls to confirm the card is active without alerting the cardholder. Once validated, they quickly move to high-value fraud before the card is canceled, creating a clear two-stage attack pattern that distinguishes this from legitimate low-value shopping.",
+  "indicator_explanations": [
+    "Card hits same low dollar amount repeatedly within an hour",
+    "Attacker probes multiple merchants rapidly to find validation weaknesses",
+    "All test transactions originate from single device or network location",
+    "Purchases limited to digital goods that deliver instant confirmation",
+    "Email address uses temporary throwaway service flagged for fraud",
+    "Spending pattern suddenly deviates sharply from cardholder's normal behavior",
+    "Quiet period separates validation tests from the actual cash-out attack"
+  ]
+}

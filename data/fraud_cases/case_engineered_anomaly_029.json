@@ -1,0 +1,27 @@
+{
+  "id": "case_engineered_anomaly_029",
+  "title": "Scripted Transaction Automation via V-Cluster Signature Detection",
+  "pattern": "engineered_anomaly",
+  "narrative": "Automated transaction generation using scripts or bots that maintain behavioral normalcy but leave distinctive fingerprints in Vesta's composite engineered features. The fraudster employs tooling that generates transactions at human-like intervals with appropriate amounts, but the underlying automation creates patterns in transaction-sequence features that V-fields encode. V307 and V320 capture timing micro-patterns and session characteristics that differ from genuine human interaction flows. V258 and V280 encode device-interaction sequences inconsistent with manual entry. The combination of elevated V200 with specific V-cluster co-occurrences indicates scripted generation rather than keyboard-driven transaction initiation. Behavioral metrics appear entirely normal because the script mimics human pacing and amount selection, but the engineered features reveal the mechanical nature of transaction construction.",
+  "indicators": [
+    "V200 > 6 (p90 threshold) indicating elevated sequence anomaly score",
+    "V307 and V320 both non-null with V307/V320 ratio > 2.5 suggesting timing micro-pattern inconsistency",
+    "V258 > 150 when present, flagging device-interaction sequence deviation",
+    "V280 in range 0-1 combined with V201 > 80, indicating script-consistent feature correlation",
+    "V305 != null with C1 < 30 showing engineered feature activation despite low card-use frequency",
+    "D1 between 50-180 indicating established device-card relationship masking the automation",
+    "card1_amt_zscore between -1.0 and +1.0 with ProductCD=W, amounts fitting normal profile"
+  ],
+  "indicator_explanations": [
+    "Transaction sequence shows unusual pattern detected by composite modeling algorithms",
+    "Timing characteristics between transaction components reveal non-human interaction flow",
+    "Device interaction pattern deviates from expected manual user behavior",
+    "Multiple engineered features co-occur in combination typical of automated generation",
+    "Advanced fraud signal activates despite the card showing limited historical activity",
+    "Device and card are familiar to each other, masking the scripted nature",
+    "Transaction amount falls within the cardholder's normal spending range"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Automated transaction scripts that mimic human behavioral patterns but create distinctive signatures in Vesta's composite engineered features, particularly V307/V320 timing ratios and V258 interaction sequences combined with elevated V200.",
+  "reasoning": "The specific combination of V-field elevations and ratios indicates mechanical transaction generation. Fraudsters using automation tools cannot replicate the micro-patterns of genuine human interaction that Vesta's engineered features encode, even when macro-level behavioral signals appear completely normal."
+}

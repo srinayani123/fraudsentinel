@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_019",
+  "title": "Tor Exit Node Card Testing with Rapid Geographic Dispersion",
+  "pattern": "geo_anomaly",
+  "narrative": "Fraudster uses Tor browser to mask true location while testing stolen card portfolios, creating distinctive patterns of transactions originating from known Tor exit node IP addresses. A batch of 8-15 cards is tested with $1-$5 authorization checks across digital goods merchants (ProductCD='W' or 'C') within 45-90 minute windows. Each transaction shows different apparent geolocations (addr1 values spanning 4+ countries, dist1 exceeding 5000km between sequential txns). The Tor routing creates characteristic latency signatures and IP reputation flags. Common email domains are temporary services (P_emaildomain like 'guerrillamail', 'tempmail', '10minutemail'). After successful validations, cards immediately shift to high-value purchases ($400-$1200) at digital wallet top-up merchants or cryptocurrency exchanges, often abandoning Tor for residential proxies to avoid velocity blocks.",
+  "indicators": [
+    "Transaction IP flagged as known Tor exit node with 90%+ confidence score",
+    "dist1 values exceeding 3000km between consecutive transactions on same card1 within 60 minutes",
+    "card1_txn_count_24hr shows 6+ transactions with 4+ distinct addr1 country codes",
+    "Initial transaction amounts $1.00-$5.00 followed by $400+ purchase within 2 hours on same card",
+    "P_emaildomain matches disposable email service list (15+ known providers)",
+    "TransactionAmt progression pattern: 3-8 micro-tests under $10, then immediate jump to $400-$1500 range",
+    "All transactions occur during is_night=1 hours (00:00-06:00 UTC) targeting US-issued cards"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Transactions originating from Tor exit node IPs show impossible geographic jumps (3000+ km between purchases within an hour) combined with micro-value card tests ($1-5) followed immediately by high-value purchases ($400+). The same card appears in multiple countries within minutes using disposable email addresses.",
+  "reasoning": "Criminals use Tor to hide their real location while testing stolen card portfolios in bulk, validating which cards are active before quickly maximizing theft with large purchases. The extreme geographic dispersion and test-then-exploit sequence reveals coordinated card fraud rather than legitimate customer behavior.",
+  "indicator_explanations": [
+    "Transaction originates from anonymization network hiding the attacker's true location",
+    "Card appears in impossibly distant locations within the same hour",
+    "Card hits multiple countries across different continents in one day",
+    "Tiny test purchases immediately followed by large fraudulent transaction",
+    "Email uses throwaway service indicating no legitimate customer identity",
+    "Attacker validates card with small charges before maxing it out",
+    "All activity happens during overnight hours when cardholders are asleep"
+  ]
+}

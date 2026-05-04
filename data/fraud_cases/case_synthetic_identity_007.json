@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_007",
+  "title": "VOIP-Anchored Synthetic Identity with Rapid Credit-Building Cycle",
+  "pattern": "synthetic_identity",
+  "narrative": "A synthetic identity is established using a freshly generated VOIP number (typically Twilio, Google Voice, or Burner) with zero telecommunications history. The fraudster obtains an authorized user tradeline or secured credit card, then begins a 45-90 day credit-building phase with small authorized purchases ($8-$35) at high-reputation merchants (MCC 5411, 5912, 5942). Phone verification services flag the number as VOIP with account age under 30 days. After establishing 15-25 successful transactions, the pattern shifts: TransactionAmt jumps to $850-$2,400 range within 72 hours, targeting electronics (ProductCD=W) and gift cards (MCC 5967). The P_emaildomain switches from common providers to disposable/temporary email services. Shipping addresses (addr1) show commercial mail receiving agencies or package forwarding services. card1_txn_count_7day spikes from 2-3 to 12-18 transactions. The bust-out phase completes within 96 hours before the first statement cycle closes.",
+  "indicators": [
+    "Phone number flagged as VOIP service with account creation date <30 days prior to first transaction",
+    "Initial 15-25 transactions averaging $8-$35 at grocery/pharmacy MCCs, followed by 72-hour surge to $850-$2,400 range",
+    "card1_txn_count_7day increases from baseline 2-3 to 12-18 within 96-hour window",
+    "P_emaildomain transitions from established provider (gmail.com, yahoo.com) to temporary/disposable domain mid-pattern",
+    "addr1 matches commercial mail receiving agency (CMRA) or package forwarding service database",
+    "ProductCD shift from physical goods (C) to high-value electronics (W) and gift cards within final 72 hours",
+    "All high-value transactions occur before day 28 of account cycle, avoiding first statement generation"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A new VOIP phone number under 30 days old is used to open credit, followed by 15-25 small purchases at grocery stores to build legitimacy, then a sudden spike to 12-18 transactions worth $850-$2,400 in electronics and gift cards within 72 hours—all before the first statement closes.",
+  "reasoning": "The fraudster is manufacturing a credible payment history with tiny transactions to pass initial fraud filters, then executing a coordinated bust-out by maxing out credit on high-value resellable items before the issuer can detect the pattern or generate a bill.",
+  "indicator_explanations": [
+    "Phone is untraceable internet-based service activated just before account opened",
+    "Normal grocery purchases suddenly explode into luxury spending after trust-building phase",
+    "Transaction frequency spikes dramatically from normal pace to frenzied burst activity",
+    "Email switches from legitimate provider to burner service during the scheme",
+    "Shipping address is mail drop service, not actual residential location",
+    "Purchases pivot from everyday items to resellable electronics and untraceable gift cards",
+    "All big-ticket charges happen before statement arrives exposing the fraud"
+  ]
+}

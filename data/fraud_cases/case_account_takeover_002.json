@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_002",
+  "title": "Express Address Swap with High-Value Electronics Purchase",
+  "pattern": "account_takeover",
+  "narrative": "Attacker gains account credentials through phishing or credential stuffing, logs into legitimate customer account, and immediately adds a new shipping address in a different state or country. Within 1-4 hours of address addition, places a single high-value order ($800-$2,500) for electronics or gift cards, often selecting expedited shipping to minimize detection window. The new address (addr1_new) typically has dist1 values exceeding 500km from historical addresses. Account shows no prior activity for 30-90 days before the attack, then suddenly reactivates with password reset or email change immediately preceding the fraudulent purchase. The transaction often occurs during off-hours (txn_hour between 23-05) when legitimate account holder is likely asleep, and ProductCD flags as 'W' (electronics) with TransactionAmt 3-5 standard deviations above account's historical card1_amt_zscore.",
+  "indicators": [
+    "New shipping address added within 1-4 hours before purchase with dist1 > 500km from prior addresses",
+    "TransactionAmt between $800-$2,500 with card1_amt_zscore > 3.0 compared to account history",
+    "Account dormant 30+ days then reactivated with password reset in past 24 hours",
+    "Purchase during night hours (txn_hour 23-05) when is_night=1 and account has no prior nighttime activity",
+    "ProductCD='W' with expedited shipping selected and addr1_txn_count=1 for new address",
+    "No verification transactions or browsing activity between address add and purchase",
+    "R_emaildomain change or P_emaildomain mismatch with historical patterns in past 48 hours"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A dormant account suddenly reactivates with a password reset, adds a shipping address hundreds of kilometers away, then immediately purchases high-value electronics (typically $800-$2,500) during overnight hours with expedited shipping, all within 1-4 hours.",
+  "reasoning": "An attacker who compromised login credentials is racing to extract value before the legitimate owner notices, using a far-away address they control and rushing the shipment to receive stolen goods before the account holder can intervene or the fraud team investigates.",
+  "indicator_explanations": [
+    "Shipping address suddenly appears far from customer's known locations right before purchase",
+    "Purchase amount drastically exceeds what this account normally spends",
+    "Dormant account springs to life immediately after a password reset",
+    "Transaction happens in dead of night when customer never shops",
+    "High-value electronics rushed to a brand-new delivery address",
+    "Customer skips straight to checkout without any normal browsing behavior",
+    "Email address changes or doesn't match account's established communication patterns"
+  ]
+}

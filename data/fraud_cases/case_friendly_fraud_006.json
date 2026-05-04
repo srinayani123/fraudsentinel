@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_006",
+  "title": "Post-Event Chargeback After Verified Digital Ticket Redemption and Gate Scan",
+  "pattern": "friendly_fraud",
+  "narrative": "Cardholder purchases premium event tickets ($850-$2,400 range) using verified digital payment, receives QR-code tickets via email within 2-3 minutes, successfully redeems tickets at venue entry (scanned 24-72 hours post-purchase), attends full event, then files chargeback 15-45 days later claiming non-receipt or unauthorized transaction. Pattern clusters around high-demand concerts, sports finals, and theater productions. Transactions show legitimate P_emaildomain match to cardholder, successful AVS/CVV checks, and normal device_id consistency. Dispute filed exactly 1-2 days after event conclusion when merchant can no longer reverse digital delivery. Cardholder often files as 'merchandise not received' despite ProductCD = 'W' (digital goods) and documented redemption timestamp in merchant system. Repeat offenders show 2-4 similar disputes across different ticketing MIDs within 6-month window, always post-redemption.",
+  "indicators": [
+    "TransactionAmt $850-$2,400 for ProductCD = 'W' with event-ticketing MCC 7922 or 7941",
+    "Chargeback filed 15-45 days post-transaction, specifically 1-2 days after scheduled event date",
+    "P_emaildomain matches known consumer domains (gmail.com, yahoo.com, outlook.com) with 90+ day account age",
+    "card1_chargeback_count_180d shows 2-4 disputes all coded 'non-receipt' for digital/event purchases",
+    "Transaction shows AVS = 'Y', cvv_match = 1, dist1 < 50km (local cardholder to billing)",
+    "Merchant metadata confirms QR redemption timestamp 24-72 hours post-purchase",
+    "card1_txn_count_7d = 1-2 (isolated high-value purchase, not velocity pattern)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Customer buys expensive digital event tickets, successfully scans them at the venue gate and attends the event, then files a chargeback 1-2 days after the event claiming they never received the tickets or the charge was unauthorized.",
+  "reasoning": "The cardholder is deliberately exploiting the chargeback system to get a refund after consuming the service—they attended the event they paid for, then falsely disputed the charge to keep both the experience and their money.",
+  "indicator_explanations": [
+    "Large spend on digital event tickets at entertainment or concert venues",
+    "Dispute arrives suspiciously soon after the event already happened",
+    "Legitimate personal email with established history, not throwaway account",
+    "Repeat pattern of claiming non-receipt on digital goods they likely received",
+    "Perfect payment verification and cardholder is local to billing address",
+    "Evidence shows customer actually scanned and used the tickets at event",
+    "Single big-ticket purchase without suspicious transaction velocity or pattern"
+  ]
+}

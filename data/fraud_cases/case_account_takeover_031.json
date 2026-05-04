@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_031",
+  "title": "Sequential Account Credential Rotation with Immediate High-Value Extraction",
+  "pattern": "account_takeover",
+  "narrative": "Attacker gains initial access to legitimate account, immediately changes email from established domain (gmail.com, yahoo.com) to disposable service (tempmail.net, guerrillamail.com), then forces password reset within 3-8 minutes. Within 15-35 minutes of password reset completion, makes 1-3 purchases totaling $800-$2,400 using stored payment method or adds new card with mismatched billing address. P_emaildomain switches from aged domain to newly-registered or disposable service. Original card on file shows normal card1_txn_count_24hr pattern (2-4 transactions/day) but suddenly executes $1,200+ purchase at unusual txn_hour (02:00-05:00 local time). Shipping address (addr1) changes to commercial suite or freight forwarder, with dist1 showing 500+ miles from historical purchase locations. ProductCD shifts to resellable electronics (C category) versus victim's typical purchase history.",
+  "indicators": [
+    "P_emaildomain changes from established provider to disposable service (10y+ â†’ 30d old domain registration)",
+    "Password reset timestamp within 3-8 minutes of email change event",
+    "First purchase 15-35 minutes after credential rotation, amount $800-$2,400",
+    "dist1 exceeds 500 miles from victim's historical addr1 cluster",
+    "txn_hour falls in 02:00-05:00 window when victim historically inactive (0 transactions in that window previous 90 days)",
+    "card1_amt_zscore jumps to 3.5+ standard deviations above victim's 60-day average",
+    "addr1 matches known freight forwarder or commercial mail receiving agency pattern"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Account email switches from an established provider to a disposable service, followed by password reset within minutes, then a high-value purchase ($800-$2,400) ships to a commercial suite or freight forwarder 500+ miles away during hours the victim never shops.",
+  "reasoning": "The attacker locks out the legitimate owner by changing credentials, then immediately extracts maximum value using stored payment methods before the victim notices, shipping resellable electronics to drop locations that facilitate quick resale and prevent tracing back to the fraudster.",
+  "indicator_explanations": [
+    "Email switches from long-established provider to newly-registered disposable domain",
+    "Password gets reset within minutes of the email address change",
+    "Large purchase happens shortly after account credentials are altered",
+    "Transaction originates far outside the victim's normal geographic activity zone",
+    "Purchase occurs during hours when legitimate account owner never shops",
+    "Transaction amount dramatically exceeds what this cardholder normally spends",
+    "Shipping address matches freight forwarding or package reshipping service pattern"
+  ]
+}

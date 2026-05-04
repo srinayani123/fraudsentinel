@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_009",
+  "title": "Serial Disputer with Escalating Claim Refinement Pattern",
+  "pattern": "friendly_fraud",
+  "narrative": "Cardholder files initial 'not as described' dispute on $847 electronics purchase, then withdraws when merchant provides delivery confirmation. Within 45 days, files new 'unauthorized' claim on same transaction with different reason code, citing 'compromised card'. Pattern shows card1_txn_count_30day of 23 legitimate purchases before dispute, all under $200, then single high-value $847 transaction disputed twice. Email domain remains consistent (P_emaildomain='gmail.com'), same addr1, but claimant provides contradictory statements about transaction awareness. Third dispute attempt surfaces after 60-day mark with 'service not rendered' claim. Behavioral signature includes searching merchant return policy 4 times via same device_id before initial purchase, screenshot activity on order confirmation page, and merchant contact 8 days post-delivery requesting partial refund before first dispute filed.",
+  "indicators": [
+    "Same TransactionAmt disputed 2-3 times with different reason codes within 90-day window",
+    "Transaction value 4.2x+ higher than cardholder's card1_avg_amt_30day baseline",
+    "Pre-purchase activity shows 3+ merchant policy page views from matching DeviceInfo hash",
+    "Initial merchant contact requesting 40-60% partial refund occurs 7-12 days before first dispute",
+    "Dispute withdrawal followed by re-filing with contradictory authorization claim within 30-50 days",
+    "All other card1 transactions show consistent delivery addr1 and no dispute history",
+    "Claimant provides different transaction awareness timeline in each dispute narrative"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "The same transaction is disputed multiple times within 90 days using different reason codes (not as described, then unauthorized, then service not rendered), with the dispute amount being 4x higher than the cardholder's typical purchase pattern. Pre-purchase behavior shows multiple merchant policy page views and a partial refund request before the first dispute.",
+  "reasoning": "The cardholder is systematically testing different dispute angles to get a refund on a legitimate high-value purchase they received and used. The contradictory claims, policy research, and strategic withdrawal-then-refiling pattern reveal intentional manipulation of the dispute process rather than genuine fraud victimization.",
+  "indicator_explanations": [
+    "Buyer disputes the exact same purchase multiple times using different excuses",
+    "Purchase amount wildly exceeds what this cardholder normally spends in a month",
+    "Buyer researched merchant return policies repeatedly before making the purchase",
+    "Buyer first asks merchant for partial refund then files chargeback days later",
+    "Buyer drops original dispute then refiles with completely opposite fraud claim",
+    "All other purchases ship to same address with zero disputes—this one stands out",
+    "Buyer tells different stories about when they discovered the unauthorized charge"
+  ]
+}

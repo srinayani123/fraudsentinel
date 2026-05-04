@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_023",
+  "title": "Prepaid BIN Exploitation with Ghost Merchant Rotation",
+  "pattern": "bin_attack",
+  "narrative": "Fraudsters exploit prepaid card BINs (typically 403358, 448590, 486236 ranges) targeting MCCs with minimal verificationâ€”gas stations (5542), convenience stores (5411), and quick-service restaurants (5814). A single prepaid BIN produces 40-80 unique card numbers tested across 8-12 merchant IDs within 72 hours. Transactions cluster at $47-$89 to stay under automated review thresholds. The operation rotates through regional processors every 18-24 hours to avoid single-MID velocity triggers. Approval rates hit 68-74% because prepaid cards lack robust fraud controls and issuers can't easily contact cardholders. Email domains follow patterns like tempmail.org, guerrillamail.com, or missing entirely (null P_emaildomain in 83% of transactions). Chargebacks surface 14-21 days post-transaction when legitimate cardholders check balances. The attack concludes before issuers can block the BIN range system-wide.",
+  "indicators": [
+    "Single IIN range (6-digit BIN) generates 40-80 unique card1 values within 72-hour window",
+    "TransactionAmt concentrated in $47-$89 band across 91% of transactions from affected BIN",
+    "card1_txn_count_merchant rotates: no single merchant exceeds 15 transactions per card",
+    "P_emaildomain null or disposable (tempmail, guerrilla, mailinator) in 78%+ of transactions",
+    "MCC distribution: 67% across 5542, 5411, 5814 with minimal high-risk category presence",
+    "Approval rate 68-74% vs. 52-58% baseline for same merchant cohort",
+    "dist1 values cluster in 3-5 geographic zones despite wide card1 distribution suggesting proxy use"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single prepaid card BIN spawns 40-80 unique card numbers within 72 hours, all transacting $47-$89 at gas stations and convenience stores with 68-74% approval rates and mostly null or disposable email addresses.",
+  "reasoning": "Fraudsters exploit weak prepaid card controls and rotate through multiple merchants to stay under velocity limits, conducting a fast-moving testing operation before issuers can block the compromised BIN range and before chargebacks reveal the fraud 14-21 days later.",
+  "indicator_explanations": [
+    "Same bank identification number spawns dozens of different cards in days",
+    "Purchase amounts cluster tightly in the sweet spot below fraud thresholds",
+    "Each card spreads activity across merchants to avoid single-merchant flags",
+    "Email addresses are missing or belong to throwaway temporary mail services",
+    "Merchants are everyday categories like gas stations and fast food outlets",
+    "Fraudulent cards are getting approved far more than legitimate similar transactions",
+    "Locations appear diverse but actually funnel through handful of proxy addresses"
+  ]
+}

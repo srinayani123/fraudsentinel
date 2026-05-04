@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_001",
+  "title": "High-Frequency Card Testing Burst with Incremental Authorization Probing",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster conducts rapid-fire authorization attempts on a compromised card, starting with small amounts to verify card validity before escalating. Within a 5-minute window, 12-15 transactions are submitted across 3-4 different merchant categories (MCC 5411, 5812, 5999). Initial transactions are $1-$3 test charges, followed by progressively larger amounts ($47, $89, $156) once the card validates. All transactions occur between 2:00-4:00 AM cardholder local time (is_night=1), targeting different online merchants with mismatched billing addresses. The card1_txn_count_10min feature spikes from baseline 0.2 to 14, while card1_amt_zscore exceeds 8.5. P_emaildomain rotates between disposable services (guerrillamail, tempmail) across transactions, and dist1 values show impossible geographic dispersion (>500km between sequential purchases within 90 seconds).",
+  "indicators": [
+    "12-15 transactions submitted within 5-minute window on single card (card1_txn_count_5min >= 12)",
+    "Progressive transaction amounts: initial $1-$3 test charges followed by $47-$156 purchases",
+    "All activity occurs 2:00-4:00 AM cardholder timezone (txn_hour between 2-4, is_night=1)",
+    "P_emaildomain switches between disposable providers across consecutive transactions (guerrillamail.com, tempmail.net)",
+    "card1_amt_zscore exceeds 8.5 indicating extreme deviation from cardholder spending baseline",
+    "dist1 values show >500km geographic distance between transactions <90 seconds apart",
+    "Transactions span 3-4 different MCC codes within burst window (5411, 5812, 5999)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single card shows 12-15 transactions in five minutes during the middle of the night, starting with tiny $1-$3 charges that quickly escalate to $47-$156 purchases across different merchant types. The transactions use rotating disposable email addresses and occur in geographically impossible locations (500+ km apart within 90 seconds).",
+  "reasoning": "The fraudster is testing a stolen card with small amounts first to confirm it's active, then immediately maximizing the haul before the cardholder wakes up or the bank flags the card. The overnight timing, disposable emails, and impossible travel distances reveal this isn't the legitimate cardholder making urgent purchases.",
+  "indicator_explanations": [
+    "Card is being hammered with rapid-fire transactions in a tight window",
+    "Amounts start tiny for testing then escalate to real theft attempts",
+    "Activity happens during cardholder's sleep hours when monitoring is unlikely",
+    "Email domain rotates between throwaway services between purchases",
+    "Amount is wildly larger than this card's normal spending range",
+    "Transactions appear in geographically impossible locations within seconds",
+    "Card jumps between unrelated merchant types during the attack burst"
+  ]
+}

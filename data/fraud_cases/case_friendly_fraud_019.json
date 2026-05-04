@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_019",
+  "title": "Serial Disputer with Escalating Narrative Sophistication and Test Transactions",
+  "pattern": "friendly_fraud",
+  "narrative": "Cardholder files initial dispute claiming non-receipt on a $247 electronics purchase, documenting tracking anomalies. After merchant prevails with delivery proof, files second dispute 18 days later on same merchant for different order ($189) citing item-not-as-described with photographic evidence. Third attempt at day 47 adds fraud claim on $312 transaction, now alleging card was briefly stolen. Pattern shows card1_txn_count_30d climbing from 2 to 19 transactions between disputes, with deliberate $15-$35 test purchases at same MID immediately before each dispute filing. Email domain switches from Gmail to ProtonMail before final dispute. All disputed transactions share addr1 match with successful orders, dist1 under 12km, and ProductCD='W'. Cardholder timing disputes to fall within different chargeback reason code windows, exploiting merchant fatigue.",
+  "indicators": [
+    "3+ disputes filed against 1-2 merchants within 60-day window with different reason codes each time",
+    "card1_txn_count_7d increases 4-9 transactions in week preceding each subsequent dispute",
+    "Test transactions $15-$35 at target merchant 2-5 days before dispute filing, all successful",
+    "P_emaildomain changes between dispute attempts while addr1 and dist1 remain constant under 15km",
+    "Disputed TransactionAmt escalates 20-60% with each iteration ($200â†’$250â†’$350 pattern)",
+    "Time gap between disputes strategically placed at 14-21 days to reset merchant fraud scoring windows",
+    "All disputed transactions CNP with matching device fingerprint but narrative claims card theft"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Cardholder files multiple disputes against the same merchant within 60 days, each time using a different reason code (non-receipt, then item defect, then unauthorized use) while transaction amounts escalate and small test purchases appear at the merchant 2-5 days before each dispute.",
+  "reasoning": "The cardholder is deliberately cycling through different chargeback reason codes and timing disputes to exploit merchant fatigue and bypass fraud detection systems, while test transactions confirm the card works before filing claims they know are false.",
+  "indicator_explanations": [
+    "Customer files multiple disputes against same merchants using different excuses each time",
+    "Transaction activity spikes dramatically in the week before filing each new dispute",
+    "Small test purchases confirm merchant acceptance before launching larger disputed transactions",
+    "Email address rotates between disputes while physical location stays anchored to same area",
+    "Disputed amounts climb systematically with each new claim filed against merchants",
+    "Disputes are strategically timed to avoid triggering merchant fraud velocity alerts",
+    "Claims card was stolen despite all transactions coming from same device fingerprint"
+  ]
+}

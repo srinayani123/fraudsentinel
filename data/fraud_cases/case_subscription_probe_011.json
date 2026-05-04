@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_011",
+  "title": "Low-Friction Subscription Ladder Testing for Card Longevity Validation",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster enrolls stolen card in 3-5 legitimate low-cost subscription services ($0.99-$4.99 monthly) across entertainment, news, or cloud storage MCCs within 48 hours. Services chosen specifically for infrequent user login requirements and automatic renewal without re-authentication. Initial charges succeed, then fraudster monitors for 30-60 days without canceling to confirm card remains active and issuer has not blocked. Pattern shows card1_txn_count_7d jumping from 0 to 4-5, all transactions under $5.00, all ProductCD='C' (subscription), distinct merchant IDs but overlapping P_emaildomain across services. TransactionAmt variance near zero (Ïƒ < $2). After validation period, card is either sold on darknet markets as 'aged and verified' at premium pricing or used for larger fraud. No genuine user enrolls in multiple paid subscriptions simultaneously without mixing in organic purchases.",
+  "indicators": [
+    "4-5 transactions within 48 hours, all $0.99-$4.99, card1_txn_count_7d previously zero",
+    "All transactions ProductCD='C', distinct MIDs but same P_emaildomain domain",
+    "TransactionAmt standard deviation < $2.00 across all subscription charges",
+    "No non-subscription purchases (ProductCD='W', 'H', 'R') in surrounding 14-day window",
+    "Subscriptions span 3+ different MCC codes (5815 digital goods, 5968 continuity services, 7372 software)",
+    "All transactions CNP with identical card1/addr1 but no dist1 variance",
+    "30-60 day gap before any subsequent non-subscription activity or high-value fraud"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A stolen card suddenly shows 4-5 small subscription charges ($0.99-$4.99) within 48 hours across different services but using the same email domain, with no other purchases before or after. The amounts barely vary and the card sits idle for 30-60 days while the fraudster confirms the issuer hasn't blocked it.",
+  "reasoning": "Criminals test stolen cards with multiple low-cost subscriptions to verify they're active and undetected before selling them as premium 'verified' cards or using them for larger theft. Legitimate users don't sign up for several paid subscriptions simultaneously without making any normal purchases.",
+  "indicator_explanations": [
+    "Card suddenly awakens with small subscription charges after dormancy period",
+    "Multiple subscription merchants share the same disposable email domain",
+    "All charges cluster tightly around tiny subscription amounts with minimal variance",
+    "Card shows zero legitimate shopping activity surrounding the subscription pattern",
+    "Subscriptions hop across unrelated service categories within testing window",
+    "Same billing address across all trials with no geographic movement",
+    "Card goes silent after probing then resurfaces for major fraud"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_002",
+  "title": "Post-Holiday Family Device Purchase Dispute Pattern",
+  "pattern": "friendly_fraud",
+  "narrative": "Cardholder disputes $800-$2400 electronics purchase 45-75 days post-transaction, claiming unauthorized use. Investigation reveals transaction originated from device with matching device_id fingerprint to cardholder's previous 15+ authenticated purchases over 6 months. Purchase occurred during daytime hours (10AM-4PM) when cardholder historically shops, used stored CVV, shipped to card_addr1 matching billing, signed for at delivery. Email confirmation opened from same IP subnet (dist1 < 100km) as cardholder's residence within 3 hours of purchase. Chargeback filed precisely at 60-day mark, typical of coached disputes. Pattern common with teen/spouse purchases where family member used saved payment on shared device, then primary cardholder disputes upon discovering charge.",
+  "indicators": [
+    "device_id matches cardholder's historical authenticated sessions (15+ prior txns)",
+    "TransactionAmt between $800-$2400 for ProductCD='W' (electronics)",
+    "Delivery addr1 exact match to card billing address with confirmed signature",
+    "Email opened from IP with dist1 < 100km from shipping address within 180 minutes",
+    "Chargeback filed at day 60-75, no contact with merchant prior",
+    "Transaction txn_hour between 10-16, matching cardholder's 80%+ purchase window",
+    "CVV match, card1_txn_count_24hr = 1, no velocity anomaly"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "High-value electronics purchase shows all hallmarks of legitimate cardholder activity — same device used for 15+ prior purchases, delivery to billing address with signature, email opened nearby, transaction during customer's normal shopping hours — yet disputed at exactly 60 days with no prior merchant contact.",
+  "reasoning": "Family member (teen or spouse) likely made the purchase on a shared device using saved payment info, and the primary cardholder disputes it upon seeing the statement rather than resolving it as a household matter, coached to wait until day 60 to maximize chargeback window.",
+  "indicator_explanations": [
+    "Device is the cardholder's own trusted device with long transaction history",
+    "Purchase amount fits typical electronics price range for high-value consumer goods",
+    "Item was delivered to cardholder's verified billing address with signature confirmation",
+    "Cardholder opened delivery email from their home location shortly after shipment",
+    "Chargeback filed at maximum dispute window without any merchant communication attempts",
+    "Purchase made during cardholder's normal daytime shopping hours and behavior pattern",
+    "Card verification passed and transaction was isolated with no suspicious velocity"
+  ]
+}

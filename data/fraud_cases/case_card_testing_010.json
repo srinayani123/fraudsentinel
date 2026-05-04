@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_010",
+  "title": "Pre-Authorization Testing via Hotel or Rental Merchant with 7-14 Day Capture Window",
+  "pattern": "card_testing",
+  "narrative": "Fraudsters exploit merchants with extended pre-authorization periods (hotels, car rentals, subscription trials) to validate stolen cards without immediate fund movement. A card undergoes 3-8 authorization attempts at ProductCD='H' or 'R' merchants with TransactionAmt between $1.00-$15.00, all flagged as pre-auth holds. These tests occur within a 90-minute window, typically during txn_hour 2-5 (late night), with identical P_emaildomain across attempts but rotating addr1 values. The fraudster monitors which cards receive approval codes, then immediately pivots to high-value purchases at different merchant categories before the original holds settle or generate chargebacks. card1_txn_count_24h shows 6-12 transactions with card1_amt_zscore remaining low due to small test amounts. Legitimate customers rarely generate multiple low-value hotel pre-auths in rapid succession across different property locations.",
+  "indicators": [
+    "3-8 pre-authorization transactions in 90-minute window at ProductCD='H' or 'R' merchants",
+    "All test amounts between $1.00-$15.00 with identical P_emaildomain but 3+ distinct addr1 values",
+    "Transactions clustered in txn_hour 2-5 (late night/early morning)",
+    "card1_txn_count_24h increases to 6-12 while card1_amt_zscore remains below 0.8",
+    "Same card shows high-value purchase ($300+) at different MCC within 2 hours of pre-auth approvals",
+    "dist1 (distance between billing/shipping) varies wildly between attempts (50+ mile swings)",
+    "No prior transaction history for P_emaildomain despite multiple card attempts"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple low-value ($1-$15) hotel or rental pre-authorizations fire rapidly within 90 minutes, typically late night hours 2-5, using the same email but constantly changing addresses. The card then immediately makes a high-value purchase elsewhere if the tests get approved.",
+  "reasoning": "Criminals use hotels' week-long authorization windows to test stolen cards with small holds that won't immediately alert victims or trigger fraud systems, then rush to buy expensive goods with whichever cards pass before the holds settle or chargebacks arrive.",
+  "indicator_explanations": [
+    "Multiple low-dollar holds placed at hotels or rentals in rapid succession",
+    "Testing different billing addresses while keeping the same throwaway email",
+    "Activity concentrated in graveyard hours when fraud monitoring is weakest",
+    "Card shows unusual transaction frequency but amounts stay deceptively normal",
+    "Validated card immediately used for large purchase at completely different merchant",
+    "Billing and shipping locations swing drastically between test transactions",
+    "Email address has no purchase history yet appears across multiple cards"
+  ]
+}

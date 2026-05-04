@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_013",
+  "title": "Sequential Credential Pivot with Immediate High-Value Extraction",
+  "pattern": "account_takeover",
+  "narrative": "Attacker gains initial access to customer account, immediately changes email to temporary domain (mailinator, guerrillamail), waits 8-15 minutes, triggers password reset to new email, then within 30 minutes executes 2-4 purchases totaling $800-$2,400. Original account shows 6-18 month purchase history with avg transaction $45-$120, suddenly shifts to electronics (ProductCD=W) or gift cards (ProductCD=C) with individual amounts $400-$800. Email change and first fraudulent purchase occur from different IP address than historical pattern (dist1 > 5000km). Card-on-file remains unchanged but shipping address updates to freight forwarder or parcel locker. Time between email modification and first purchase consistently 25-45 minutes across incidents.",
+  "indicators": [
+    "Email domain switches from established provider to temporary/disposable service within same session",
+    "Password reset request 8-15 minutes after email change, followed by login from new IP geolocation",
+    "First purchase within 30 minutes of credential changes, TransactionAmt 6-18x historical average",
+    "dist1 shows >5000km between historical transaction locations and current IP origin",
+    "ProductCD shifts to W (electronics) or C (gift cards) when history shows H (home goods) or R (retail)",
+    "addr1 changes to known freight forwarder ZIP codes (33172, 33178, 19701) on first fraudulent transaction",
+    "card1_txn_count_24h = 2-4 when typical card1_txn_count_30d historical average â‰¤ 3"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Account email switches to a temporary domain like mailinator or guerrillamail, followed 8-15 minutes later by a password reset and then 2-4 high-value purchases ($400-$800 each) within 30 minutes from a new IP location over 5000km away. Historical purchase patterns show modest transactions averaging $45-$120, but suddenly shift to expensive electronics or gift cards with shipping redirected to freight forwarders.",
+  "reasoning": "The attacker has compromised login credentials and immediately pivots the account to their control by changing the email to a disposable address they can access, locking out the real customer. The rapid sequence of credential changes followed by multiple large purchases to reshippable addresses indicates organized theft, not legitimate customer behavior—real users don't suddenly change core account details and immediately buy high-value resellable items from distant locations.",
+  "indicator_explanations": [
+    "Email suddenly switches from legitimate provider to burner service mid-session",
+    "Password gets reset shortly after email swap then login from unfamiliar location",
+    "First purchase after takeover is dramatically larger than normal spending pattern",
+    "Transaction originates from distant country nowhere near cardholder's usual locations",
+    "Purchases pivot to resellable goods when history shows everyday shopping habits",
+    "Shipping address changes to known package forwarding service on suspicious order",
+    "Card shows unusual burst activity compared to typically quiet monthly usage"
+  ]
+}

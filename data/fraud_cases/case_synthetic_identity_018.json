@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_018",
+  "title": "Fresh Domain Synthetic Identity with Gradual Account Seasoning Pattern",
+  "pattern": "synthetic_identity",
+  "narrative": "A synthetic identity is created using a newly registered email domain (P_emaildomain registered 45-90 days ago) paired with a valid SSN-name combination that doesn't belong to the email holder. The fraudster opens accounts across 3-4 merchants within the first week, making small purchases ($8-35) to establish legitimacy. Over 30-45 days, transaction amounts gradually increase following a stair-step pattern: $50-80 (week 2-3), $120-200 (week 4-5), then a final bust-out phase with 6-12 purchases of $400-850 within 48 hours. The P_emaildomain shows no historical transaction volume prior to account creation, and addr1 matches on 15-20+ other recent accounts. Card velocity metrics show card1_txn_count_7d jumping from 2-3 to 18+ during bust-out, with consistent use of ProductCD='W' (electronics/high-resale items) in final phase.",
+  "indicators": [
+    "P_emaildomain registration date within 45-90 days of first transaction",
+    "Transaction amounts follow stair-step pattern: $8-35 initial week, $50-80 weeks 2-3, $120-200 weeks 4-5, then $400-850 bust-out",
+    "card1_txn_count_7d increases from 2-3 baseline to 18+ during final 48-hour period",
+    "addr1 matches on 15-20+ accounts created within same 90-day window",
+    "P_emaildomain shows zero transaction history across network prior to account opening",
+    "Final phase concentrated on ProductCD='W' with 6-12 purchases in 48 hours",
+    "Account seasoning period of 30-45 days before bust-out phase begins"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A newly created email domain (45-90 days old) with no prior transaction history is used to open multiple merchant accounts, making small initial purchases that gradually increase over 30-45 days, then suddenly spiking to 18+ high-value electronics transactions within 48 hours. The billing address appears on 15-20+ other recent accounts, and the card shows dramatic velocity jumps from 2-3 to 18+ transactions per week.",
+  "reasoning": "The fraudster is building apparent legitimacy through a calculated seasoning period before executing a coordinated bust-out, using a controlled identity (fresh domain, shared address infrastructure) to maximize credit exposure across merchants before the synthetic identity collapses. The stair-step spending pattern is designed to bypass automated fraud controls that flag sudden large purchases, while the final concentration on resellable electronics indicates intent to quickly monetize stolen credit before accounts are shut down.",
+  "indicator_explanations": [
+    "Email domain was freshly registered just weeks before this account started transacting",
+    "Spending ramps up in deliberate stages to build trust before the final attack",
+    "Card goes from quiet normal use to frenzied activity in the final two days",
+    "Billing address is shared across a suspicious cluster of recently opened accounts",
+    "Email domain has zero payment history anywhere before this account appeared",
+    "Final burst targets specific high-value product category with rapid-fire purchases",
+    "Account sits dormant building history before the fraud attack is triggered"
+  ]
+}

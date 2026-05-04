@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_027",
+  "title": "Ghost Shift Exploitation: High-Value Transactions During Merchant Dormant Hours",
+  "pattern": "temporal_anomaly",
+  "narrative": "A compromised merchant account processes 12-18 transactions totaling $8,400-$12,600 between 2:47 AM and 4:23 AM, despite the business historically showing zero activity from midnight to 6 AM over the prior 180 days. The transactions target a jewelry retailer whose legitimate hours are 10 AM to 8 PM. All transactions are card-not-present with TransactionAmt values clustering at $697, $749, and $899â€”just below common fraud review thresholds. The card1_txn_count_24h spikes from merchant baseline of 0.2 to 14 within the ghost shift window. Billing addresses span 7+ states with mismatched P_emaildomain patterns (temporary email services like 'guerrillamail' and 'tempmail'). The txn_hour distribution shows 100% concentration in hours 2-4, versus merchant's normal 0% allocation to this window. CVV match rates drop to 41% compared to daytime baseline of 94%, and dist1 values average 847 miles from merchant addr1, indicating remote card testing during operational blind spots.",
+  "indicators": [
+    "12-18 transactions between 2:47-4:23 AM in account with 180-day history of zero midnight-6 AM activity",
+    "TransactionAmt clustering at $697, $749, $899 across all ghost shift transactions",
+    "card1_txn_count_24h spike from 0.2 baseline to 14 within 90-minute window",
+    "P_emaildomain showing 67%+ temporary email services (guerrillamail, tempmail, 10minutemail)",
+    "CVV match rate 41% during ghost shift versus 94% merchant daytime baseline",
+    "dist1 averaging 847+ miles from merchant addr1 with billing addresses spanning 7+ states",
+    "txn_hour distribution 100% concentrated in hours 2-4 versus 0% historical allocation"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A merchant account that normally has zero activity between midnight and 6 AM suddenly processes 12-18 high-value transactions in a 90-minute window during early morning hours, with transaction amounts clustering just below fraud review thresholds and involving temporary email addresses from multiple distant states.",
+  "reasoning": "Criminals have compromised the merchant account and are exploiting the operational blind spot when no legitimate staff are monitoring, using the dormant hours to test stolen cards and push through fraudulent purchases before the business opens and discovers the unauthorized activity.",
+  "indicator_explanations": [
+    "Account suddenly active during hours when legitimate cardholder has never transacted before",
+    "Purchase amounts cluster at suspiciously identical high-dollar price points across burst",
+    "Card goes from dormant to hyperactive with sudden surge of transactions",
+    "Emails tied to throwaway services that disappear after short lifespan",
+    "Security codes failing at alarming rate compared to merchant's normal success rate",
+    "Billing addresses scattered across country far from merchant's physical location",
+    "All activity crammed into dead-of-night hours with zero historical precedent"
+  ]
+}

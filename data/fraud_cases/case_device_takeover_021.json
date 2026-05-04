@@ -1,0 +1,27 @@
+{
+  "id": "case_device_takeover_021",
+  "title": "New Browser-OS Combination on Established Card with Clean Behavior",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster uses stolen card credentials from their own device with a browser and operating system combination never previously associated with the legitimate cardholder. The transaction amount, timing, and velocity all fall within the cardholder's normal behavioral envelope, making traditional fraud rules ineffective. The fraud signal emerges exclusively from device-level features: first-time browser-OS pairing (D10=0), device age below legitimate user baseline (D15 < 50), and card-device counter aggregations showing this device has never processed a transaction with this card. The fraudster operates during normal business hours with amounts that match the cardholder's spending profile. Device fingerprint analysis reveals the browser-OS stack differs from all historical transactions on this card, while email and address fields match due to credential theft completeness. This pattern exploits the gap between stolen digital credentials and physical device control.",
+  "indicators": [
+    "D10 = 0 indicating first-time browser-OS combination for this card",
+    "D15 < 50 (below p75 of 83.25), indicating relatively new or reset device age",
+    "D1 = 0 showing zero historical transactions between this device and card",
+    "card1_amt_zscore between -1.0 and +1.0 (within normal spending range)",
+    "card1_txn_count_24h < 10 (normal velocity, below fraud baseline)",
+    "D4 < 30 (below p75 of 77.00), low device-level transaction history",
+    "txn_hour between 9 and 20 with emails_match = 1 (behavioral camouflage intact)"
+  ],
+  "indicator_explanations": [
+    "The browser and operating system combination has never been seen with this card before",
+    "Device fingerprint shows relatively recent device creation or profile reset",
+    "This specific device has no prior transaction history with the card",
+    "Transaction amount falls within the cardholder's typical spending pattern",
+    "Card usage frequency appears normal without velocity spikes",
+    "Device shows limited overall transaction history across all cards",
+    "Transaction occurs during normal waking hours with matching email verification"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "A fraudster using stolen credentials operates from their own device with a never-before-seen browser-OS combination, while maintaining the cardholder's normal spending amounts, timing, and velocity patterns.",
+  "reasoning": "Legitimate cardholders rarely switch to entirely new browser-OS combinations without prior gradual device updates in their history. The combination of zero device-card history (D1=0, D10=0) with clean behavioral signals indicates credential theft rather than legitimate user behavior change, as real users typically show device transition patterns rather than abrupt first-time pairings."
+}

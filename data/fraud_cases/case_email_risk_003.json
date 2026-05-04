@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_003",
+  "title": "Pristine ProtonMail Account with Immediate High-Value Digital Goods Purchase",
+  "pattern": "email_risk",
+  "narrative": "Fraudster registers a privacy-focused email (ProtonMail, Tutanota, Mailfence) minutes before first transaction, immediately purchasing high-value digital products. The P_emaildomain shows privacy provider while card1_txn_count_1day equals 1 and email_txn_count_lifetime equals 1. Transaction occurs 8-45 minutes after email creation timestamp (when capturable). Typical pattern: $247-$899 digital goods (ProductCD='W' or 'C'), mismatched billing/shipping distances (dist1 > 2000km), and card1 shows 0-2 historical transactions across all emails. The privacy email itself has zero merchant footprint - no marketing subscriptions, no loyalty accounts, no previous failed attempts. AVS returns 'N' or 'P' in 73% of cases. Often paired with prepaid BIN ranges (card_type='debit prepaid') and daytime US hours (txn_hour 9-16) despite international IP geolocation. Email domain age under 72 hours when verificable through domain registration checks.",
+  "indicators": [
+    "P_emaildomain in ['protonmail.com','tutanota.com','mailfence.com'] with card1_txn_count_1day = 1",
+    "TransactionAmt between $200-$900 for digital ProductCD ('W' or 'C') on first transaction",
+    "dist1 > 2000 indicating billing-shipping geographic mismatch over 2000km",
+    "card1_email_count_lifetime â‰¤ 2 showing card has minimal email association history",
+    "Email domain registration age < 72 hours or email creation within 45 minutes of transaction",
+    "AVS mismatch code 'N' or 'P' with card_type containing 'prepaid'",
+    "txn_hour between 9-16 (US business hours) with DeviceInfo geo suggesting non-US origin"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A brand-new privacy email service account (ProtonMail, Tutanota) makes its first-ever purchase within minutes of creation, buying high-value digital goods ($200-900) with billing and shipping addresses over 2000km apart and minimal card history.",
+  "reasoning": "Criminals use disposable privacy emails and prepaid cards to obscure identity while immediately converting stolen payment credentials into untraceable digital goods, avoiding the merchant reputation building that legitimate customers establish over time.",
+  "indicator_explanations": [
+    "Brand-new privacy email service account makes its very first purchase",
+    "High-dollar digital product ordered immediately with zero trust-building transactions",
+    "Billing and shipping addresses are continents apart from each other",
+    "Card has almost no purchase history tied to any email address",
+    "Email account was created within hours or minutes of making purchase",
+    "Address verification fails while using anonymous prepaid card for payment",
+    "Transaction timing mimics US hours but device location reveals foreign origin"
+  ]
+}

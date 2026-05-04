@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_024",
+  "title": "Disposable Email Domain Synthetic Identity Testing with Escalation",
+  "pattern": "email_risk",
+  "narrative": "Fraudster uses throwaway email services (mailinator.com, guerrillamail.com, 10minutemail.com) to test stolen card data with low-value purchases before attempting larger fraud. Initial transaction at $1.99-$9.99 with P_emaildomain matching known disposable provider list. If approved, secondary transaction within 45-90 minutes jumps to $247-$899, often switching ProductCD from 'W' (digital) to 'H' (physical goods). R_emaildomain typically null or mismatched. Card shows card1_txn_count_1day=1 on first hit, then rapid card1_txn_count_6hr spike to 3-5. Disposable emails allow bypassing merchant fraud rules tied to email reputation scores. Addr1 often generic or high-risk zip codes. CVV match on first transaction establishes false confidence, enabling approval on larger follow-up.",
+  "indicators": [
+    "P_emaildomain in disposable provider list (mailinator, guerrillamail, tempmail, 10minutemail, trashmail)",
+    "Initial transaction $1.99-$9.99, follow-up $247-$899 within 45-90 minutes",
+    "card1_txn_count_1day=1 on first transaction, card1_txn_count_6hr jumps to 3-5",
+    "R_emaildomain null or mismatched from P_emaildomain",
+    "ProductCD switches from 'W' to 'H' between transactions",
+    "card1_amt_zscore increases from <0.5 to >2.8 across transaction pair",
+    "CVV match on initial low-value test, may fail or be absent on escalation"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card is tested with a small purchase under $10 using a temporary email address like mailinator.com or guerrillamail.com, then within 45-90 minutes the same card is used for a much larger purchase ($247-$899) that shifts from digital to physical goods.",
+  "reasoning": "Fraudsters use disposable emails to avoid detection systems that track email reputation, testing stolen card details with a low-risk transaction to confirm the card works before quickly escalating to high-value fraud while the card is still active.",
+  "indicator_explanations": [
+    "Email address uses a throwaway service known for fraud testing",
+    "First purchase is a small test, quickly followed by large fraudulent charge",
+    "Card goes from zero activity to multiple hits within hours",
+    "Recipient email missing or different from purchaser email address",
+    "Product type changes between the test transaction and escalation hit",
+    "Purchase amount rockets from normal to extreme for this card",
+    "Security code validates initially but fails or vanishes on bigger charge"
+  ]
+}

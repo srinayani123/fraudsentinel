@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_025",
+  "title": "Cross-Merchant Synthetic Identity Layering with Shared Fragment Rotation",
+  "pattern": "synthetic_identity",
+  "narrative": "Fraudster constructs a synthetic identity by systematically rotating fragments (email, billing address, card BIN) across 8-12 merchants over 45-90 days to build apparent legitimacy. Pattern begins with low-risk MCCs (grocery 5411, gas 5542) using card1 paired with P_emaildomain yahoo.com and addr1 block 247. After 15-20 transactions totaling $340-$890, actor pivots to same card1 but switches to P_emaildomain outlook.com with addr1 block 522 at electronics MCC 5732, establishing a second fragment combination. Final phase reunites original email with new address at high-ticket MCC 5944 (jewelry) for $1,800-$3,200 purchases. The card1 appears legitimate via distributed history, but no single merchant sees the full fragment matrix. Each merchant validates only their slice, missing the synthetic assembly.",
+  "indicators": [
+    "card1 used across 8+ distinct MCCs within 60 days with card1_mcc_diversity_score >0.72",
+    "P_emaildomain switches 2-3 times for same card1, each domain sustained 12-18 days before rotation",
+    "addr1 changes but maintains same dist1 range (420-580 km) suggesting controlled geographic fabrication",
+    "Initial merchant phase shows 15-20 txns with TransactionAmt $12-$67, then sudden jump to $1,800+ within 5 days",
+    "card1_addr1_combination_count equals 3-4 unique pairs, but card1_email_combination_count also 3-4, creating 9-16 permutations",
+    "No single MID sees more than 2 fragment combinations, card1_per_merchant_fragment_diversity <0.35",
+    "Final high-value transactions occur 48-72 hours after last fragment rotation, txn_since_fragment_change <4320 minutes"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card appears across 8+ merchant categories over 60-90 days with systematically rotating email domains and billing addresses, where no single merchant sees more than 2 combinations but the card accumulates 9-16 total fragment permutations. Transaction amounts escalate from $12-67 across groceries and gas to sudden $1,800+ jewelry purchases within days of the final address/email swap.",
+  "reasoning": "The fraudster is building a fake credit history by spreading fragment combinations thin so each merchant's fraud checks see only a narrow, normal-looking slice, masking that the underlying identity is fabricated from mismatched stolen or invented data. The controlled distance ranges and timed rotations reveal deliberate orchestration rather than a real person naturally changing details, with the high-value final purchases exploiting the synthetic legitimacy once enough distributed history exists.",
+  "indicator_explanations": [
+    "Card appears across numerous unrelated merchant categories indicating profile layering activity",
+    "Email address rotates through distinct domains with deliberate timing gaps between switches",
+    "Address changes but distances stay suspiciously consistent suggesting fabricated geographic spread",
+    "Spending pattern shifts from small trust-building purchases to sudden large amounts",
+    "Identity fragments create multiple fake personas through systematic address and email mixing",
+    "Each merchant sees limited fragment combinations preventing pattern detection across sellers",
+    "Large purchases occur shortly after identity details stabilize following rotation cycle"
+  ]
+}

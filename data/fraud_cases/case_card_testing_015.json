@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_015",
+  "title": "Refund Farming: Gift Card Purchase and Immediate Reversal Testing",
+  "pattern": "card_testing",
+  "narrative": "Fraudster purchases low-value digital gift cards ($5-$25) using stolen card details, then immediately initiates refunds through merchant customer service channels claiming accidental purchase or technical errors. The refund process validates the card is active and has sufficient funds without financial loss to the fraudster. Pattern observed across ProductCD='W' (digital goods) with 8-15 purchase-refund cycles per card within 48-72 hours. Fraudster rotates through multiple merchants (3-5 different MIDs) to avoid single-merchant velocity triggers. After successful validation through refunds, the same cards appear in high-value fraud ($800-$3,500) within 5-7 days. Email domains match between purchase and refund requests (P_emaildomain = R_emaildomain), typically disposable services. Transaction timestamps cluster in business hours (txn_hour 9-17) to match legitimate refund processing windows and avoid automated fraud flags.",
+  "indicators": [
+    "TransactionAmt between $5-$25 for ProductCD='W', followed by refund request within 2-6 hours",
+    "card1_txn_count_24hr shows 8-15 transactions with identical amounts across 3-5 different merchant IDs",
+    "P_emaildomain = R_emaildomain, both from known disposable email providers (guerrillamail, tempmail, 10minutemail)",
+    "All transactions occur during txn_hour 9-17 (business hours) despite cardholder addr1 timezone suggesting overnight",
+    "card1_amt_zscore remains below 0.5 during testing phase, then spikes above 3.0 within 5-7 days",
+    "Refund success rate exceeds 90% across all test transactions before high-value fraud appears",
+    "dist1 (distance between billing/shipping) consistently null for digital goods, then suddenly populated for physical goods fraud"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple low-value gift card purchases ($5-$25) from the same card across different merchants, each immediately followed by refund requests within hours, all during business hours with matching disposable email addresses. After 8-15 successful purchase-refund cycles over 2-3 days, the same card appears in high-value transactions ($800+).",
+  "reasoning": "Criminals use cheap gift cards and immediate refunds as a safe testing method to verify stolen cards are active and have funds without losing money, since refunds return the test amounts. The low-value循环 avoids fraud triggers while confirming card validity before executing their real target: high-value fraudulent purchases days later.",
+  "indicator_explanations": [
+    "Small gift card purchases quickly followed by refund requests to test card validity",
+    "Card repeatedly hits different merchants with identical small amounts across one day",
+    "Buyer and recipient email addresses match and both use throwaway email services",
+    "Purchases happen during daytime hours when cardholder's timezone indicates they should be asleep",
+    "Transaction amounts stay modest during testing then suddenly jump to unusually high values",
+    "Nearly all refund requests succeed during testing before the real fraud hits",
+    "Distance field stays empty for digital purchases then suddenly appears when physical fraud begins"
+  ]
+}

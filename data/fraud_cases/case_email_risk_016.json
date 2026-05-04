@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_016",
+  "title": "Burner Email Account with Accelerating High-Value Purchase Pattern",
+  "pattern": "email_risk",
+  "narrative": "Fraudster creates free webmail account (gmail.com, yahoo.com, outlook.com) with minimal setup and no secondary verification, then immediately initiates purchase attempts. Pattern shows email account age under 24 hours paired with R_emaildomain matching free provider but P_emaildomain null or different provider. Transaction sequence begins with sub-$50 test charges (avg $23-$35) to validate card, followed within 90-180 minutes by escalating purchases: $180-$320 range, then $450-$680. Card velocity shows card1_txn_count_1day jumping from 0 to 4-7 transactions. No historical link between card BIN and this email domain in prior 180 days.Addr1 frequently null or generic (00000, 99999). ProductCD switches from physical goods (W, C) to high-liquidity items (H, S) as amounts increase. CVV match rate 100% initially, suggesting fresh stolen card data rather than card-not-present testing.",
+  "indicators": [
+    "P_emaildomain is free provider (gmail/yahoo/outlook) with R_emaildomain null or mismatched",
+    "card1_txn_count_1day increases from 0 to 4+ within 3-hour window",
+    "TransactionAmt escalates: first txn $20-$50, subsequent txns $180-$680 within 180 minutes",
+    "addr1 is null, 00000, or 99999 in 60%+ of transactions for this email",
+    "No historical transactions linking card1 BIN to this email domain in prior 180 days",
+    "ProductCD shifts from W/C to H/S as TransactionAmt increases",
+    "CVV2 match on all transactions with card1_amt_zscore exceeding 2.8 by fourth transaction"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A brand-new free email account (gmail, yahoo, outlook) under 24 hours old starts with small test purchases ($20-50) then rapidly escalates to high-value transactions ($450-680) within 3 hours, using a card that has never been linked to this email domain before. The address is missing or fake (00000, 99999), and purchases shift from physical goods to easily-resold items as amounts climb.",
+  "reasoning": "The fraudster is using a disposable email to validate stolen card details with small charges, then maximizing the theft window before the card is blocked by making increasingly large purchases of high-liquidity items they can quickly resell. The brand-new email, rapid escalation pattern, fake address, and zero prior relationship between card and email all indicate this is a criminal using fresh stolen payment data rather than a legitimate new customer.",
+  "indicator_explanations": [
+    "Email uses free service but recipient domain is missing or doesn't match",
+    "Card activity spikes from zero to multiple transactions within three hours",
+    "Purchase amounts ramp up from small test to large fraud hits rapidly",
+    "Address fields are mostly missing or placeholder values for this email account",
+    "This card's bank has never processed transactions for this email domain before",
+    "Merchant categories change from low-risk to high-value goods as amounts climb",
+    "All transactions pass CVV check yet spending exceeds typical cardholder baseline significantly"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_002",
+  "title": "Luhn-Valid BIN Range Enumeration with Sequential Card Testing",
+  "pattern": "bin_attack",
+  "narrative": "Fraudster generates algorithmically-valid card numbers within a single BIN range (first 6-8 digits), then tests them in rapid succession across multiple merchant IDs. A cybercriminal obtains BIN 442637 from a data breach, then uses a Luhn algorithm generator to create 200+ valid card number candidates. Within a 90-minute window, these cards attempt $1.00-$4.99 authorization checks across 3-5 different MCCs (typically digital goods MCC 5816, telecom MCC 4814). The sequential nature creates a distinctive staircase pattern: card1 values increment by 1-3 digits per transaction. All attempts share identical P_emaildomain (temp-mail.org or guerrillamail.com), same dist1 value indicating single device geolocation, and clustered txn_hour values (usually is_night=1). Successful authorizations immediately followed by larger transactions ($47-$299) within 2-8 minutes using the validated card numbers.",
+  "indicators": [
+    "card1 values incrementing sequentially (Â±1-3 digits) across 40+ transactions in 90-minute window",
+    "Single BIN prefix (first 6-8 digits identical) across 85%+ of transaction batch",
+    "Initial transaction amounts $1.00-$4.99 followed by secondary charges $47-$299 within 2-8 minutes on same card1",
+    "Identical P_emaildomain across 95%+ of attempts, typically disposable email services",
+    "card1_txn_count_1hr exceeding 15 for newly-seen card numbers with card1_txn_count_lifetime=1",
+    "dist1 value consistent across batch indicating single device origin despite multiple card1 values",
+    "Concentration in is_night=1 hours (22:00-06:00) with 70%+ of volume in 3-hour window"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single device tests 40+ card numbers from the same BIN prefix in quick succession, starting with small $1-5 authorization checks followed immediately by larger charges on successful cards. Sequential card numbers increment by just 1-3 digits, all using the same disposable email domain and originating from one location during nighttime hours.",
+  "reasoning": "The attacker is manufacturing valid card numbers from a stolen BIN and systematically testing which ones work, using small amounts to avoid triggering fraud alerts before exploiting validated cards for higher-value purchases. The sequential pattern, single device origin, and disposable emails reveal organized enumeration rather than legitimate customers making independent purchases.",
+  "indicator_explanations": [
+    "Card numbers are being tested in sequence, incrementing by small amounts",
+    "All cards share the same bank identification prefix during the attack",
+    "Small test charges are quickly followed by larger fraudulent purchases",
+    "Same throwaway email address is reused across nearly all transaction attempts",
+    "Brand-new card numbers are being hit with rapid-fire transaction bursts",
+    "All transactions originate from the same device despite changing card numbers",
+    "Attack is concentrated in overnight hours when monitoring is typically reduced"
+  ]
+}

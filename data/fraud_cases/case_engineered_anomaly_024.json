@@ -1,0 +1,25 @@
+{
+  "id": "case_engineered_anomaly_024",
+  "title": "Rare Card-Merchant Interaction Pattern with Engineered Feature Anomaly",
+  "pattern": "engineered_anomaly",
+  "narrative": "This pattern captures fraud occurring when a card is used at a merchant where it has never appeared before, flagged exclusively by Vesta engineered features encoding the rarity of the card-merchant-category combination. Raw behavioral signals remain unremarkable: amounts fit spending profiles, velocity is normal, and device characteristics show no obvious red flags. The fraud surface manifests in V-fields that encode complex interaction histories between the card, the merchant ID, and merchant category code. The engineered model detects that this specific card-merchant pairing represents a statistical outlier in the transaction network graph, even though individual transaction attributes appear legitimate. The attack leverages stolen card credentials at merchants outside the cardholder's normal ecosystem, where behavioral guardrails cannot detect the breach because transaction attributes remain in-pattern.",
+  "indicators": [
+    "V307 > 2.5 (p85), engineered feature flagging rare card-MID interaction history",
+    "V320 between 0.8 and 1.2 (mid-range), card-MCC pairing frequency shows limited historical overlap",
+    "C1 < 15 (p25), card-level counter shows relatively low overall activity masking the anomaly",
+    "D1 > 10 (p60), device-card pairing has modest history not triggering first-use alerts",
+    "card1_amt_zscore between -0.8 and +1.2, transaction amount within cardholder's established range",
+    "V280 > 4.0 (p80), composite feature encoding merchant-network position anomaly"
+  ],
+  "indicator_explanations": [
+    "The card and merchant have an unusually sparse interaction history compared to network norms",
+    "The card and merchant category combination appears infrequently in historical data",
+    "The card shows moderate overall usage patterns that don't suggest account takeover",
+    "The device has been used with this card enough times to avoid new-device flags",
+    "The transaction amount fits within the cardholder's typical spending behavior",
+    "The merchant occupies an unusual position in the cardholder's transaction network graph"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Card used at a merchant with no prior relationship, detected only through engineered features encoding card-merchant-category interaction rarity. All standard behavioral metrics remain within normal ranges.",
+  "reasoning": "Fraudsters using stolen credentials often test cards at merchants outside the victim's ecosystem. While individual attributes look clean, the card-merchant pairing represents a network anomaly that composite engineered features capture through multi-dimensional interaction encoding."
+}

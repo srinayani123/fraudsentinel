@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_018",
+  "title": "Micro-Transaction Card Testing at Single High-Volume Merchant",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster exploits a single high-transaction-volume merchant (often digital goods MCC 5816 or streaming services) to validate a batch of stolen cards through minimal-value authorizations. Over 2-4 hours, 40-90 transactions of $0.50-$2.99 each hit the same MID, each using a different card number but identical shipping/billing details. The merchant's legitimate high velocity masks the fraud initially. Fraudster uses automated scripts cycling through BINs, resulting in card1 values incrementing sequentially or showing patterned numeric proximity. After validation, successful cards are sold on carding forums or used for larger purchases elsewhere within 6-12 hours. The attack often occurs during overnight hours (txn_hour 1-5) when fraud monitoring may have reduced staffing, and all transactions share identical dist1=0, P_emaildomain from temporary email services, and ProductCD='C' for digital content requiring no physical fulfillment.",
+  "indicators": [
+    "40-90 transactions at identical MID within 2-4 hour window, each with unique card1 value",
+    "TransactionAmt consistently $0.50-$2.99 across all transactions in sequence",
+    "card1 values showing sequential or near-sequential numeric patterns (e.g., incrementing by 1-15)",
+    "Identical addr1 and dist1=0 across all transactions despite different card numbers",
+    "P_emaildomain matches disposable email patterns (guerrillamail, tempmail, 10minutemail)",
+    "75%+ of transactions occurring during txn_hour 1-5 (overnight testing window)",
+    "card1_txn_count_1day spikes from 0 to 40+ for each new card within the batch"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Dozens of tiny purchases ($0.50-$2.99) hit the same merchant within hours, each using a different card number but identical shipping address and disposable email, with card numbers often incrementing sequentially.",
+  "reasoning": "The fraudster is testing stolen card numbers to see which are still active before selling the validated cards or using them for larger fraudulent purchases elsewhere, hiding the activity in a high-volume merchant's legitimate transaction stream.",
+  "indicator_explanations": [
+    "Same merchant processes dozens of tiny purchases from different cards in hours",
+    "Every transaction amount falls in the micro-payment testing sweet spot",
+    "Card numbers increment in predictable patterns suggesting generated test sequences",
+    "All cards ship to same address despite belonging to different cardholders",
+    "Email addresses come from temporary throwaway services used for testing",
+    "Activity concentrates overnight when legitimate monitoring is lowest",
+    "Each card goes from zero activity to burst usage instantly"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_014",
+  "title": "Thin-File Synthetic Ramping with Initial Low-Value Seasoning Period",
+  "pattern": "synthetic_identity",
+  "narrative": "A synthetic identity establishes credit history through 3-4 months of small authorized user tradelines, then receives first-party credit card with $500-$2000 limit. Pattern shows deliberate seasoning: 6-8 weeks of micro-transactions ($3-$15 gas stations, fast food) with perfect payment history to build TransactionAmt_card1_mean baseline below $20. Account suddenly shifts to maximum utilization phase with 12-18 transactions over 48-72 hours, all near credit limit, targeting high-liquidity MCCs (electronics, jewelry, gift cards). Velocity spike shows card1_txn_count_24hr jumping from 0.2 average to 8-12. Email domain switches from free provider used during application to burner domain for final bust-out purchases. Delivery addresses fragment across 3+ zip codes (high addr1_entropy) despite thin credit file showing single address history. No chargebacks filedâ€”classic bust-out with no intent to dispute.",
+  "indicators": [
+    "card1_txn_count_1day jumps from 0-1 baseline to 8-12 transactions within 48-hour window",
+    "TransactionAmt_card1_mean historically $8-$18 for 40+ days, then 12+ transactions at $180-$450 range",
+    "P_emaildomain changes from gmail.com/yahoo.com to disposable domain (mailinator, guerrillamail) in final 72 hours",
+    "addr1 shows 3-4 distinct zip codes across final transaction burst despite single-address credit application",
+    "Account age 90-150 days with card1_total_txn_count under 45 before velocity spike",
+    "All bust-out transactions in MCC 5732 (electronics), 5944 (jewelry), 5815 (digital goods) within 3-day window",
+    "dist1 values exceeding 500km between consecutive transactions in 6-hour periods during final phase"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A newly established account maintains 6-8 weeks of tiny purchases under $20 with perfect payments, then suddenly executes 8-12 high-value transactions near the credit limit within 48-72 hours across multiple distant locations. The email switches to a disposable domain and shipping addresses fragment across 3+ zip codes during this final burst.",
+  "reasoning": "The fraudster deliberately builds a clean payment history to gain trust and credit increases, then executes a coordinated bust-out—maxing out the card with no intention of repayment. The sudden geographic spread, disposable email, and concentration in high-resale categories like electronics and gift cards reveal this is orchestrated theft rather than legitimate spending.",
+  "indicator_explanations": [
+    "Card suddenly erupts from dormant to frantic activity within two days",
+    "Spending jumps twentyfold after weeks of small purchases building fake history",
+    "Email switches to burner service right before the bust-out attack begins",
+    "Shipping addresses scatter across multiple zip codes during final spending spree",
+    "Card stayed quiet with minimal activity for months then exploded overnight",
+    "All final purchases hit high-resale categories like electronics and jewelry fast",
+    "Transactions ping-pong across impossible distances during the final cashout phase"
+  ]
+}

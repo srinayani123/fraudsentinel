@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_030",
+  "title": "Foreign Currency Micro-Charge Card Validation via FX Conversion Spread",
+  "pattern": "card_testing",
+  "narrative": "Fraudsters exploit currency conversion mechanisms to validate cards with minimal financial exposure by initiating $0.10-$0.50 transactions in foreign currencies (commonly THB, PHP, or INR) where the actual charge to the cardholder appears as $0.01-$0.03 after conversion, often below merchant's minimum chargeback threshold. The pattern emerges across 15-40 cards tested within 45-90 minute windows against low-friction digital goods merchants (ProductCD='W' or 'C'). Transactions cluster from 2-4 IP addresses with sequential card1 values, identical P_emaildomain (temporary email services like 'guerrillamail' or 'tempmail'), and uniform dist1 values near zero indicating email/billing address mismatch. The converted amounts generate distinctive TransactionAmt patterns: $0.01, $0.02, $0.01, $0.03 recurring. Successful validations precede large authorization attempts 6-18 hours later on surviving cards, typically $200-$800 transactions to same MID before merchant detection.",
+  "indicators": [
+    "15-40 cards with TransactionAmt between $0.01-$0.03 within 45-90 minute window at single merchant",
+    "card1 values sequential or incrementing by 1-3 digits with identical card4 (bank identifier)",
+    "Uniform dist1 values <5km with P_emaildomain matching disposable email services (guerrillamail, tempmail, 10minutemail)",
+    "ProductCD='W' or 'C' for digital goods with addr1_card1_ratio >8 (same address across many cards)",
+    "card1_txn_count_1day shows 1 for all cards, followed by 1-3 authorization attempts 6-18 hours later",
+    "TransactionAmt exhibits repeating micro-pattern: $0.01, $0.02, $0.01, $0.03 across sequential transactions",
+    "All transactions share 2-4 unique IP addresses with card1_ip_count_ratio >5 (many cards per IP)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A burst of 15-40 cards making tiny charges ($0.01-$0.03) within 45-90 minutes at one merchant, using sequential card numbers, disposable emails, and just 2-4 IP addresses. Hours later, the validated cards return for large $200-$800 purchases.",
+  "reasoning": "Criminals test stolen cards with amounts too small to trigger alerts or chargebacks, using foreign currency conversion to mask the activity. Cards that don't decline are then used for high-value fraud before the merchant notices the validation pattern.",
+  "indicator_explanations": [
+    "Dozens of cards hitting same merchant with penny amounts in concentrated time window",
+    "Card numbers look like sequential test sequences from same issuing bank",
+    "All transactions originate from tight location using throwaway email addresses",
+    "Digital purchases share same billing address across suspiciously many different cards",
+    "Each card is brand new to the merchant, then retries shortly after initial validation",
+    "Transaction amounts follow mechanical penny-testing pattern instead of natural purchase behavior",
+    "Small pool of IP addresses is cycling through large volume of different cards"
+  ]
+}

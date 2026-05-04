@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_025",
+  "title": "Burner Email Registration with Immediate High-Ticket CNP Purchase",
+  "pattern": "email_risk",
+  "narrative": "A fraudster creates a throwaway Gmail or Yahoo account with no recovery phone or secondary email, then immediately uses it to register on a merchant platform and execute high-value card-not-present transactions within 2-4 hours. The email account age is typically under 6 hours when the first purchase occurs, with no prior engagement (zero marketing emails opened, no password resets, no profile updates). The pattern targets electronics or gift cards in the $850-$2,200 range, exploiting the merchant's trust in recognizable email domains. The fraudster often tests a small transaction ($1-$15) first, then rapidly escalates if it succeeds. Device fingerprints show unfamiliar OS/browser combinations, and billing-shipping address mismatches exceed 500 miles. Card verification shows AVS partial match (street yes, ZIP no) and correct CVV, suggesting compromised fullz data paired with synthetic identity tactics.",
+  "indicators": [
+    "P_emaildomain in ['gmail.com', 'yahoo.com', 'outlook.com'] with account registration timestamp <6 hours before first transaction",
+    "First TransactionAmt between $850-$2,200 for ProductCD='W' (electronics) or 'C' (gift cards)",
+    "Preceding test transaction with TransactionAmt <$15 occurring 8-35 minutes before high-value purchase",
+    "dist1 (billing-shipping distance) >500 miles with addr1_risk_score in top 15th percentile",
+    "card1_txn_count_1day = 1 and card1_txn_count_7day = 1 indicating new card to merchant",
+    "AVS response 'Y' for address, 'N' for postal code, CVV match 'M'",
+    "No prior engagement metrics: email_opens_30day = 0, password_resets_ever = 0, profile_updates = 0"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Brand-new email account (under 6 hours old) registers and immediately makes a high-value purchase ($850-$2,200) for electronics or gift cards, often preceded by a small test transaction minutes earlier. The billing and shipping addresses are separated by over 500 miles, and the card has never been seen before at this merchant.",
+  "reasoning": "Criminals use disposable email addresses to avoid identity tracing and pair stolen payment card data with mismatched addresses to route goods to drop locations. The rapid escalation from test charge to large purchase, combined with zero account engagement, indicates someone exploiting compromised card details rather than a legitimate customer building trust over time.",
+  "indicator_explanations": [
+    "Brand-new email account was created just hours before making the purchase",
+    "First purchase jumps straight to high-dollar electronics or gift cards",
+    "Fraudster tested the card with a tiny charge right before the big hit",
+    "Shipping address is hundreds of miles from billing with elevated risk signals",
+    "Card has never been used at this merchant before today",
+    "Street address matches but zip code fails suggesting partial stolen data",
+    "Email shows zero legitimate customer behavior before this sudden purchase"
+  ]
+}

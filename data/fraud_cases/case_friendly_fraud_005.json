@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_005",
+  "title": "Post-Delivery Digital Content Chargeback with Usage Evidence",
+  "pattern": "friendly_fraud",
+  "narrative": "Cardholder purchases high-value digital goods (gaming currency, software licenses, streaming subscriptions) in the $49-$299 range, successfully completes delivery, then files unauthorized transaction dispute 45-75 days laterâ€”just before chargeback window closes. Pattern shows legitimate card usage: correct billing address (addr1 matches historical), established email domain (P_emaildomain consistent across 6+ months), and CVV match. Critical tell: ProductCD='C' or 'R' (digital/service) with immediate successful fulfillment, followed by normal account activity for 30-60 days, then sudden dispute. Fraudster exploits merchant difficulty proving digital good consumption. Transaction occurs during normal customer hours (txn_hour 14-22), device fingerprint matches previous legitimate purchases, and card1_txn_count_7day shows only 1-2 transactions. No velocity flags, no AVS mismatchâ€”appears completely legitimate until dispute filed claiming 'card not present, unauthorized charge.'",
+  "indicators": [
+    "ProductCD in ['C','R'] with TransactionAmt between $49-$299 and successful delivery confirmation",
+    "Chargeback filed 45-75 days post-transaction, reason code 10.4 (CNP unauthorized) or 13.1 (services not provided)",
+    "P_emaildomain matches cardholder's previous 6+ month history, dist1 < 50km from addr1",
+    "card1_txn_count_30day shows 8-15 legitimate transactions before and after disputed charge",
+    "Transaction timestamp during waking hours (txn_hour 14-22, is_night=0) matching cardholder's historical pattern",
+    "CVV and AVS full match (M_cvv_match=1, M_avs_match='Y'), no velocity alerts at transaction time",
+    "Account shows continued normal usage for 30-60 days post-purchase before dispute initiation"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Customer buys digital content with their own card showing perfect verification matches and normal account activity, then disputes the charge 45-75 days later claiming they never authorized it. All fraud checks passed at purchase time, billing details match history, and the account continued normal usage for weeks after receiving the digital goods.",
+  "reasoning": "The customer is trying to get a refund while keeping the digital product by falsely claiming fraud after they've already used it. They wait until just before the chargeback deadline, knowing merchants struggle to prove consumption of digital goods like game currency or software licenses.",
+  "indicator_explanations": [
+    "Digital product or subscription was successfully delivered to the customer",
+    "Customer disputes charge weeks after using the service or content",
+    "Purchase came from customer's verified email and usual geographic location",
+    "Card shows steady legitimate spending before and after the disputed transaction",
+    "Transaction occurred during customer's normal active hours, not unusual timing",
+    "Card security checks all passed cleanly at point of sale",
+    "Customer kept using their card normally for weeks before claiming fraud"
+  ]
+}

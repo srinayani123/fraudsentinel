@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_025",
+  "title": "Corporate VPN Masking Cross-Border Card Testing with Incremental Amounts",
+  "pattern": "geo_anomaly",
+  "narrative": "Fraudster uses enterprise VPN endpoint (commonly Digital Ocean, AWS, or OVH IP ranges) to mask transactions originating from high-risk geography. Card testing begins with $1.00-$4.99 authorization probes across 15-30 card numbers within a 90-minute window, all routing through same VPN exit node showing stable IP but mismatched billing country. Successful cards immediately escalate to $47-$89 purchases of digital goods (ProductCD=W). The dist1 feature shows 8,500+ km discrepancy between cardholder address (addr1) and transaction IP geolocation. All transactions occur during cardholder's local nighttime hours (is_night=1, txn_hour between 2-5 AM in card's timezone). Email domains rotate between disposable services (R_emaildomain shows guerrillamail, tempmail patterns). The attacker maintains the same device_id across all attempts despite changing card details, and card1_txn_count_1day spikes from 0 to 22 for each compromised card.",
+  "indicators": [
+    "15-30 unique card numbers tested through identical IP address within 90 minutes",
+    "Initial authorization amounts $1.00-$4.99 followed by $47-$89 purchases within 15 minutes of successful test",
+    "dist1 exceeds 8,500 km between billing addr1 and transaction IP geolocation",
+    "All transactions during cardholder local hours 2-5 AM (is_night=1)",
+    "Same device_id persists across 15+ different card1 values",
+    "R_emaildomain matches disposable email provider list in 85%+ of attempts",
+    "card1_txn_count_1day jumps 0â†’20+ for each card within single session"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple cards (15-30) tested through a single corporate VPN IP with small charges under $5, followed immediately by $47-$89 digital goods purchases on successful cards. Same device fingerprint used across all different card numbers, with billing addresses 8,500+ km away from the VPN location and all transactions hitting during the cardholder's local nighttime hours.",
+  "reasoning": "Fraudsters use stolen card data and enterprise VPN services to hide their true high-risk location while rapidly testing which cards are still active. The immediate escalation to larger purchases, combined with disposable emails and impossible geographic distances, shows organized criminals monetizing compromised card databases before victims notice the unauthorized activity.",
+  "indicator_explanations": [
+    "Single IP address is cycling through dozens of different cards rapidly",
+    "Small test charge immediately followed by larger purchase once card validates",
+    "Transaction location is on opposite side of planet from billing address",
+    "All activity happens in cardholder's middle-of-night hours when sleeping",
+    "Same device is hopping between many different cardholders in quick succession",
+    "Email addresses are throwaway services created just for these attempts",
+    "Card goes from zero activity to heavy burst in single day"
+  ]
+}

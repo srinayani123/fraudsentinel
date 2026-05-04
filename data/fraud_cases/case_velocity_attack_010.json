@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_010",
+  "title": "Gaming Platform Card Testing via Micro-Transaction Burst Pattern",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster exploits gaming or digital goods merchants (ProductCD='W' or 'C') to validate stolen cards through rapid-fire low-value purchases. Within a 5-minute window, 12-18 transactions appear on single card1, each between $0.99-$4.99, targeting same MID. Initial 3-4 transactions succeed to establish pattern, then amounts incrementally increase to $9.99-$19.99 in final attempts. Email domain rotates between temporary providers (P_emaildomain shows 'outlook.com', 'yahoo.com', 'gmail.com' cycling across transactions). Card holder's actual billing address (addr1) remains constant but dist1 varies wildly (200+ km differences) suggesting VPN/proxy usage. Transactions cluster in off-peak hours (txn_hour between 2-5 AM merchant local time, is_night=1). Card1_txn_count_24h spikes from 0 to 15+ within the burst window. This pattern validates card details before larger fraud.",
+  "indicators": [
+    "card1_txn_count_5min >= 12 with all transactions under $20",
+    "TransactionAmt progression pattern: 3+ txns at $0.99-$4.99 followed by 2+ txns at $9.99-$19.99",
+    "P_emaildomain changes 3+ times across burst while card1 remains constant",
+    "dist1 standard deviation > 150km across transactions in same 5-minute window",
+    "All transactions occur during txn_hour 2-5 with is_night=1",
+    "ProductCD limited to 'W' (digital/gaming) or 'C' (cash/reload) categories only",
+    "card1_txn_count_24h increases from 0-2 baseline to 15+ during burst period"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single card processes 12-18 small transactions ($0.99-$19.99) within 5 minutes on gaming/digital platforms, starting with micro-purchases that gradually increase in amount. The same card shows rotating email addresses and distance measurements that jump 200+ km between purchases during early morning hours.",
+  "reasoning": "Criminals use rapid low-value purchases to test if stolen card numbers are valid before attempting larger fraud. The escalating amounts, rotating emails with constant card details, and impossible geographic jumps reveal automated testing rather than legitimate gaming purchases.",
+  "indicator_explanations": [
+    "Card hits with rapid small-dollar transactions testing approval limits",
+    "Amounts escalate from micro-tests to larger fraudulent purchases systematically",
+    "Email address keeps changing while the same card gets hammered",
+    "Transactions scatter across widely separated geographic locations during the burst",
+    "All activity concentrates in overnight hours when fraud monitoring slows",
+    "Purchases target only digital goods or cash-reload products for quick monetization",
+    "Card suddenly explodes from dormant to hyperactive within a day"
+  ]
+}

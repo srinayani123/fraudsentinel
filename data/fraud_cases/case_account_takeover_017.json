@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_017",
+  "title": "SIM Swap Account Takeover with Rapid Profile Change and Velocity Spike",
+  "pattern": "account_takeover",
+  "narrative": "Fraudster executes SIM swap to intercept SMS-based 2FA codes, gaining account access within 2-4 hours of the swap. Immediately updates account profile: new shipping address (dist1 jumps from <50 to 800+ miles), email domain changes from established provider to disposable (P_emaildomain shifts from gmail.com to tempmail variants), and phone number replaced. Within 15-45 minutes of profile modification, initiates 3-6 card-not-present transactions totaling $1,200-$3,500 targeting high-liquidity ProductCD='W' (digital goods) or 'C' (electronics). Card1_txn_count_1day spikes from baseline 0-2 to 5-8 transactions. All purchases occur during is_night=1 hours (txn_hour between 1-5 AM victim local time). Legitimate cardholder's historical card1_amt_zscore averages 0.3-0.8; post-takeover transactions show z-scores of 2.5-4.2. AVS and CVV match perfectly since fraudster accessed saved payment methods.",
+  "indicators": [
+    "dist1 increases by 750+ miles within 1 hour of account login from new device",
+    "P_emaildomain changes from established provider to disposable/temporary email service",
+    "card1_txn_count_1day jumps from 0-2 baseline to 5-8 transactions within 45 minutes",
+    "3-6 transactions totaling $1,200-$3,500 with ProductCD='W' or 'C' within 1 hour of profile change",
+    "All transactions occur during txn_hour 1-5 AM in cardholder's historical timezone",
+    "card1_amt_zscore spikes from historical 0.3-0.8 to 2.5-4.2 across transaction burst",
+    "Phone number modification timestamp precedes transaction burst by 10-40 minutes"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Account accessed from new device shows immediate profile changes—shipping address jumps 750+ miles, email switches to disposable domain, phone number updated—followed within minutes by a burst of 5-8 high-value transactions ($1,200-$3,500) for digital goods or electronics, all occurring between 1-5 AM in the victim's timezone. Transaction amounts show z-scores of 2.5-4.2 versus the cardholder's normal 0.3-0.8 baseline, despite perfect AVS/CVV matches.",
+  "reasoning": "The fraudster has hijacked the victim's phone number via SIM swap to intercept 2FA codes, granting full account access to saved payment methods and personal data. Rapid profile updates secure a fraudulent delivery address while the nighttime transaction velocity and amount spike indicate urgency to monetize the takeover before the legitimate owner wakes up and notices unauthorized activity.",
+  "indicator_explanations": [
+    "Account location jumps hundreds of miles within an hour of suspicious login",
+    "Email switches from legitimate provider to throwaway temporary service",
+    "Transaction frequency explodes from near-zero to aggressive burst pattern",
+    "High-value digital goods or cash equivalents purchased immediately after profile tampering",
+    "All fraudulent activity occurs during cardholder's typical sleeping hours",
+    "Purchase amounts suddenly far exceed this card's normal spending behavior",
+    "Phone number was changed shortly before the spending spree began"
+  ]
+}

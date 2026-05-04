@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_025",
+  "title": "BIN Attack via Fake E-commerce Account Creation with Progressive Testing",
+  "pattern": "bin_attack",
+  "narrative": "Fraudsters exploit legitimate retailer signup flows by creating 15-40 accounts within 2-3 hours, each tied to different card numbers sharing the same BIN prefix. Initial transactions are small verification charges ($0.50-$1.99) to validate cards without triggering fraud alerts. Successful cards then receive 2-3 immediate follow-up purchases at $89-$299 within 20 minutes of validation. All accounts share identical P_emaildomain patterns (typically disposable services like 'tempmail.io' or 'guerrillamail.com'), identical shipping addr1 values, and dist1 distances consistently showing 0-5km between billing and shipping. Transactions cluster in ProductCD='W' (digital/services) for validation phase, then shift to 'C' (physical goods) for monetization. The attack signature shows card1_txn_count_24h spiking from 0 to 3-4 per card, while the shared addr1 accumulates 45-120 total transactions in the same period.",
+  "indicators": [
+    "15-40 new account registrations within 2-3 hours sharing same addr1 but different card1 values from identical BIN",
+    "Two-phase transaction pattern: initial $0.50-$1.99 charges followed by $89-$299 purchases within 20 minutes for successful cards",
+    "P_emaildomain concentrated on 2-3 disposable email services across all accounts (tempmail.io, guerrillamail.com, 10minutemail.com)",
+    "dist1 values showing 0-5km uniformly across all transactions despite different card billing addresses",
+    "card1_txn_count_24h escalating from 0 to 3-4 per card while addr1_txn_count_3h reaches 45-120",
+    "ProductCD transition from 'W' (validation) to 'C' (monetization) within same 20-minute window per card",
+    "card1_amt_zscore exceeding 2.5 on second transaction for cards that successfully validated"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple new accounts (15-40) created within hours using cards from the same BIN prefix, all sharing one shipping address and disposable email domains. Each card is tested with a small charge under $2, then immediately hit with 2-3 larger purchases ($89-$299) if the test succeeds.",
+  "reasoning": "Criminals are systematically checking which stolen cards from a batch are still active by making tiny charges that won't alert cardholders, then racing to extract maximum value from valid cards before they're shut down. The shared shipping address and disposable emails reveal this is organized fraud, not legitimate customers.",
+  "indicator_explanations": [
+    "Same address floods the system with new accounts using different cards from one bank",
+    "Cards get tested with tiny charges then immediately hit with large purchases",
+    "All accounts registered using throwaway email services in tight rotation",
+    "All purchases originate from same location despite cards having different billing addresses",
+    "Individual cards show few hits while the shared address shows massive burst activity",
+    "Attack shifts from validation products to high-value goods once cards pass testing",
+    "Second purchase amount spikes dramatically above the card's tiny first transaction"
+  ]
+}

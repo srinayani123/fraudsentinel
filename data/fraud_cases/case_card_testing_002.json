@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_002",
+  "title": "Single Sub-Dollar Digital Goods Authorization Test with Disposable Email",
+  "pattern": "card_testing",
+  "narrative": "Fraudster validates a stolen card by making a single small purchase ($0.50-$1.99) at a digital goods merchant (ProductCD='W' or 'C') using a disposable email domain (P_emaildomain in ['gmail.com','yahoo.com','outlook.com'] is low risk, but 'guerrillamail.com','tempmail.net','10minutemail.com' raises flags). The transaction occurs outside business hours (txn_hour between 23-05 or is_night=1) to avoid immediate detection. Card shows card1_txn_count_1day=1 and card1_txn_count_7day=1, indicating first observed use. The billing and shipping addresses often mismatch significantly (dist1 > 5000 km or addr1 differs entirely). TransactionAmt clusters tightly around $0.99 or $1.50â€”just above minimum authorization thresholds but below fraud review triggers at many issuers. No CVV decline (transaction_result='approved'), but AVS may show partial mismatch. Within 2-6 hours, if test succeeds, fraudster pivots to high-value purchases elsewhere using same card.",
+  "indicators": [
+    "TransactionAmt between $0.50 and $1.99 at digital goods merchant (ProductCD='W' or 'C')",
+    "P_emaildomain matches known disposable email providers (guerrillamail.com, tempmail.net, 10minutemail.com, etc.)",
+    "card1_txn_count_1day=1 and card1_txn_count_7day=1 indicating first card appearance",
+    "Transaction occurs during off-hours: txn_hour between 23-05 or is_night=1",
+    "dist1 > 5000 km or billing/shipping addr1 fields show significant mismatch",
+    "card1_amt_zscore near 0 for amount ($0.99 or $1.50 common test values)",
+    "Approved transaction (no CVV decline) but AVS shows partial address mismatch"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A first-time card makes a single sub-$2 purchase at a digital goods merchant during overnight hours, using a disposable email address and showing a large distance between billing and shipping locations.",
+  "reasoning": "Fraudsters test stolen cards with tiny charges at low-scrutiny merchants to confirm the card works before attempting larger fraudulent purchases elsewhere within hours.",
+  "indicator_explanations": [
+    "Tiny purchase at digital store tests if card works without triggering alerts",
+    "Email is from a throwaway service used once and discarded",
+    "Card appears for the very first time in system history",
+    "Transaction happens in the middle of the night when monitoring is lighter",
+    "Billing and shipping locations are impossibly far apart or deeply inconsistent",
+    "Amount matches classic test values fraudsters use to verify card validity",
+    "Card approved despite address verification showing cardholder location doesn't match"
+  ]
+}

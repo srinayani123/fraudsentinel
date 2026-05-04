@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_025",
+  "title": "Dormant Account Reactivation Following Credential Stuffing Wave",
+  "pattern": "account_takeover",
+  "narrative": "Account inactive for 180+ days suddenly initiates transactions within 2 hours of a detected credential stuffing attack targeting the merchant. Attacker successfully authenticates using compromised credentials from a third-party breach. First post-dormancy transaction typically tests card validity with $4.99-$9.99 digital purchase (ProductCD=W), followed within 20-45 minutes by 3-5 higher-value transactions ($299-$899) to different shipping addresses. Email domain remains unchanged but delivery addr1 shows 800+ mile distance (dist1) from historical shipping locations. Device fingerprint completely new: different DeviceType, id_30 browser signature, and IP geolocation. card1_txn_count_7day spikes from 0 to 6-9. No failed login attempts visible because credentials were valid. AVS mismatch common on subsequent orders. Pattern peaks during non-business hours (txn_hour 22-04) when legitimate user unlikely to shop after long absence.",
+  "indicators": [
+    "Account dormant 180+ days, then 4-8 transactions within 3-hour window",
+    "First transaction $4.99-$9.99 digital good, followed by $299-$899 physical goods within 45 minutes",
+    "dist1 shows 800+ miles between new addr1 and all historical shipping addresses",
+    "Complete device fingerprint change: new DeviceType, id_30, id_31, IP subnet",
+    "card1_txn_count_7day jumps from 0 to 6-9 transactions",
+    "Transaction timing txn_hour 22-04 (night hours) with is_night=1",
+    "AVS mismatch on 60%+ of post-reactivation transactions despite valid CVV"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "An account that hasn't been used in over 6 months suddenly makes 4-8 purchases within 3 hours, starting with a small digital item then quickly escalating to multiple high-value orders shipped to new addresses 800+ miles away, all from a completely different device and browser.",
+  "reasoning": "A fraudster has obtained valid login credentials from a data breach and is racing to extract maximum value before the legitimate owner notices, testing the card first with a small charge then rapidly placing expensive orders to addresses they control.",
+  "indicator_explanations": [
+    "Long-inactive account suddenly bursts back to life with rapid transaction cluster",
+    "Small test purchase validates card before rapid escalation to expensive items",
+    "Shipping address is nowhere near any location the account has used before",
+    "Every device identifier has changed indicating takeover from completely new environment",
+    "Card goes from zero activity to sustained burst within single week",
+    "Activity clusters during overnight hours when legitimate user likely asleep",
+    "Billing address fails verification repeatedly despite attacker having valid card details"
+  ]
+}

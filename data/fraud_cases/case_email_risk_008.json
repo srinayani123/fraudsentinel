@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_008",
+  "title": "Machine-Generated Email Addresses with Rapid Card Testing Velocity",
+  "pattern": "email_risk",
+  "narrative": "Fraudsters deploy automated account creation tools generating random alphanumeric email addresses (e.g., xk9m2p4@mailinator.com, 7ht3qw9@tempmail.net) to circumvent fraud detection systems tracking repeat email usage. These machine-generated addresses typically appear during coordinated card testing operations where stolen card details are validated through low-value transactions. A typical case involves 15-30 unique email addresses created within 90 minutes, each attempting 1-3 transactions between $1.00-$4.99 against different card BINs. The emails show no prior transaction history in the system (card1_txn_count_P_emaildomain = 0) and originate from disposable email domains like guerrillamail.com or 10minutemail.com. The pattern emerges when fraudsters systematically test stolen card databases before executing higher-value fraud, with successful test transactions immediately followed by bust-out attempts from the validated cards using different email addresses. Transaction clustering analysis reveals identical device fingerprints despite unique email addresses, and addr1 values frequently null or mismatched to card issuer geography.",
+  "indicators": [
+    "Email format: 6-10 random alphanumeric characters before @ symbol with entropy score >0.85",
+    "P_emaildomain in known disposable provider list (tempmail.net, guerrillamail.com, mailinator.com, 10minutemail.com)",
+    "card1_txn_count_P_emaildomain = 0 and account_age <2 hours at transaction time",
+    "TransactionAmt between $1.00-$4.99 for 85%+ of attempts (card testing threshold)",
+    "15+ unique P_emaildomain values sharing identical DeviceInfo hash within 90-minute window",
+    "ProductCD = 'C' or 'W' (digital goods preferred for instant validation feedback)",
+    "dist1 >5000 km OR dist1 IS NULL indicating email/card geography mismatch"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Fifteen or more brand-new email addresses with random alphanumeric names (like xk9m2p4@mailinator.com) appear within 90 minutes, each making $1-$5 purchases with different cards but from the same device. These disposable email accounts have zero transaction history and often show mismatched or missing address data.",
+  "reasoning": "Fraudsters use throwaway email generators to test batches of stolen cards without triggering repeat-email blocks, validating which cards are active before attempting larger fraudulent purchases. The low amounts and rapid velocity across fresh accounts signal coordinated testing rather than legitimate new customers making small purchases.",
+  "indicator_explanations": [
+    "Email username looks computer-generated with no recognizable human pattern",
+    "Email domain is a known temporary throwaway service",
+    "Email has never been used with this card and was just created",
+    "Transaction amounts are tiny probing charges typical of card validation",
+    "Dozens of different throwaway emails coming from the same attacking device",
+    "Purchase is digital goods allowing instant confirmation of card validity",
+    "Billing location is impossibly far from email registration or missing entirely"
+  ]
+}

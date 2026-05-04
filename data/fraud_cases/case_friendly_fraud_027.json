@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_027",
+  "title": "Luxury Electronics Quick-Flip Friendly Fraud with Marketplace Resale Pattern",
+  "pattern": "friendly_fraud",
+  "narrative": "Cardholder purchases high-value electronics ($800-$2500 range, typically gaming consoles, GPUs, or flagship phones) using legitimate card. Within 48-72 hours, identical or similar items appear listed on eBay, Mercari, or Facebook Marketplace from newly created seller accounts. Original transaction shows clean payment (AVS/CVV match, established card history). Customer waits 45-75 days post-delivery, then initiates chargeback claiming item never arrived or was defective. TransactionAmt typically shows card1_amt_zscore above 2.8 for this MCC (5732 electronics). Delivery address matches billing (dist1=0), transaction during business hours (txn_hour 10-18), but P_emaildomain often recent Gmail/Yahoo account (<90 days old). Multiple purchases of same ProductCD within 14-day window across different merchants suggests intentional inventory building for resale arbitrage funded by chargebacks.",
+  "indicators": [
+    "TransactionAmt $800-$2500 for ProductCD in high-resale categories (gaming, electronics MCC 5732/5999)",
+    "card1_amt_zscore > 2.8 indicating unusually high purchase for this card's history",
+    "Chargeback filed 45-75 days post-delivery, maximizing resale window while staying within dispute timeframe",
+    "P_emaildomain shows account age <90 days despite card1_txn_count_365d > 50 indicating established card",
+    "dist1=0 (billing-shipping match) and clean AVS/CVV to appear legitimate",
+    "Multiple transactions same ProductCD across 2-4 different MIDs within 14-day window totaling $3000-$8000",
+    "Transaction timing clustered in business hours (txn_hour 9-17, is_night=0) suggesting deliberate planning"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A cardholder makes multiple high-value electronics purchases ($800-$2500) across different merchants within two weeks, with transaction amounts significantly above their historical spending pattern (z-score > 2.8), then files chargebacks 45-75 days later claiming non-delivery or defects. The purchases use clean payment credentials with matching billing and shipping addresses, but the email account is recently created despite the card showing long transaction history.",
+  "reasoning": "The fraudster is buying genuine electronics with their own card to resell on marketplaces for immediate cash, then recovering the purchase cost through false chargebacks after the items are sold, effectively getting free inventory. The timing gap maximizes resale profit while staying within chargeback windows, and the mismatch between new email accounts and established card history reveals the deliberate setup of a fraud operation disguised as legitimate purchases.",
+  "indicator_explanations": [
+    "High-value electronics purchase in categories easily flipped on resale platforms",
+    "Purchase amount is unusually large compared to cardholder's typical spending behavior",
+    "Chargeback timing allows maximum resale period while remaining inside dispute window",
+    "Fresh email account paired with well-established card suggests intentional account separation",
+    "Billing and shipping match with clean verification to avoid blocking",
+    "Same product type purchased from multiple merchants creating resale inventory stockpile",
+    "Transactions occur during business hours indicating calculated rather than impulsive behavior"
+  ]
+}

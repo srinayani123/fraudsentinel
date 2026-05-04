@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_004",
+  "title": "Pre-Validation BIN Reconnaissance with Sequential Card Testing",
+  "pattern": "bin_attack",
+  "narrative": "Fraudster performs systematic BIN range validation before live transaction attempts, visible as clusters of $0.00 or $1.00 authorization checks followed by rapid higher-value attempts. The attacker queries 15-40 sequential card numbers within a single BIN prefix (e.g., 442538XXXXXXXXXX) to identify active accounts, then immediately exploits confirmed cards with $87-$299 transactions. All attempts originate from identical device fingerprint (DeviceInfo hash) and P_emaildomain, typically disposable services like 'guerrillamail.com'. Pattern shows 8-12 minute gap between validation wave and exploitation wave. Card1_txn_count_24h spikes from 0 to 12+ within single session. Transactions clustered in ProductCD='W' (digital goods) with international dist1 values exceeding 5000km from cardholder's addr1.",
+  "indicators": [
+    "$0.00-$1.00 authorization attempts preceding genuine transactions by 8-12 minutes",
+    "15-40 sequential card numbers sharing first 8 BIN digits tested within 20-minute window",
+    "Identical DeviceInfo hash and P_emaildomain across all attempts in sequence",
+    "Card1_txn_count_24h increases from 0 to 12+ during attack window",
+    "Exploitation transactions are $87-$299 in ProductCD='W' category",
+    "Dist1 values exceed 5000km between transaction location and cardholder addr1",
+    "P_emaildomain matches disposable email service pattern (guerrillamail, tempmail, 10minutemail)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "An attacker tests 15-40 sequential card numbers from the same BIN prefix with $0-$1 authorization checks, then 8-12 minutes later uses the validated cards for $87-$299 digital goods purchases, all from the same device and disposable email address.",
+  "reasoning": "The criminal is methodically probing which card numbers in a stolen BIN range are active before immediately exploiting confirmed accounts for high-value digital goods that can be quickly resold, with the geographic mismatch and disposable email revealing the transactions aren't from legitimate cardholders.",
+  "indicator_explanations": [
+    "Tiny test charges probe cards before real fraud hits minutes later",
+    "Fraudster systematically tests card numbers from the same bank in rapid succession",
+    "All attempts come from one device using one throwaway email account",
+    "Card goes from dormant to hyperactive during the testing burst window",
+    "Validated cards get hit with mid-range digital goods purchases immediately after",
+    "Purchase location is impossibly far from the cardholder's billing address",
+    "Attacker uses temporary email service to avoid real identity verification"
+  ]
+}

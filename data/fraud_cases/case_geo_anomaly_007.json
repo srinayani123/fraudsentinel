@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_007",
+  "title": "Dormant Card Activation in Foreign Currency Zone with Native Language Indicators",
+  "pattern": "geo_anomaly",
+  "narrative": "A card inactive for 90+ days suddenly activates with 3-7 transactions in a foreign country using a currency never previously seen in the account history. The cardholder's original profile shows US billing (addr1 in 48000-88000 range) with 12+ months of USD-only transactions averaging $67, then abruptly shifts to EUR or GBP purchases totaling $890-$1,840 within 18 hours. The new transactions originate from IP blocks matching the foreign currency's home region (dist1 > 8,500km from billing), often with P_emaildomain switching from gmail.com to local providers (web.de, mail.ru, orange.fr). The MCC codes shift from everyday categories (5411 grocery, 5812 restaurants) to high-risk merchant types: 5732 electronics, 7999 recreation, 4121 taxi services. CVV match rates drop from 100% historical to 0% on the foreign transactions. Transaction hours cluster in what would be 2AM-6AM in the cardholder's original timezone (is_night=1 by home location). Card1_txn_count_24hr spikes from 0.2 average to 6.",
+  "indicators": [
+    "Card dormant 90+ days then 3-7 transactions in 18 hours in new currency (EUR/GBP vs historical USD-only)",
+    "dist1 > 8,500km from billing addr1, IP geolocation matches foreign currency zone",
+    "P_emaildomain changes from established provider to foreign domain (.de/.ru/.fr) mid-transaction sequence",
+    "CVV match drops from 100% historical success to 0% on all new-country transactions",
+    "MCC shift from low-risk (5411/5812) to high-risk (5732/7999/4121) categories",
+    "card1_txn_count_24hr increases 30x: 0.2 baseline to 6 transactions",
+    "Transaction timing shows is_night=1 for original timezone (2AM-6AM home location)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card unused for over 90 days suddenly executes 6 transactions in 18 hours from a foreign country 8,500+ km away, all in a new currency the account has never used before, with failed CVV checks and email domain switching to a foreign provider mid-sequence.",
+  "reasoning": "Fraudsters who obtained stolen card details test the card in a distant location where the legitimate owner is unlikely to be, deliberately avoiding CVV to hide that they don't possess the physical card, while the overnight timing and rapid spending spree indicate urgency to extract value before the theft is detected.",
+  "indicator_explanations": [
+    "Card suddenly wakes up after months of silence with foreign currency purchases",
+    "Transactions originate from opposite side of globe from cardholder's billing address",
+    "Email switches from legitimate provider to foreign country domain during attack",
+    "Security code failures spike to total miss rate on foreign transactions",
+    "Merchant types shift from groceries to electronics and travel services",
+    "Daily transaction volume explodes from near-zero to sustained burst activity",
+    "Purchases happen during cardholder's local sleep hours in different time zone"
+  ]
+}

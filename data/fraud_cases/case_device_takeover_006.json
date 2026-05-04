@@ -1,0 +1,25 @@
+{
+  "id": "case_device_takeover_006",
+  "title": "Rooted Device Transaction from Compromised Account with Clean Behavioral Profile",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster operates from a jailbroken or rooted device after stealing cardholder credentials. The transaction amount, timing, and velocity all match the legitimate cardholder's normal spending patterns, making behavioral detection ineffective. However, device integrity flags reveal the compromised hardware environment. The D10 field captures root/jailbreak detection signals that spike far above normal values, while D4 shows temporal device anomalies consistent with modified operating systems. The fraudster maintains the victim's typical transaction cadence and amount range to avoid velocity triggers, but cannot mask the underlying device manipulation. This pattern exploits the gap between credential theft and device-level security controls, targeting merchants with weak device fingerprinting. The legitimate cardholder's email matches and transaction amounts remain within established z-score bounds, creating a false sense of legitimacy.",
+  "indicators": [
+    "D10 > 219 (p90 threshold), indicating elevated root/jailbreak detection score",
+    "D4 > 297 (p90), flagging temporal device anomaly consistent with OS modification",
+    "D1 = 0, representing first-time pairing of this device with the card",
+    "card1_amt_zscore between -1.5 and +1.5, amount within cardholder's normal range",
+    "D15 > 346 (p90), device configuration feature showing abnormal system settings",
+    "TransactionAmt between 50 and 200, typical mid-range purchase masking fraud intent"
+  ],
+  "indicator_explanations": [
+    "Device shows strong signals of being rooted or jailbroken by the operator",
+    "Device timing patterns suggest the operating system has been modified or compromised",
+    "This device has never been used with this card before today",
+    "Purchase amount perfectly matches what this cardholder normally spends",
+    "Device system configuration settings deviate significantly from legitimate consumer devices",
+    "Transaction amount is unremarkable and falls within everyday spending patterns"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Fraudster uses stolen credentials from a rooted or jailbroken device while maintaining the victim's normal spending patterns. Behavioral signals appear legitimate, but device integrity flags reveal the compromised hardware environment.",
+  "reasoning": "Legitimate cardholders rarely conduct transactions from rooted or jailbroken devices, especially when paired with first-time device-card association. The combination of device integrity violations with otherwise-normal behavioral patterns indicates credential theft rather than authorized unusual activity."
+}

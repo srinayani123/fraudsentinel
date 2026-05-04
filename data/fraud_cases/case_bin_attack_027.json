@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_027",
+  "title": "Pre-Validated BIN Reconnaissance with Systematic Card Type Testing",
+  "pattern": "bin_attack",
+  "narrative": "Fraudsters use BIN lookup services to pre-validate card metadata before attempting transactions, resulting in 92-98% accuracy on card type and issuer alignment. Within 18-35 minute windows, attackers submit 15-40 transactions where ProductCD and card type perfectly match expected categories (e.g., all Visa cards attempt ProductCD='C', all Discover cards attempt ProductCD='R'). Transactions cluster at amounts like $1.00, $4.99, or $9.95 on low-risk MCCs (5999, 5735) to test validity. The pattern shows zero card type mismatches despite sequential card1 values spanning 400-800 increments, unlike organic testers who show 15-25% metadata inconsistencies. Fraudsters often cycle through 3-4 P_emaildomains using disposable providers (mailinator.com, guerrillamail.com) but maintain consistent addr1 and dist1=0 patterns. CNP flags are universal with CVV matches on 85%+ attempts despite sequential testing.",
+  "indicators": [
+    "15-40 transactions within 35 minutes with 92%+ card type to ProductCD alignment accuracy",
+    "Sequential card1 values spanning 400-800 increments with zero issuer metadata mismatches",
+    "Clustering at probe amounts: $1.00, $4.99, or $9.95 on MCC 5999/5735",
+    "3-4 rotating P_emaildomains from disposable services with identical addr1 and dist1=0",
+    "card1_txn_count_1day between 15-40 with CVV match rate exceeding 85%",
+    "Zero organic transaction characteristics: all txn_hour clustering within 2-hour window",
+    "TransactionAmt_zscore < 0.5 across all attempts indicating deliberate low-value testing"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Within 30 minutes, 15-40 small transactions ($1-$10) show perfect alignment between card type and product category, with sequential card numbers spanning hundreds of increments yet zero metadata mismatches. Disposable email domains rotate while billing addresses stay identical, and all transactions cluster in a narrow time window.",
+  "reasoning": "Attackers use BIN databases to verify card details before fraud, then systematically test stolen cards with low amounts to confirm validity without triggering alarms. The perfect metadata accuracy and sequential testing pattern reveal automated reconnaissance rather than legitimate purchases, where customers naturally show inconsistencies.",
+  "indicator_explanations": [
+    "Attacker validates card types with near-perfect accuracy across sustained burst",
+    "Card numbers increment systematically showing automated sequential generation not random guessing",
+    "Testing uses classic probe amounts to minimize merchant attention and approval friction",
+    "Email rotates through burner addresses while physical location remains suspiciously static",
+    "High daily transaction count with CVVs matching proves attacker has validated card data",
+    "All activity concentrates in narrow time window with no normal shopping behavior",
+    "Every amount stays deliberately small showing cautious validation not legitimate purchases"
+  ]
+}

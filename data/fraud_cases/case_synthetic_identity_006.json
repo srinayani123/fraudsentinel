@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_006",
+  "title": "Synthetic Identity Established Through Commercial Mail Receiving Agency",
+  "pattern": "synthetic_identity",
+  "narrative": "A fraudster constructs a synthetic identity using a commercial mail receiving agency (CMRA) address, often identifiable by specific ZIP codes known for virtual mailbox services (e.g., 33166, 90001, 10036). The account shows a 30-45 day aging period with small-dollar purchases ($12-$47) at low-risk MCCs (grocery, pharmacy) to establish legitimacy. Initial purchases use free email domains with numeric suffixes (P_emaildomain: gmail.com, username pattern: firstname.lastname[4-digit]). After the aging period, transaction velocity spikes to 8-12 transactions in 72 hours with TransactionAmt jumping 400-800% above baseline. The dist1 feature shows consistent 0.0 distance between billing and shipping addresses initially, then shipping addresses (addr2) suddenly diverge to high-risk states while addr1 remains static. Card utilization accelerates from 15% to 95% within one billing cycle, with txn_hour clustering in business hours (9-17) during aging, then shifting to late evening (22-02) during bust-out phase.",
+  "indicators": [
+    "addr1 matches known CMRA ZIP codes with dist1 = 0.0 for first 8-15 transactions",
+    "P_emaildomain is free provider with numeric suffix pattern in username",
+    "Initial 6-10 transactions under $50 at MCC 5411, 5912, 5122 over 30-45 days",
+    "TransactionAmt increases 400-800% after aging period with 8-12 txns in 72 hours",
+    "card1_amt_zscore jumps from -0.3 range to +2.5 range within one week",
+    "addr2 divergence from addr1 begins after day 35 with dist1 increasing to 500+ miles",
+    "txn_hour pattern shifts from daytime (9-17) to late night (22-02) during acceleration phase"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A newly created account uses a commercial mail receiving agency address and starts with small grocery or pharmacy purchases over 30-45 days, then suddenly escalates to 8-12 high-value transactions within 72 hours while shipping addresses diverge to different states and purchase times shift to late evening.",
+  "reasoning": "The fraudster is building credibility with a fake identity by mimicking normal spending patterns, then executing a coordinated bust-out once the account appears legitimate, maximizing credit before the synthetic identity is detected and the account closed.",
+  "indicator_explanations": [
+    "Shipping address is a commercial mail drop with zero distance variation early on",
+    "Email uses free provider with suspicious numbered username suggesting mass generation",
+    "Account starts with small grocery and drug store purchases to build legitimacy",
+    "Spending suddenly explodes with rapid-fire high-value transactions after waiting period",
+    "Transaction amounts spike dramatically from below-average to well above cardholder norm",
+    "Shipping destinations split geographically after initial trust-building phase concludes",
+    "Transaction timing switches from business hours to graveyard shift during cash-out"
+  ]
+}

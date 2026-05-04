@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_021",
+  "title": "Newly Registered Domain Mass Account Creation Fraud Ring",
+  "pattern": "email_risk",
+  "narrative": "Fraudsters register a fresh email domain within the last 30 days and immediately create 15-40 customer accounts using sequential or pattern-based email prefixes (user001@newdomain.com through user040@newdomain.com). Within 48-72 hours of domain registration, these accounts initiate card-not-present transactions averaging $180-$320 each, typically targeting digital goods (ProductCD='W' or 'C'). The P_emaildomain shows registration date within 30 days via WHOIS lookup, while card1_txn_count_1day shows 8-15 transactions across different accounts sharing this domain. Transaction velocity is compressed: 25+ transactions within a 6-hour window during evening hours (txn_hour 18-23). Shipping addresses show high dist1 values (>2000km) between P_emaildomain registration location and addr1. All accounts use different card BINs but identical device fingerprints, suggesting automated account generation followed by rapid monetization before domain reputation catches up.",
+  "indicators": [
+    "P_emaildomain registration date <30 days from transaction timestamp",
+    "15-40 accounts sharing same P_emaildomain with sequential email prefixes (pattern: [name][digits]@domain)",
+    "card1_txn_count_6hour â‰¥25 transactions across multiple accounts on same domain",
+    "TransactionAmt clustering between $180-$320 with ProductCD in {'W','C'} for digital goods",
+    "dist1 >2000km indicating large geographic mismatch between domain registration and shipping location",
+    "Device fingerprint collision: single DeviceInfo hash across 10+ distinct card1 values",
+    "Transaction concentration in txn_hour 18-23 with 80%+ of domain's volume in 6-hour window"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple accounts (15-40) share a newly registered email domain (under 30 days old) with sequential usernames, then rapidly execute 25+ transactions within a 6-hour evening window using different cards but identical device fingerprints. Transactions average $180-$320 for digital goods, with shipping addresses over 2000km from the domain's registration location.",
+  "reasoning": "Criminals register a disposable domain to create dozens of fake accounts at scale, then quickly cash out through coordinated purchasing before the domain gets flagged. The identical device fingerprint across different cards, combined with the brand-new domain and extreme transaction velocity, reveals an automated fraud operation rather than legitimate customers who would use established emails and varied devices.",
+  "indicator_explanations": [
+    "Email domain was created very recently, just before the fraud burst",
+    "Multiple accounts use numbered variations of the same email pattern",
+    "Same card fires off dozens of transactions across different accounts rapidly",
+    "Purchase amounts cluster in narrow range targeting specific digital product types",
+    "Shipping destination is thousands of miles from where domain was registered",
+    "Single device is being used to conduct transactions across many different cards",
+    "Nearly all activity happens in late evening concentrated six-hour attack window"
+  ]
+}

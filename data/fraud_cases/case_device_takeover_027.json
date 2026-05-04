@@ -1,0 +1,27 @@
+{
+  "id": "case_device_takeover_027",
+  "title": "Device Timezone Mismatch with Stolen Credential Replay Attack",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster uses stolen cardholder credentials from a different geographic region, operating from their own device in a timezone that contradicts the billing country. The transaction appears legitimate in all behavioral dimensions—amount within cardholder norms, daytime hours, normal velocity, matching email domains—but device signals expose the fraud. The device-card pairing is new (D1=0), and device timezone metadata conflicts with the registered billing country timezone. This pattern exploits credential theft where the attacker maintains clean behavioral mimicry but cannot spoof hardware geolocation metadata embedded in browser fingerprints. The fraudster may be operating during their local business hours, which appear normal by clock time but represent an impossible timezone for the legitimate cardholder's billing address. Device identity fields reveal first-time pairing and timezone discrepancies that betray the geographic displacement of the actual transaction origin.",
+  "indicators": [
+    "D1 = 0 indicating first-time device-card pairing with no historical association",
+    "D10 > 200 (p90 threshold) indicating device timezone offset mismatch severity",
+    "D15 > 300 (p90 threshold) flagging device-country timezone discrepancy magnitude",
+    "card1_amt_zscore between -1.0 and +1.0 showing amount within cardholder spending pattern",
+    "C1 < 5 indicating low card-counter activity consistent with normal usage frequency",
+    "TransactionAmt between 50 and 200 fitting typical cardholder transaction range",
+    "V294 > 0.75 (engineered feature detecting timezone-country inconsistency score)"
+  ],
+  "indicator_explanations": [
+    "The device has never been seen with this card before in transaction history",
+    "Device reports a timezone offset that significantly differs from billing country timezone",
+    "Geographic device metadata shows timezone displacement inconsistent with registered billing address",
+    "Transaction amount falls within the cardholder's normal spending range masking fraud intent",
+    "Card usage frequency appears normal with no velocity spikes or unusual activity bursts",
+    "Dollar amount is typical for this cardholder avoiding red flags from amount-based rules",
+    "Model feature flags geographic timezone mismatch between device origin and billing country"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Transaction originates from a never-seen device operating in a timezone that contradicts the cardholder's billing country, while all behavioral signals—amount, velocity, timing, email—appear completely normal. The fraudster has stolen credentials but cannot mask the geographic timezone displacement embedded in device fingerprint metadata.",
+  "reasoning": "Legitimate cardholders do not suddenly transact from devices in foreign timezones while maintaining perfect behavioral normalcy. The combination of D1=0 (new device), extreme D10/D15 values (timezone mismatch), and clean behavioral signals indicates credential theft with geographic displacement—a fraudster operating from their own location using stolen payment credentials."
+}

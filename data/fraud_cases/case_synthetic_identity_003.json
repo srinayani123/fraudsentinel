@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_003",
+  "title": "Thin-File Credit Bust-Out with Compressed Seasoning Window",
+  "pattern": "synthetic_identity",
+  "narrative": "A synthetic identity establishes a thin credit profile using a recently activated credit card (card1_txn_count_lifetime: 8-15) with abnormally compressed seasoning behavior. The account shows 6-9 low-value transactions ($12-$47) across 45-65 days to build perceived legitimacy, then abruptly escalates to bust-out phase with 3-5 high-value purchases ($850-$2,400) within 72 hours. Transactions cluster in high-risk MCCs (5732 electronics, 5944 jewelry) with mixed fulfillment addresses. Email domain is recently registered free provider (P_emaildomain: gmail.com, domain_age <90 days). The synthetic exhibits no organic browsing patternsâ€”all transactions occur 2-8 minutes after session initiation. Card velocity spikes from 0.4 txns/week to 14 txns/day during bust-out. Billing and shipping distance (dist1) exceeds 500km on final purchases, indicating drop shipping to money mules.",
+  "indicators": [
+    "card1_txn_count_lifetime between 8-15 at time of bust-out phase",
+    "Initial seasoning period: 6-9 transactions averaging $12-$47 over 45-65 days",
+    "Bust-out escalation: 3-5 transactions totaling $850-$2,400 within 72 hours",
+    "card1_amt_zscore jumps from <0.5 to >3.2 during final transaction cluster",
+    "P_emaildomain shows domain_age <90 days, typically free provider",
+    "dist1 (billing-shipping distance) >500km on high-value purchases",
+    "Time from session start to purchase consistently 2-8 minutes, no browsing behavior"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A new credit card makes 6-9 small purchases over about two months to look legitimate, then suddenly executes 3-5 large purchases ($850-$2,400) within 72 hours using a recently created email address and shipping to addresses 500+ km from billing.",
+  "reasoning": "The fraudster is building just enough transaction history to avoid automated flags before maxing out the credit line with no intention to repay, using mismatched addresses to route goods through money mules for resale.",
+  "indicator_explanations": [
+    "Card has minimal transaction history when the fraud strike occurs",
+    "Account was deliberately nurtured with small purchases over two months",
+    "Spending explodes to four-figure totals in a three-day window",
+    "Purchase amounts suddenly spike far beyond established spending patterns",
+    "Email account is brand new and uses disposable free service",
+    "Shipping address is hundreds of miles from the billing address",
+    "Checkout happens in minutes with no natural shopping or browsing"
+  ]
+}

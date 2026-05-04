@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_024",
+  "title": "Privacy VPN Service Multi-Region Trial Stacking with Disposable Email",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster uses stolen card to register 4-7 VPN/privacy service trials across multiple providers (NordVPN, ExpressVPN, Private Internet Access) within 72 hours, each charging $0.99-$2.99 verification amounts. Transactions originate from diverse geographic locations despite single billing address, suggesting VPN usage during signup itself. Email domains are temporary services (guerrillamail.com, tempmail.org, 10minutemail.com). Card shows no prior subscription history but suddenly accumulates 6+ distinct MIDs in digital services category (MCC 5817). Transaction pattern: sequential $1-3 charges spaced 4-18 hours apart, each from different merchant but identical device_id. Fraudster monetizes accounts by reselling on dark web forums or uses for anonymous torrenting before cardholder disputes appear 15-30 days later.",
+  "indicators": [
+    "TransactionAmt between $0.99-$2.99 across 4-7 transactions in 72-hour window",
+    "card1_txn_count_digital_services increases from 0 to 6+ within 3 days, all MCC 5817",
+    "P_emaildomain matches known disposable email providers (guerrillamail, tempmail, 10minutemail)",
+    "dist1 shows 500+ miles variance between consecutive transactions despite fixed addr1",
+    "Device_id remains constant across merchants while IP geolocation changes 3+ countries",
+    "card1_age_at_txn under 90 days with zero prior subscription-category history",
+    "All transactions occur during txn_hour 22-06 (night hours) with is_night=1"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A payment card with no subscription history suddenly racks up 4-7 small charges ($1-3) from different VPN providers within 72 hours, all from the same device but different countries, using throwaway email addresses like guerrillamail or tempmail.",
+  "reasoning": "The fraudster is testing a stolen card with low-dollar trial signups to avoid immediate detection, then selling the activated VPN accounts on dark web forums or using them for anonymous illegal activity before the real cardholder notices and disputes the charges weeks later.",
+  "indicator_explanations": [
+    "Small recurring charges cluster together in a short burst window",
+    "Card suddenly starts hitting only digital service merchants repeatedly",
+    "Email address comes from a temporary throwaway provider",
+    "Billing address stays the same but transactions geolocate hundreds of miles apart",
+    "Same device keeps appearing but connection comes from different countries",
+    "Brand new card with no subscription service history suddenly stacking trials",
+    "All activity happens during late night and early morning hours"
+  ]
+}

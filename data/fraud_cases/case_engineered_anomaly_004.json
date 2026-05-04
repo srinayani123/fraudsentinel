@@ -1,0 +1,25 @@
+{
+  "id": "case_engineered_anomaly_004",
+  "title": "V-Field Magnitude Divergence from Baseline Feature Space",
+  "pattern": "engineered_anomaly",
+  "narrative": "Transactions where Vesta engineered features exhibit extreme values despite raw behavioral features remaining within normal bounds. The V-fields encode multi-dimensional relationships between device, identity, and transaction attributes that suggest synthetic or manipulated identity construction. Classic indicators like amount, velocity, and email matching appear legitimate, but the V-field magnitudes reveal structural anomalies in how the transaction components fit together. This pattern often emerges when fraudsters successfully replicate surface-level legitimacy (correct card details, typical amounts, matching contact information) but the underlying feature interactions captured by Vesta's proprietary transformations expose inconsistencies in identity cohesion or device-card-email triangulation that human analysts cannot directly observe in raw data.",
+  "indicators": [
+    "V258 > 85 (p95), engineered feature capturing identity-device-address triangulation anomaly",
+    "V280 < 15 (p10), abnormally low composite trust score despite clean behavioral signals",
+    "V305 > 120 (p90), elevated feature indicating device fingerprint inconsistency with cardholder profile",
+    "V307 between 0.05 and 0.15 (p5-p15 range), unusual low-end distribution for email-device coupling metric",
+    "C1 < 5 (p25), card counter shows limited history but V-features suggest mature fraud infrastructure",
+    "D1 between 100-300 days, established device-card pairing timeline contradicts V-field anomaly signals"
+  ],
+  "indicator_explanations": [
+    "Composite identity verification score shows structural mismatch between provided identity elements",
+    "Overall trust metric is unexpectedly weak given the transaction's normal surface characteristics",
+    "Device signature does not align with the expected cardholder equipment profile",
+    "Email and device relationship shows atypical coupling pattern for legitimate account usage",
+    "Card has limited transaction history yet appears embedded in sophisticated fraud infrastructure",
+    "Device has been paired with card for months but feature relationships suggest recent manipulation"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "V-engineered features reveal structural identity and device inconsistencies while all raw behavioral signals (amount, velocity, email matching, timing) remain normal. The model detects fraud through complex multi-feature interactions invisible to standard rule-based analysis.",
+  "reasoning": "When V-fields show extreme values contradicting clean behavioral patterns, it indicates fraudsters have successfully mimicked surface legitimacy but cannot replicate the deep feature relationships Vesta's transformations capture. The divergence between raw feature normality and engineered feature anomalies exposes synthetic identity construction or account manipulation."
+}

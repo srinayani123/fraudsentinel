@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_015",
+  "title": "Machine-Generated Email Accounts with Rapid High-Value Card Testing",
+  "pattern": "email_risk",
+  "narrative": "Fraudsters deploy bots to create throwaway email accounts with random 12-16 character alphanumeric strings (e.g., 'k7j2x9m4q8w1@gmail.com') and immediately link them to stolen card data for accelerated testing. Unlike human-typed randomness, these emails show no vowel clustering or memorable patterns. The attack unfolds in 15-45 minute windows: 8-15 transactions per email, starting with $1-$5 authorization probes, then jumping to $200-$800 purchases once a card validates. P_emaildomain is consistently free providers (gmail, yahoo, outlook) with account creation timestamps within 2 hours of first transaction. Card velocity shows card1_txn_count_24h spiking to 18-40 across multiple machine-generated emails. Transactions cluster in late-night hours (txn_hour 1-5 AM merchant local time) with dist1 values exceeding 3000km, indicating VPN/proxy use. ProductCD skews heavily toward easily liquidated digital goods or gift cards.",
+  "indicators": [
+    "P_emaildomain username contains 12-16 random alphanumeric characters with no recognizable word fragments or vowel patterns",
+    "8-15 transactions per email address within 15-45 minute windows",
+    "Transaction amounts escalate from $1-$5 initial probes to $200-$800 purchases after card validation",
+    "card1_txn_count_24h reaches 18-40 across multiple newly-created email addresses",
+    "85%+ of transactions occur during txn_hour 1-5 AM in merchant timezone",
+    "dist1 (distance between billing and IP location) exceeds 3000km for 70%+ of transactions",
+    "P_emaildomain account creation timestamp within 120 minutes of first transaction usage"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Email addresses with 12-16 random alphanumeric characters (no recognizable patterns) make 8-15 transactions in 15-45 minute bursts, starting with small $1-$5 test charges then jumping to $200-$800 purchases. The same stolen card appears across multiple throwaway emails with 18-40 transactions in 24 hours, concentrated in late-night hours with IP distances exceeding 3000km from billing addresses.",
+  "reasoning": "Bots are rapidly testing stolen card numbers to identify which ones still work before the cardholder or bank catches on. The escalating transaction amounts, newly-created disposable emails, extreme geographic mismatches, and nocturnal timing indicate automated credential stuffing designed to maximize fraudulent purchases before cards are frozen.",
+  "indicator_explanations": [
+    "Email username looks machine-generated with no human-readable patterns or structure",
+    "Email is cycling through numerous transactions in a compressed timeframe",
+    "Purchases start small to test card validity then jump to high-dollar amounts",
+    "Same card is being tested across many freshly created email accounts",
+    "Activity concentrates in overnight hours when monitoring is weakest",
+    "Billing address and actual IP location are separated by transcontinental distances",
+    "Email account was created moments before being used for transactions"
+  ]
+}

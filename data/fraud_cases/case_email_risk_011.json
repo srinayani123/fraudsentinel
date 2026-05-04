@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_011",
+  "title": "Fresh Domain Coordination Attack with Shared Payment Infrastructure",
+  "pattern": "email_risk",
+  "narrative": "Fraudsters register a new email domain within 7-14 days of attack launch, creating 8-15 distinct email accounts under that domain to appear like separate customers. All accounts transact within a 36-hour window, purchasing high-margin digital goods (ProductCD='W' or 'C') valued $180-$450. Despite different P_emaildomain prefixes, transactions share identical or sequential card1 values, same addr1 postal code, and dist1 distances under 50km. The domain shows zero historical transaction presence in merchant data prior to attack. Attackers exploit newly registered domains to bypass email reputation checks while the WHOIS registration date reveals domain age of 12-28 days. Card velocity metrics show card1_txn_count_24h jumping from 0 to 9-14 transactions across these coordinated accounts.",
+  "indicators": [
+    "P_emaildomain registration date within 28 days of first transaction",
+    "8-15 transactions sharing same P_emaildomain suffix with unique prefixes within 36-hour window",
+    "card1 values identical or sequential across 70%+ of domain-linked transactions",
+    "addr1 postal code identical for 6+ transactions despite different email prefixes",
+    "dist1 values all under 50km suggesting coordinated geographic origin",
+    "TransactionAmt clustering tightly between $180-$450 across domain users",
+    "card1_txn_count_24h spike from 0 to 9-14 coinciding with fresh domain usage"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A newly registered email domain (under 28 days old) spawns 8-15 unique email addresses that all transact within 36 hours, purchasing digital goods worth $180-$450 using identical or sequential card numbers and the same postal code. Card velocity jumps from zero to 9-14 transactions in 24 hours, all originating within 50km of each other.",
+  "reasoning": "Criminals register a fresh domain to evade email reputation filters, then create multiple fake accounts to simulate separate customers while actually using the same stolen cards and operating from a single location. The tight coordination in timing, geography, card sequences, and transaction amounts reveals orchestrated theft rather than coincidental legitimate purchases.",
+  "indicator_explanations": [
+    "Email domain was registered less than a month before the first purchase",
+    "Same email domain spawns multiple accounts with different usernames in tight timeframe",
+    "Multiple transactions use identical or consecutive card numbers from same batch",
+    "Different email accounts all ship to the exact same postal code",
+    "All transactions originate from the same geographic area within tight radius",
+    "Purchase amounts fall into suspiciously narrow range across supposedly different buyers",
+    "Card goes from zero activity to heavy usage exactly when fresh domain appears"
+  ]
+}

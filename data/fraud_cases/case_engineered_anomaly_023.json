@@ -1,0 +1,25 @@
+{
+  "id": "case_engineered_anomaly_023",
+  "title": "V-Field Magnitude Inconsistency: Engineered Features Contradicting Clean Profile",
+  "pattern": "engineered_anomaly",
+  "narrative": "This pattern manifests when Vesta's engineered V-fields signal fraud despite completely normal behavioral presentation. The cardholder's transaction amounts, timing, and velocity appear typical. Device and email match historical patterns. Yet multiple V-fields register values at statistical extremes, indicating the feature engineering has detected complex multi-dimensional anomalies in transaction sequencing, device fingerprint composition, or identity-graph relationships that aren't visible in any single raw feature. The model sees encoded patterns — perhaps unusual combinations of browser attributes with card metadata, or atypical identity-linkage scoring — that suggest the transaction context has been artificially constructed. Analysts cannot directly verify what the V-fields measure, but the statistical divergence from normal V-field distributions for similar transaction profiles indicates sophisticated fraud operation that has successfully mimicked surface-level cardholder behavior while failing to replicate the deeper transactional signature captured in Vesta's proprietary feature space.",
+  "indicators": [
+    "V200 > 6 (p90 threshold) indicating extreme value in Vesta sequence anomaly feature",
+    "V280 and V307 both in top decile (>p90) while card1_amt_zscore between -0.8 and +0.8",
+    "V258 > p85 for MCC while TransactionAmt matches cardholder p25-p75 range",
+    "C1 <= 15 indicating low card-counter activity, inconsistent with V-field magnitude",
+    "V305 and V320 correlation pattern atypical: both elevated but ratio outside 0.6-1.4 normal range",
+    "D1 < 30 (recent device-card pairing) yet V201 suggests mature identity-device graph linkage"
+  ],
+  "indicator_explanations": [
+    "Vesta's sequence anomaly detector shows an extreme outlier score for this transaction",
+    "Multiple engineered features flag risk while the transaction amount appears completely normal",
+    "Category-specific Vesta feature elevated despite amount fitting the merchant category baseline",
+    "Card activity counter shows limited history inconsistent with the engineered feature scores",
+    "Two related Vesta features both elevated but their relationship deviates from typical fraud patterns",
+    "Device appears recently paired with card yet identity verification feature suggests established relationship"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Vesta's engineered V-fields register statistical extremes and internal inconsistencies while all observable behavioral signals — amount, velocity, timing, email, device — appear completely normal for the cardholder profile.",
+  "reasoning": "When proprietary feature engineering detects multi-dimensional anomalies invisible in raw features, it indicates fraud operations have successfully reverse-engineered normal behavioral signatures but cannot replicate the complex feature interactions Vesta's models encode. The inconsistency between V-field magnitude and both behavioral cleanliness and inter-V-field relationships suggests artificially constructed transaction context."
+}

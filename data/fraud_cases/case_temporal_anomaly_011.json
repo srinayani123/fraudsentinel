@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_011",
+  "title": "Graveyard Shift Takeover on Established Day-Only Account",
+  "pattern": "temporal_anomaly",
+  "narrative": "A cardholder with 18+ months of transaction history exclusively between 8am-6pm local time suddenly executes 3-7 transactions between 3:00-5:30am, typically starting with a $15-45 test charge followed by escalating amounts ($180, $340, $620). The account shows no prior activity in txn_hour bins 3-5, making the overnight window a hard boundary violation. Fraudsters exploit credential theft during victim sleep hours, knowing detection lag gives them a 4-6 hour window before account holder wakes. Transactions often target digital goods (ProductCD='W') or international MCCs with instant fulfillment. The addr1 may remain consistent while dist1 jumps to 800+ miles, suggesting VPN use to mask new geolocation while maintaining some address fingerprint continuity. Card1_txn_count_24hr spikes from baseline of 1-2 to 5-8 transactions.",
+  "indicators": [
+    "Zero prior transactions in txn_hour range 3-5am across 18+ month history, then 3-7 overnight charges",
+    "Transaction sequence: $15-45 initial test, followed by $180+, $340+, $620+ within 90 minutes",
+    "card1_txn_count_24hr increases from 1-2 baseline to 5-8 during overnight window",
+    "dist1 distance jumps to 800+ miles while addr1 hash remains unchanged",
+    "All overnight transactions target ProductCD 'W' or MCCs 5816, 5818, 5967 (digital/subscription)",
+    "is_night flag=1 for all suspicious transactions versus 0% historical night activity",
+    "card1_amt_zscore exceeds 3.5 standard deviations from cardholder's historical daytime pattern"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "An account that has only transacted between 8am-6pm for over 18 months suddenly shows 3-7 charges between 3:00-5:30am, starting with a small test charge then rapidly escalating to $600+, often targeting digital goods while the distance spikes 800+ miles but the billing address stays the same.",
+  "reasoning": "Fraudsters use stolen credentials during the victim's sleep hours to exploit the 4-6 hour detection window before the cardholder wakes, testing the card with a small charge then quickly draining it on instantly-fulfilled digital products before the account can be frozen.",
+  "indicator_explanations": [
+    "Account that never transacts at night suddenly becomes active in early morning hours",
+    "Classic testing pattern escalates from small probe to increasingly larger fraudulent charges",
+    "Card velocity spikes dramatically during overnight window versus normal daily usage",
+    "Purchases originate from distant location while billing address stays the same",
+    "Fraudster targets easy-to-monetize digital goods and subscription services exclusively",
+    "Every suspicious transaction occurs during hours the cardholder has never shopped",
+    "Purchase amounts are drastically higher than what this card spends during daytime"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_007",
+  "title": "Commute-Time Geographic Impossibility with Routine Amount Mimicry",
+  "pattern": "temporal_anomaly",
+  "narrative": "Fraudster exploits stolen card during the victim's predictable 7:45-8:15 AM weekday commute window, conducting CNP transactions while the cardholder is verifiably in transit. The attacker strategically times purchases at 7:52 AM on Tuesday matching the victim's historical commute-hour spending pattern ($4.50-$8.75 coffee/breakfast range), but the dist1 feature reveals 847 miles between this digital goods purchase (ProductCD=C) and the cardholder's addr1. Legitimate pattern shows consistent MCC 5814 (fast food) transactions with is_night=0 and txn_hour=7 at physical locations along the victim's route. The fraudulent transaction maintains temporal alignment but breaks geographic continuityâ€”P_emaildomain suddenly switches from victim's corporate domain to a disposable service, and card1_amt_zscore remains deceptively normal at 0.3 despite the impossible location shift occurring within the 18-minute commute window.",
+  "indicators": [
+    "Transaction occurs within victim's established commute window (7:45-8:15 AM weekdays) with txn_hour=7",
+    "dist1 shows 847+ miles between transaction and addr1 during 18-minute period with no flight/travel MCCs preceding",
+    "Amount mimics victim's commute-hour pattern ($4.50-$8.75) but ProductCD switches from W (physical merchant) to C (digital goods)",
+    "P_emaildomain changes from corporate domain (historical 94% of transactions) to disposable email service",
+    "card1_txn_count_1hr shows isolated single transaction vs. victim's pattern of 2-3 sequential commute purchases",
+    "MCC shifts from consistent 5814 (fast food) to 5816 (digital gaming) while maintaining routine timestamp",
+    "CVV match maintained but AVS failsâ€”billing address verification shows mismatch despite correct card security code"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A transaction occurs during the cardholder's normal morning commute time (7:45-8:15 AM) with a familiar amount ($4.50-$8.75), but the location is 847+ miles away and the email domain switches from the victim's corporate account to a disposable service. The purchase type also changes from physical fast food to digital goods despite matching the routine timestamp and amount pattern.",
+  "reasoning": "The fraudster is exploiting the victim's predictable routine to hide their activity in plain sight—they know the cardholder is in transit and unable to intervene, so they time their purchase to match normal breakfast spending. The geographic impossibility (traveling 847 miles in 18 minutes) combined with the email and product-type switches reveals this is credential theft, not the legitimate customer making their usual commute purchase.",
+  "indicator_explanations": [
+    "Transaction hits during the cardholder's usual morning commute time window",
+    "Card appears hundreds of miles away impossibly fast with no travel purchases",
+    "Purchase amount mimics morning coffee range but switches to digital goods",
+    "Email suddenly switches from work domain to disposable throwaway service",
+    "Only one transaction appears instead of the usual morning purchase cluster",
+    "Merchant type jumps from fast food to gaming while keeping commute timing",
+    "CVV is correct but billing address fails verification during the transaction"
+  ]
+}

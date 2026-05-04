@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_002",
+  "title": "Frankenstein Identity with Graduated Credit-Building Pattern",
+  "pattern": "synthetic_identity",
+  "narrative": "Fraudster combines stolen SSN of a real person with fabricated name and synthetic address, creating a Frankenstein identity that passes initial credit checks. Opens thin-file account with $500-800 credit limit. Follows disciplined 90-120 day aging strategy: makes 3-5 small purchases ($15-45) monthly at grocery/gas MCCs, pays minimum on-time to build payment history. After seasoning period, applies for 2-3 additional cards within 72 hours using same synthetic profile. Once approved with $2000-5000 aggregate limits, executes rapid bust-out: 8-12 CNP transactions totaling $4200-6800 within 48 hours at electronics/jewelry merchants, all shipping to freight forwarder address (dist1 >500km from billing). TransactionAmt jumps from historical $32 average to $480-750 range. All purchases occur during business hours (txn_hour 9-17) to mimic legitimate behavior, using free email domains (gmail.com, yahoo.com) with account age <6 months.",
+  "indicators": [
+    "card1_txn_count_30d increases from 4-5 to 11-14 in final 48 hours",
+    "card1_amt_zscore spikes above 8.5 (historical avg $32, final transactions $480-750)",
+    "dist1 exceeds 500km between billing addr1 and shipping address",
+    "P_emaildomain shows free provider with email account age <180 days",
+    "Velocity: 3 new credit applications within 72 hours after 90-day dormancy",
+    "ProductCD shifts from 'W' (wallet/small items) to 'C' (electronics) exclusively",
+    "All bust-out transactions are CNP with identical shipping R_addr1 matching known freight forwarder"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A thin-file account with 90-120 days of disciplined small purchases ($15-45 at grocery/gas) suddenly executes 8-12 high-value transactions ($480-750) within 48 hours, shipping to a distant freight forwarder address over 500km away. Transaction count jumps from 4-5 monthly to 11-14 in two days, with average purchase amount spiking from $32 to the $480-750 range.",
+  "reasoning": "The fraudster deliberately builds payment history to gain credit limit increases, then immediately maxes out all available credit by purchasing high-value resellable goods shipped to a consolidation point for export. The disciplined aging period followed by coordinated bust-out across multiple newly-approved cards reveals planned financial exploitation rather than a customer experiencing sudden legitimate need.",
+  "indicator_explanations": [
+    "Transaction frequency suddenly doubles in the final two days before vanishing",
+    "Purchase amounts explode to twenty times the account's normal spending level",
+    "Shipping destination is over 500 kilometers from the registered billing address",
+    "Email comes from free service and account was created less than six months ago",
+    "Three new credit lines requested within three days after months of silence",
+    "Purchases shift abruptly from low-value items to high-value electronics only",
+    "All card-not-present orders ship to same address flagged as freight forwarding hub"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_007",
+  "title": "App Store Micro-Transaction Card Validation Pattern",
+  "pattern": "card_testing",
+  "narrative": "Fraudsters exploit mobile app store $0.99 purchases as low-friction card validators before graduating to higher-value fraud. A compromised card is tested with 1-3 app store transactions at $0.99 each, often within ProductCD='C' (digital content). These validators typically occur between 2-6 AM (is_night=1) when cardholder monitoring is minimal. The attacker uses burner email domains (P_emaildomain contains 'tempmail', 'guerrillamail', or numeric patterns) and may cycle through multiple app store merchant IDs. Within 45-90 minutes of successful validation, the same card appears at high-risk MCCs (5816 gaming, 5967 direct marketing) with TransactionAmt jumping 50-200x. The card1_txn_count_24hr shows unnatural clustering: zero history, then 1-3 micro-transactions, then immediate high-value attempts. Dist1 values often exceed 3000km between validator and exploitation transactions, revealing geographic inconsistency impossible for legitimate users.",
+  "indicators": [
+    "TransactionAmt exactly $0.99 with ProductCD='C' during txn_hour 2-6 (is_night=1)",
+    "P_emaildomain matches disposable patterns: tempmail, guerrillamail, or contains 4+ consecutive digits",
+    "card1_txn_count_24hr shows 0â†’1-3â†’5+ pattern within 90-minute window",
+    "TransactionAmt spike from $0.99 to $50-200 within 45-90 minutes on same card1",
+    "dist1 exceeds 3000km between initial $0.99 transaction and subsequent high-value attempts",
+    "Merchant category code switches from app store to MCC 5816/5967 within 2-hour span",
+    "card1_amt_zscore jumps from -0.8 to +2.5 within single session"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple $0.99 app store purchases occur during nighttime hours (2-6 AM) using disposable email addresses, followed within 45-90 minutes by dramatically larger transactions ($50-200) from the same card at gaming or direct marketing merchants located thousands of kilometers away.",
+  "reasoning": "Criminals use cheap app store purchases as low-risk tests to validate stolen card details when cardholders are likely asleep, then immediately exploit confirmed active cards for high-value fraud before detection, with geographic and spending pattern jumps that no legitimate customer would exhibit.",
+  "indicator_explanations": [
+    "Tiny app store charge hits during deep-night hours when fraud is least monitored",
+    "Email account is disposable or machine-generated for single-use testing",
+    "Card goes from dormant to active with escalating transaction count within 90 minutes",
+    "Amount explodes from validation charge to substantial purchase in under two hours",
+    "Card location teleports thousands of kilometers between the test charge and cashout",
+    "Merchant type suddenly shifts from app store to digital goods or direct marketing",
+    "Transaction size leaps from below-average to highly abnormal within one session"
+  ]
+}

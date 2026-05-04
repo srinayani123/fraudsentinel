@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_012",
+  "title": "Residential Proxy Network Concealing Cross-Border Card Testing Campaign",
+  "pattern": "geo_anomaly",
+  "narrative": "Fraudster uses residential proxy service to mask systematic card testing across multiple merchant categories, creating false appearance of legitimate domestic activity. Over 48 hours, 23 cards are tested with $1-$3 authorization attempts at digital goods merchants (ProductCD=W, MCC 5816). All transactions show consistent US IP geolocation (addr1 matches cardholder billing) but display residential proxy signatures: dist1 values cluster in 3-5 specific ranges despite varied card1 values, P_emaildomain rotating between 6 temporary email providers, and DeviceInfo strings showing identical browser fingerprints across supposedly different cardholders. Successful tests (non-declined) immediately followed by $200-$400 purchases at same MID within 15-30 minutes. Card1_txn_count increases from 0 to 4+ for each card in single session, all during late evening hours (txn_hour 22-02) when legitimate cardholders unlikely to make multiple small digital purchases.",
+  "indicators": [
+    "23 unique card1 values with identical DeviceInfo hash tested in 48-hour window",
+    "dist1 values cluster in 3-5 narrow ranges (Â±50km) despite geographically dispersed billing addresses",
+    "P_emaildomain rotates through 6 temporary providers (guerrillamail, tempmail, 10minutemail) with fresh domains per card",
+    "Initial transactions $1-$3 followed by $200-$400 purchases within 15-30 minutes for approved cards",
+    "All activity concentrated in txn_hour 22-02 window across 2 consecutive nights",
+    "Card1_txn_count_24h jumps from 0 to 4+ for each tested card at single MID",
+    "100% of transactions show ProductCD=W at MCC 5816 despite varied cardholder profiles"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple cards tested with tiny $1-3 charges show identical device fingerprints and cluster in just 3-5 geographic distance ranges despite different billing addresses, followed by larger purchases within minutes for approved cards. Activity concentrates in late-night hours with temporary email domains rotating across cards.",
+  "reasoning": "Fraudster uses residential proxy network to make stolen cards appear domestically located while systematically testing validity—identical devices and clustered distances expose the single actor behind seemingly separate cardholders, with immediate exploitation of verified cards indicating criminal card testing operation.",
+  "indicator_explanations": [
+    "Two dozen different cards all tested through the same device fingerprint",
+    "Geographic locations cluster tightly despite cards belonging to widely separated billing addresses",
+    "Email addresses cycle through disposable services with fresh throwaway domains per card",
+    "Small test charges followed by large purchases minutes later on approved cards",
+    "All fraudulent activity happens during late-night hours over consecutive nights",
+    "Each card suddenly shows multiple transactions at same merchant after zero history",
+    "Every transaction is identical product type and merchant category despite varied cardholders"
+  ]
+}

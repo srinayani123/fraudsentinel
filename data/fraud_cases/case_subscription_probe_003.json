@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_003",
+  "title": "$0.99 Subscription Micro-Charge as Card Validation Before Fraud Monetization",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster initiates low-value subscription charges ($0.99-$2.99) to validate stolen card details before attempting high-value fraud. Pattern shows initial subscription charge to streaming/trial services (ProductCD='W' or 'C'), followed 12-72 hours later by rapid-fire transactions if card validates successfully. Initial charge uses temporary email domains (P_emaildomain in '10minutemail.com', 'guerrillamail.com') with mismatched billing/shipping addresses (dist1 > 500km). Card shows zero prior transaction history (card1_txn_count_1day = 0), then sudden burst of 8-15 transactions within 48 hours post-validation. Night-time initiation common (txn_hour between 1-5 AM cardholder timezone). AVS mismatch on initial probe (addr1 != issuer_addr1), but fraudster proceeds regardless. Chargeback filed 15-45 days later on initial subscription, after monetization complete.",
+  "indicators": [
+    "Initial transaction $0.99-$2.99 to subscription MCC (5815, 5968) with card1_txn_count_1day = 0",
+    "P_emaildomain matches disposable email services list (10minutemail, guerrillamail, temp-mail)",
+    "dist1 > 500km indicating billing/shipping address mismatch on probe transaction",
+    "8-15 follow-on transactions within 48 hours if initial charge succeeds (card1_txn_count_2day spike)",
+    "Initial probe during txn_hour 1-5 AM in cardholder's timezone (is_night = 1)",
+    "AVS response 'N' or 'A' on initial charge but fraudster does not abandon",
+    "Chargeback filed on original subscription 15-45 days post-transaction with reason code 4863/10.4 (fraud)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A brand-new card makes its first transaction as a $0.99-$2.99 subscription charge using a disposable email address and mismatched billing/shipping locations over 500km apart, then suddenly shows 8-15 additional transactions within 48 hours if the initial charge succeeds.",
+  "reasoning": "Criminals test stolen cards with trivial charges that cardholders rarely notice immediately, then exploit the validated card for high-value fraud before the victim detects the initial probe and requests a chargeback weeks later.",
+  "indicator_explanations": [
+    "Tiny first charge to streaming service from card with zero transaction history",
+    "Email is from known temporary/burner email provider often used for fraud testing",
+    "Billing and shipping locations are separated by impossible distance for legitimate subscriber",
+    "Card suddenly erupts with numerous purchases after the test charge clears successfully",
+    "First transaction happens in middle of night when cardholder is asleep",
+    "Address verification fails but attacker continues instead of abandoning the attempt",
+    "Original subscription generates fraud chargeback weeks later confirming stolen card usage"
+  ]
+}

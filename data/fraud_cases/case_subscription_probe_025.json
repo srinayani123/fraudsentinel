@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_025",
+  "title": "Cloud Storage Trial Chain with Capacity Escalation Testing",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster tests stolen card portfolio by registering multiple cloud storage trials (Dropbox, Google Drive, OneDrive) within 48-72 hours, each requiring $0.00-$0.99 authorization holds. Pattern shows systematic capacity tier probing: attacker attempts 50GB, 100GB, then 1TB trial conversions to gauge card limits before monthly billing cycles activate. Transactions cluster between 2-6 AM (is_night=1), use temporary email domains (guerrillamail, tempmail, 10minutemail in P_emaildomain), and show card1_txn_count_7d jumping from 0 to 8-12. Distinct signature: sequential MCC 5817 (digital goods) transactions with TransactionAmt=$0.50, $0.99, $1.00 pre-authorizations, all sharing addr1 but rotating through 3-5 different R_emaildomains. Geographic dist1 remains constant while IP geolocation shifts across VPN endpoints. Attacker exploits trial periods before first legitimate charge posts.",
+  "indicators": [
+    "8-12 MCC 5817 transactions within 72 hours on single card, all $0.00-$1.00 amounts",
+    "card1_txn_count_7d increases from 0 to 10+ with 70%+ occurring during txn_hour 2-6",
+    "P_emaildomain matches disposable email providers (10minutemail.com, guerrillamail.com, tempmail.org)",
+    "3-5 distinct R_emaildomains used while addr1 and dist1 remain constant",
+    "Sequential TransactionAmt pattern: $0.50, $0.99, $1.00 authorization holds within 6-hour window",
+    "ProductCD='W' (digital/online service) with 100% is_night=1 transaction clustering",
+    "card1_amt_zscore remains <0.5 (below typical spending) while velocity spikes"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple cloud storage trial signups within 48-72 hours showing $0.50-$1.00 authorization holds, all occurring at night (2-6 AM) with disposable email addresses and a single card rapidly accumulating 8-12 transactions. The attacker uses the same billing address while rotating through different merchant email domains, with sequential capacity tier attempts (50GB, 100GB, 1TB).",
+  "reasoning": "The fraudster is validating a stolen card's limits and testing which merchants will approve it before trial periods convert to paid subscriptions. The night-time clustering, disposable emails, and systematic capacity probing reveal deliberate reconnaissance rather than legitimate customer behavior exploring storage options.",
+  "indicator_explanations": [
+    "Card hits same cloud storage merchant repeatedly with penny-test transactions",
+    "Card goes from dormant to hyperactive with activity concentrated in dead-of-night hours",
+    "Email uses throwaway services designed to expire after account setup",
+    "Multiple receiving emails used while billing address stays locked to one location",
+    "Amounts follow classic trial-upgrade probe sequence testing authorization limits",
+    "All transactions are digital services purchased exclusively during overnight hours",
+    "Amounts stay suspiciously low while transaction frequency explodes abnormally"
+  ]
+}

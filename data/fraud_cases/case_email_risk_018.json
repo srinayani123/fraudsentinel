@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_018",
+  "title": "Resurrected Email Credential Return with Card Rotation Pattern",
+  "pattern": "email_risk",
+  "narrative": "A P_emaildomain flagged in fraud archives 90-180 days prior resurfaces with fresh payment credentials across multiple merchant categories. The email exhibits classic credential-testing behavior: initial $1-15 authorization probes at digital goods merchants (ProductCD='W'), followed by escalating transactions ($89, $247, $612) at electronics retailers within 48 hours. The pattern diverges from typical account takeover through card diversityâ€”four distinct card1 BINs paired with the same compromised email, each showing first-use characteristics. TransactionAmt progression follows geometric growth (3x, 2.5x jumps) rather than linear increases. Distance mismatches appear systematically: dist1 values exceeding 2500km between P_emaildomain geolocation and billing addr1 on 80% of attempts. The resurrected email bypasses initial fraud filters due to dormancy period, exploiting the gap between fraud flag expiration and permanent blacklisting in merchant risk databases.",
+  "indicators": [
+    "P_emaildomain matches confirmed fraud case from 90-180 day historical window",
+    "4+ unique card1 values paired with single email within 72 hours, each first transaction for that BIN",
+    "TransactionAmt escalation: initial probes $1-15, then jumps to $89+, $247+, $612+ within 48 hours",
+    "dist1 distance between email geolocation and addr1 exceeds 2500km on 75%+ of transactions",
+    "card1_txn_count_24h = 1 for each new card introduction (fresh credential pattern)",
+    "ProductCD switches from 'W' (digital) to 'C' (electronics) after successful low-value authorizations",
+    "Geometric TransactionAmt growth rate 2.5x-3x between successive approved purchases"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "An email address previously flagged for fraud 3-6 months ago reappears with multiple new credit cards (4+ different card numbers in 72 hours), starting with small test charges under $15 at digital merchants then rapidly escalating to $600+ purchases at electronics stores with transaction amounts growing 2.5-3x each time.",
+  "reasoning": "Fraudsters revive old compromised email credentials after the initial fraud flag expires, cycling through freshly stolen card numbers to maximize approval rates before merchants connect the pattern—the geometric spending increases and systematic distance mismatches (2500+ km between email location and billing address) reveal deliberate credential testing rather than legitimate shopping behavior.",
+  "indicator_explanations": [
+    "Email address was flagged in fraud cases three to six months ago",
+    "Single email burns through multiple fresh cards in rapid succession",
+    "Spender tests limits with tiny amounts then rockets to high-dollar purchases",
+    "Billing address is thousands of miles from email's geographic registration point",
+    "Every card appears exactly once in 24 hours then vanishes from dataset",
+    "Fraudster pivots from low-risk digital goods to high-value physical electronics",
+    "Purchase amounts multiply aggressively after each successful authorization goes through"
+  ]
+}

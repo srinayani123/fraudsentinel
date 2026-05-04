@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_008",
+  "title": "Serial Dispute Abuser with Escalating Transaction Values and Delivery Confirmation Gap",
+  "pattern": "friendly_fraud",
+  "narrative": "Customer establishes trust through 8-12 small purchases ($15-$45) over 45-60 days with same card1 and addr1, then begins disputing delivered physical goods (ProductCD='W') claiming non-receipt. Pattern shows card1_chargeback_count increases from 0 to 4-6 over 90 days while card1_successful_txn_count remains steady at 15-20. Disputed transactions cluster at $120-$280 range, exactly 18-25 days after purchase (outside immediate fraud window but within chargeback rights). Same P_emaildomain and R_emaildomain match across all orders. TransactionAmt progression shows clear step-up: initial purchases avg $28, disputed purchases avg $187. Delivery tracking confirms receipt 2-3 days before dispute filed. Customer never contacts merchant before disputing, goes straight to issuer.",
+  "indicators": [
+    "card1_chargeback_count rises from 0 to 4+ over 90-day period while card1_successful_txn_count stays 15-20",
+    "TransactionAmt shows bimodal distribution: early purchases $15-$45, disputed transactions $120-$280",
+    "Dispute timing consistently 18-25 days post-purchase across multiple incidents",
+    "ProductCD='W' (physical goods) with addr1 and R_emaildomain unchanged across dispute history",
+    "card1_avg_amt_ratio between disputed vs non-disputed exceeds 4.5x",
+    "Zero merchant contact attempts before chargeback (no email/phone logs, verified via CRM)",
+    "card1_dispute_rate climbs to 25-35% of total transactions after initial trust-building period"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Customer makes 8-12 small purchases ($15-$45) with the same card over 45-60 days, then begins disputing larger orders ($120-$280) claiming non-receipt, despite delivery confirmation showing receipt 2-3 days before each dispute. Disputes consistently filed 18-25 days after purchase, with no merchant contact beforehand, pushing chargeback count from 0 to 4-6 while total successful transactions remain steady at 15-20.",
+  "reasoning": "The deliberate progression from trust-building small purchases to disputing higher-value items, combined with waiting exactly until delivery confirmation plus several days before filing chargebacks directly with the issuer, indicates intentional abuse of the chargeback system to obtain merchandise without payment. The consistent timing outside the immediate fraud window and avoidance of merchant resolution channels shows calculated exploitation rather than genuine delivery problems.",
+  "indicator_explanations": [
+    "Cardholder racks up multiple chargebacks while maintaining normal purchase activity",
+    "Early purchases are small but disputed amounts suddenly jump much higher",
+    "Cardholder waits nearly identical timeframes before filing each dispute",
+    "Same shipping address and email used across all disputed purchases",
+    "Disputed purchases are over four times larger than legitimate ones",
+    "Cardholder never contacts merchant before escalating directly to dispute",
+    "Dispute rate surges after building initial transaction history with smaller purchases"
+  ]
+}

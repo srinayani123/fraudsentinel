@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_006",
+  "title": "Session Hijack via Cookie Replay with Geographic Discontinuity",
+  "pattern": "account_takeover",
+  "narrative": "Fraudster captures session token after victim's legitimate login, then replays cookie from geographically distant IP within 12-45 minutes. Initial session shows normal browsing: 3-4 page views, cart additions under $85, matching historical addr1. Hijacked session immediately attempts high-value checkout ($420-$890) with same card1 but dist1 jumps 800+ miles, different device_id, and UserAgent switches from mobile to desktop. No re-authentication despite addr1 change. Fraudster rushes: time between login and first hijacked transaction averages 18 minutes, checkout completed in under 90 seconds with shipping address (R_emaildomain) differing from account email (P_emaildomain). Card1_txn_count_1day shows 1 legitimate + 1-2 fraudulent within same session window. Victim's card1_amt_zscore spikes from 0.3 to 2.8 within the hijacked transactions.",
+  "indicators": [
+    "dist1 increases by 800+ miles between same-session transactions within 45-minute window",
+    "device_id or UserAgent changes mid-session without re-authentication event",
+    "TransactionAmt jumps from sub-$85 browsing adds to $420+ checkout within same card1 session",
+    "P_emaildomain and R_emaildomain mismatch on first hijacked transaction after years of matching",
+    "Time from session start to high-value checkout under 20 minutes with checkout duration under 90 seconds",
+    "card1_amt_zscore increases from <0.5 to >2.5 between consecutive same-session transactions",
+    "No CVV re-entry or step-up authentication despite addr1 change triggering risk threshold"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A legitimate session shows normal browsing and small cart adds, then suddenly the same session cookie is used from 800+ miles away with a different device to rush through a high-value checkout in under 90 seconds, all without re-authentication.",
+  "reasoning": "The attacker stole the victim's session token and is racing against time before the victim notices or the session expires, using the hijacked access to make expensive purchases and ship to a different address controlled by the fraudster.",
+  "indicator_explanations": [
+    "Session jumps across impossibly distant locations within minutes of each other",
+    "Device fingerprint changes during active session without the user logging back in",
+    "Small browsing amounts suddenly spike to large checkout in same session",
+    "Email addresses stop matching after consistent pairing throughout cardholder history",
+    "Attacker races from session start to high-value purchase in under twenty minutes",
+    "Transaction amount explodes from normal range to unusually high within same session",
+    "No security challenge triggered despite risky address change during checkout"
+  ]
+}

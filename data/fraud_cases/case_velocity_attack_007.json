@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_007",
+  "title": "Batch Settlement Window Velocity Exploitation with Rapid MCC Rotation",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster exploits merchant batch settlement timing to maximize authorization approvals before fraud flags propagate. Attack concentrates 18-35 transactions within 90-minute window immediately preceding typical 11 PM EST batch cutoff. Transactions rotate across 4-6 different MCC codes (5411 grocery, 5912 pharmacy, 5499 misc food) at $47-89 each to avoid single-merchant velocity triggers. Card holder's normal monthly volume is $800-1200, but attacker pushes $1,850-2,400 in single evening. All transactions share identical P_emaildomain (temporary email service) and dist1 values under 15km despite MCC diversity suggesting geographic spread. TransactionAmt shows deliberate variance (no duplicate amounts) but card1_amt_zscore exceeds 4.2 for the session. Attack terminates exactly 8-12 minutes before historical batch time, suggesting automated script with settlement window intelligence.",
+  "indicators": [
+    "18-35 transactions compressed into 90-minute window before 11 PM batch settlement",
+    "Transaction volume 180-250% above cardholder's established monthly baseline within single session",
+    "MCC rotation across 4-6 categories (5411, 5912, 5499) with amounts $47-89 to fragment velocity detection",
+    "card1_amt_zscore > 4.2 for evening session despite individual amounts below $100",
+    "All transactions share identical P_emaildomain from temporary email service despite merchant diversity",
+    "dist1 values cluster under 15km radius contradicting MCC diversity that implies geographic spread",
+    "Abrupt transaction cessation 8-12 minutes before merchant's historical batch processing time"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A burst of 18-35 transactions totaling $1,850-2,400 occurs in a 90-minute window before 11 PM, with amounts varying between $47-89 across different merchant categories (grocery, pharmacy, food) but all sharing the same temporary email domain and clustering within 15km geographically. The activity stops abruptly 8-12 minutes before the typical merchant batch settlement time.",
+  "reasoning": "The attacker is racing against settlement deadlines to maximize approvals before fraud detection systems update overnight, using merchant category rotation and varied transaction amounts to disguise velocity while the concentrated timing, temporary email, and automated cutoff reveal coordinated exploitation of batch processing windows.",
+  "indicator_explanations": [
+    "Attacker races against the clock, flooding transactions before daily batch closes",
+    "Card suddenly processes double or triple its normal monthly spend in one session",
+    "Purchases hop between grocery, drug, and misc retail to avoid single-category flags",
+    "Total evening spending spikes abnormally high despite each purchase looking individually small",
+    "Same throwaway email appears across merchants who should have different customer profiles",
+    "All purchases happen within tiny area despite hitting stores normally spread across town",
+    "Fraudster stops exactly when they know the merchant submits batch to avoid real-time blocks"
+  ]
+}

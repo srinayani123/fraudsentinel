@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_015",
+  "title": "Sequential Gift Card Liquidation with Incremental Amount Testing",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster executes rapid-fire gift card purchases starting with small amounts to verify card validity before escalating. Over 18-35 minutes, they complete 8-14 transactions ranging from $24.99 initial test to $499.99 ceiling amounts, all targeting ProductCD='W' (digital gift cards). Pattern shows methodical incremental steps: $25, $50, $100, $250, $500, often repeating successful amounts. Transactions cluster at same merchant (single MID) with identical billing/shipping addresses (dist1=0). Card velocity explodes from baseline zero to 12+ transactions in 30 minutes. Night-time execution common (txn_hour between 1-5 AM in cardholder timezone) to delay victim detection. Email domain often free provider (P_emaildomain='gmail.com' or 'yahoo.com') newly associated with card. Chargebacks typically filed 36-72 hours later when legitimate cardholder reviews statement.",
+  "indicators": [
+    "card1_txn_count_30min jumps from 0 to 8+ transactions all ProductCD='W'",
+    "TransactionAmt shows incremental ladder pattern: $24.99, $49.99, $99.99, $249.99, $499.99",
+    "All transactions at single MID within 18-35 minute window",
+    "dist1=0 (billing matches shipping) but addr1 newly seen with card1 in last 24 hours",
+    "card1_amt_zscore exceeds 4.5 compared to card's 90-day transaction history",
+    "75%+ of transactions occur during txn_hour 1-5 AM in card's typical timezone",
+    "P_emaildomain is free provider with account age under 7 days based on email velocity features"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card executes 8-14 gift card purchases in under 35 minutes with amounts climbing in a ladder pattern from $25 to $500, all at the same merchant with identical billing and shipping addresses during overnight hours. The card's transaction velocity spikes from zero to 12+ purchases within 30 minutes, and the email is a newly created free provider account.",
+  "reasoning": "The fraudster is testing a stolen card number with small amounts to confirm it works, then rapidly maximizing the haul before the legitimate owner notices, choosing digital gift cards because they're instantly deliverable and easily resold. The overnight timing and new email deliberately delay detection while the criminal liquidates the card's available balance.",
+  "indicator_explanations": [
+    "Card suddenly used for burst of digital wallet transactions after being dormant",
+    "Purchase amounts escalate in predictable steps testing card limits upward",
+    "All transactions hit the same merchant in rapid succession",
+    "Shipping address matches billing but card never sent anything there before",
+    "Transaction sizes dwarf what this cardholder normally spends",
+    "Activity clusters in the dead of night when cardholder typically sleeps",
+    "Email tied to newly created free account raising identity concerns"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "case_device_takeover_014",
+  "title": "VPN-Masked Device Takeover with Clean Transaction Behavior",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster compromises cardholder credentials and operates from their own device using VPN or proxy services to mask geographic origin. Transaction amounts, timing, and velocity appear completely normal for the cardholder's spending profile. Email addresses match expected patterns. However, device fingerprint analysis reveals network routing anomalies, IP reputation flags, and device-location mismatches that expose the concealed infrastructure. The fraudster mimics behavioral norms but cannot hide the network-layer obfuscation required to avoid geographic detection. D-field distributions show proxy characteristics while identity verification scores flag inconsistencies between claimed and actual network origins.",
+  "indicators": [
+    "D1 = 0 indicating first-time pairing between device fingerprint and card",
+    "D10 > 200 (p90 threshold), elevated proxy/VPN risk score",
+    "D15 > 320 (p90+ range), IP reputation score flagging anonymization service",
+    "card1_amt_zscore between -1.2 and +1.0, amount within cardholder normal range",
+    "D4 < 10, minimal device-card historical interaction counter",
+    "V200 > 5.8, Vesta engineered feature detecting network routing anomaly"
+  ],
+  "indicator_explanations": [
+    "The device has never been seen with this card before",
+    "Device risk score indicates high probability of proxy or VPN usage",
+    "IP address reputation flags commercial anonymization or tunneling service",
+    "Transaction amount fits the cardholder's typical spending pattern",
+    "Device shows virtually no prior transaction history with this card",
+    "Engineered model feature detects unusual network routing or connection pattern"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Transaction behavior appears completely normal for the cardholder—correct amounts, timing, and email patterns—but device fingerprint analysis reveals VPN or proxy masking. Network-layer obfuscation exposes the fraudster despite behavioral mimicry.",
+  "reasoning": "Legitimate cardholders rarely use commercial VPN or proxy services for routine purchases, especially when all other behavioral signals are normal. The combination of clean transaction patterns with network anonymization infrastructure indicates credential theft where the fraudster attempts to conceal their true device location."
+}

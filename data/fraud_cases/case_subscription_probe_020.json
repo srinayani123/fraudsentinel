@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_020",
+  "title": "Monthly Wellness Subscription Card Liveness Validation Chain",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster establishes recurring $4.99 monthly subscription to health/wellness merchant (MCC 5817) to maintain card validation over extended period. Initial authorization on stolen card credentials uses temporary email domain (guerrillamail, tempmail). Card successfully processes same $4.99 charge on 28th of each month for 3-6 months while fraudster monetizes card elsewhere for high-value purchases. Low-friction merchant auto-renews without CVV re-verification. Pattern surfaces when cardholder disputes accumulated $29.94-$34.93 in subscription charges months later, revealing card remained active entire period. Fraudster exploits merchant's lenient retry logic and absence of behavioral monitoring on sub-$5 recurring transactions. Transaction metadata shows consistent device_id but rotating IP addresses across billing cycles, indicating automated renewal monitoring rather than legitimate subscriber behavior.",
+  "indicators": [
+    "Identical $4.99 TransactionAmt recurring exactly 28-31 days apart for 3+ cycles",
+    "P_emaildomain matches disposable provider list (guerrillamail.com, tempmail.net, 10minutemail.com)",
+    "card1_txn_count_30d shows 8-15 other merchants between subscription renewals",
+    "ProductCD='W' (wellness/subscription) with MCC 5817, no CVV verification after initial transaction",
+    "device_id consistent across renewals but dist1 (distance between billing/IP location) varies 500+ km per cycle",
+    "txn_hour for renewals always 02:00-04:00 UTC suggesting automated retry window",
+    "card1_amt_zscore shows bimodal distribution: $4.99 recurring plus $200-$800 purchases at unrelated MCCs"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A stolen card processes the same $4.99 wellness subscription charge on the 28th of each month for 3-6 months, using a disposable email address and consistent device ID but rotating IP locations 500+ km apart each cycle, while 8-15 other merchants appear between renewals.",
+  "reasoning": "The fraudster maintains a low-value recurring charge to confirm the card stays active for months while making high-value purchases elsewhere, exploiting merchants that don't re-verify CVV and don't monitor sub-$5 subscriptions for fraud signals.",
+  "indicator_explanations": [
+    "Same tiny charge repeats like clockwork every month to test card validity",
+    "Email address comes from throwaway temporary mail services favored by fraudsters",
+    "Card shows legitimate-looking activity at multiple other merchants between test charges",
+    "Wellness subscription skips security checks after first payment making renewals invisible",
+    "Device stays the same but billing location jumps hundreds of miles each renewal",
+    "Renewals always fire during dead-of-night hours consistent with automated bot behavior",
+    "Card alternates between tiny subscription charges and large unrelated purchases elsewhere"
+  ]
+}

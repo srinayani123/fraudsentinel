@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_007",
+  "title": "Catch-All Domain Synthetic Identity Farm with Incremental Prefix Testing",
+  "pattern": "email_risk",
+  "narrative": "Fraudster exploits catch-all mail server (e.g., obscure .tk or .ml domains) to generate unlimited synthetic identities without email validation. Pattern shows 15-40 transactions over 3-7 days using same P_emaildomain but systematically varying prefixes (user001@, user002@, etc.). Each prefix tied to different card1 value, suggesting BIN testing with synthetic accounts. TransactionAmt clusters tightly $45-$89 (below fraud review thresholds). All transactions share identical dist1 (847 miles) and addr1, indicating single shipping drop point. R_emaildomain always null (digital goods, ProductCD=W). Velocity spikes: 8-12 transactions per day from same IP subnet, all during txn_hour 2-6 AM EST. No legitimate business uses catch-all domains with sequential username patterns and distance/address invariance.",
+  "indicators": [
+    "P_emaildomain is catch-all enabled (.tk, .ml, .ga, .cf TLDs), R_emaildomain null across all transactions",
+    "15-40 transactions over 3-7 days with identical P_emaildomain but systematically incremented prefixes (user001@, user002@, sequential pattern)",
+    "Each unique email prefix paired with distinct card1 value, card1_txn_count_24h = 1 for all cards",
+    "TransactionAmt variance <$50 across sequence, mean $45-$89, all ProductCD=W (digital goods)",
+    "dist1 identical across all transactions (single constant like 847 miles), addr1 invariant",
+    "Temporal clustering: 8-12 transactions daily during txn_hour 2-6 AM, is_night=1",
+    "card1_amt_zscore uniformly low (<0.5) due to first-use cards with similar amounts"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single domain with catch-all email (often obscure TLDs like .tk or .ml) generates 15-40 transactions over several days, each using a sequentially numbered email prefix (user001@, user002@) paired with a different card but identical shipping distance and address. All transactions are for digital goods in a tight dollar range ($45-$89) and cluster during early morning hours.",
+  "reasoning": "The fraudster is mass-creating synthetic identities to test stolen card numbers while staying under review thresholds, using a catch-all domain to bypass email verification and a single drop point to collect digital goods. Sequential prefixes with invariant shipping details reveal coordinated abuse rather than organic customer behavior.",
+  "indicator_explanations": [
+    "Email domain is disposable throwaway service with no billing contact verification",
+    "Email addresses follow automated sequential numbering pattern suggesting script-generated accounts",
+    "Every new email gets matched with a fresh card number",
+    "Purchase amounts stay suspiciously uniform suggesting automated testing of card validity",
+    "All transactions originate from identical geographic coordinates despite different cards",
+    "Activity clusters in overnight hours when fraud monitoring is lightest",
+    "Spending amounts look normal because cards are brand-new with no history"
+  ]
+}

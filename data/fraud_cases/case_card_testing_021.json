@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_021",
+  "title": "Sub-Dollar Digital Goods Probe with Immediate Card Abandonment Pattern",
+  "pattern": "card_testing",
+  "narrative": "Fraudster tests stolen card validity using single micro-transaction ($0.50-$1.99) at digital goods merchant (ProductCD='W' or 'C'), typically gaming platforms, VPN services, or digital download sites with MCC 5816/5815. Transaction occurs outside victim's typical spending hours (is_night=1 when card1_night_txn_ratio <0.05). Card shows zero prior history with merchant category (card1_mcc5816_count_24h=0). Email domain is temporary/disposable (P_emaildomain matches known temp provider list: 'guerrillamail.com', 'temp-mail.org'). Distance between billing and IP geolocation exceeds 500km (dist1 >500). Card never used again at ANY merchant after successful authorizationâ€”card1_txn_count_7d remains at 1. This single-shot validation allows fraudster to classify card as 'live' for resale or high-value fraud without triggering multi-transaction velocity alerts. Chargeback filed 45-90 days later when cardholder reviews statement.",
+  "indicators": [
+    "TransactionAmt between $0.50-$1.99 at digital goods merchant (ProductCD='W' or MCC 5816/5815)",
+    "is_night=1 when card1_night_txn_ratio historically <0.05 (transaction outside normal hours)",
+    "P_emaildomain matches temporary email provider list (guerrillamail, temp-mail, 10minutemail)",
+    "dist1 >500km (billing address to IP geolocation mismatch exceeds 500 kilometers)",
+    "card1_mcc5816_count_24h=0 and card1_digital_goods_history=0 (first-ever digital goods purchase)",
+    "card1_txn_count_7d=1 and remains at 1 (card never used again after authorization)",
+    "Transaction time between 02:00-05:00 local when card1_txn_hour_mode indicates daytime usage (09:00-17:00)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single micro-transaction ($0.50-$1.99) at a digital goods merchant occurs outside the cardholder's normal hours using a disposable email, with billing address over 500km from the transaction IP location. The card is never used again after this one authorization.",
+  "reasoning": "Fraudsters test stolen cards with tiny purchases at low-scrutiny digital merchants to confirm the card is active before selling it or using it for larger fraud. The one-and-done pattern, temporary email, and geographic mismatch show the criminal is validating card details, not making a legitimate purchase.",
+  "indicator_explanations": [
+    "Tiny purchase at digital storefront used to verify the card works",
+    "Transaction hits at odd hours when cardholder normally sleeps",
+    "Email address comes from a throwaway service that expires quickly",
+    "Buyer's claimed location is hundreds of miles from their actual IP",
+    "First time this card has ever touched a digital goods merchant",
+    "Card gets tested once and never surfaces again after approval",
+    "Purchase happens during graveyard shift when cardholder typically shops during business hours"
+  ]
+}

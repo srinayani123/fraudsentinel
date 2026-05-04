@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_023",
+  "title": "Post-Delivery Dispute with Conflicting Digital Footprint Evidence",
+  "pattern": "friendly_fraud",
+  "narrative": "Cardholder purchases $180-$450 retail items (ProductCD='W' apparel or electronics) with standard shipping, then files 'item not received' chargeback 45-75 days post-transaction despite delivery confirmation. Pattern shows legitimate purchase behavior initially: matching billing/shipping addresses (dist1=0), email domain matches historical profile (P_emaildomain consistent with card1 history), transaction during normal hours (txn_hour 10-20), and card1_txn_count_7day=1-3 indicating non-velocity play. However, dispute timing clusters suspiciously at 73-78 days (approaching chargeback deadline window), and cardholder often has 2-4 prior 'not received' claims across different merchants within 180-day window. Cross-merchant analysis reveals identical shipping address (addr1) used successfully for 8-12 other deliveries during same period without dispute, creating forensic contradiction.",
+  "indicators": [
+    "TransactionAmt between $180-$450 with ProductCD='W' and standard shipping method",
+    "dist1=0 indicating matching billing and shipping addresses at purchase time",
+    "Chargeback filed 73-78 days post-transaction, near dispute deadline window",
+    "Cardholder history shows 2-4 'item not received' disputes across merchants within 180 days",
+    "Same addr1 received 8-12 successful deliveries from other merchants during dispute period",
+    "card1_txn_count_7day=1-3 and txn_hour between 10-20, suggesting legitimate purchase pattern",
+    "P_emaildomain consistency with card1 historical profile, no account takeover indicators"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A cardholder makes a legitimate-looking purchase with matching billing and shipping addresses, receives the item, then files an 'item not received' chargeback 73-78 days later—right before the dispute deadline expires. The same shipping address successfully received 8-12 other deliveries during this period without any issues.",
+  "reasoning": "The cardholder is exploiting chargeback protections to get a refund while keeping the merchandise. The strategic timing near the deadline and contradictory delivery history at the same address reveal intentional false claims rather than genuine delivery problems.",
+  "indicator_explanations": [
+    "Mid-range purchase with physical goods and regular delivery chosen",
+    "Billing and shipping addresses match at checkout, no mismatch flag",
+    "Dispute filed close to the deadline window, classic strategic timing",
+    "Customer has pattern of claiming packages never arrived across multiple stores",
+    "Same address successfully received many other deliveries during the complaint timeframe",
+    "Purchase timing and frequency look normal, not suspicious transaction behavior",
+    "Email account is stable and consistent, rules out account compromise"
+  ]
+}

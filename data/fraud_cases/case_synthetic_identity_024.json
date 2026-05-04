@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_024",
+  "title": "Authorized User Bust-Out on Thin-File Primary Cardholder Account",
+  "pattern": "synthetic_identity",
+  "narrative": "A synthetic identity with minimal credit history (2-4 months, $500-800 credit limit) adds an authorized user who immediately dominates account activity. Within 72 hours of AU addition, transaction velocity jumps from 1-2 monthly purchases to 8-15 transactions totaling $1,200-$2,400. The AU card shows distinct behavioral signatures: different P_emaildomain than primary (often disposable domains like tempmail or guerrillamail), transactions cluster in high-risk MCCs (5732 electronics, 5944 jewelry), and purchases occur during primary's inactive hours (txn_hour differs by 6+ hours from primary's historical pattern). Card1_txn_count_7d spikes 400-600% while card1_amt_zscore exceeds 3.5. The primary account maintains small stabilization payments ($25-50) to avoid immediate flags while AU drains available credit. Distinct dist1 values (300+ miles) between primary and AU shipping addresses suggest coordination. Pattern culminates in charge-off within 45-60 days as neither party responds to overlimit notices.",
+  "indicators": [
+    "card1_txn_count_7d increases 400-600% within 72 hours of authorized user addition",
+    "AU card shows P_emaildomain from disposable providers (tempmail, guerrillamail, 10minutemail) while primary uses established domain",
+    "TransactionAmt concentration in MCCs 5732, 5944, 5399 totaling 75-95% of AU spend",
+    "txn_hour distribution differs by 6+ hours between primary cardholder and AU usage patterns",
+    "card1_amt_zscore exceeds 3.5 for AU transactions against primary's thin historical baseline",
+    "dist1 between primary addr1 and AU shipping addresses consistently 300+ miles",
+    "Primary account shows small stabilization payments ($25-50) coinciding with AU spend acceleration"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A new credit account with minimal history suddenly adds an authorized user whose card immediately generates 8-15 high-value transactions in electronics and jewelry within 72 hours, while the primary cardholder makes only small maintenance payments. The AU uses a disposable email domain, ships to addresses 300+ miles away, and transacts during completely different hours than the primary's established pattern.",
+  "reasoning": "Fraudsters create a synthetic identity to obtain credit, then add a coordinated accomplice as an authorized user to rapidly extract maximum value before the account charges off. The primary makes token payments to delay detection while the AU systematically drains available credit through high-risk purchases, with no intent from either party to repay the debt.",
+  "indicator_explanations": [
+    "Transaction volume explodes immediately after authorized user is added to account",
+    "Authorized user employs throwaway email while primary holder uses legitimate address",
+    "Spending concentrates in electronics and jewelry categories typically targeted for resale",
+    "Authorized user transacts during completely different hours than primary cardholder",
+    "Authorized user charges amounts far exceeding primary cardholder's spending history",
+    "Authorized user ships purchases hundreds of miles from primary cardholder's address",
+    "Small payments keep account current while authorized user rapidly maxes out"
+  ]
+}

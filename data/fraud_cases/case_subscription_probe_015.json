@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_015",
+  "title": "Cloud Storage Trial Abuse with Graduated Payment Testing",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster exploits cloud storage providers offering 30-day trials with tiered plans by cycling through multiple trial signups using compromised cards. Pattern begins with $0.00 authorization holds for trial activation, followed by immediate plan upgrades to premium tiers ($9.99, $19.99, $49.99) within 2-4 hours to test card validity and limits. Fraudster registers 8-15 accounts per card using email variations at disposable domains (tempmail.com, guerrillamail.com) with identical addr1 but rotating dist1 values between 150-800km. All signups occur during 22:00-04:00 UTC window to evade real-time review. ProductCD remains 'S' for service subscriptions. After successful premium upgrades, accounts are either sold on dark web marketplaces or used for data exfiltration before trial expiration. Card abandonment occurs at day 28-29 before legitimate billing cycle begins.",
+  "indicators": [
+    "Initial $0.00 authorization followed by $9.99-$49.99 charges within 240 minutes on same card",
+    "card1_txn_count_24h between 8-15 with 100% to same merchant MCC 5734 (computer software)",
+    "P_emaildomain matches known disposable providers with 12+ domain variations per card1",
+    "All transactions have is_night=1 and txn_hour between 22-04 UTC",
+    "addr1 constant but dist1 varies 150-800km across transactions suggesting VPN/proxy rotation",
+    "card1_amt_zscore spikes from 0.0 to 3.5+ within first 4-hour window",
+    "ProductCD='S' with transaction sequence: $0.00, $9.99, $19.99, $49.99 in ascending order"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple trial signups (8-15) on the same card within 24 hours, all to the same cloud storage merchant during overnight hours (22:00-04:00 UTC), starting with $0 authorizations then quickly upgrading to premium tiers ($9.99 to $49.99) within 2-4 hours. Email addresses use disposable domains with variations, billing address stays constant but distance values jump 150-800km between transactions suggesting VPN use.",
+  "reasoning": "The fraudster is testing stolen card limits and validity through low-risk trial abuse, cycling through multiple accounts to maximize extraction before the legitimate cardholder notices or the trial period ends. The overnight timing, disposable emails, VPN rotation, and systematic price escalation reveal intentional evasion of detection rather than a genuine customer trying different service tiers.",
+  "indicator_explanations": [
+    "Card starts with free trial then escalates to paid tiers rapidly",
+    "Card hits the same software merchant repeatedly in a single day",
+    "Email address cycles through dozens of throwaway domain variants per card",
+    "All activity happens during overnight hours when monitoring is minimal",
+    "Billing address stays fixed but location signals hop across distant cities",
+    "Spending amount suddenly jumps far beyond the card's early baseline",
+    "Service purchases follow a stair-step pattern testing progressively higher price points"
+  ]
+}

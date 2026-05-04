@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_009",
+  "title": "OAuth Token Hijack with Immediate High-Value Digital Goods Pivot",
+  "pattern": "account_takeover",
+  "narrative": "Attacker compromises OAuth tokens from a legitimate third-party budgeting or rewards app, gaining API-level account access without triggering password reset alerts. Within 2-6 hours of token theft, fraudster pivots the account to purchase high-value digital goods ($299-$899 per transaction) that weren't part of the victim's historical pattern. Typical sequence: 1-2 small test transactions under $15 to verify token validity, followed by 3-8 rapid purchases of gift cards or gaming currency. The P_emaildomain remains unchanged (victim's Gmail/Yahoo), but device fingerprints shift entirelyâ€”new card1 value, different addr1, dist1 jumping from historical 0-50km to 800+ km. ProductCD switches abruptly from physical goods (W) to digital (C). Transactions cluster in 45-90 minute windows during is_night=1 periods when legitimate user is typically inactive, with card1_txn_count_24h spiking from baseline 0-2 to 6-12.",
+  "indicators": [
+    "card1_txn_count_24h increases from historical baseline <3 to 6-12 transactions within 90 minutes",
+    "ProductCD switches from historical 'W' (physical) to exclusively 'C' (digital goods) for $299-$899 amounts",
+    "dist1 (distance from billing address) jumps from typical 0-50km to 800+ km between consecutive sessions",
+    "Transaction cluster: 1-2 sub-$15 test purchases followed by 3-8 transactions in 45-90 minute window",
+    "P_emaildomain unchanged but addr1 and device fingerprint (card1) completely new values",
+    "Activity occurs during is_night=1 with txn_hour 1-5 AM, outside victim's historical active hours (9 AM-10 PM)",
+    "card1_amt_zscore exceeds 3.5 due to $299-$899 transactions versus victim's typical $15-$85 range"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Account shows unchanged email but completely new device fingerprint and billing address, with distance from billing address jumping from under 50km to over 800km. A few small test transactions under $15 are followed by 6-12 rapid purchases of high-value digital goods ($299-$899) in a 45-90 minute window during overnight hours, replacing the victim's normal pattern of physical goods under $85.",
+  "reasoning": "The attacker used stolen OAuth tokens to access the account without triggering password alerts, then exploited API-level control to quickly liquidate the account into untraceable digital goods before the victim notices. The test transactions verify token validity, while the overnight timing and geographic shift indicate someone else is operating the account during the victim's typical sleep hours.",
+  "indicator_explanations": [
+    "Card suddenly erupts from quiet activity to concentrated burst of purchases",
+    "Spending pattern abandons physical items for expensive digital downloads only",
+    "Purchases originate from completely different geographic region than billing address",
+    "Small test charges validate the card before rapid expensive transaction spree",
+    "Email stays same but address and device completely replaced with attacker's",
+    "Activity happens in the middle of the night outside victim's normal shopping hours",
+    "Transaction amounts wildly exceed the victim's typical spending comfort zone"
+  ]
+}

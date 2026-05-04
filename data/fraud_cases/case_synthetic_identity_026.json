@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_026",
+  "title": "Virtual Mailbox Synthetic Identity with Micro-Deposit Account Seasoning",
+  "pattern": "synthetic_identity",
+  "narrative": "A synthetic identity constructed with a commercial mail receiving agency (CMRA) address in the 33186 ZIP exploits a seven-month account aging strategy before initiating bust-out. The perpetrator registers with a Gmail account using numerical suffix pattern (firstname.lastname####@gmail.com), passes initial $24.99 subscription ProductCD=W purchase, then executes five months of dormancy followed by ten weeks of micro-transactions averaging $8-$15 to build positive payment history. At month seven, the pattern shifts: card1_txn_count_1day jumps from 0.2 average to 11 transactions totaling $4,847 across electronics MCCs 5732 and 5999. The addr1 hash matches twenty-three other accounts created in preceding ninety days, all sharing the R_emaildomain structure and identical dist1 values of 0.0 kilometers between billing and shipping, consistent with single-location mail drop operations.",
+  "indicators": [
+    "addr1 hash appears in 15+ accounts created within 90-day window",
+    "dist1 equals 0.0km for 90%+ of transactions despite different stated shipping addresses",
+    "Account dormancy period of 120-180 days between first transaction and velocity spike",
+    "card1_txn_count_1day increases from <1 baseline to 8+ transactions in single day",
+    "P_emaildomain and R_emaildomain both generic free providers with numerical suffix patterns (4+ digits)",
+    "Initial transactions cluster in low-risk categories (streaming services, digital subscriptions <$30) followed by abrupt shift to electronics MCC 5732/5999",
+    "TransactionAmt pattern shows sustained micro-transactions ($5-$20) for 60+ days then sudden $500+ purchases"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A fake identity uses a mail drop address shared by 15+ other accounts, stays quiet for 4-6 months with small purchases under $20, then suddenly makes 8+ transactions in one day totaling thousands in electronics while all shipping stays at the same location.",
+  "reasoning": "Fraudsters build credibility through patient low-value activity to pass automated checks, then cash out once the account looks legitimate—the shared address, identical distance patterns, and coordinated timing across multiple accounts reveal an organized identity fabrication scheme rather than genuine customer behavior.",
+  "indicator_explanations": [
+    "Same address is recycled across many newly created accounts in short timeframe",
+    "Physical location never changes despite claiming different shipping destinations each time",
+    "Account sits idle for months before suddenly erupting with transaction activity",
+    "Daily transaction rate explodes from dormant baseline to rapid-fire burst pattern",
+    "Both billing and shipping emails use generic providers with suspicious number strings",
+    "Spending starts innocent with cheap subscriptions then pivots hard to expensive electronics",
+    "Purchase amounts stay tiny for two months then suddenly jump to high-dollar items"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_014",
+  "title": "Post-Delivery Dispute Pattern: High-Value Electronics with Delayed Chargeback Filing",
+  "pattern": "friendly_fraud",
+  "narrative": "A cardholder purchases premium electronics ($800-$2,500 range, ProductCD 'W' for electronics) using legitimate credentials with clean payment history. Transaction clears with matching AVS and CVV. Customer receives product, confirmed by delivery signature and 14-30 day usage window. Cardholder then files 'unauthorized transaction' dispute 45-70 days post-purchase, typically after return window closes. Pattern shows card1_txn_count_7day of 1-2 (no velocity flags), addr1 matches billing on file, and dist1 under 50km. Device fingerprint shows repeat logins to merchant account during dispute period. TransactionAmt consistently exceeds card1_amt_mean by 2.8-4.5 standard deviations (elevated card1_amt_zscore). P_emaildomain matches historical account email. This represents classic buyer's remorse disguised as fraud after product depreciation or financial hardship, exploiting the ambiguity in Regulation E timelines.",
+  "indicators": [
+    "TransactionAmt between $800-$2,500 for ProductCD 'W' electronics category",
+    "Chargeback filed 45-70 days post-transaction, beyond merchant return policy window",
+    "card1_amt_zscore of 2.8-4.5 (significantly higher than cardholder's typical spending)",
+    "card1_txn_count_7day of 1-2 with no velocity anomalies at time of purchase",
+    "dist1 under 50km and addr1 matches cardholder's verified billing address",
+    "Device fingerprint shows 3+ account logins between delivery confirmation and dispute filing",
+    "Clean AVS and CVV match at transaction time with P_emaildomain consistent with account history"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Customer buys high-value electronics ($800-$2,500) with clean payment credentials and confirmed delivery, then files an 'unauthorized transaction' dispute 45-70 days later—well after the return window closes but within chargeback rights. The purchase amount is 2.8-4.5 standard deviations above their normal spending, and device logs show they logged into their account multiple times after receiving the product.",
+  "reasoning": "This is friendly fraud where the customer deliberately waits out the merchant's return period before disputing, likely due to buyer's remorse, financial hardship, or product depreciation. The delayed timing and account activity after delivery prove they received and accepted the item, then strategically exploited chargeback protections to get a refund they wouldn't qualify for through legitimate channels.",
+  "indicator_explanations": [
+    "High-value electronics purchase in the sweet spot for dispute abuse",
+    "Chargeback timing strategically waits out the merchant's return window",
+    "Purchase amount is much larger than this cardholder normally spends",
+    "Low transaction frequency shows no suspicious velocity at purchase time",
+    "Transaction originates from cardholder's legitimate home location",
+    "Account accessed multiple times after receiving the goods before disputing",
+    "All fraud checks passed cleanly showing authorized cardholder transaction"
+  ]
+}

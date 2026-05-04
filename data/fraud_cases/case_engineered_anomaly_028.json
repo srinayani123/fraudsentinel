@@ -1,0 +1,27 @@
+{
+  "id": "case_engineered_anomaly_028",
+  "title": "Session Cookie Sequence Anomaly with Clean Transaction Behavior",
+  "pattern": "engineered_anomaly",
+  "narrative": "Fraudster uses stolen card credentials within a compromised or spoofed browser session, manipulating cookie/session identifiers to appear as a continuing legitimate user session. The transaction amount, timing, and email all align with cardholder norms, masking the fraud from standard behavioral rules. However, Vesta's V-field engineered features — specifically V258 (session integrity score), V280 (cookie sequence hash), and V307 (session-device binding strength) — detect that the session/cookie fingerprint sequence deviates from the expected pattern for this card-device pairing. The V-fields encode multi-dimensional relationships between session tokens, device attributes, and temporal sequencing that cannot be decomposed into individual raw features. This pattern targets card-not-present merchants where session hijacking or cookie replay attacks allow fraudsters to inject unauthorized transactions into what appears to be an active legitimate browsing session.",
+  "indicators": [
+    "V258 > 0.72 (p90), elevated session integrity anomaly score",
+    "V280 between 4.5 and 7.2, cookie sequence hash indicates non-standard session progression",
+    "V307 < 0.15 (p10), weak session-device binding strength despite device match",
+    "D1 = 0 but id_02 shows device seen with other cards in prior 48h, first card-device pairing with reused device",
+    "card1_amt_zscore between -0.8 and +1.2, amount within cardholder's normal range",
+    "TransactionAmt < median for MCC, conservative amount selection masking fraud",
+    "V200 = 2 to 4, moderate Vesta feature indicating sequence complexity within normal bounds"
+  ],
+  "indicator_explanations": [
+    "Engineered session integrity metric shows the session behaves differently than expected for this context",
+    "Cookie fingerprint progression does not match typical sequential browsing patterns for legitimate users",
+    "Session appears weakly bound to the device despite technical indicators showing device match",
+    "Device is new to this card but has recent history with other payment credentials",
+    "Transaction amount fits the cardholder's established spending pattern, avoiding amount-based detection",
+    "Amount is conservative relative to merchant category baseline, reducing scrutiny triggers",
+    "Vesta composite feature shows moderate complexity but no single raw signal flags the transaction"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Fraudster hijacks or replays browser session tokens to inject transactions that appear as continuation of legitimate user activity. All raw behavioral signals remain clean — normal amount, timing, email match — but Vesta's session/cookie sequence features detect fingerprint manipulation invisible to standard rules.",
+  "reasoning": "Session-based attacks exploit the trust boundary between device identity and session continuity. When V-fields flag session integrity or cookie sequence anomalies while behavioral signals remain clean, it indicates sophisticated session manipulation by an attacker with stolen credentials but incomplete control over the authentic browsing environment."
+}

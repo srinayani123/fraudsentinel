@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_009",
+  "title": "Gmail Plus-Addressing Enumeration for Multi-Account Abuse",
+  "pattern": "email_risk",
+  "narrative": "Fraudster creates 8-15 accounts using a single Gmail address with plus-addressing variants (baseuser+var1@gmail.com, baseuser+var2@gmail.com, etc.) to exploit new-user promotions or distribute suspicious activity across apparent identities. Each variant appears as a unique P_emaildomain entry but resolves to the same inbox. Attacks typically unfold within 48-72 hours: accounts created sequentially, then used for coordinated purchases targeting gift cards or high-resale electronics. TransactionAmt clusters tightly around $299-$349 per variant account. All accounts share identical device fingerprints (DeviceInfo) and originate from the same addr1/dist1 combination. Card funding spreads across 3-5 different card1 BINs to avoid single-card velocity flags, but card1_txn_count_24h remains artificially low per card. Purchases concentrate in late evening hours (txn_hour 22-02) with is_night=1, suggesting batch scripting. R_emaildomain mismatches P_emaildomain in 60%+ of transactions.",
+  "indicators": [
+    "8-15 P_emaildomain values sharing identical base address before '+' symbol, all gmail.com",
+    "All associated accounts created within 48-72 hour window",
+    "Identical DeviceInfo hash across all plus-addressed accounts",
+    "TransactionAmt clusters $299-$349 with <$15 standard deviation across accounts",
+    "Card1_txn_count_24h stays under 3 per card, but 3-5 different card1 BINs funding the email cluster",
+    "85%+ transactions occur during txn_hour 22-02 (is_night=1)",
+    "R_emaildomain differs from P_emaildomain in 60%+ of transactions for this email cluster"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single Gmail address spawns 8-15 accounts using plus-addressing variants (user+1@gmail.com, user+2@gmail.com), all sharing the same device fingerprint and shipping address while making near-identical purchases ($299-$349) within a 48-72 hour window. Transactions cluster in late-night hours and spread across multiple payment cards to stay under velocity thresholds.",
+  "reasoning": "The fraudster exploits Gmail's plus-addressing feature to create the illusion of multiple customers and repeatedly claim new-user promotions or circumvent account limits, while the shared device and address prove it's one actor orchestrating a coordinated attack on high-resale goods.",
+  "indicator_explanations": [
+    "Same Gmail base address reused with plus-sign tricks to create fake accounts",
+    "All suspect accounts were registered in a concentrated time burst",
+    "Every account logs in from the exact same device fingerprint",
+    "Transaction amounts are suspiciously uniform across all the linked accounts",
+    "Multiple payment cards fund the scheme while keeping each card's activity low",
+    "Fraudster operates almost exclusively during late-night hours to avoid detection",
+    "Recipient email differs from purchaser email in most transactions across cluster"
+  ]
+}

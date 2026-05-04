@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_025",
+  "title": "Merchant Collusion Refund Testing: Card Validation via Instant Chargebacks",
+  "pattern": "card_testing",
+  "narrative": "Fraudster operates or colludes with a shell merchant (often high-risk MCC 5816, 7995, or 5962) to test stolen cards through purchase-refund cycles that net to zero cost. Pattern shows 8-15 paired transactions per card within 90 minutes: initial charges of $47-$83 immediately followed by full refunds processed 3-8 minutes later. The merchant MID remains constant while card1 values rotate through 20+ distinct PANs. Refunds bypass typical 3-7 day settlement, posting same-day via manual merchant portal action. EmailDomain pair (P_emaildomain, R_emaildomain) matches across all transactions, often disposable domains like 'tempmail.org' or 'guerrillamail.com'. This validates card active status and available credit without financial loss, preparing validated cards for high-value fraud at legitimate merchants. TransactionAmt shows tight clustering (card1_amt_zscore < 0.3) suggesting scripted automation. Successful refund receipt confirms card not frozen or fraud-blocked.",
+  "indicators": [
+    "8-15 purchase-refund pairs per card1 within 90-minute window, refunds processed 3-8 minutes after purchase",
+    "All transactions route to single MID with high-risk MCC (5816, 7995, 5962), merchant age < 45 days",
+    "20+ distinct card1 values cycling through same merchant, each card tested exactly once",
+    "P_emaildomain equals R_emaildomain across all transactions, domain age < 14 days or known disposable service",
+    "TransactionAmt tightly clustered $47-$83 range, card1_amt_zscore < 0.3 indicating non-organic amounts",
+    "Same-day refund settlement bypassing normal 3-7 day ACH cycle, suggesting manual merchant intervention",
+    "addr1 and dist1 values show no geographic consistency with card BIN country, dist1 > 5000km in 80%+ of cases"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single merchant processes 8-15 purchase-refund pairs per card within 90 minutes, cycling through 20+ different cards that each get tested exactly once with amounts clustered tightly around $47-$83. Refunds post same-day (3-8 minutes after purchase) instead of the normal 3-7 day settlement, and all transactions share the same email domain—often a disposable service less than 14 days old.",
+  "reasoning": "Fraudsters operate or collude with a shell merchant to validate stolen cards without financial loss, using instant refunds to confirm each card is active and not fraud-blocked before using it for high-value theft elsewhere. The tight amount clustering, disposable emails, rapid refund timing, and single-use testing per card reveal automated scripting rather than legitimate customer behavior.",
+  "indicator_explanations": [
+    "Card produces rapid purchase-refund loops all completing within narrow time windows",
+    "All activity funnels through brand-new merchant with sketchy business category",
+    "Merchant sees parade of fresh cards with each tested exactly once",
+    "Buyer and refund recipient share same newly-created or throwaway email domain",
+    "Purchase amounts cluster artificially tight avoiding typical spending variation patterns",
+    "Refunds hit accounts same day bypassing standard multi-day settlement delays",
+    "Transaction locations are geographically impossible for cards issued in their home countries"
+  ]
+}

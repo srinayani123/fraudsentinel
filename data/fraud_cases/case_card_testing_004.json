@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_004",
+  "title": "Subscription Trial Cycling for Zero-Dollar Card Validation",
+  "pattern": "card_testing",
+  "narrative": "Fraudsters exploit free trial periods on streaming services, SaaS platforms, and digital subscriptions to validate stolen card credentials without triggering $0.01-$1.00 authorization charges that banks often flag. Attackers register 15-40 accounts within 2-6 hours using sequential email variations (servicename+001@domain.com through servicename+040@domain.com) from disposable providers like guerrillamail or tempmail. Each card undergoes a $0.00 authorization hold during trial signup, confirming validity for subsequent fraud on higher-value merchants. Successful validations show card1_txn_count_1day jumping from 0 to 20+ within the test window, all with identical P_emaildomain but rotating addr1 values. The subscription MCC (5968 or 7372) combined with ProductCD='S' and dist1 values exceeding 5000km between sequential transactions reveals the coordinated testing operation before cards are monetized elsewhere.",
+  "indicators": [
+    "15-40 transactions with TransactionAmt=$0.00 or $0.01 from single card within 2-6 hours",
+    "P_emaildomain matches disposable providers (guerrillamail.com, tempmail.net, 10minutemail) with sequential username patterns",
+    "card1_txn_count_1day increases from 0 to 20+ during testing window",
+    "All transactions share MCC 5968 or 7372 (subscription services) with ProductCD='S'",
+    "dist1 values exceed 5000km between consecutive transactions despite same card1",
+    "Rotating addr1 values (10+ unique) while device fingerprints remain constant",
+    "Burst occurs during txn_hour 2-7 UTC (is_night=1 for US merchants) suggesting automated scripting"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single card creates 15-40 zero-dollar subscription trial signups within a few hours, using sequential disposable emails and rotating addresses while device fingerprints stay identical. Transaction distances jump thousands of kilometers between attempts despite the same card.",
+  "reasoning": "Criminals validate stolen card credentials through free trials that avoid typical authorization flags, testing which cards are active before using them for high-value fraud elsewhere. The automated bursts with disposable emails reveal coordinated testing operations rather than legitimate customer behavior.",
+  "indicator_explanations": [
+    "Card is being slammed with dozens of zero-dollar subscription trials",
+    "Email addresses rotate through temporary throwaway services in sequence",
+    "Card activity explodes from zero to dozens of transactions today",
+    "All hits target subscription services using the same product type",
+    "Purchases appear in physically impossible locations seconds apart",
+    "Billing addresses cycle through many variants while device stays fixed",
+    "Activity concentrates in overnight hours suggesting bot-driven automation"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_engineered_anomaly_005",
+  "title": "Vesta Engineered Feature Flagging Rare Card-Merchant Interaction Pattern",
+  "pattern": "engineered_anomaly",
+  "narrative": "This fraud pattern surfaces when a legitimate-appearing transaction triggers Vesta's composite engineered features detecting a historically rare or never-before-seen card-merchant pairing. The cardholder's spending behavior appears entirely normal — amounts fit their baseline, velocity is unremarkable, email and device signals match expectations. However, the specific combination of this card interacting with this merchant category or merchant ID represents a significant deviation from the card's established merchant relationship pattern. Vesta's V-fields encode multi-dimensional merchant-card interaction histories across thousands of transactions, capturing relationship patterns invisible in raw features. The engineered features flag this as a card being tested or used fraudulently at a merchant outside its normal ecosystem, despite all behavioral guardrails appearing intact. This represents card-not-present fraud where the fraudster has valid card details but hasn't replicated the cardholder's authentic merchant preferences.",
+  "indicators": [
+    "V307 > 4.5 (p85), Vesta card-merchant interaction rarity score elevated",
+    "V280 = 1 or V280 > 0.8, binary or continuous flag for unusual card-merchant category pairing",
+    "V320 > 3.2 (p80), engineered feature capturing merchant-card historical relationship anomaly",
+    "C1 between 15-45 (p25-p75), card counter in normal range indicating established card",
+    "V258 < 0.3 (low familiarity score), card-merchant affinity feature showing weak historical connection",
+    "card1_TransactionAmt_zscore between -1.0 and +1.5, amount within cardholder baseline range",
+    "V201 > 2.5 (p75), composite feature flagging merchant category deviation from card profile"
+  ],
+  "indicator_explanations": [
+    "Engineered model detects this card-merchant combination is statistically rare in historical data",
+    "Binary feature flags this specific card has unusual or no relationship with merchant category",
+    "Composite feature identifies the merchant falls outside card's normal spending ecosystem",
+    "Card activity counter shows established usage history, not a newly issued card",
+    "Card-merchant affinity score indicates weak or absent prior relationship between them",
+    "Transaction amount fits perfectly within the cardholder's typical spending pattern",
+    "Merchant category represents significant deviation from card's established purchase categories"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Card used at merchant outside its normal relationship ecosystem despite clean behavioral signals. Vesta engineered features detect the card-merchant pairing is historically rare or unprecedented.",
+  "reasoning": "Fraudsters with stolen card details cannot replicate the cardholder's authentic merchant preferences and relationship patterns. The engineered features capture this merchant-ecosystem mismatch even when amount, timing, and device signals appear legitimate."
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_009",
+  "title": "Cross-Border Currency Conversion Fee Validation Testing",
+  "pattern": "card_testing",
+  "narrative": "Fraudsters exploit foreign currency transactions to test cards with minimal authorization footprints. They initiate 8-15 micro-transactions between $0.12-$0.47 USD equivalent across multiple currencies (GBP, EUR, CAD, AUD) within 45-90 minutes, deliberately targeting the currency conversion fee structure rather than meaningful purchase amounts. Each transaction uses a different MCC (5734, 5816, 5999) and merchant country to trigger forex processing. The pattern emerges when card1_txn_count_1day spikes from 0 to 12+ with TransactionAmt consistently under $0.50, all marked ProductCD='C' for card-not-present. The attacker rotates through 4-6 distinct merchant countries while maintaining the same P_emaildomain and card1. dist1 values show impossible geographic dispersion (2000+ km between consecutive transactions within 8 minutes). Legitimate cardholders rarely execute more than 2 forex micro-transactions daily, and never across 5+ countries in under two hours. This validates card authenticity while minimizing chargeback exposure and staying below fraud alert thresholds.",
+  "indicators": [
+    "12-15 transactions with TransactionAmt between $0.12-$0.47 within 90 minutes",
+    "card1_txn_count_1day increases from 0-1 to 12+ with all ProductCD='C'",
+    "4-6 distinct transaction currencies (GBP, EUR, CAD, AUD) from same card1",
+    "dist1 shows 2000+ km distance changes between transactions under 10 minutes apart",
+    "All transactions use different MCC codes (5734, 5816, 5999) but identical P_emaildomain",
+    "card1_amt_zscore remains negative (under $0.50) while velocity metrics spike 800%+",
+    "Zero legitimate purchase amounts over $1.00 despite 10+ transaction attempts"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card generates 12-15 tiny transactions (under $0.50) across 4-6 different countries and currencies within 90 minutes, each using different merchant categories but the same email, with impossible geographic distances between purchases.",
+  "reasoning": "Criminals test stolen cards with micro-amounts in multiple currencies to confirm the card works while staying below fraud detection thresholds and minimizing financial loss if the card is blocked, using currency conversion complexity to obscure the pattern.",
+  "indicator_explanations": [
+    "Card is being probed with tiny amounts to test validity without triggering alerts",
+    "Card goes from idle to hyperactive with identical product types in single day",
+    "Card processes transactions across multiple foreign currencies within same session",
+    "Card appears in physically impossible locations within minutes of each transaction",
+    "Merchant categories vary wildly but all transactions use identical email domain",
+    "Transaction amounts stay suspiciously small while activity frequency explodes dramatically",
+    "No real purchases attempted despite repeated micro-transactions testing card limits"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_004",
+  "title": "High-Risk Country CNP Surge with Residential Proxy Masking",
+  "pattern": "geo_anomaly",
+  "narrative": "Card issued in US suddenly shows 8-12 CNP transactions over 48 hours, all routing through IP addresses geolocated to Nigeria, Indonesia, or Romaniaâ€”countries flagged for organized CNP fraud rings. TransactionAmt values cluster tightly at $87-$94, suggesting automated scripting to stay below merchant fraud thresholds. The dist1 feature shows 8,000+ km distance between billing address (addr1) and transaction IP geolocation. All purchases occur during txn_hour 2-6 AM cardholder local time, typical of overseas fraudsters operating in their own business hours. P_emaildomain shows free webmail services like yahoo.com or outlook.com despite card history of corporate email domains. ProductCD remains 'W' (web-based services/digital goods) across all transactions, avoiding physical shipping verification. Card1_txn_count_24h spikes from baseline of 0.3 to 11, while card1_amt_zscore exceeds 4.2 standard deviations. No CVV mismatch errors occur, indicating full card data compromise rather than card-testing behavior.",
+  "indicators": [
+    "8-12 transactions within 48 hours from IP addresses in Nigeria, Indonesia, or Romania",
+    "TransactionAmt consistently $87-$94 across all transactions",
+    "dist1 exceeds 8,000 km between billing addr1 and transaction geolocation",
+    "All txn_hour values between 2-6 AM in cardholder's timezone",
+    "P_emaildomain switches to free webmail (yahoo.com, outlook.com) from prior corporate domains",
+    "card1_txn_count_24h increases from 0.3 baseline to 11",
+    "card1_amt_zscore exceeds 4.2 standard deviations above historical mean"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A U.S.-issued card suddenly processes 8-12 identical-value transactions ($87-$94) within 48 hours, all routed through high-risk country IPs (Nigeria, Indonesia, Romania) over 8,000 km from the billing address during the cardholder's nighttime hours (2-6 AM), with the email switching from corporate to free webmail.",
+  "reasoning": "Organized fraud rings use stolen card data and residential proxies in high-risk jurisdictions to rapidly extract value through scripted purchases that stay just under merchant review thresholds, timing attacks when the legitimate cardholder is asleep and unlikely to notice alerts.",
+  "indicator_explanations": [
+    "Burst of transactions originating from known high-risk fraud jurisdictions",
+    "All purchases cluster around same dollar amount suggesting automated testing",
+    "Transaction location is thousands of miles from card's billing address",
+    "Activity concentrated during cardholder's typical sleeping hours",
+    "Email domain suddenly changes from business to anonymous free service",
+    "Card goes from nearly dormant to extremely active overnight",
+    "Purchase amounts far exceed what this cardholder normally spends"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_001",
+  "title": "$0 Authorization Trial Probe with Immediate High-Value Follow-On Attempt",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster validates stolen card credentials through legitimate $0.00 trial authorization at streaming or SaaS merchant (ProductCD=W or S), then immediately attempts high-value purchase at different merchant within 15-45 minutes. The trial authorization creates card1_txn_count baseline without actual charge, testing for active card status and available credit. Successful $0 auth triggers rapid pivot to electronics retailer or digital goods merchant with $300-$900 transaction. Pattern exploits merchant assumption that $0 auth failure means card is dead, but fraudster interprets successful authorization as green light. Temporal clustering is key: both transactions occur same session, often same txn_hour, with dist1 distance between billing/shipping addresses jumping from 0km to 500+ km on the second attempt. P_emaildomain switches from legitimate provider (gmail.com) on trial to disposable (tempmail, guerrillamail) on high-value purchase.",
+  "indicators": [
+    "Initial transaction: TransactionAmt = $0.00 with ProductCD = W or S at subscription merchant",
+    "Second transaction within 15-45 minutes: TransactionAmt between $300-$900, ProductCD = C or H",
+    "card1_txn_count_24h increases from 1 to 2 with no intermediate transactions",
+    "dist1 = 0 on first transaction, dist1 > 500 on second transaction",
+    "P_emaildomain changes from major provider (gmail/yahoo/outlook) to disposable domain between transactions",
+    "Both transactions occur within same txn_hour window (0-23)",
+    "card1_amt_zscore spikes from baseline on second transaction (z-score > 3.0)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A $0 trial authorization at a streaming or SaaS service is immediately followed within 15-45 minutes by a $300-$900 purchase at a different merchant, with the billing/shipping distance jumping from 0km to 500+km and the email switching from a legitimate provider to a disposable domain.",
+  "reasoning": "The fraudster uses the free trial to verify the stolen card is active without triggering fraud alerts, then races to make a high-value purchase before the victim notices, switching to a disposable email and distant shipping address to collect the goods anonymously.",
+  "indicator_explanations": [
+    "Card is tested with zero-dollar authorization at a subscription service",
+    "Large purchase follows immediately after the probe validates the card",
+    "Card shows exactly two transactions with no activity in between",
+    "Purchase location jumps hundreds of miles from the initial test transaction",
+    "Email switches from legitimate provider to throwaway domain between attempts",
+    "Both test and attack happen within the same hour block",
+    "Purchase amount is dramatically larger than cardholder's normal spending pattern"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_016",
+  "title": "Post-Authentication IP Shift with Immediate High-Value Digital Goods Extraction",
+  "pattern": "account_takeover",
+  "narrative": "Attacker compromises session tokens after legitimate user authenticates, then reuses cookies from geographically distant IP within 8-15 minutes. Original session from residential IP (addr1 matches historical profile) shows normal browsing, cart adds under $75. New IP emergesâ€”often datacenter or VPN rangeâ€”and immediately purchases high-margin digital goods (ProductCD='W' for digital wallet top-ups or 'C' for digital content) totaling $280-$950 in 2-4 rapid transactions. No re-authentication occurs despite IP change. dist1 jumps from <50km to 800+ km between sessions. card1_txn_count_1day spikes from 1-2 to 6-8. Email domain remains consistent (P_emaildomain matches account) but device_id shifts mid-session. Transactions cluster in 12-18 minute window, all declining CVV/AVS checks that legitimate session passed earlier.",
+  "indicators": [
+    "IP address changes with dist1 >800km within 8-15 minutes of successful authentication",
+    "ProductCD switches from physical goods to 'W' or 'C' (digital products) after IP shift",
+    "TransactionAmt increases 4-7x from pre-shift baseline, reaching $280-$950 range",
+    "card1_txn_count_1day jumps from 1-2 to 6-8 transactions within 18-minute window",
+    "Device fingerprint or device_id changes mid-session while P_emaildomain remains constant",
+    "CVV and AVS match rates drop to 0% post-shift despite 100% match in original session",
+    "New IP resolves to datacenter/hosting ASN while original was residential ISP"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A legitimate user logs in from their usual location and browses normally, then 8-15 minutes later the same session suddenly shifts to a distant IP (800+ km away, often a datacenter) and immediately buys $280-$950 in digital goods across multiple rapid transactions without re-authenticating. The device fingerprint changes mid-session while the email stays the same, and CVV/AVS checks that passed earlier now fail.",
+  "reasoning": "An attacker has stolen session tokens or cookies from the legitimate user and is replaying them from a different location to bypass login security, racing to extract high-value digital goods before the victim notices. The switch to untraceable digital products, the geographic impossibility of the IP jump, and the sudden verification failures reveal someone other than the account owner is now controlling the session.",
+  "indicator_explanations": [
+    "Login location jumps impossible distance minutes after account access succeeds",
+    "Purchases pivot from physical items to instant-delivery digital goods post-shift",
+    "Transaction amounts spike dramatically above the account's normal spending pattern",
+    "Card goes from casual use to frantic burst activity immediately",
+    "Device signature changes while logged in but email stays the same",
+    "Card security checks suddenly fail after passing perfectly moments earlier",
+    "New connection comes from server farm instead of home internet"
+  ]
+}

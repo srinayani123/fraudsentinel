@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_020",
+  "title": "Authorization Farming on Hotels with 72-Hour Settlement Windows",
+  "pattern": "card_testing",
+  "narrative": "Fraudsters exploit hospitality merchants with extended authorization holds to test stolen card portfolios without immediate settlement scrutiny. A single MID receives 40-80 authorization requests within 3-6 hours, all for standard room rates ($120-$185) with check-in dates 7-14 days forward. The merchant's deferred capture policy (typical 72-hour auth-to-settlement) creates a detection blind spot. Cards span 15+ BINs but share behavioral signatures: new card1 entities (card1_txn_count_1day = 1), sequential transaction timestamps averaging 2.8 minutes apart, identical ProductCD (H for hotel), and clustered addr1 values suggesting scripted input. Valid cards receive real authorizations that won't settle for days, while declines get recorded for future targeting. The fraudster captures approval codes and moves validated cards to high-value fraud before chargebacks surface at the test merchant.",
+  "indicators": [
+    "40-80 authorizations at single hotel MID within 3-6 hour window, all ProductCD='H'",
+    "Transaction amounts tightly clustered $120-$185 with standard deviation under $12",
+    "Card1_txn_count_1day = 1 for 85%+ of cards, indicating first-time usage",
+    "Mean inter-transaction interval 2.5-3.5 minutes suggesting automated submission",
+    "15+ distinct card1 BINs but addr1 values repeat across only 3-5 unique addresses",
+    "Future-dated service delivery (check-in 7-14 days out) present in 90%+ of transactions",
+    "P_emaildomain shows 60%+ temporary/disposable domains (guerrillamail, tempmail, 10minutemail)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A hotel merchant receives 40-80 authorization requests within hours, all for similar room rates ($120-$185) with check-in dates 7-14 days out, cards from 15+ different banks but only 3-5 billing addresses, and transactions spaced exactly 2-3 minutes apart.",
+  "reasoning": "Fraudsters exploit the 72-hour gap between authorization and settlement at hotels to test which stolen cards are active without triggering immediate fraud alerts, then use the validated cards for bigger purchases elsewhere before chargebacks appear at the test hotel.",
+  "indicator_explanations": [
+    "Massive volume of hotel authorizations hitting one merchant in a concentrated timeframe",
+    "Purchase amounts are suspiciously uniform with minimal variation across the burst",
+    "Most cards appear brand-new with no prior transaction history on the platform",
+    "Transactions arrive at machine-like intervals indicating bot-driven automation",
+    "Different card numbers funnel through just a few shipping or billing addresses",
+    "Reservations are scheduled well into the future to maximize fraud window before discovery",
+    "Email addresses predominantly use temporary throwaway services to avoid detection"
+  ]
+}

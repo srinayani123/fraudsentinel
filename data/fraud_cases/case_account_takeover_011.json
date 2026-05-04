@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_011",
+  "title": "Contact Detail Swap Followed by Rapid High-Value Digital Goods Purchase",
+  "pattern": "account_takeover",
+  "narrative": "Fraudster gains access to legitimate account credentials, immediately updates the registered phone number to enable bypass of SMS-based verification, then executes high-value digital goods purchases within 15-45 minutes. The attacker typically changes phone number during off-hours (txn_hour between 1-5 AM account holder's timezone), waits just long enough for system cooling periods to expire, then initiates 2-4 transactions totaling $800-$2,400 for digital gift cards or gaming credits (ProductCD = 'W' or 'C'). The phone change and first transaction often originate from different IP addresses separated by 50+ miles (dist1 > 50), with transactions showing card1_txn_count_24h jumping from typical 0-2 to 3-5. Email domain remains unchanged to avoid additional security triggers, while delivery address switches to freight forwarder or PO box.",
+  "indicators": [
+    "Phone number modification within 1-6 hours before first transaction",
+    "Initial purchase occurs during txn_hour 1-5 AM in account's historical timezone",
+    "ProductCD = 'W' or 'C' with TransactionAmt between $200-$850 per transaction",
+    "dist1 > 50 miles between account update IP and transaction IP",
+    "card1_txn_count_24h increases 3-5x above 90-day baseline",
+    "P_emaildomain unchanged but R_emaildomain switches to generic provider or absent",
+    "2-4 transactions totaling $800-$2,400 executed within 45-minute window"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A phone number is changed on an account during early morning hours (1-5 AM), followed within minutes by multiple high-value digital goods purchases ($200-850 each) from a different location 50+ miles away, with transaction frequency spiking 3-5x above normal.",
+  "reasoning": "The attacker updates the phone number to intercept SMS codes and bypass security, then rushes to buy easily resellable digital items before the legitimate owner notices, using off-hours and rapid execution to minimize detection time.",
+  "indicator_explanations": [
+    "Phone number was changed just hours before the suspicious purchases began",
+    "Purchases happen during dead-of-night hours when legitimate user normally sleeps",
+    "Digital goods in the sweet spot for quick resale or gift card liquidation",
+    "Account changes and purchases originate from different cities or states",
+    "Card suddenly shows triple or more its normal daily transaction volume",
+    "Recipient email switches to disposable provider while account email stays intact",
+    "Multiple high-value purchases crammed into less than an hour total"
+  ]
+}

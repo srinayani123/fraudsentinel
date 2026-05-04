@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_028",
+  "title": "CVV Brute-Force Validation with Incremental Amount Testing",
+  "pattern": "card_testing",
+  "narrative": "Fraudster systematically tests CVV codes on a stolen card PAN by cycling through common three-digit combinations (000, 001, 111, 123) using small-value transactions. Initial attempts show 4-8 CVV decline codes (05 or 82) across $1.00-$3.00 authorization requests within 6-12 minutes. After successful CVV match, fraudster immediately escalates to $247-$899 purchases, often in different MCC categories. Pattern shows card1_txn_count_1hr jumping from 0 to 6-9, all transactions showing identical card1/addr1 but rotating P_emaildomain across free providers. Successful CVV unlock typically occurs at attempt 3-7, followed by 2-4 higher-value approvals within 15 minutes. TransactionAmt shows clear two-tier structure: probe tier under $5, exploitation tier $200+. Frequently targets digital goods (ProductCD='W') or gift cards post-validation.",
+  "indicators": [
+    "4-8 consecutive declines with CVV mismatch response codes within 6-12 minute window",
+    "TransactionAmt under $5.00 during decline phase, then jumps to $200-$900 after first approval",
+    "card1_txn_count_1hr increases from 0 to 6+ transactions in single session",
+    "P_emaildomain changes across attempts while card1 and addr1 remain constant",
+    "Time delta between final decline and first high-value approval under 3 minutes",
+    "Successful transaction shows ProductCD shift to high-liquidity categories (W, C, or gift card MCC 5817)",
+    "All attempts originate from same dist1 value indicating identical device fingerprint"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card shows 4-8 rapid declines with CVV error codes on small $1-$3 transactions, then immediately switches to high-value $200-$900 purchases once a valid CVV is found. Email addresses rotate across free providers while the card number and address stay identical.",
+  "reasoning": "The attacker is systematically guessing CVV codes on a stolen card number until finding the correct combination, then immediately cashing out with large purchases before the card is frozen. The email rotation and small-to-large amount jump reveal deliberate testing rather than a legitimate customer making normal purchase mistakes.",
+  "indicator_explanations": [
+    "Attacker is systematically testing CVV codes until they crack the correct one",
+    "Initial transactions are penny tests followed by immediate high-value fraud purchase",
+    "Card suddenly bursts from dormant to multiple transactions in under an hour",
+    "Email rotates between attempts while card and address stay locked during testing",
+    "Fraudster pivots to large purchase within minutes of finding valid CVV code",
+    "Approved transaction targets easily liquidated items like gift cards or crypto",
+    "All testing attempts come from the same device throughout the attack sequence"
+  ]
+}

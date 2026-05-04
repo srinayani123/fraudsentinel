@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_016",
+  "title": "Cross-Merchant Identity Fragment Stitching with Incremental Authorization Testing",
+  "pattern": "synthetic_identity",
+  "narrative": "Fraudster creates synthetic identity by establishing legitimate-looking payment history across 4-6 different merchant categories (MCC 5411, 5812, 5999, 7299) over 18-25 days, each merchant seeing different fragments of the same synthetic profile. Card holder name varies slightly (J. Martinez vs Jose Martinez vs J.M. Martinez) while card_id remains constant. Each merchant category shows 2-3 successful micro-transactions ($8-$23) before a single larger authorization ($180-$340). The synthetic profile uses consistent P_emaildomain (outlook.com or gmail.com created 45-90 days prior) but rotates billing addr1 across 3 zip codes in same metro area. Final bust-out phase hits all established merchants simultaneously within 90-minute window with transactions $890-$1,850. Pattern shows card1_txn_count_7day jumping from 2-3 to 15+ while maintaining low card1_amt_zscore until final burst.",
+  "indicators": [
+    "card_id appears across 4-6 distinct MCC codes with 18-25 day establishment period",
+    "Cardholder name variations (2-3 formats) consistent card_id, same P_emaildomain throughout",
+    "Each merchant category: 2-3 txns $8-$23, then single auth $180-$340 before dormancy",
+    "addr1 rotates across 3+ zip codes within 50-mile radius, consistent city-level dist1",
+    "card1_txn_count_7day increases from 2-3 to 15+ in single day during bust-out phase",
+    "Final burst: 8-12 transactions across all established merchants within 90 minutes",
+    "card1_amt_zscore remains <1.5 during establishment, spikes to >4.0 in final phase"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single card appears across 4-6 different merchant types over 18-25 days with slight name variations (J. Martinez, Jose Martinez), small purchases establishing history at each merchant, then all merchants hit simultaneously with large transactions in a 90-minute window. Transaction counts jump from 2-3 to 15+ in one day while billing addresses rotate across nearby zip codes.",
+  "reasoning": "The fraudster is building credibility separately with multiple merchants using a synthetic identity, making each merchant see an apparently normal customer, then exploiting all these relationships at once before the synthetic identity collapses. The coordinated final burst across previously established merchants reveals this was never a real customer but a carefully constructed fraud scheme.",
+  "indicator_explanations": [
+    "Card builds purchase history across multiple merchant types over several weeks",
+    "Name formatting changes slightly while email and card stay constant across purchases",
+    "Each merchant sees a few small tests then one larger authorization attempt",
+    "Shipping addresses shift between nearby zip codes while staying in same metro area",
+    "Daily transaction volume explodes from normal pace to frenzied activity overnight",
+    "All previously-established merchant relationships get hit simultaneously in tight window",
+    "Spending amounts stay modest during setup then surge far above baseline pattern"
+  ]
+}

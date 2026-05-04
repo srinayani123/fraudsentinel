@@ -1,0 +1,25 @@
+{
+  "id": "case_device_takeover_022",
+  "title": "Credential Theft with Anomalous Device Screen Resolution and Timezone Offset",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster uses stolen credentials to transact from a device with unusual screen resolution (D10 flagging non-standard display geometry) and timezone offset (D15 indicating clock skew or VPN/proxy usage). The cardholder's behavioral pattern remains intact: amounts fall within typical spending range, transaction velocity is normal, purchases occur during waking hours, and email addresses match expected patterns. However, device fingerprinting reveals this is a first-time device-card pairing with screen properties that deviate from typical consumer hardware profiles. The timezone offset suggests the device clock is deliberately misaligned or routed through anonymization infrastructure. Card-level counters show elevated aggregation relative to baseline despite clean behavioral signals, indicating the card is being systematically tested or exploited across multiple sessions from unfamiliar hardware. Vesta engineered features flag the combination of device novelty and configuration anomalies as high-risk, while transaction amounts intentionally stay within cardholder norms to evade amount-based triggers.",
+  "indicators": [
+    "D1 = 0 indicating first-time pairing between this device and card",
+    "D10 > 219.30 (p90), unusually high screen resolution metric outside typical consumer device range",
+    "D15 > 346.30 (p90), extreme timezone offset value suggesting clock manipulation or proxy routing",
+    "card1_amt_zscore between -1.5 and +1.5, transaction amount within cardholder's normal spending pattern",
+    "D4 > 297.20 (p90), device-level counter aggregation significantly elevated despite clean behavioral velocity",
+    "TransactionAmt between 50 and 200, mid-range amount consistent with typical CNP purchase avoiding high-value triggers"
+  ],
+  "indicator_explanations": [
+    "The device has never been used with this card before in transaction history",
+    "Screen resolution parameters fall outside the range of standard consumer laptops and mobile devices",
+    "Device timezone offset is extremely unusual indicating possible VPN use or deliberate clock tampering",
+    "Purchase amount fits perfectly within the cardholder's established spending habits masking the fraud",
+    "Device-level activity aggregation is abnormally high compared to typical device usage patterns for this merchant",
+    "Transaction amount is moderate and unremarkable avoiding automated high-value fraud detection rules"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Stolen credentials used from a device with non-standard screen resolution and suspicious timezone configuration, while transaction amounts and timing appear completely normal for the cardholder. Device fingerprinting reveals first-time hardware usage with configuration anomalies despite clean behavioral signals.",
+  "reasoning": "Legitimate cardholders do not suddenly switch to devices with unusual screen geometries and extreme timezone offsets while maintaining identical spending patterns. The combination of device novelty, configuration anomalies, and elevated device-level counters indicates credential theft where the fraudster attempts to mimic behavioral norms but cannot mask hardware-level signatures."
+}

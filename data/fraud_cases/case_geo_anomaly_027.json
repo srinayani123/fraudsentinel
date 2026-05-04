@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_027",
+  "title": "Dormant Card Reactivation in High-Risk Currency Market",
+  "pattern": "geo_anomaly",
+  "narrative": "A card with 8-14 months of transaction dormancy suddenly generates 6-12 CNP purchases totaling $840-$1,950 within 72 hours, all denominated in a foreign currency (PHP, THB, or IDR) the cardholder never previously used. Transactions occur exclusively through digital goods MCCs (5816, 5815) with 4-6 different merchant IDs clustered in the same country. The card1_txn_count_24hr spikes from 0 to 8+ while card1_amt_zscore exceeds 4.2 due to the sharp departure from historical patterns. P_emaildomain switches to a free provider (yahoo.com, outlook.com) different from the original registration. All transactions occur during off-hours relative to the cardholder's addr1 timezone (txn_hour between 2-6 AM local time), and dist1 values show consistent 8,000-11,000 km separation from billing address.",
+  "indicators": [
+    "Card dormant 240+ days, then 6-12 transactions in 72 hours all in previously unused currency",
+    "card1_txn_count_24hr increases from 0 to 8+, card1_amt_zscore > 4.2",
+    "All transactions digital goods MCCs (5816/5815) in single foreign country (PHP/THB/IDR denomination)",
+    "P_emaildomain changed to free provider not matching original registration domain",
+    "100% of transactions occur txn_hour 2-6 AM relative to addr1 timezone",
+    "dist1 consistently 8,000-11,000 km, indicating persistent foreign IP geolocation",
+    "Total spend $840-$1,950 across 4-6 unique merchant IDs in same country"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card inactive for 8-14 months suddenly executes 6-12 digital goods purchases in 72 hours, all in a foreign currency never used before (Philippine peso, Thai baht, or Indonesian rupiah), with transactions happening exclusively during the cardholder's local nighttime hours from IPs 8,000+ kilometers away.",
+  "reasoning": "Fraudsters who acquired stolen card credentials are testing and exploiting the card through low-friction digital goods merchants in Southeast Asian markets, betting that dormant accounts receive less monitoring and that the cardholder won't notice until after maximum damage is done.",
+  "indicator_explanations": [
+    "Card sits unused for eight months then suddenly fires multiple times in unfamiliar currency",
+    "Card goes from zero activity to eight transactions in one day with abnormally high amounts",
+    "All purchases are digital goods from a single foreign country using exotic currency",
+    "Email address switched to generic free provider completely different from original registration",
+    "Every transaction happens in the middle of the night for the cardholder's home location",
+    "IP address stays locked in foreign country thousands of miles from billing address",
+    "Total damage ranges from eight hundred to two thousand dollars across multiple foreign merchants"
+  ]
+}

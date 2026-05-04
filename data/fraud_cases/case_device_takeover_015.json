@@ -1,0 +1,27 @@
+{
+  "id": "case_device_takeover_015",
+  "title": "Credential Compromise from Rooted Mobile Device with Clean Transaction Behavior",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster uses stolen cardholder credentials to transact from a rooted or jailbroken mobile device, bypassing OS-level security controls. Transaction amounts, timing, and velocity appear normal because the attacker mimics the legitimate cardholder's spending patterns. However, device integrity flags (D10) reveal tampered operating system environments, while first-time device-card pairings (D1) and elevated device risk scores (D15) expose the compromise. The rooted device allows installation of modified payment apps or interception tools that harvest session tokens while maintaining superficially legitimate transaction characteristics. Email addresses match cardholder records and amounts stay within historical norms, making behavioral detection ineffective.",
+  "indicators": [
+    "D10 > 200 (p90), indicating elevated device integrity risk score flagging rooted or jailbroken environment",
+    "D1 = 0, first occurrence of this device identifier with the card number",
+    "D15 > 300 (p90), high device fraud score from aggregated device reputation signals",
+    "card1_amt_zscore between -1.0 and +1.0, amount within cardholder's typical spending range",
+    "D4 > 250 (p90), elevated device-level counter aggregation across recent time window",
+    "emails_match = 1 AND addr1_card1_match = 0, email matches but billing address never seen with card",
+    "C1 > 50 (p85), card-level aggregation counter elevated but below panic threshold"
+  ],
+  "indicator_explanations": [
+    "Device shows signs of operating system tampering or security bypass through rooting or jailbreaking",
+    "This is the first time the device has ever been used with this payment card",
+    "Device carries high fraud risk score based on historical reputation and behavioral signals",
+    "Transaction amount fits perfectly within the cardholder's normal spending pattern avoiding detection",
+    "Device has been seen across multiple transactions in recent timeframe suggesting testing or velocity",
+    "Email address matches cardholder records but billing address is completely new to this card",
+    "Card shows moderately elevated usage but not enough to trigger standard velocity rules"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Fraudster operates from compromised rooted mobile device using stolen credentials, maintaining normal transaction amounts and timing while device integrity flags reveal tampered operating system. First-time device-card pairing and elevated device risk scores expose the account takeover despite clean behavioral signals.",
+  "reasoning": "Rooted devices allow fraudsters to bypass mobile OS security controls and run modified payment applications that can intercept credentials or session tokens. The combination of device integrity violations with first-time device-card pairing and matching emails indicates credential theft rather than a legitimate device upgrade, as genuine cardholders rarely switch to rooted devices mid-account lifecycle."
+}

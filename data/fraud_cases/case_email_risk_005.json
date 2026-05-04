@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_005",
+  "title": "Fraudulent Email Resurrection with Card Testing Escalation Pattern",
+  "pattern": "email_risk",
+  "narrative": "A previously flagged email address resurfaces after 90-180 day dormancy with systematic card testing behavior before escalating to high-value transactions. The email, linked to 3+ confirmed fraud cases in prior periods, initiates activity with 8-15 small transactions ($1-$9.99) across different card1 values within 72 hours, all succeeding despite varying BINs. After establishing which cards clear, the pattern shifts to 2-4 transactions of $400-$800 within 6 hours, typically targeting digital goods (ProductCD='W' or 'C'). The email consistently pairs with mismatched or generic P_emaildomain entries (gmail, yahoo) while R_emaildomain remains null or differs. Transactions cluster in off-hours (txn_hour 1-5 AM) with elevated card1_amt_zscore (>2.5) and identical addr1 across the card testing phase, suggesting centralized fraud operations reactivating known compromised identities.",
+  "indicators": [
+    "Email dormant 90-180 days with 3+ prior fraud confirmations now active",
+    "8-15 transactions under $10 across different card1 values within 72 hours",
+    "Card testing phase followed by 2-4 transactions of $400-$800 within 6 hours",
+    "R_emaildomain null or mismatched from P_emaildomain in 80%+ of transactions",
+    "Consistent addr1 value across all card testing attempts despite varying BINs",
+    "Transaction timing concentrated in txn_hour 1-5 AM window",
+    "card1_amt_zscore exceeds 2.5 for escalation transactions"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A previously dormant email with a fraud history suddenly returns, running 8-15 small test charges under $10 across different cards within 72 hours, then immediately jumping to 2-4 high-value purchases ($400-$800) once successful cards are identified. Activity clusters overnight (1-5 AM) with mismatched email domains and identical shipping addresses despite different payment cards.",
+  "reasoning": "Fraudsters reactivate compromised email accounts to systematically test stolen card numbers with micro-transactions, then rapidly exploit the cards that clear before they're blocked. The dormancy period, prior fraud history, overnight timing, and immediate escalation to high-value digital goods reveal organized criminals efficiently monetizing stolen payment data rather than legitimate purchasing patterns.",
+  "indicator_explanations": [
+    "Previously flagged email account suddenly reactivates after months of silence",
+    "Multiple low-dollar purchases testing different card numbers in quick succession",
+    "Small test charges immediately followed by high-value purchase attempts",
+    "Recipient email differs from purchaser email in most transactions",
+    "Same billing address reused despite cards from different issuing banks",
+    "Activity clusters suspiciously during overnight hours when monitoring is minimal",
+    "Final purchase amounts drastically exceed the card's typical spending pattern"
+  ]
+}

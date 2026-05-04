@@ -1,0 +1,27 @@
+{
+  "id": "case_engineered_anomaly_027",
+  "title": "Velocity-Encoded Anomaly With Clean Raw Transaction Counts",
+  "pattern": "engineered_anomaly",
+  "narrative": "Fraudsters execute transactions at a pace that appears normal when counting raw transaction events, but Vesta's engineered velocity features detect abnormal temporal clustering invisible to standard aggregation windows. The attacker may spread transactions across multiple cards or devices to keep per-entity counts low, but V-field composite velocity encodings capture the underlying coordinated-activity signature. Raw TransactionDT intervals look typical, individual card and device counters remain below fraud thresholds, and amounts fit expected patterns. However, V307 (velocity composite encoding) and V320 (multi-dimensional velocity feature) spike dramatically, indicating the model has identified temporal patterns suggesting automated execution or coordinated account takeover across linked identities that share hidden behavioral fingerprints.",
+  "indicators": [
+    "V307 > 150 (p95+ engineered velocity composite feature elevation)",
+    "V320 > 4.8 (p90+ multi-dimensional velocity encoding anomaly)",
+    "C1 < 45 and C2 < 30 (card and address counters within normal ranges)",
+    "D1 between 50 and 300 (device-card pairing shows moderate history, not first-time)",
+    "TransactionAmt_card1_mean_ratio between 0.7 and 1.3 (amount consistent with cardholder baseline)",
+    "V200 <= 3 (basic sequence feature remains at median, no simple pattern violation)",
+    "addr1_P_emaildomain match rate > 0.85 (email-address pairing looks legitimate)"
+  ],
+  "indicator_explanations": [
+    "Composite velocity encoding feature shows extreme elevation despite normal-looking raw counts",
+    "Multi-dimensional temporal pattern feature indicates coordinated execution signature across linked entities",
+    "Card-level and address-level transaction counters remain well within typical cardholder activity levels",
+    "Device has moderate transaction history with this card suggesting established relationship not new pairing",
+    "Transaction amount aligns closely with the cardholder's historical spending average masking the fraud",
+    "Basic transaction sequence feature shows no obvious ordering or timing violation",
+    "Email domain and billing address pairing rate suggests legitimate account credentials were used"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Transactions appear normal across all raw behavioral metrics—typical amounts, moderate device history, normal per-card counts—but Vesta's composite velocity encodings (V307, V320) spike dramatically. The model detects temporal clustering patterns suggesting coordinated automated activity that evades simple counter-based detection.",
+  "reasoning": "When engineered velocity features elevate sharply while raw counters remain clean, it indicates the fraud operation is deliberately structured to evade threshold-based rules. The attacker understands standard velocity logic but cannot mask the complex temporal signatures that composite V-features encode, revealing coordinated account compromise or card-testing infrastructure."
+}

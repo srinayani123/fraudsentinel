@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_003",
+  "title": "Regional Credit Union BIN Exploitation with Progressive Amount Testing",
+  "pattern": "bin_attack",
+  "narrative": "Fraudster identifies a small regional credit union BIN (typically 6-digit ranges serving <50K cardholders) with delayed fraud monitoring response times. Attack begins with $1-3 authorization tests across 15-20 cards within the same BIN range to identify active accounts. Successful test cards are then exploited with progressively larger CNP transactions: $47-89 (digital goods), then $180-240 (electronics), culminating in $400-600 purchases within 72 hours per card. The attacker uses 3-5 rotating P_emaildomains (mail.com, outlook.com variants) and consistent shipping address patterns (addr1 matches across 60%+ of transactions). Small issuers lack real-time velocity controls, allowing bust-out before fraud detection triggers. Transactions cluster in MCC 5732 (electronics) and 5815 (digital goods) with 80%+ CNP, all showing identical dist1 values indicating single fulfillment location.",
+  "indicators": [
+    "15-20 cards sharing first 8 digits (BIN+2) with authorization amounts $1-3 within 6-hour window",
+    "card1_txn_count_24h escalates 1â†’3â†’5 pattern with corresponding TransactionAmt progression $50â†’$200â†’$500",
+    "card1_amt_zscore exceeds 3.5 for issuer's typical cardholder profile on second transaction",
+    "P_emaildomain concentration: 3-5 domains account for 70%+ of transactions across different card1 values",
+    "addr1 field shows 60-80% match rate across ostensibly unrelated cards within 72-hour period",
+    "dist1 (distance between billing/shipping) identical across 12+ transactions suggesting single drop location",
+    "Small issuer BIN (identifiable by IIN database lookup showing <100K cardholders, regional FI)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple cards from the same small credit union show identical tiny test charges ($1-3) within hours, followed by the same cards making rapidly escalating purchases ($50→$200→$500) over 2-3 days, all shipping to matching addresses despite different cardholder names.",
+  "reasoning": "Criminals exploit small banks with weak fraud systems by testing stolen card numbers to find active accounts, then quickly draining them before the bank notices—the matching email domains, shipping addresses, and identical billing distances across unrelated cards reveal coordinated theft rather than coincidental legitimate purchases.",
+  "indicator_explanations": [
+    "Batch of cards from same bank being tested simultaneously with tiny amounts",
+    "Transaction amounts climb methodically as fraudster tests card limits before cashing out",
+    "Purchase size is abnormally large compared to legitimate cardholders from this issuer",
+    "Email addresses cluster around handful of domains despite cards appearing unrelated",
+    "Billing addresses overlap suspiciously across cards that should have no connection",
+    "Shipping distances match perfectly across unrelated orders pointing to single drop house",
+    "Cards issued by small regional credit union with limited cardholder base being targeted"
+  ]
+}

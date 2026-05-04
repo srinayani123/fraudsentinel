@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_028",
+  "title": "Catch-All Domain Mass Account Creation with Card Testing Spray",
+  "pattern": "email_risk",
+  "narrative": "Fraudsters exploit catch-all email domains (protonmail.com, mail.ru, outlook.com) to create 20-50+ accounts with randomized prefixes in under 6 hours, enabling parallel card testing without reputation overlap. Each account tests 1-3 stolen cards with $1-$15 transactions (ProductCD='W' or 'C'). The domain accepts any prefix, so fraudster generates emails like x7k2p@protonmail.com, m9wd@mail.ru with zero validation. Successful cards graduate to $200-$800 purchases within 24 hours from the same billing address (addr1) but different email prefixes. Detection requires cross-prefix aggregation: monitoring P_emaildomain transaction velocity rather than full email. Typical signature: 15+ unique email prefixes on same domain, same IP or device, card1_txn_count_1day spikes 30-80x baseline, 60-90% decline rate on test transactions, AVS mismatch on 40%+ attempts, then sudden authorization on larger amounts.",
+  "indicators": [
+    "15-50 unique email prefixes sharing same P_emaildomain (catch-all) within 6 hours",
+    "Card1_txn_count_1day elevated 30-80x normal for domain, card1_amt_zscore >4.5",
+    "Initial test transactions $1-$15, then 1-4 transactions $200-$800 within 24 hours from same addr1",
+    "60-90% decline rate on test phase transactions, AVS mismatch on 40%+ attempts",
+    "Same device fingerprint or IP (dist1 <5km) across 10+ email prefix variations",
+    "ProductCD 'W' or 'C' exclusively, txn_hour clustering in 2-4 hour window during account creation",
+    "R_emaildomain often differs from P_emaildomain or null on successful high-value transactions"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single fraudster creates 15-50 accounts using randomized email prefixes on the same catch-all domain (like protonmail.com or mail.ru) within hours, all from the same device or IP address. Small $1-$15 test transactions show 60-90% decline rates, then suddenly larger $200-$800 purchases appear from the same billing address using cards that passed the tests.",
+  "reasoning": "The attacker is validating stolen credit cards at scale without triggering account-level blocks—each fake email prefix looks like a different customer, but they're all the same criminal testing which cards still work. Once a card authorizes on the small amount, they immediately exploit it for high-value fraud before the card owner notices.",
+  "indicator_explanations": [
+    "Dozens of fake accounts registered using variations on one catch-all domain",
+    "Card sees wildly elevated transaction volume compared to normal domain behavior",
+    "Small tests followed quickly by large purchases from the same billing address",
+    "Most test transactions fail, many rejected for billing address verification mismatches",
+    "Same device or location cycles through multiple throwaway email accounts",
+    "Fraudster targets specific payment types during concentrated time windows for speed",
+    "Recipient email differs from purchaser email on successful high-dollar transactions"
+  ]
+}

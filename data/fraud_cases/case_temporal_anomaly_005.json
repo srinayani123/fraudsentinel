@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_005",
+  "title": "Cross-Timezone Night Burst: Fraudster's Active Hours Override Cardholder Geography",
+  "pattern": "temporal_anomaly",
+  "narrative": "Compromised card shows sudden activity concentrated between 2-6 AM cardholder local time (derived from addr1 timezone), but precisely aligned to 8 PM-midnight in a different region. Pattern emerges when card1_txn_count_24h spikes from baseline 0-2 to 8-12 transactions, all occurring within attacker's evening hours. Transactions cluster in 15-45 minute windows with TransactionAmt ranging $47-$189, targeting digital goods (ProductCD=W) and electronics merchants. The is_night flag triggers consistently while dist1 shows stable billing location. Card historically dormant during these hours over prior 90 days, suddenly executing CNP purchases with consistent P_emaildomain patterns (burner email services). The temporal signature reveals fraudster working their daytime/evening shift while cardholder sleeps, often targeting merchants in intermediate timezones where fraud controls relax during off-peak staffing.",
+  "indicators": [
+    "All transactions occur 2-6 AM cardholder timezone (addr1-derived) over 3-7 consecutive nights",
+    "Transactions align precisely to 8 PM-midnight window in suspected fraudster timezone (Eastern Europe/South Asia pattern)",
+    "card1_txn_count_4h increases from 0 baseline to 4-7 transactions per night window",
+    "Historical analysis shows zero transactions in this time window over prior 90 days",
+    "is_night=1 for 100% of transactions despite card's previous daytime-only pattern",
+    "P_emaildomain switches to disposable/burner services coinciding with temporal shift",
+    "txn_hour clusters tightly (variance <1.2 hours) across multiple days, suggesting scripted automation"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Card suddenly active 2-6 AM in cardholder's timezone after 90 days of daytime-only use, with transactions tightly clustered in 15-45 minute bursts targeting digital goods and electronics. The timing precisely matches evening hours (8 PM-midnight) in a different region, suggesting a fraudster working their own schedule while the victim sleeps.",
+  "reasoning": "Legitimate cardholders don't suddenly reverse their sleep patterns and make multiple purchases at 3 AM using burner emails. The consistent night-time clustering across consecutive days, combined with the shift to disposable email domains, indicates a criminal operating from a different timezone who has compromised the card and is executing scripted purchases during their own waking hours.",
+  "indicator_explanations": [
+    "Card suddenly active only during cardholder's deep sleep hours across multiple nights",
+    "Activity pattern matches fraudster working hours in distant overseas timezone",
+    "Card goes from silent to burst of transactions in tight four-hour windows",
+    "This time window was completely unused by legitimate cardholder for three months",
+    "Card now exclusively transacts at night despite zero historical nighttime activity",
+    "Email provider changes to throwaway service exactly when sleep-hour attacks begin",
+    "Transaction times repeat with robotic precision suggesting automated script not human behavior"
+  ]
+}

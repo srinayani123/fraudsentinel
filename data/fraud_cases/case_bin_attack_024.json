@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_024",
+  "title": "Distributed Multi-Merchant BIN Probe Campaign with Shared Infrastructure",
+  "pattern": "bin_attack",
+  "narrative": "Fraudster tests a harvested BIN range (typically 100-300 consecutive card numbers from same issuer) across 15-40 different merchant IDs within a 2-4 hour window to identify valid cards before chargebacks trigger blocks. Each merchant receives 3-8 test transactions from different cards in the sequence, all showing identical P_emaildomain (often disposable services like guerrillamail, tempmail), same addr1 despite varying card numbers, and uniform TransactionAmt values like $1.00, $2.99, or $4.95 to stay below fraud review thresholds. The card1_txn_count_1day shows 0-1 for each individual card, masking the attack when viewed per-card, but grouping by BIN prefix reveals the coordinated pattern. Transactions cluster in txn_hour 2-6 (overnight US time) and dist1 values are null or identical, indicating scripted automation rather than organic shopping.",
+  "indicators": [
+    "100-300 card numbers from same 8-digit BIN prefix transacting across 15-40 distinct merchant MIDs within 2-4 hours",
+    "P_emaildomain shared across 70%+ of transactions despite different card numbers (guerrillamail.com, tempmail.org, or single custom domain)",
+    "addr1 values identical for 60-90% of cards in sequence, inconsistent with legitimate cardholder diversity from same issuer",
+    "TransactionAmt uniform at low values: $1.00, $2.99, or $4.95 across 80%+ of test transactions",
+    "card1_txn_count_1day = 0-1 per card but BIN-level aggregation shows 100+ transactions in narrow time window",
+    "txn_hour concentrated in 2-6 (overnight) with 85%+ of attempts occurring during is_night=1",
+    "dist1 either null for 90%+ transactions or shows identical value suggesting single origin point for all attempts"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Hundreds of consecutive card numbers from the same bank are tested across dozens of different merchants within hours, all using the same email domain and shipping address despite being supposedly different cardholders. Transaction amounts are uniformly low ($1-5), clustered overnight, and each card shows minimal individual history while the BIN prefix reveals massive coordinated activity.",
+  "reasoning": "Criminals systematically test stolen card number sequences to identify which ones are valid and active before the issuing bank detects the breach. By spreading attempts across many merchants with low amounts during off-hours, they evade per-card and per-merchant fraud detection while the shared email and address expose the single attacker controlling all transactions.",
+  "indicator_explanations": [
+    "Same bank's card numbers are being tested across dozens of merchants simultaneously",
+    "Different cards all share the same throwaway email address or suspicious domain",
+    "Cards supposedly from different people all list the same billing address",
+    "All transactions use identical tiny dollar amounts typical of card testing",
+    "Each card appears fresh but the bank prefix shows massive coordinated activity",
+    "Attack is timed for overnight hours when fraud monitoring may be reduced",
+    "All transactions originate from the same geographic location despite different cardholders"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_002",
+  "title": "Disposable Email Domain Velocity Spike with High-Value Digital Goods",
+  "pattern": "email_risk",
+  "narrative": "Fraudster registers multiple accounts using throwaway email services (mailinator.com, guerrillamail.com, 10minutemail.net) to bypass merchant fraud rules that flag repeat customers. Pattern emerges when P_emaildomain matches known disposable providers and multiple transactions occur within 72 hours targeting high-margin digital products (gift cards, gaming currency, software licenses). Transactions typically range $75-$250 to stay under manual review thresholds. Card diversity is highâ€”fraudster cycles through 8-12 stolen card numbers (distinct card1 values) all shipping to same addr1 or within 15km radius (dist1 <15). Transactions cluster in off-hours (txn_hour between 1-5 AM merchant local time, is_night=1) when fraud teams are understaffed. The disposable email never matches R_emaildomain, indicating no prior relationship. Card1_txn_count_24h shows 0-1 prior use, suggesting fresh test of stolen PANs. Pattern terminates abruptly after 18-36 hours when chargebacks begin surfacing.",
+  "indicators": [
+    "P_emaildomain belongs to known disposable provider list (mailinator, 10minutemail, guerrillamail, tempmail, sharklasers)",
+    "6-15 transactions within 72-hour window all sharing same addr1 or dist1 <15km",
+    "ProductCD = 'C' or 'H' (digital goods) with TransactionAmt between $75-$250 per transaction",
+    "Each transaction uses distinct card1 value with card1_txn_count_24h â‰¤ 1 indicating fresh cards",
+    "P_emaildomain â‰  R_emaildomain (no historical email match)",
+    "Transactions concentrated during txn_hour 1-5 or 22-24 (is_night=1)",
+    "Card1_amt_zscore > 2.5 indicating unusual spending pattern for those card numbers"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple accounts created with disposable email domains (like mailinator or 10minutemail) place 6-15 orders for digital goods worth $75-$250 each within 72 hours, all shipping to the same address or within 15km, using a different credit card for each transaction during overnight hours.",
+  "reasoning": "Criminals use throwaway emails to evade repeat-customer flags while testing freshly stolen credit cards on high-margin digital products that can be quickly resold, clustering purchases at night when fraud monitoring is weakest and stopping once chargebacks start appearing.",
+  "indicator_explanations": [
+    "Email comes from throwaway service designed to evade tracking and verification",
+    "Multiple purchases cluster from same location within three-day attack window",
+    "Targets high-value digital goods that can be instantly resold or monetized",
+    "Each transaction burns a different stolen card number used only once",
+    "Email address has no purchase history tied to any previous transactions",
+    "Activity happens during overnight hours when fraud monitoring is lightest",
+    "Purchase amounts are abnormally high compared to each card's typical use"
+  ]
+}

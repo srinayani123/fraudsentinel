@@ -1,0 +1,27 @@
+{
+  "id": "case_engineered_anomaly_003",
+  "title": "Multi-Vector Vesta Engineered Feature Cluster Activation Pattern",
+  "pattern": "engineered_anomaly",
+  "narrative": "This pattern represents sophisticated fraud that evades traditional behavioral detection by appearing entirely normal in raw transaction metrics. The fraudster has carefully calibrated amounts, timing, and velocity to match legitimate cardholder behavior. However, three specific Vesta engineered features simultaneously activate: V258, V280, and V305. These features encode complex multi-dimensional relationships between device fingerprint components, card-not-present verification sequences, and identity-linkage graph structures. The simultaneous activation of this specific triad indicates the transaction sits in a latent feature space occupied almost exclusively by confirmed fraud. No single raw signal explains the risk, but the composite mathematical representation reveals structural anomalies invisible to human review. The fraud likely involves credential stuffing or account takeover where attackers possess sufficient PII to mimic behavioral norms but cannot replicate the subtle digital fingerprint patterns legitimate users create through organic interaction history.",
+  "indicators": [
+    "V258 > 75 (p85 threshold), indicating device-identity linkage graph anomaly",
+    "V280 > 50 (p80 threshold), flagging card-not-present verification sequence irregularity",
+    "V305 > 60 (p82 threshold), composite feature detecting multi-field interaction pattern deviation",
+    "V200 <= 3 (p75 baseline), transaction-sequence feature remains in normal range",
+    "card1_amt_zscore between -1.2 and +1.2, amount consistent with cardholder spending profile",
+    "D1 > 0, device previously seen with legitimate transaction history",
+    "C1 < 45 (below p75), card-level aggregation counter within expected range"
+  ],
+  "indicator_explanations": [
+    "Device and identity linkage shows structural inconsistency with known legitimate patterns",
+    "Card-not-present verification steps occurred in an atypical sequence or timing pattern",
+    "Multiple feature interactions combine to create a signature outside normal transaction space",
+    "Basic transaction sequencing appears normal with no obvious ordering anomalies",
+    "Transaction amount falls within the typical spending range for this card",
+    "The device has established transaction history and is not flagged as first-time",
+    "Card usage frequency remains consistent with typical cardholder activity levels"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Behavioral signals appear completely normal but three specific Vesta engineered features (V258, V280, V305) activate simultaneously above their fraud-cluster thresholds, indicating the transaction occupies a latent feature space associated with sophisticated credential compromise.",
+  "reasoning": "The concurrent activation of multiple independent engineered features while raw behavioral metrics remain clean suggests the attacker possesses extensive PII and has calibrated their activity to mimic legitimate patterns, but cannot replicate the complex digital fingerprint artifacts that organic user sessions create across device, identity, and verification interaction dimensions."
+}

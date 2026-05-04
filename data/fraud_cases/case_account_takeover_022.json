@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_022",
+  "title": "Sequential Account Credential Swap with Immediate High-Value Redemption",
+  "pattern": "account_takeover",
+  "narrative": "Fraudster gains access to victim account through credential stuffing or phishing, then systematically replaces security controls before monetizing. Within 45 minutes, attacker changes email from established domain (gmail.com, yahoo.com) to disposable service (tempmail.com, guerrillamail.com detected in P_emaildomain). Password reset follows within 8-15 minutes. First transaction occurs 12-35 minutes post-reset: single high-value purchase ($450-$1,200) in Digital or Gift Card ProductCD categories. This differs from gradual account harvestingâ€”it's a smash-and-grab after credential replacement. Transaction often shows addr1 mismatch from previous 30-day history, dist1 exceeding 500km from historical centroid, and txn_hour between 01:00-05:00 local time when legitimate owner typically inactive. Card on file shows card1_txn_count_24hr jumping from 0 to 1-3 within the attack window.",
+  "indicators": [
+    "P_emaildomain changes from established provider to disposable/temporary email service (10min.com, guerrillamail.com, tempmail.net) within 45 minutes of password reset event",
+    "First transaction occurs 12-35 minutes after password reset with TransactionAmt $450-$1,200",
+    "ProductCD is 'W' (digital wallet load) or 'C' (gift card) in 78% of cases",
+    "dist1 exceeds 500km from account's 30-day historical transaction centroid",
+    "txn_hour between 01:00-05:00 when account holder's historical activity shows 95%+ daytime transactions",
+    "addr1 shows complete mismatch (different state/region) from previous 30-day billing address",
+    "card1_txn_count_24hr increases from 0 to 2-3 transactions within 60-minute window post-credential change"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Account shows rapid sequential changes—email switches from established provider to disposable service, password resets within 15 minutes, then a single high-value digital goods purchase ($450–$1,200) occurs 12–35 minutes later, often from a new location 500+ km away during overnight hours when the account holder is typically inactive.",
+  "reasoning": "Attackers use stolen credentials to lock out the legitimate owner by changing security settings, then immediately convert the account's stored payment methods into liquid assets like gift cards before the victim notices, exploiting the brief window before detection.",
+  "indicator_explanations": [
+    "Email suddenly switches from legitimate provider to throwaway service right after password reset",
+    "Fraudster strikes fast with expensive purchase minutes after taking control of account",
+    "Attacker converts stolen account to cash via digital wallets or gift cards",
+    "Transaction originates from location hundreds of kilometers from victim's normal area",
+    "Purchase happens in middle of night when victim historically shops during day",
+    "Billing address suddenly switches to completely different state from established pattern",
+    "Dormant card suddenly fires multiple transactions within hour of credential compromise"
+  ]
+}

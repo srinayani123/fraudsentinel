@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_015",
+  "title": "Synthetic Identity Activated Through Commercial Mail Receiving Agency Address",
+  "pattern": "synthetic_identity",
+  "narrative": "A synthetic identity is established using a commercial mail receiving agency (CMRA) address disguised as a residential location. The account ages 4-6 months with small authorized user tradeline piggybacking before activation. Initial transactions are conservative: $47-$89 purchases at grocery/gas MCCs with consistent addr1 and dist1 values suggesting local activity. After the aging period, a sudden bust-out occurs with 8-12 high-value transactions ($850-$2,400) within 72 hours across electronics and jewelry merchants. The R_emaildomain switches from free provider to a burner domain registered 30 days prior. Card velocity metrics spike: card1_txn_count_7day jumps from 2-3 to 15+, while card1_amt_zscore exceeds 4.5 standard deviations. The CMRA address often correlates with addr1 values appearing across 20+ unrelated accounts in the dataset.",
+  "indicators": [
+    "addr1 matches known CMRA location appearing in 20+ distinct customer profiles",
+    "Account aging period of 4-6 months with transaction amounts under $100, then sudden spike to $850-$2,400",
+    "card1_txn_count_7day increases from baseline 2-3 to 15+ transactions in 72-hour window",
+    "card1_amt_zscore exceeds 4.5 during bust-out phase versus 0.8-1.2 during aging",
+    "R_emaildomain changes from established free provider to domain registered within 30 days",
+    "dist1 consistency during aging (95%+ transactions within 15km) then geographic scatter across 200+ km",
+    "MCC shift from everyday categories (5411, 5541) to high-risk electronics/jewelry (5732, 5944) within 48 hours"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "An account uses a mail-forwarding address shared by 20+ other accounts, makes small local purchases for 4-6 months, then suddenly executes 15+ transactions totaling thousands of dollars in 72 hours while switching to a newly-registered email domain.",
+  "reasoning": "Fraudsters build a fake credit history using a commercial mailbox to receive cards, age the account to appear legitimate, then drain maximum credit before the bust-out is detected—the address reuse and coordinated timing across multiple accounts reveal an organized synthetic identity operation.",
+  "indicator_explanations": [
+    "Address is a mail drop shared by dozens of supposedly unrelated accounts",
+    "Account stayed quiet with small purchases, then suddenly maxed out in one burst",
+    "Transaction frequency exploded from a few per week to over fifteen in three days",
+    "Purchase amounts jumped to extreme outliers compared to the card's historical pattern",
+    "Email domain switched from Gmail or Yahoo to a brand-new suspicious domain",
+    "Card stayed local for months then suddenly scattered across distant cities",
+    "Purchases shifted from groceries and gas to expensive electronics and jewelry overnight"
+  ]
+}

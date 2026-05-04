@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_014",
+  "title": "Gift Card Purchase with Recipient Email Mismatch and Value Laddering",
+  "pattern": "email_risk",
+  "narrative": "Fraudster purchases gift cards (ProductCD=W) using stolen card credentials with purchaser email (P_emaildomain) set to a disposable domain like tempmail.com or guerrillamail.com, while recipient email (R_emaildomain) routes to a different, longer-established domain. The attacker tests card validity with a $15-25 initial purchase, then rapidly escalates to $200-500 transactions within 15-30 minutes if successful. This laddering behavior exploits the gift-card merchant category's delayed fraud detection while the mismatched email pairing obscures the beneficial owner. Typically occurs during high-volume shopping windows (10am-2pm) when manual review queues are saturated. The P_emaildomain often shows card1_txn_count_1day=1, indicating first use, while TransactionAmt progression creates a distinctive step pattern across sequential transactions to the same MID.",
+  "indicators": [
+    "P_emaildomain belongs to disposable email service list, R_emaildomain is established provider (gmail, outlook, yahoo)",
+    "ProductCD=W (gift card/digital goods) with 3+ transactions in 20-minute window showing value laddering: $15-25, then $75-150, then $200-500",
+    "card1_txn_count_1day=1 or 2, indicating new card usage to this merchant",
+    "TransactionAmt increases 5x-20x between first and third transaction to same merchant",
+    "Transactions cluster in 10am-2pm window (txn_hour=10-14) during weekdays",
+    "dist1 (distance between billing and shipping) null or >500km when addresses provided",
+    "R_emaildomain shows card1_email_count_7day â‰¥3, suggesting recipient email reused across multiple cards"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A disposable email purchases gift cards with rapidly escalating amounts—starting at $15-25, then jumping to $200-500 within minutes—while the recipient email is a different, established domain. The purchaser's card shows first-time use, and transactions cluster during busy daytime hours.",
+  "reasoning": "The fraudster tests stolen card credentials with a small gift card purchase, then quickly maxes out the card before detection, sending value to a separate email they control. Mismatched sender/recipient emails and value laddering indicate deliberate obfuscation rather than a legitimate customer gradually increasing their purchase.",
+  "indicator_explanations": [
+    "Buyer uses throwaway email while recipient gets legitimate long-term provider",
+    "Fraudster tests card limits with small gift cards before maxing out",
+    "Card appears brand new to this merchant with minimal transaction history",
+    "Purchase amounts escalate dramatically from initial test to final drain",
+    "Activity concentrated in midday weekday hours suggesting automated attack pattern",
+    "Billing and shipping locations are impossibly far apart or suspiciously missing",
+    "Same recipient email collects gift cards from multiple different payment cards"
+  ]
+}

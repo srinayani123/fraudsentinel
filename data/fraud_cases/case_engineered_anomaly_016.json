@@ -1,0 +1,25 @@
+{
+  "id": "case_engineered_anomaly_016",
+  "title": "Vesta Engineered Velocity Spike Pattern with Clean Raw Transaction Counts",
+  "pattern": "engineered_anomaly",
+  "narrative": "Fraudster conducts transactions that appear normal in all visible behavioral dimensions — typical amounts, standard timing, consistent email domains, and raw transaction counts that remain within merchant baseline ranges. However, Vesta's proprietary engineered velocity features detect hidden acceleration patterns that aggregate multiple identity and device attributes across non-obvious time windows. The fraud operates by cycling through slight variations in device fingerprints or identity tokens that keep raw D-field and C-field counters low, while V-field composite velocity calculations capture the true aggregate pattern. This represents advanced fraud where attackers understand raw feature thresholds but cannot reverse-engineer Vesta's proprietary feature engineering logic that combines card, device, identity, and temporal signals into composite velocity scores.",
+  "indicators": [
+    "V200 >= 6.00 (p90 threshold), Vesta composite velocity feature substantially elevated",
+    "C1 <= 3 and C2 <= 2 (raw card counters remain within normal merchant baseline)",
+    "D1 <= 2 and D2 = 1 (device-card and device-address combinations appear as repeat legitimate use)",
+    "V280 > 0.75 (p75), Vesta identity-velocity composite indicating compressed activity timeline",
+    "card1_amt_zscore between -0.8 and +1.2 (amount fits established cardholder spending pattern)",
+    "V307 >= 3.5 (elevated), engineered feature capturing hidden cross-attribute velocity pattern"
+  ],
+  "indicator_explanations": [
+    "Proprietary velocity calculation shows unusually compressed transaction sequencing across combined attributes",
+    "Card-level transaction counts remain low and appear consistent with normal cardholder behavior",
+    "Device appears as a recognized repeat device for this card and address",
+    "Identity velocity composite reveals timing compression not visible in raw timestamp analysis",
+    "Transaction amount falls within the cardholder's typical spending range without anomalous deviation",
+    "Cross-attribute velocity feature detects acceleration pattern hidden from single-dimension counters"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Transactions exhibit normal amounts, standard timing, and low raw velocity counters, but Vesta's multi-dimensional engineered velocity features reveal hidden acceleration patterns across combined card-device-identity attributes.",
+  "reasoning": "Fraudsters who understand individual feature thresholds may keep raw counters low through attribute rotation, but cannot circumvent proprietary composite features that aggregate signals across multiple dimensions simultaneously, revealing the true fraud velocity hidden beneath apparently clean behavioral signals."
+}

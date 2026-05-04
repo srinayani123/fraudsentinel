@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_002",
+  "title": "Streaming Service Validation Cascade with Incremental Authorization Testing",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster conducts systematic validation of compromised card credentials through sequential streaming service trial signups across Netflix, Hulu, Disney+, Spotify, and HBO Max within a 45-90 minute window. Initial transactions start with $0.99-$1.99 authorization holds to confirm card validity, followed by immediate $7.99-$14.99 full subscription charges once validation succeeds. All transactions originate from residential IP (dist1 < 50km from cardholder billing) but use temporary email domain (P_emaildomain = 'guerrillamail.com' or 'tempmail.net') inconsistent with account history. Pattern shows precise MCC 5815 (Digital Goods - Media) clustering with zero failed authorizations, suggesting batch-testing of stolen credentials. Fraudster deliberately spaces transactions 8-12 minutes apart to evade basic velocity triggers while maintaining momentum before card is blocked.",
+  "indicators": [
+    "5-7 transactions to MCC 5815 merchants within 45-90 minute window, all approved",
+    "TransactionAmt progression: 2-3 charges $0.99-$1.99, followed by 3-4 charges $7.99-$14.99",
+    "P_emaildomain matches disposable email services (guerrillamail, tempmail, 10minutemail) with account age < 1 hour",
+    "card1_merchant_diversity_1h >= 5 distinct streaming merchants, card1_mcc5815_count_24h = 0 historically",
+    "dist1 < 50km (IP geolocation near billing addr1) but R_emaildomain != historical email domain",
+    "Uniform 8-12 minute spacing between transactions (card1_txn_time_delta_mean = 600 seconds)",
+    "ProductCD = 'C' (card-not-present) with 100% approval rate and zero CVV/AVS mismatches"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple streaming service signups (Netflix, Hulu, Spotify) occur within 45-90 minutes using the same card, starting with small test charges under $2 that immediately escalate to full subscriptions of $8-15, all perfectly approved with 8-12 minute gaps between transactions and temporary email addresses.",
+  "reasoning": "The fraudster is systematically testing a stolen card across different services to validate it works before maximizing the theft, using disposable emails and precise timing to avoid fraud detection while the card is still active.",
+  "indicator_explanations": [
+    "Multiple streaming service signups cluster together in a single session",
+    "Transaction amounts escalate from trial tiers to full subscription prices",
+    "Email address comes from throwaway service created moments before attacks",
+    "Card hits several streaming platforms it has never used before",
+    "Location matches billing address but email domain suddenly changes",
+    "Transactions follow mechanical timing pattern like automated testing script",
+    "All remote purchases sail through without any verification failures"
+  ]
+}

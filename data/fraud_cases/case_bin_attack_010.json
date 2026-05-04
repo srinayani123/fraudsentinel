@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_010",
+  "title": "Regional Credit Union BIN Exploitation with Staged Validation Testing",
+  "pattern": "bin_attack",
+  "narrative": "Fraudsters identify a small regional credit union's BIN (typically 6-digit range serving <50K cardholders) with limited real-time fraud detection capabilities. Attack begins with 8-15 micro-transactions ($0.50-$2.99) across different merchants to map valid card numbers and identify those without SMS alerts or push notifications. Within 45-90 minutes of successful validation, attackers pivot to 12-25 mid-value purchases ($185-$450) concentrated in digital goods and gift card MCCs. The targeted issuer lacks velocity controls across MCCs and fails to flag the pattern until batch processing 6-18 hours later. Attackers exploit the detection lag window, with 70-85% of fraudulent transactions completing before issuer intervention.",
+  "indicators": [
+    "IIN/BIN belongs to institution with <100K cards issued, often regional credit unions or small banks",
+    "Initial phase: 8-15 transactions under $3.00 within 60-minute window, card1_txn_count_1hr between 8-15",
+    "Secondary phase: 12-25 transactions $185-$450 within next 90 minutes, card1_amt_zscore >3.5",
+    "90%+ transactions in MCC 5816, 5732, 5941, 5968 (digital goods, electronics, gift cards)",
+    "Consistent P_emaildomain across attempts (gmail.com, yahoo.com burner accounts)",
+    "TransactionAmt clustering: tight ranges $189-$199 or $445-$449 suggesting pre-identified merchant limits",
+    "Time gap of 45-90 minutes between micro-validation phase and exploitation phase, detectable via card1_first_txn_delta"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Attackers test a small credit union's card numbers with 8-15 tiny purchases under $3 in one hour, then immediately follow with 12-25 larger purchases ($185-$450) for gift cards and digital goods before the issuer's delayed fraud systems catch on.",
+  "reasoning": "Criminals exploit smaller institutions' slow fraud detection by first validating which stolen card numbers are active and unmonitored, then racing to extract maximum value during the 6-18 hour window before batch processing flags the pattern.",
+  "indicator_explanations": [
+    "Attacking a small-scale issuer with limited fraud controls and detection resources",
+    "Testing card validity with tiny purchases before launching the real attack",
+    "Ramping up to high-value purchases once the card validates successfully",
+    "Targeting convertible-to-cash categories that can be quickly liquidated or resold",
+    "Using the same throwaway email repeatedly to coordinate the staged attack",
+    "Amounts cluster just under merchant authorization limits to avoid manual review",
+    "Deliberate pause between test phase and exploitation suggests coordinated fraud planning"
+  ]
+}

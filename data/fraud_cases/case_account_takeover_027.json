@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_027",
+  "title": "SIM Swap Account Takeover with Immediate Financial Drainage Pattern",
+  "pattern": "account_takeover",
+  "narrative": "Fraudster ports victim's phone number to new SIM card, intercepts SMS-based 2FA codes, and gains account access within 30-90 minutes of the swap. Pattern shows sudden device_id change (new IMEI) followed by rapid credential updates: email changed to disposable domain (@tempmail, @guerrillamail), shipping address updated to freight forwarder or drop address (addr1 mismatch >500 miles from historical), then 3-8 high-value transactions totaling $2,400-$8,500 within 2-4 hours. Transactions cluster in digital goods (ProductCD='W') or gift cards before attempting physical goods. Key signature: P_emaildomain changes from established provider to temporary service, device_info shows Android emulator or new iOS device, and dist1 shows extreme geographic jump (>1000km) between last legitimate session and takeover session. Card CVV failures may precede as fraudster tests stored payment methods.",
+  "indicators": [
+    "device_id completely new within 60 minutes of last legitimate session, no prior association with card1",
+    "P_emaildomain changed from established domain to temporary email service (@tempmail, @guerrillamail, @10minutemail) within takeover window",
+    "dist1 > 1000km between current transaction and addr1 from previous 30-day card1 history",
+    "card1_txn_count_24hr jumps from 0-1 to 5+ transactions, with card1_amt_zscore > 2.5 relative to 90-day baseline",
+    "3+ consecutive transactions in ProductCD='W' (digital goods) totaling $800-$3000 within 90-minute window",
+    "addr1 updated within 2 hours before first takeover transaction to address with no prior delivery history",
+    "TransactionAmt progression: initial test charge $15-$50, then rapid escalation to $400-$1200 per transaction"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A phone number is ported to a new SIM card, then within 30-90 minutes the account shows a completely new device, email changed to a disposable domain, shipping address updated over 500 miles away, and 3-8 high-value purchases ($2,400-$8,500 total) clustered in digital goods or gift cards within 2-4 hours.",
+  "reasoning": "The fraudster hijacks the victim's phone number to intercept SMS security codes, takes over the account by changing credentials, and immediately drains value before the victim realizes their phone service stopped working—exploiting the brief window before the carrier or customer detects the unauthorized port.",
+  "indicator_explanations": [
+    "Brand new device appears immediately after legitimate user's last session ended",
+    "Email switches from trusted domain to disposable throwaway service during attack",
+    "Transaction location is over 1000km from cardholder's established address history",
+    "Card suddenly shifts from quiet to hyperactive with unusually large amounts",
+    "Rapid succession of digital goods purchases totaling thousands in minutes",
+    "Shipping address just changed to location with zero prior delivery record",
+    "Small test charge succeeded then attacker rapidly escalates to maximum amounts"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_016",
+  "title": "VPN Service Subscription Test with Burner Email and Velocity Escalation",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster tests a stolen card by subscribing to a privacy-focused VPN service, typically $9.99-$14.99 monthly trials. The attacker uses a disposable email domain (guerrillamail.com, tempmail.org, 10minutemail.com) and immediately attempts 2-4 additional subscriptions at different VPN/privacy providers within 45 minutes. The P_emaildomain shows throwaway pattern while card1 shows first transaction ever recorded in system. After successful VPN authorization, fraudster pivots to higher-value digital goods within 2-6 hours. Transactions cluster in late night hours (22:00-04:00 local card time) with dist1 showing 800+ km from card billing addr1. Card1_txn_count_24hr jumps from 0 to 5+, all ProductCD='S' (services), with identical device_id but rotating IP addresses suggesting proxy rotation. No prior relationship between card1 and any R_emaildomain in merchant history.",
+  "indicators": [
+    "TransactionAmt=$9.99-$14.99 at MCC 4816 (VPN/privacy service) with card1_txn_count_lifetime=1",
+    "P_emaildomain matches disposable email pattern (guerrillamail|tempmail|10minute|sharklasers)",
+    "card1_txn_count_6hr increases from 1 to 4-6 transactions, all ProductCD='S', all different merchants",
+    "txn_hour between 22-04 with is_night=1 and dist1>800km from card addr1",
+    "Identical device_id across transactions but id_31 (browser signature) shows 3+ unique values indicating proxy/VPN rotation",
+    "Zero historical overlap between card1 and any P_emaildomain or R_emaildomain in merchant database",
+    "Time delta between first VPN auth and next high-value transaction (>$50) is 2-6 hours"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card's very first transaction is a low-cost VPN subscription using a disposable email address, followed rapidly by 4-6 similar service purchases at different merchants within hours, all from the same device but rotating IP addresses over 800km from the billing address during late-night hours.",
+  "reasoning": "The attacker uses cheap VPN trials as a low-risk test to confirm the stolen card works before moving to higher-value fraud, while burner emails, proxy rotation, and geographic mismatches reveal deliberate attempts to hide identity and evade detection rather than legitimate privacy-conscious behavior.",
+  "indicator_explanations": [
+    "First-ever transaction is a cheap VPN subscription to hide future activity",
+    "Email is a throwaway service designed to evade merchant contact attempts",
+    "Card velocity explodes from single test to multi-merchant attack within hours",
+    "Transactions happen overnight from location far from cardholder's registered address",
+    "Same device but browser fingerprint keeps changing through VPN or proxy rotation",
+    "Card and email addresses have never appeared together in merchant records",
+    "Attacker waits a few hours after VPN setup before hitting high-value targets"
+  ]
+}

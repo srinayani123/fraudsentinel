@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_027",
+  "title": "Recycled Fraud Email with Incremental Testing and Geographic Mismatch",
+  "pattern": "email_risk",
+  "narrative": "A previously flagged email resurfaces after 60-90 day cooling period, initiating low-value probe transactions ($12-$35) across 3-4 different BINs within 48 hours to test card validity before escalating. The email shows P_emaildomain from free providers (gmail, yahoo) despite R_emaildomain suggesting corporate billing addresses. Pattern emerges when card1_txn_count_1day spikes from 0 to 8+ transactions while maintaining clean payment history on individual cards. Fraudster rotates through digital goods (ProductCD='W') and small physical items to different addr1 values, creating dist1 measurements of 800+ miles between billing and shipping. Transactions cluster in off-peak hours (txn_hour between 2-5 AM local time, is_night=1) when fraud monitoring may be reduced. Email's prior fraud association was 73 days earlier with same behavioral signature: multi-card testing phase followed by attempted bust-out.",
+  "indicators": [
+    "Email domain previously linked to confirmed fraud 60-90 days prior with similar testing behavior",
+    "8+ transactions across 3-4 distinct card1 values within 48-hour window, all under $35",
+    "dist1 exceeds 800 miles between billing and shipping addresses across multiple orders",
+    "P_emaildomain is free provider while R_emaildomain suggests corporate or institutional billing",
+    "75%+ of transactions occur during txn_hour 2-5 AM with is_night=1",
+    "card1_txn_count_1day jumps from 0 to 8+ while individual cards show no prior fraud flags",
+    "ProductCD alternates between 'W' (digital) and 'C' (physical goods) with different addr1 per transaction"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "An email address that was flagged for fraud 60-90 days ago reappears, immediately running 8+ small transactions ($12-$35) across multiple cards within 48 hours, mostly between 2-5 AM, with billing and shipping addresses over 800 miles apart despite using mismatched free and corporate email domains.",
+  "reasoning": "The fraudster is testing stolen card numbers with low-value purchases to identify which cards are still active, deliberately spacing the activity to avoid immediate detection, before planning larger fraudulent purchases once valid cards are confirmed.",
+  "indicator_explanations": [
+    "Same email was used in previous fraud with identical small-dollar testing pattern",
+    "Email runs micro-transactions across multiple cards to probe for live accounts",
+    "Billing and shipping locations are separated by extreme geographic distance",
+    "Free personal email conflicts with corporate billing domain suggesting stolen credentials",
+    "Activity concentrated in dead-of-night hours when cardholders are asleep",
+    "Card suddenly experiences burst activity with zero historical usage baseline",
+    "Fraudster alternates digital and physical products while changing delivery addresses each time"
+  ]
+}

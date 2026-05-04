@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_021",
+  "title": "Device-Swap Account Hijack with Express Shipping Exploitation",
+  "pattern": "account_takeover",
+  "narrative": "Fraudster gains access to dormant account, immediately changes password from new device fingerprint (DeviceInfo never seen in 90-day history), then places 2-4 orders totaling $800-$2,200 within 45 minutes. Classic tell: shipping address (addr1) differs from billing and previous delivery history, dist1 shows 400+ miles. Orders cluster at high-value ProductCD='W' (electronics) with express shipping selected despite account's historical preference for standard. Password reset timestamp precedes first transaction by 8-18 minutes. The account shows no login activity for 30+ days prior, then sudden burst. P_emaildomain changes from original registration (gmail.com to protonmail.com variant). Card linked to account processes all transactions successfully despite being flagged for previous small-dollar probing ($1.00, $2.50) 72 hours earlier from different IP block.",
+  "indicators": [
+    "DeviceInfo fingerprint absent from account's 90-day transaction history",
+    "Password reset occurs 8-18 minutes before first purchase",
+    "addr1 shipping address differs from billing, dist1 > 400 miles from historical",
+    "2-4 transactions totaling $800-$2,200 within 45-minute window",
+    "P_emaildomain changed from original registration domain",
+    "Express shipping selected contrary to account's standard shipping history",
+    "Account dormant 30+ days then sudden activity burst with ProductCD='W' concentration"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A dormant account suddenly activates from a never-before-seen device, changes its password and email domain, then rapidly fires 2-4 high-value electronics orders with express shipping to an address 400+ miles away from the account's billing and previous delivery locations. The linked card shows prior low-dollar probing attempts from a different IP block 72 hours earlier.",
+  "reasoning": "Criminals steal login credentials to hijack inactive accounts, banking on delayed victim detection while they rush expensive goods to drop addresses before the legitimate owner notices. The device swap, immediate credential changes, geographic distance, rushed shipping, and prior card testing collectively signal an attacker monetizing stolen access rather than a genuine customer resuming normal shopping.",
+  "indicator_explanations": [
+    "Account is being accessed from a completely unfamiliar device",
+    "Password was just reset moments before suspicious purchases begin",
+    "Shipping destination is far from the account's normal locations",
+    "Multiple high-value purchases clustered in under an hour",
+    "Email address was recently changed from the original registration",
+    "Attacker rushing delivery with express shipping against user's normal behavior",
+    "Long-dormant account suddenly springs to life buying specific product types"
+  ]
+}

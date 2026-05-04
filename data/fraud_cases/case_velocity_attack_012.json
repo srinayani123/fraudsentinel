@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_012",
+  "title": "Gradient Drain with Sleep Intervals â€” Sustained 24-Hour Wallet Bleed",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster maintains persistent access to compromised card over 24-hour window, executing 50-78 transactions with deliberate pacing to avoid instant velocity blocks. Attack begins with test transaction under $5, then escalates to $47-$89 digital goods purchases (ProductCD='W' or 'C') spaced 15-35 minutes apart during business hours (txn_hour 9-17), pausing 6-8 hours overnight (txn_hour 1-6 shows zero activity). Resumes at dawn with renewed burst. Total drain $2,800-$5,400. Fraudster rotates between 3-4 merchant categories (MCC 5816, 5735, 5968) but maintains same device fingerprint and P_emaildomain throughout. Card1_txn_count_24hr climbs steadily from 8 to 50+. Transaction amounts show flat distribution (card1_amt_zscore oscillates -0.3 to +0.8, never spiking). This mimics legitimate user behavior while systematically draining available credit.",
+  "indicators": [
+    "card1_txn_count_24hr exceeds 50 with sustained 15-35 minute inter-transaction intervals",
+    "Zero transaction activity during txn_hour 1-6 followed by immediate resumption at txn_hour 7-8",
+    "TransactionAmt flat distribution $47-$89 across 80%+ of transactions (card1_amt_zscore remains -0.5 to +1.0)",
+    "Consistent P_emaildomain and device fingerprint across all 50+ transactions despite rotating MCC codes",
+    "ProductCD restricted to 'W' or 'C' (digital goods) with no physical delivery or addr1 variance",
+    "Initial test transaction under $5 followed by immediate escalation to $47+ average within 2 hours",
+    "Total 24-hour cumulative spend $2,800-$5,400 with no declines or step-down behavior"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A compromised card shows 50+ transactions over 24 hours with deliberate 15-35 minute spacing, a flat $47-$89 amount pattern, and complete silence overnight (1-6am) before resuming at dawn. The same device and email persist across all purchases while merchant categories rotate.",
+  "reasoning": "The fraudster is pacing transactions to stay under velocity thresholds while draining the card's credit limit, using the overnight pause and consistent transaction amounts to mimic a legitimate user's shopping pattern rather than triggering instant fraud blocks.",
+  "indicator_explanations": [
+    "Card shows methodical pacing with 50-plus hits spread across a full day",
+    "Attack pauses completely overnight then resumes precisely at business hours",
+    "Transaction amounts cluster in narrow band to stay below velocity triggers",
+    "Same email and device used throughout despite changing merchant categories",
+    "Only digital goods purchased with no shipping address involvement",
+    "Tiny probe transaction immediately followed by sustained higher-value draining",
+    "Wallet drained for thousands with zero declines suggesting compromised valid card"
+  ]
+}

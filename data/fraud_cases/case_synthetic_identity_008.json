@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_008",
+  "title": "Fresh Domain Synthetic Identity with Graduated Spend Pattern",
+  "pattern": "synthetic_identity",
+  "narrative": "A synthetic identity is established using a newly registered email domain (P_emaildomain created <90 days ago) paired with a consistent card fingerprint. The fraudster builds legitimacy over 14-21 days through graduated spending: initial transactions of $15-$45 at low-risk MCCs (grocery, gas stations) with 100% AVS/CVV match rates. After 8-12 successful small transactions, velocity increases to 3-5 purchases per day at $80-$200 each, targeting electronics merchants (ProductCD=W). The card1 shows zero prior history before this email pairing. The bust-out phase occurs days 18-23 with 6-9 high-value transactions ($400-$850 each) within 36 hours, often targeting different merchant categories than the seasoning phase. R_emaildomain frequently matches P_emaildomain, both being disposable domains with no digital footprint. Address information (addr1) remains constant but dist1 values show illogical geographic patterns inconsistent with stated billing location.",
+  "indicators": [
+    "P_emaildomain registration timestamp <90 days from first transaction date",
+    "Initial 8-12 transactions range $15-$45 with 100% AVS_CVV match, followed by 6-9 transactions $400-$850 within 36 hours",
+    "card1_txn_count_prior = 0 at account opening, card1_amt_zscore jumps from <0.5 to >3.2 during bust-out phase",
+    "P_emaildomain = R_emaildomain in 85%+ of transactions, both domains have zero search engine presence",
+    "Graduated spend pattern: 14-21 days of small purchases before velocity spike to 3-5 daily transactions",
+    "dist1 values show >500km variance despite constant addr1, inconsistent with normal card usage patterns",
+    "MCC switches from 5411/5541 (grocery/gas) in seasoning phase to 5732/5944 (electronics) during exploitation"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card with no prior history appears alongside a brand-new email domain, making small legitimate-looking purchases (groceries, gas) for two weeks before suddenly switching to rapid high-value electronics purchases within 36 hours. The billing address stays the same but distance patterns are geographically impossible.",
+  "reasoning": "Fraudsters create a fake identity and deliberately build a clean payment history to bypass fraud filters, then cash out with maximum purchases once trust is established. The fresh domain, zero card history, and abrupt shift from trust-building to aggressive spending reveal orchestrated abuse rather than a real customer's evolving needs.",
+  "indicator_explanations": [
+    "Email domain was created very recently, just before the account opened",
+    "Small test purchases establish legitimacy before jumping to large fraudulent amounts",
+    "Card shows no history initially, then spending explodes beyond normal range",
+    "Shipping and billing emails match but both domains are invisible online",
+    "Account builds trust with weeks of normal purchases before attacking",
+    "Location data wildly inconsistent despite address staying the same throughout",
+    "Shopping shifts from everyday necessities to high-value resellable electronics"
+  ]
+}

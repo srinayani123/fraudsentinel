@@ -1,0 +1,25 @@
+{
+  "id": "case_engineered_anomaly_017",
+  "title": "Automated Script Execution Pattern via V-Feature Cluster Anomaly",
+  "pattern": "engineered_anomaly",
+  "narrative": "This pattern identifies fraud executed through automated scripts or transaction generators that produce machine-perfect behavioral consistency. While individual transactions appear completely normal in amount, timing, velocity, and email/device matching, Vesta's composite V-features detect algorithmic signatures in the transaction sequence. Specifically, V280 (transaction-sequence entropy) combined with V307 (session-pattern encoding) and V320 (inter-transaction timing distribution) reveal mechanical precision inconsistent with human purchasing behavior. The fraud operates at normal merchant velocity and uses amounts within cardholder baseline, but the mathematical regularity across multiple feature dimensions creates a detectable cluster signature. This represents card-testing operations or automated account abuse where the attacker has carefully studied normal behavioral ranges but cannot replicate the natural randomness of human interaction patterns.",
+  "indicators": [
+    "V280 > 8.5 (p95), elevated transaction-sequence entropy score indicating mechanically regular patterns",
+    "V307 between 4.0 and 6.0, session-pattern encoding falls into known automation cluster range",
+    "V320 < 0.15 (p5), abnormally low inter-transaction timing variance suggesting scripted execution",
+    "V258 > 12 (p90), composite feature aggregating multiple sequence anomalies across V-space",
+    "card1_amt_zscore between -0.8 and +0.8, amounts deliberately calibrated to cardholder baseline",
+    "D1 > 3, device-card pairing exists but C1 > 45 suggesting automated reuse pattern"
+  ],
+  "indicator_explanations": [
+    "Transaction sequence shows mathematical regularity that humans cannot naturally produce",
+    "Session behavior patterns match known signatures of automated transaction tools",
+    "Time intervals between actions are too consistent for human interaction",
+    "Multiple hidden feature dimensions simultaneously flag sequence-level abnormalities",
+    "Purchase amounts are carefully chosen to blend with normal spending patterns",
+    "Device is established but card-level activity counter indicates programmatic usage"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Fraud executed via automated scripts produces transactions that look perfectly normal in amount, timing, and velocity, but Vesta's composite V-features detect the mathematical signatures of algorithmic execution that human behavior cannot replicate.",
+  "reasoning": "While attackers can study and mimic normal transaction ranges, automated tools produce mechanical precision in timing, sequence patterns, and multi-dimensional feature interactions. The V-feature cluster captures this algorithmic fingerprint across dimensions invisible to single-feature analysis, revealing script-driven fraud operations."
+}

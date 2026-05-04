@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_012",
+  "title": "Distributed Micro-Merchant Card Validation via Low-Value MCC Spread",
+  "pattern": "card_testing",
+  "narrative": "Fraudster tests stolen card portfolio by distributing $0.50-$2.99 authorization attempts across 8-15 different micro-merchants in unrelated MCC categories within a 45-90 minute window. Pattern exploits smaller merchants with delayed fraud monitoring and lower velocity thresholds. Transactions typically hit digital goods (MCC 5816), subscription services (MCC 5968), charitable donations (MCC 8398), and parking meters (MCC 7523) to avoid clustering detection. Each merchant sees only 1-2 attempts per card, staying below individual merchant alerts. The attacker rotates through 20-40 cards sequentially, producing a characteristic staircase pattern when card1 sorted by timestamp. Successful validations are monetized within 6-12 hours at higher-value merchants. Email domains frequently use temporary providers like guerrillamail or 10minutemail, with distinct P_emaildomain per card but shared IP subnet (dist1 < 50km clustering).",
+  "indicators": [
+    "card1_txn_count_24h between 8-15 with zero prior history",
+    "TransactionAmt uniformly distributed $0.50-$2.99 with no repeating amounts",
+    "MCC_unique_count >= 6 spanning 4+ unrelated category groups",
+    "txn_hour concentrated in 1.5-hour window, 85%+ transactions is_night=1",
+    "P_emaildomain entropy > 0.92 across card portfolio with 90%+ temporary email providers",
+    "dist1 clustering shows 70%+ transactions within 50km radius despite addr1 variance",
+    "card1_amt_zscore < -1.8 compared to merchant's 30-day average"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single cardholder makes 8-15 tiny purchases ($0.50-$2.99) across unrelated merchant types—digital goods, donations, parking—all within 90 minutes, usually at night, using temporary email addresses. Each merchant sees only one or two attempts per card, but the transactions cluster geographically despite varied billing addresses.",
+  "reasoning": "Fraudsters test stolen cards with small charges at different low-risk merchants to validate which cards are active without triggering individual merchant alerts, then use the confirmed cards for larger purchases within hours. The spread across merchant categories and use of throwaway emails reveal deliberate evasion rather than legitimate shopping behavior.",
+  "indicator_explanations": [
+    "Brand new card suddenly fires off multiple transactions with no usage history",
+    "Transaction amounts deliberately varied in micro-range to avoid detection patterns",
+    "Card hits six or more completely unrelated merchant categories in quick succession",
+    "Nearly all activity crammed into narrow overnight window during monitoring gaps",
+    "Email addresses rotate through disposable providers showing coordinated fraud infrastructure",
+    "Transactions cluster in tight geographic area despite varied billing addresses on file",
+    "Purchase amounts far below what these merchants normally process per transaction"
+  ]
+}

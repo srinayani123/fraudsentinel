@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_003",
+  "title": "Rapid Gift Card Liquidation via Compromised Card Credentials",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster uses stolen card credentials to purchase digital gift cards in quick succession before the cardholder or issuer can react. Typically targets retailers with instant delivery (Amazon, Apple, Google Play) where ProductCD='W' dominates. Attack window averages 8-15 minutes with 6-12 transactions. Transaction amounts cluster tightly around merchant limits: $99.99, $149.99, or $199.99 to stay under velocity thresholds. Card1_txn_count_1hr spikes from 0 to 10+. All purchases originate from same IP/device (dist1=0) but shipping/billing addresses may vary or be null for digital goods. Attacks concentrate in off-hours (22:00-04:00 local) when fraud teams have reduced coverage. Email domain often free provider (gmail.com, yahoo.com) with recent registration. Card1_amt_zscore exceeds 4.5 within the burst window, and AVS/CVV typically match on first transaction but may be bypassed on subsequent attempts.",
+  "indicators": [
+    "6-12 transactions within 8-15 minute window, all ProductCD='W' (digital goods)",
+    "TransactionAmt values clustered at $99.99, $149.99, or $199.99 per transaction",
+    "card1_txn_count_1hr jumps from 0-1 to 10+ during attack sequence",
+    "dist1=0 across all transactions (same device/IP) with is_night=1 (22:00-04:00)",
+    "card1_amt_zscore > 4.5 relative to cardholder's historical spending pattern",
+    "P_emaildomain from free provider with account age < 30 days",
+    "R_emaildomain null or mismatched across transaction set"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card generates 6-12 digital gift card purchases at standardized amounts ($99.99–$199.99) within 8-15 minutes, all from the same device during nighttime hours, while the cardholder's typical spending pattern shows no such velocity.",
+  "reasoning": "Fraudsters exploit stolen card credentials to rapidly convert credit into liquid digital assets before detection, choosing digital goods for instant delivery and off-hours timing to evade monitoring, with amount clustering designed to slip under merchant velocity controls.",
+  "indicator_explanations": [
+    "Card is being used for a rapid burst of digital goods purchases",
+    "All purchase amounts hit standard gift card denominations repeatedly",
+    "Card activity explodes from near-zero to dozens of transactions instantly",
+    "All transactions originate from identical device during overnight hours",
+    "Purchase amounts are drastically higher than cardholder's normal spending",
+    "Email is from free service with newly created account",
+    "Recipient email is missing or keeps changing between transactions"
+  ]
+}

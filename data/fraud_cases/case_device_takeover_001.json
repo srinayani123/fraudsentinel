@@ -1,0 +1,25 @@
+{
+  "id": "case_device_takeover_001",
+  "title": "First-Time Device Pairing with Stolen Credentials in Normal Shopping Window",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster uses compromised cardholder credentials to execute a transaction from a previously unseen device while mimicking normal spending behavior. The transaction occurs during typical daytime hours with an amount consistent with the cardholder's historical spending patterns and matching email addresses to avoid behavioral red flags. However, the device-card pairing is completely novel (D1=0), indicating this is the first time this specific device has processed a transaction with this card. The fraudster operates from their own hardware after credential theft, creating a clean behavioral surface that masks the device takeover. Critical fraud signals emerge exclusively from device and identity features: the never-before-seen device fingerprint, low historical device activity counters, and potential mismatches in secondary identity verification fields that conflict with the established cardholder profile.",
+  "indicators": [
+    "D1 = 0 indicating first-time device-card pairing with no historical association",
+    "D4 < 10 showing minimal historical transaction count from this device across all cards",
+    "D10 = 0 revealing first-time pairing between this device and cardholder email domain",
+    "card1_amt_zscore between -1.0 and +1.0 keeping amount within normal cardholder range",
+    "C1 > 45 (approaching p75) with elevated card-level activity counter despite device novelty",
+    "V200 > 5.5 (approaching p90) where Vesta engineered feature detects device-identity mismatch pattern"
+  ],
+  "indicator_explanations": [
+    "The device has never processed a transaction with this card before today",
+    "This device shows very limited transaction history across the entire payment network",
+    "The device has never been associated with this cardholder's email domain previously",
+    "Purchase amount fits comfortably within the cardholder's typical spending behavior",
+    "Card shows recent elevated usage despite appearing on a completely new device",
+    "Advanced fraud model detects inconsistency between device fingerprint and identity attributes"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "A transaction that appears behaviorally normal in amount, timing, and email matching but originates from a device that has never been paired with this card or cardholder identity before. The device itself shows minimal payment network history.",
+  "reasoning": "Legitimate cardholders rarely introduce entirely new devices without any prior association history, especially when the card shows recent elevated activity. The combination of D1=0 with low device counters (D4, D10) while maintaining clean behavioral signals indicates credential compromise where the fraudster operates from their own hardware after stealing login credentials."
+}

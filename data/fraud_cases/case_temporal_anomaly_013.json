@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_013",
+  "title": "Holiday Period Dormancy Break with Geographic Displacement Pattern",
+  "pattern": "temporal_anomaly",
+  "narrative": "Cardholder shows 180+ day pattern of zero transaction activity during December 20-January 5 holiday period across three consecutive years, then suddenly generates $847, $1,203, and $695 CNP transactions on December 23 at 02:14, 02:31, and 02:47 UTC. Historical data shows cardholder's typical December behavior is complete dormancy with card1_txn_count_7d = 0 during this window. Current transactions show dist1 = 4,872 km from primary addr1, P_emaildomain differs from 18-month historical pattern (switches from gmail.com to protonmail.com), and all three transactions target electronics MCC 5732. The cardholder's normal TransactionAmt mean is $43 for grocery MCC 5411, making these amounts 15-28x typical spend. Transactions occur during is_night = 1 for cardholder's timezone but business hours for Eastern Europe (txn_hour = 5-6 local time UTC+2).",
+  "indicators": [
+    "card1_txn_count_30d = 0 for three consecutive years during Dec 20-Jan 5 window, current year shows 3 transactions",
+    "dist1 = 4,872 km from historical addr1 centroid during traditionally dormant period",
+    "TransactionAmt values ($847, $1,203, $695) exceed cardholder's 18-month mean by 15-28x",
+    "P_emaildomain switches from established gmail.com to protonmail.com for first time in account history",
+    "All transactions occur during is_night = 1 for cardholder timezone but 05:00-07:00 local time UTC+2 region",
+    "MCC 5732 electronics purchases contradict 94% historical pattern of MCC 5411 grocery transactions",
+    "Three transactions clustered in 33-minute window (02:14, 02:31, 02:47 UTC) during cardholder's typical sleep hours"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card that's been completely inactive every holiday season for three years suddenly makes three high-value electronics purchases in 33 minutes at 2am, from a location 4,872 km away, using a new email domain that differs from 18 months of history.",
+  "reasoning": "A fraudster has obtained compromised card details and is exploiting the holiday period when the legitimate cardholder is predictably away or less attentive, rushing multiple purchases during the victim's sleep hours before the account can be frozen.",
+  "indicator_explanations": [
+    "Card suddenly active during holiday weeks after years of complete silence in this period",
+    "Purchases originating nearly 5,000 kilometers away from cardholder's known location cluster",
+    "Transaction amounts dwarf the cardholder's typical spending by over fifteen times",
+    "Email suddenly switches from long-established provider to privacy-focused anonymous service",
+    "Purchases happen during cardholder's night but morning hours in distant timezone",
+    "Electronics purchases break years-long pattern of only buying groceries",
+    "Three transactions fire off in half-hour burst during cardholder's sleep window"
+  ]
+}

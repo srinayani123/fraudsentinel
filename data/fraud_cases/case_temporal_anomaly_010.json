@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_010",
+  "title": "Graveyard Shift Exploit: Dead-Hour Merchant Activity with Inconsistent Geography",
+  "pattern": "temporal_anomaly",
+  "narrative": "A legitimate restaurant merchant with established 11am-10pm operating hours suddenly processes 23 transactions between 2:47am-4:13am totaling $4,890. All transactions fall within $180-$260 range, clustering around $212 averageâ€”consistent with the merchant's typical ticket but occurring when the physical location is verifiably closed. The card1_txn_count_1day jumps from baseline 0.3 to 8 unique cards in this window. Crucially, dist1 values show 850+ miles between billing/shipping addresses despite merchant being local-service MCC 5812. TransactionAmt shows no failed authorizations (fraudsters pre-validated cards), and txn_hour distribution violates merchant's 18-month pattern where 99.2% of volume occurs hours 11-22. P_emaildomain concentration shows 17 transactions share just 3 email providers (gmail.com, yahoo.com, outlook.com) versus merchant's typical corporate domain diversity.",
+  "indicators": [
+    "23 transactions between 2:47am-4:13am when merchant's 18-month txn_hour histogram shows <0.8% activity hours 2-5",
+    "card1_txn_count_1day spike from 0.3 baseline to 8 unique cards within 86-minute window",
+    "dist1 values 850-1240 miles for local-service MCC 5812 merchant with historical dist1 median of 12 miles",
+    "Zero declined transactions in sequence (100% approval rate vs merchant baseline 87%)",
+    "TransactionAmt clustering $180-$260 with stdev $18 matching merchant profile but wrong temporal context",
+    "P_emaildomain concentration: 17/23 transactions from 3 freemail domains vs typical 40% freemail rate",
+    "All transactions CNP (ProductCD='W') for merchant with 94% card-present historical mix"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A restaurant processes 23 transactions during verified closed hours (2:47am-4:13am) with 8 different cards, all showing distant shipping addresses (850+ miles) despite being a local service business. Every transaction approves without declines, and email domains cluster around three free providers instead of the merchant's typical corporate diversity.",
+  "reasoning": "Fraudsters compromised the merchant account to test stolen card credentials during low-monitoring hours when legitimate staff aren't present to notice. The perfect approval rate, geographic inconsistencies, and email clustering reveal coordinated card testing rather than real customers—no authentic patron would order from a closed restaurant for delivery 1,000 miles away.",
+  "indicator_explanations": [
+    "Merchant suddenly active during dead hours when they're normally closed",
+    "Multiple different cards hitting the same merchant in rapid succession",
+    "Transactions coming from impossibly far away for a local business",
+    "Every transaction approves when this merchant normally sees some declines",
+    "Dollar amounts look normal but happening at completely wrong time",
+    "Overwhelming surge of free email addresses instead of typical customer mix",
+    "All online transactions for a merchant that normally sees in-person swipes"
+  ]
+}

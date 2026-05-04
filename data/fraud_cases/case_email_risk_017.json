@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_017",
+  "title": "Catch-All Domain Sequential Testing with Incremental Email Mutations",
+  "pattern": "email_risk",
+  "narrative": "Fraudster exploits catch-all email domains (typically hosting providers or small businesses with wildcard MX records) to bypass duplicate email blocks. Card testing operation burns through stolen BINs using sequentially generated email prefixes at same domain. Pattern shows 8-15 declined attempts at $1.00-$4.99 followed by 2-4 approvals at $47-$89 within 35-minute window. All transactions share P_emaildomain but prefix increments (test001@, test002@, test003@). Same device_id and addr1 across attempts. Fraudster rotates card1 values every 3-5 attempts but maintains same card4 (last 4 digits suggest same BIN family). Transactions cluster at txn_hour 2-5 (night operations). R_emaildomain either null or different from P_emaildomain. Card validation requests spike with CVV mismatch rate exceeding 60% before successful authorization.",
+  "indicators": [
+    "Same P_emaildomain across 10+ transactions with systematically incrementing email prefixes (user01@, user02@, userABC@)",
+    "Card testing velocity: 8-15 sub-$5 declines followed by 2-4 approvals $47-$89 within 35-minute span",
+    "Consistent device_id and addr1 while card1 rotates every 3-5 attempts, card4 indicates same BIN range",
+    "Transactions concentrated at txn_hour 2-5 with is_night=1 across all attempts",
+    "CVV mismatch rate exceeds 60% during decline phase, P_emaildomain TLD is hosting provider (.xyz, .host, .site)",
+    "R_emaildomain null or mismatched from P_emaildomain in 100% of transactions",
+    "Card1_txn_count_24h jumps from 0 to 12+ as pattern executes, all sharing single IP subnet"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Ten or more transactions from the same email domain but with systematically changing prefixes (test001@, test002@, test003@) hit the same device and billing address overnight, showing 8-15 small declines followed by a few larger approvals within 35 minutes. Cards rotate every few attempts but share the same last 4 digits, CVV mismatches exceed 60%, and the email domain is a catch-all hosting provider.",
+  "reasoning": "The fraudster uses a catch-all email domain to generate unlimited unique addresses that bypass duplicate-email blocks, then rapidly tests stolen cards from the same BIN family to find valid ones. The overnight timing, systematic email mutations, high CVV errors, and velocity of declines followed by approvals reveal automated card testing rather than a legitimate customer making repeated purchase attempts.",
+  "indicator_explanations": [
+    "Email addresses follow sequential numbering pattern on same throwaway domain",
+    "Attacker probes with tiny amounts until finding valid cards then cashes out",
+    "Same device and address keep reappearing while card numbers rotate through attempts",
+    "All activity happens during graveyard shift when fraud monitoring is thinnest",
+    "Most attempts fail CVV check and domain is sketchy hosting provider",
+    "Recipient email is blank or doesn't match purchaser across entire sequence",
+    "Card suddenly sees dozen transactions from same network after zero history"
+  ]
+}

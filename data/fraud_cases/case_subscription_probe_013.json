@@ -1,0 +1,25 @@
+{
+  "id": "case_subscription_probe_013",
+  "title": "$0.99 Subscription Validator Preceding International Card-Not-Present Fraud",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster acquires compromised card credentials and validates them through a $0.99 subscription probe to a low-friction merchant (typically ProductCD='W' streaming service) before executing larger CNP fraud internationally. The validator charge appears legitimateâ€”small amount, recognizable MCC 5815 (digital goods), AVS matchâ€”and rarely triggers immediate chargeback. Within 18-36 hours post-validation, the card shows velocity explosion: 8-15 transactions averaging $347 at international merchants (dist1 > 8000km), different R_emaildomain from probe, transactions clustered in 90-minute windows during cardholder's night hours (is_night=1, txn_hour 2-5). The original $0.99 charge serves as authorization canaryâ€”if it clears without decline or fraud alert, the card becomes high-confidence inventory for immediate monetization through electronics purchases or digital wallet loads.",
+  "indicators": [
+    "Initial $0.99-$1.99 subscription charge to MCC 5815/5968 merchant, AVS_match=Y, CVV_match=Y",
+    "card1_txn_count_1day spikes from 1 to 12+ within 18-36 hours of probe transaction",
+    "Post-probe transactions show dist1 > 8000km and R_emaildomain differs from P_emaildomain used in validator",
+    "Average TransactionAmt jumps to $280-$450 range after initial sub-$2 probe clears successfully",
+    "85%+ of post-validation transactions occur during txn_hour 2-5 when is_night=1 for card billing addr1",
+    "card1_amt_zscore exceeds 4.2 within 48 hours of subscription probe authorization"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card starts with a $0.99 streaming subscription that passes all verification checks, then within 18-36 hours shows 8-15 high-value transactions ($280-$450) from international locations over 8000km away, often clustered in 90-minute bursts during the cardholder's nighttime hours.",
+  "reasoning": "Criminals use the small subscription charge as a low-risk test to confirm stolen card credentials work before immediately exploiting the card for large purchases internationally, knowing the cardholder won't notice until much later and the initial charge looked completely legitimate.",
+  "indicator_explanations": [
+    "Small subscription test confirms card is active and passes security checks",
+    "Card erupts from single transaction to rapid-fire activity within two days",
+    "Follow-up charges originate from different continent using unrelated email domain",
+    "Transaction amounts explode from pennies to hundreds after validation succeeds",
+    "Fraudulent purchases cluster in cardholder's local nighttime hours when asleep",
+    "Spending pattern deviates dramatically from card's historical behavior within days"
+  ]
+}

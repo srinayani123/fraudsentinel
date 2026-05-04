@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_024",
+  "title": "Post-Purchase Cognitive Dissonance Fraud Claims on High-Ticket Items",
+  "pattern": "friendly_fraud",
+  "narrative": "Cardholder makes legitimate premium purchase ($800-$2,500 range, typically ProductCD=W or C) using verified card with established history (card1_txn_count_30d > 15), completes transaction during normal shopping hours (txn_hour 10-20, is_night=0), provides matching billing/shipping addresses (dist1 < 50km), passes all authentication checks (AVS=Y, CVV=M). Item delivers successfully within 5-9 days. Cardholder uses product for 12-35 days, then files unauthorized transaction dispute claiming card was stolen, despite no report to issuer during purchase window and continued card use afterward. Pattern emerges when same P_emaildomain shows 2-3 similar disputes across 6-18 month periods, always after delivery confirmation and usage period, targeting merchants with liberal return policies that expired.",
+  "indicators": [
+    "TransactionAmt between $800-$2,500 with ProductCD W or C for discretionary goods",
+    "card1_txn_count_30d > 15 showing established legitimate usage pattern pre-dispute",
+    "Dispute filed 12-35 days post-delivery, after standard return window closed",
+    "dist1 < 50km and addr1 match across dispute and 3+ prior successful transactions",
+    "P_emaildomain appears in 2-3 similar disputes within 6-18 months across different merchants",
+    "Continued card usage (4+ transactions) in 7-day window following disputed purchase",
+    "AVS=Y and CVV=M at time of original transaction with is_night=0 normal shopping hour"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A customer with an established card history makes a high-value purchase ($800-$2,500) that passes all verification checks, successfully receives the product, uses it for 2-5 weeks, then files a dispute claiming the card was stolen—despite continuing to use the same card both before and after the purchase.",
+  "reasoning": "The customer is attempting to keep an expensive item without paying for it by falsely claiming fraud after the merchant's return period expires. The continued card use, matching addresses, successful authentication, and pattern of repeat disputes across multiple merchants reveal intentional abuse rather than genuine card theft.",
+  "indicator_explanations": [
+    "Purchase is a high-value discretionary item that buyers often regret later",
+    "Card shows normal spending history before the dispute emerges",
+    "Dispute timing conveniently lands after merchant's return policy expired",
+    "Transaction location matches cardholder's address and previous legitimate purchases",
+    "Same email tied to similar dispute patterns with other merchants recently",
+    "Cardholder keeps using card actively right after claiming the disputed purchase",
+    "Original transaction passed all security checks during normal business hours"
+  ]
+}

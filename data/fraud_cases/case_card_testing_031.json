@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_031",
+  "title": "Micro-Authorization Digital Goods Probe with Enumerated Card Series",
+  "pattern": "card_testing",
+  "narrative": "Fraudster validates stolen card portfolio using single $0.99-$1.49 charges at streaming service or digital content merchant (ProductCD='C' or 'R'). Pattern shows sequential card1 values suggesting enumerated PANs (e.g., 4532...1001, 4532...1002, 4532...1003) all hitting same MID within 90-180 seconds. Transactions originate from residential proxy network with dist1 values showing 800-2400km separation from cardholder billing addresses. Email domain rotates through temporary providers (P_emaildomain in 'guerrillamail.com', 'tempmail.net', '10minutemail.com'). Successful validations (no decline) are immediately followed by larger purchases at different merchants within 15-45 minutes. AVS and CVV match rates exceed 85% indicating full card data possession, not just card numbers.",
+  "indicators": [
+    "TransactionAmt fixed at $0.99-$1.49 across 8+ transactions in 90-180 second window",
+    "card1 values show sequential enumeration pattern (last 3-4 digits increment by 1-2)",
+    "All transactions share identical ProductCD='C' or 'R' and same merchant ID",
+    "dist1 shows 800-2400km distance between transaction and cardholder address",
+    "P_emaildomain concentrates in 3-4 temporary email providers across card series",
+    "card1_txn_count_24h = 1 for each card (first-time usage at this merchant)",
+    "85%+ AVS_match and CVV_match rates indicating full card data availability"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Sequential card numbers (e.g., ending in 1001, 1002, 1003) all attempt small $0.99-$1.49 digital purchases at the same merchant within 90-180 seconds, originating from locations 800+ km from cardholders' billing addresses with temporary email domains.",
+  "reasoning": "Fraudsters test stolen card databases by making tiny charges that cardholders rarely notice, using sequential card numbers to efficiently validate which cards are still active before moving to high-value fraud at different merchants.",
+  "indicator_explanations": [
+    "All purchase amounts locked at micro-transaction levels to stay under fraud alerts",
+    "Card numbers follow sequential patterns suggesting automated enumeration of stolen card ranges",
+    "Every transaction hits the same digital goods merchant with identical product codes",
+    "Purchases originate from locations hundreds of miles from the cardholder's billing address",
+    "Email addresses cluster among a few throwaway domains across the card batch",
+    "Each card shows first-ever activity at this merchant indicating fresh testing",
+    "High verification match rates prove attacker has complete card details including CVV"
+  ]
+}

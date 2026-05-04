@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_008",
+  "title": "Cross-Border IP Masking with Domestic Card Presentation",
+  "pattern": "geo_anomaly",
+  "narrative": "Fraudster uses VPN or proxy to mask true location while presenting stolen US-issued card with legitimate domestic billing address. Card holder's genuine pattern shows consistent US transactions over 180+ days, then suddenly switches to IP addresses from high-risk jurisdictions (Romania, Nigeria, Indonesia) while billing addr1 remains unchanged. Transactions spike from typical $45-120 range to $380-850 per transaction within 48 hours. The dist1 feature (distance between billing and IP location) jumps from historical 0-50km baseline to 8000+ km. Perpetrator targets digital goods (ProductCD='W') and gift cards to monetize quickly before detection, maintaining CVV match to appear legitimate but failing AVS street number check.",
+  "indicators": [
+    "dist1 metric increases from <50km baseline to >7500km across 2-4 consecutive transactions",
+    "IP country changes to high-risk jurisdiction while billing addr1 remains constant US value",
+    "TransactionAmt increases 4-7x above cardholder's 90-day rolling average within 24-48 hours",
+    "card1_txn_count_24h reaches 6-12 transactions versus typical 0-2 daily baseline",
+    "ProductCD shifts exclusively to 'W' (digital) or 'C' (cash equivalent) from mixed historical pattern",
+    "CVV match=1 but AVS returns partial match (zip only, street mismatch)",
+    "Transactions cluster in is_night=1 time windows (2-6 AM) in stated billing timezone"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A US-issued card suddenly transacts from IP addresses 7,500+ km away in high-risk countries while the billing address stays unchanged, with transaction amounts jumping 4-7x above normal and clustering on digital goods or gift cards.",
+  "reasoning": "The fraudster uses stolen card credentials with a VPN to hide their true foreign location, rushing to extract value through quickly monetizable digital products before the legitimate cardholder notices the unauthorized charges.",
+  "indicator_explanations": [
+    "Card suddenly appears thousands of miles away from its normal geographic footprint",
+    "Connection originates from risky foreign country while billing address stays domestic",
+    "Purchase amounts spike dramatically beyond what this cardholder typically spends",
+    "Card generates a flurry of transactions well above its normal daily activity",
+    "Purchases pivot entirely to digital goods and cash-like products from varied history",
+    "CVV is correct but street address fails verification against billing records",
+    "All activity concentrates in middle-of-night hours for the cardholder's stated timezone"
+  ]
+}

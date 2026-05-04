@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_024",
+  "title": "Sequential Gift Card Liquidation with Incrementing Amounts",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster exploits a compromised card by executing 8-12 gift card purchases within a 45-90 minute window, systematically testing transaction limits. Starts with $25-50 gift cards, then increments by $25-100 until hitting decline threshold, typically reaching $300-500 before cessation. All transactions use ProductCD='W' (digital goods) with identical P_emaildomain (often disposable like 'guerrillamail.com') but varying card metadata. The addr1 field remains constant while dist1 shows zero (billing-shipping match to avoid AVS friction). Transactions cluster in txn_hour 22-3 (night operations for delayed detection). Card1_txn_count_24h spikes from baseline 0-2 to 10+ within the session, while card1_amt_zscore exceeds 4.5 indicating severe deviation from cardholder's normal spend pattern. Pattern terminates abruptly after first hard decline, suggesting automated script with no retry logic.",
+  "indicators": [
+    "8-12 transactions within 45-90 minutes, all ProductCD='W' gift cards",
+    "Incrementing amounts: starts $25-50, increases $25-100 per transaction, peaks $300-500",
+    "Card1_txn_count_24h increases from 0-2 baseline to 10+ during session",
+    "Card1_amt_zscore > 4.5 indicating extreme deviation from normal spending",
+    "Consistent P_emaildomain (disposable services) with dist1=0 across all transactions",
+    "Txn_hour concentrated in 22-3 range (night operations)",
+    "Abrupt cessation after first decline with no retry attempts"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A compromised card suddenly fires off 8-12 gift card purchases in under 90 minutes, starting small ($25-50) and climbing by $25-100 each time until hitting the card's limit around $300-500, all during late-night hours with a disposable email address. The spending spikes from nearly zero to 10+ transactions with amounts 4.5+ standard deviations above the cardholder's normal pattern, then stops immediately after the first decline.",
+  "reasoning": "The fraudster is racing to drain a stolen card before the victim notices, systematically probing the card's remaining credit limit by incrementing amounts until finding the ceiling. The late-night timing, disposable email, and abrupt stop after decline reveal automated theft—not a legitimate customer gradually buying more gift cards—designed to maximize stolen value before the card gets frozen.",
+  "indicator_explanations": [
+    "Attacker is burning through gift cards in a tight time window",
+    "Each purchase is slightly larger, testing limits before hitting the ceiling",
+    "Card goes from quiet to hyperactive within hours of breach",
+    "Purchase sizes are drastically larger than cardholder's historical pattern",
+    "Same throwaway email reused across spree with zero location variation",
+    "Activity clusters during late-night hours when monitoring is lighter",
+    "Fraudster stops completely at first rejection without normal retry behavior"
+  ]
+}

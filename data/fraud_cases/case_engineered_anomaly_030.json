@@ -1,0 +1,27 @@
+{
+  "id": "case_engineered_anomaly_030",
+  "title": "Vesta V-Field Refund-Recharge Cycle Pattern Masked by Normal Behavior",
+  "pattern": "engineered_anomaly",
+  "narrative": "Fraudsters exploit merchant refund policies by executing legitimate-appearing refund transactions followed by immediate recharge attempts using the same or rotated payment instruments. The refund establishes trust signals in payment networks while the subsequent recharge transactions carry hidden risk indicators. Raw behavioral signals appear completely clean: amounts match historical patterns, velocity falls within normal ranges, device fingerprints show continuity, and email/identity fields remain consistent. However, Vesta's V-field composite features encode the temporal relationship between refund and recharge events, detecting subtle sequencing anomalies that indicate coordinated abuse. The V280 and V307 features capture cross-transaction dependencies that reveal the cycle pattern, while V258 flags the payment-instrument rotation strategy. This pattern is invisible to rule-based systems and human analysts reviewing individual transactions, emerging only through multi-dimensional feature engineering that encodes transaction history interactions.",
+  "indicators": [
+    "V307 > 4.2 (p85 threshold), indicating encoded refund-recharge temporal sequence anomaly",
+    "V280 > 3.8 (p80), elevated composite feature capturing payment-instrument rotation within cycle",
+    "V258 between 2.1 and 4.5, flagging coordinated transaction-pair dependency pattern",
+    "C1 < 15 and C2 < 8, low card counters indicating legitimacy masking through limited exposure",
+    "V201 > 2.5 (p70), elevated sequence-position feature detecting non-random transaction ordering",
+    "D1 > 180 (device age exceeds six months), established device trust contradicting fraud signal",
+    "card1_amt_zscore between -0.8 and +1.2, amount within cardholder's normal spending distribution"
+  ],
+  "indicator_explanations": [
+    "Engineered feature detects unusual timing relationship between refund and subsequent charge",
+    "Model identifies suspicious pattern of switching payment methods across linked transactions",
+    "Feature flags that two transactions are operationally coordinated rather than independent",
+    "Card appears minimally used, creating false legitimacy signals that mask the abuse",
+    "Transaction appears in an unlikely position within the cardholder's sequence history",
+    "Device has long-established history with merchant, contradicting typical fraud device profile",
+    "Purchase amount falls within the customer's normal range, appearing behaviorally legitimate"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Fraudsters execute refund-then-recharge cycles that appear completely normal in raw behavioral data but trigger Vesta's composite V-field features encoding temporal and payment-instrument relationships across transaction pairs.",
+  "reasoning": "This indicates fraud because legitimate customers rarely execute coordinated refund-recharge cycles with payment instrument rotation, while the V-field anomalies detect systematic abuse patterns invisible to behavioral analysis. The contradiction between clean behavioral signals and elevated V-field scores reveals deliberate exploitation of refund policies."
+}

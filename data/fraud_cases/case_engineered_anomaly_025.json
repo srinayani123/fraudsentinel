@@ -1,0 +1,25 @@
+{
+  "id": "case_engineered_anomaly_025",
+  "title": "Amount-Merchant History Divergence Pattern via V307 Engineered Anomaly",
+  "pattern": "engineered_anomaly",
+  "narrative": "Fraudsters compromise cards with established merchant relationships and attempt transactions at amounts significantly divergent from the cardholder's historical spend patterns at those merchants. Raw behavioral signals appear completely normal — amount falls within overall card spending range, velocity is clean, email matches, device shows no red flags. However, Vesta's V307 feature, which encodes amount-versus-merchant-history alignment, flags a critical mismatch. The engineered feature captures that while the transaction amount looks reasonable in isolation, it's statistically anomalous when contextualized against this specific card's prior transactions at this merchant category or MID. Additional V-field combinations reveal subtle sequence anomalies in how the transaction was constructed, suggesting the fraudster lacks knowledge of the cardholder's typical merchant-specific behavior patterns despite having valid card credentials.",
+  "indicators": [
+    "V307 > 4.2 (p85), elevated amount-versus-merchant-history divergence score",
+    "card1_amt_zscore between -0.8 and +1.2, amount within normal cardholder range",
+    "D1 > 180 indicating established device-card relationship",
+    "V305 > 3.5 (p80), flagging merchant-category interaction anomaly",
+    "C1 < 45 (p60), card counter shows moderate normal activity level",
+    "V280 > 2.8 (p75), sequence-timing feature detecting subtle checkout-flow deviation"
+  ],
+  "indicator_explanations": [
+    "Transaction amount is highly unusual for this card at this specific merchant type",
+    "Amount falls comfortably within the cardholder's typical spending range overall",
+    "Device and card have been paired together for an extended period",
+    "Engineered feature detects abnormal interaction between merchant category and transaction context",
+    "Card activity volume appears normal and consistent with legitimate use patterns",
+    "Checkout sequence timing shows subtle deviation from cardholder's typical merchant interaction pattern"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Card used at merchant with established history but at an amount statistically divergent from prior transactions at that merchant type, flagged exclusively by V307 engineered feature while all raw behavioral signals appear normal.",
+  "reasoning": "Fraudsters with compromised cards lack knowledge of merchant-specific spending patterns. V307 detects the amount doesn't fit the card's historical relationship with this merchant category, a signal invisible in aggregate behavioral metrics."
+}

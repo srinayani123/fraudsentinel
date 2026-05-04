@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_020",
+  "title": "Corporate Card BIN Attack on B2B Software and Cloud Service Merchants",
+  "pattern": "bin_attack",
+  "narrative": "Fraudsters enumerate a corporate purchasing card BIN (typically government or enterprise fleet cards with relaxed controls) targeting high-dollar B2B merchants with instant digital delivery. Attack concentrates on SaaS subscriptions, cloud computing credits, and enterprise software licenses where MCC codes 5734, 5045, or 7372 are common. Over 48-72 hours, attackers test 200-400 sequential card numbers from the same IIN range, succeeding on 8-15% of attempts. Successful charges cluster between $850-$2,400 to remain under corporate review thresholds. Fraudsters use residential proxy networks showing consistent P_emaildomain patterns (tempmail services, 10minutemail variants) while R_emaildomain remains blank or mismatched. Transactions show abnormal card1_amt_zscore (3.5+) compared to legitimate corporate spend, and 70%+ occur during is_night=1 periods despite targeting business merchants. The bust-out phase completes rapidly before month-end reconciliation cycles trigger corporate cardholder alerts.",
+  "indicators": [
+    "200-400 transactions sharing first 8 digits of card1 within 72-hour window",
+    "TransactionAmt concentrated in $850-$2,400 range with card1_amt_zscore exceeding 3.5",
+    "MCC codes restricted to 5734, 5045, 7372 (B2B software/services)",
+    "P_emaildomain shows 85%+ temporary email services while R_emaildomain blank or inconsistent",
+    "75%+ of transactions during txn_hour 22-06 (is_night=1) despite business merchant category",
+    "card1_txn_count_24h between 15-35 with 8-15% approval rate pattern",
+    "ProductCD='W' (digital goods) with dist1=0 indicating no physical shipping distance"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Sequential corporate card numbers from the same BIN are tested rapidly (200-400 attempts in 72 hours) on B2B software merchants, with successful charges clustering at $850-$2,400 and temporary email domains used for 85% of purchases. Most transactions occur overnight despite targeting business services, and card spending shows abnormally high z-scores compared to legitimate corporate use.",
+  "reasoning": "Criminals exploit weak controls on corporate purchasing cards to buy instantly-delivered digital products they can resell, staying under corporate review thresholds while racing to complete the scheme before month-end reconciliation alerts the real cardholders. The overnight timing, temporary emails, and sequential card testing reveal coordinated enumeration rather than genuine business purchasing.",
+  "indicator_explanations": [
+    "Hundreds of cards from the same bank batch hit merchants within three days",
+    "Purchase amounts cluster in a narrow business-software price band well above normal",
+    "All transactions target business software and cloud service merchants exclusively",
+    "Buyers use burner email addresses while merchant contact info is missing or random",
+    "Business purchases happen overwhelmingly at night when legitimate corporate buyers are offline",
+    "Card attempts dozens of transactions daily but most get declined immediately",
+    "Digital products with no shipping suggest fraudsters avoid physical delivery verification"
+  ]
+}

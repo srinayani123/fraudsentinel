@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_020",
+  "title": "Dormant Home Country Pattern with Sudden Foreign High-Value Cluster",
+  "pattern": "geo_anomaly",
+  "narrative": "A card with 90+ days of consistent domestic transactions in the cardholder's country (e.g., US addr1 prefix) suddenly shows zero activity in that country while generating 8-12 transactions totaling $2,400-$4,800 exclusively in a foreign country within 72 hours. The domestic transaction history shows regular low-value purchases ($15-$85) at grocery/gas MCCs with card1_txn_count_7d typically at 4-6. The foreign burst features elevated amounts ($180-$420 per transaction), all CNP with mismatched R_emaildomain geography, ProductCD shifts from physical goods to digital/services, and dist1 values exceeding 8,000km. Transactions cluster in 6-hour windows during what would be 2AM-5AM in the cardholder's timezone (is_night=1 for home country). No transactions return to the original country even after the foreign cluster ends, suggesting account takeover during travel or credential theft exploiting a genuine trip.",
+  "indicators": [
+    "card1_txn_count_90d shows 35+ transactions, all in cardholder country, then 90d_home_country_count drops to zero",
+    "8-12 transactions in 48-72 hours, all from single foreign country with dist1 > 7500km from historical addr1",
+    "Foreign transaction amounts $180-$420 each versus historical card1_amt_mean of $45-$75",
+    "All foreign transactions during txn_hour 6-12 mapping to 2AM-6AM in cardholder's original timezone (is_night=1 for home country)",
+    "R_emaildomain country code mismatches transaction country in 70%+ of foreign transactions",
+    "ProductCD switches from 'W' (physical) to 'C'/'H' (digital/services) for 85%+ of foreign cluster",
+    "Zero return transactions to original country for 14+ days post-foreign-cluster"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card with 90+ days of steady domestic purchases suddenly goes silent at home while 8-12 high-value transactions appear in a single foreign country within 72 hours, all card-not-present with amounts 3-5x the normal spend and timing that falls in the middle of the night back home.",
+  "reasoning": "Legitimate travelers typically show overlapping activity or gradual geographic shifts, not an instant switch from one country to another with zero domestic fallback—this abrupt cutover with inflated amounts and graveyard-shift timing signals a fraudster exploiting stolen credentials during or immediately after a genuine trip.",
+  "indicator_explanations": [
+    "Card was active domestically for months then abruptly stops all home-country activity",
+    "Burst of transactions suddenly appears from a single distant foreign location",
+    "Purchase amounts are triple to quintuple the cardholder's normal spending level",
+    "Foreign transactions occur during middle-of-night hours back in cardholder's home timezone",
+    "Email domain country doesn't match where transactions are actually occurring",
+    "Card shifts from buying physical goods to intangible digital services suddenly",
+    "No return to original country activity after foreign spending spree begins"
+  ]
+}

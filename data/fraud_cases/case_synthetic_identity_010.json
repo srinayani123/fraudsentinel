@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_010",
+  "title": "Synthetic Identity Seasoning with Micro-Payment Cultivation and Rapid Bust-Out",
+  "pattern": "synthetic_identity",
+  "narrative": "Synthetic identity establishes legitimacy through 6-9 months of predictable micro-payments ($8-35) on utility MCCs (4900, 4814) with perfect on-time behavior. Account demonstrates card1_txn_count_30d consistently at 4-6 transactions monthly. TransactionAmt variance remains under $12 for entire seasoning period. Sudden behavioral shift occurs: within 72-hour window, account executes 15-23 transactions totaling $4,800-$8,200 across high-risk MCCs (5732 electronics, 5944 jewelry). TransactionAmt jumps to $280-$650 range with card1_amt_zscore spiking from 0.2 to 4.7. Bust-out phase shows is_night flag on 68% of transactions, dist1 values exceeding 850 miles from established addr1 pattern, and switch from verified P_emaildomain (gmail.com) to disposable domains. No chargeback disputes filed during seasoning, then complete payment default post-bust-out.",
+  "indicators": [
+    "6-9 months of consistent micro-payments $8-35 on utility MCCs followed by 72-hour burst of 15-23 transactions",
+    "card1_amt_zscore spike from <0.5 during seasoning to >4.0 during bust-out phase",
+    "TransactionAmt variance under $12 for 180+ days then sudden $280-$650 individual charges",
+    "dist1 changes from <50 miles to 850+ miles between seasoning and bust-out transactions",
+    "is_night transaction percentage increases from 12% to 68% during high-value burst",
+    "MCC shift from utilities (4900, 4814) to electronics/jewelry (5732, 5944) within same 72-hour window",
+    "P_emaildomain switches from established provider to disposable domain concurrent with spending spike"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "An account maintains 6-9 months of small, predictable payments ($8-35) on utility bills with perfect payment history, then suddenly executes 15-23 high-value transactions ($280-650) within 72 hours at electronics and jewelry merchants, often at night and from distant locations.",
+  "reasoning": "Fraudsters build a fake identity's credit profile through carefully controlled \"good\" behavior to gain trust and credit limits, then maximize unauthorized purchases before abandoning the account—the drastic behavioral shift from patient micro-payments to rapid high-value spending reveals the orchestrated nature of the scheme.",
+  "indicator_explanations": [
+    "Account builds trust with tiny bills then explodes into shopping spree",
+    "Spending suddenly rockets far beyond the carefully established normal pattern",
+    "Charges stay tiny and predictable for months then jump to luxury amounts",
+    "Card travels hundreds of miles away from its established geographic comfort zone",
+    "Activity shifts from daytime legitimate hours to overnight fraud-friendly timing",
+    "Purchases flip from utility bills to high-resale electronics and jewelry instantly",
+    "Email changes from credible provider to burner address right before attack"
+  ]
+}

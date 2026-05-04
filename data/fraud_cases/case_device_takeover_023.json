@@ -1,0 +1,25 @@
+{
+  "id": "case_device_takeover_023",
+  "title": "Credential Theft via Rooted Device with Clean Transaction Profile",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster has obtained valid cardholder credentials and initiates transactions from a compromised rooted or jailbroken device. The transaction amounts fall within the cardholder's normal spending range and occur during typical daytime hours with matching email verification, making behavioral detection difficult. However, device integrity flags reveal the environment has been tampered with to bypass security controls. The D10 field shows the device operating system has been modified, while D15 distance-to-address metrics indicate the physical location does not align with historical device patterns. First-time device pairing combined with rooted device flags creates a signature pattern where identity theft occurs through sophisticated technical exploitation rather than behavioral anomaly. The fraudster operates carefully within normal transaction parameters to evade velocity and amount-based controls while the compromised device environment exposes the attack vector.",
+  "indicators": [
+    "D10 > 200 (p90 threshold) indicating device operating system integrity compromise flag",
+    "D1 = 0 showing first-time pairing between this device and payment card",
+    "D15 > 300 (p90) reflecting geographic distance anomaly between device and billing address",
+    "card1_amt_zscore between -1.0 and +1.0 (within normal cardholder spending pattern)",
+    "D4 < 10 indicating minimal time-elapsed since device first seen in network",
+    "txn_hour between 10 and 20 (daytime transaction window matching cardholder habits)"
+  ],
+  "indicator_explanations": [
+    "Device shows signs of root access or jailbreak modification bypassing security controls",
+    "This device has never been used with this card before",
+    "Device location is unusually far from the cardholder's registered billing address",
+    "Transaction amount fits comfortably within the cardholder's typical spending range",
+    "Device appeared in the payment network very recently with minimal history",
+    "Transaction occurs during normal daytime hours consistent with legitimate cardholder activity"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Stolen credentials used from a rooted or jailbroken device where transaction amounts and timing appear normal but device integrity flags and first-time device pairing reveal the compromise.",
+  "reasoning": "Legitimate cardholders do not suddenly transact from recently-seen rooted devices located far from their billing address. The combination of device tampering flags with clean behavioral patterns indicates credential theft where the fraudster carefully mimics normal spending to avoid detection while the compromised device environment exposes the attack."
+}

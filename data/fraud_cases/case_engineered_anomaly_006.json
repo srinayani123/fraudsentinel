@@ -1,0 +1,25 @@
+{
+  "id": "case_engineered_anomaly_006",
+  "title": "Session Cookie Sequence Anomaly Detected by V-Field Pattern Recognition",
+  "pattern": "engineered_anomaly",
+  "narrative": "This pattern captures fraud where attackers maintain consistent behavioral appearance across multiple transactions but exhibit anomalous session or cookie-handling patterns that Vesta's V-field engineering detects. The fraudster uses stolen card credentials with legitimate-looking purchase amounts and timing, but their browser session management reveals automated tooling or session-replay attacks. V307 (session sequence feature) and V320 (cookie consistency metric) flag irregular state transitions that don't match organic user navigation. The card's transaction counter remains within normal bounds (C1 < 40), amounts appear appropriate, and device consistency seems adequate — yet the underlying session telemetry encodes a pattern inconsistent with genuine cardholder behavior. These transactions often represent card-testing operations or credential-stuffing attacks where the fraudster's automation leaves invisible fingerprints in session-state progression.",
+  "indicators": [
+    "V307 > 4.5 (p85 threshold), session sequence feature indicating non-organic state transitions",
+    "V320 > 3.2 (p80), cookie consistency metric flagging irregular browser-state handling",
+    "V200 between 2 and 4 (p50-p75 range), moderate sequence anomaly without extreme outlier status",
+    "C1 < 40 (p70), card-level counter within normal activity range masking testing behavior",
+    "card1_amt_zscore between -1.0 and +1.0, amount fully consistent with cardholder spending profile",
+    "D1 > 0 indicating device-card pairing has prior history, avoiding first-seen red flags"
+  ],
+  "indicator_explanations": [
+    "Session progression shows automated or scripted navigation rather than organic browsing behavior",
+    "Cookie handling reveals inconsistent browser state suggesting session replay or bot activity",
+    "Transaction sequence pattern deviates moderately from baseline without triggering extreme outlier alerts",
+    "Card activity counter appears normal, concealing systematic testing across multiple sessions",
+    "Purchase amount fits perfectly within expected spending range for this cardholder",
+    "Device has been seen with this card before, creating false legitimacy signal"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Fraudster uses stolen credentials with normal-looking amounts and device consistency, but automated tooling leaves detectable fingerprints in session-state and cookie-handling patterns that Vesta V-fields capture. Behavioral metrics appear entirely clean while session telemetry reveals non-human interaction patterns.",
+  "reasoning": "Genuine cardholders exhibit organic session progression and consistent cookie-state handling. When V-fields flag session anomalies while all behavioral signals remain clean, this indicates credential abuse by attackers using automation sophisticated enough to mimic amounts and timing but unable to replicate authentic browser-session state transitions."
+}

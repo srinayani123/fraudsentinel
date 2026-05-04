@@ -1,0 +1,27 @@
+{
+  "id": "case_device_takeover_005",
+  "title": "Mid-Session Device Fingerprint Rotation After Legitimate Authentication",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster compromises account credentials and initiates session from legitimate device to pass initial authentication checks, then rotates to a different device mid-transaction sequence while maintaining the authenticated session token. The cardholder's spending patterns remain intact—amounts fit historical norms, transaction frequency stays within daily baselines, and purchases occur during typical daytime hours with matching email verification. However, device fingerprint features reveal an impossible hardware transition: D1 resets to zero indicating first-time device-card pairing despite an active session, while D10 shows dramatic discontinuity from prior session values. The D4 time-delta collapses to near-zero between transactions that should show device consistency, and D15 counters spike abnormally as the new device enters the transaction stream. This pattern exploits session-hijacking techniques where authentication cookies or tokens are transferred between devices, allowing fraudsters to bypass re-authentication while introducing detectable device-layer inconsistencies that contradict the behavioral cleanliness of the transaction profile.",
+  "indicators": [
+    "D1 = 0 despite active session context indicated by card1_txn_count_24h between 3 and 8",
+    "D10 < 5 (below p75=16.75) showing recent device-card counter reset mid-sequence",
+    "D4 < 2 (below median=4.00) indicating abnormally short device time-delta between consecutive transactions",
+    "D15 > 300 (above p90=346.30) revealing elevated device identifier counter inconsistent with D1 reset",
+    "card1_amt_zscore between -0.8 and +0.9 maintaining in-pattern spending profile",
+    "TransactionAmt between 60 and 180 (median to p75 range) fitting cardholder baseline",
+    "V258 > 4.2 or V257 > 3.8 flagging Vesta device-consistency anomaly scores"
+  ],
+  "indicator_explanations": [
+    "The device appears as first-time with this card despite multiple recent transactions in the same session",
+    "Device-level activity counter shows recent reset suggesting hardware swap during active session",
+    "Time interval between device interactions is impossibly short for legitimate user behavior",
+    "Device identifier counter is very high contradicting the first-time device pairing signal",
+    "Transaction amount falls within the cardholder's normal spending range masking the fraud",
+    "Purchase amount matches typical cardholder transaction values avoiding amount-based detection",
+    "Engineered fraud model detects device fingerprint inconsistency patterns across the transaction sequence"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Fraudster hijacks authenticated session and rotates to different device mid-stream while maintaining clean behavioral profile. Device fingerprint features show impossible hardware transition with D1 reset contradicting active session and D15 elevation.",
+  "reasoning": "Legitimate users do not switch physical devices mid-session while maintaining authentication tokens. The combination of D1 reset with elevated D15 and collapsed D4 time-delta reveals session-token transfer between hardware devices, a hallmark of credential-compromise fraud where attackers exploit stolen cookies rather than re-authenticating."
+}

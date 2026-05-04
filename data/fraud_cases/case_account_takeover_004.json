@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_004",
+  "title": "Device Swap Password Reset with Immediate High-Value Purchase",
+  "pattern": "account_takeover",
+  "narrative": "Attacker gains credentials through phishing or credential stuffing, then logs in from a device never associated with the account (device_match=0). Within 15-45 minutes, they trigger a password reset, update the email to a disposable domain (P_emaildomain: guerrillamail.com, tempmail.net), and complete a purchase of $850-$2,400 in electronics or gift cards. The purchase occurs from a different geographic location (dist1 > 500km from historical addr1) with shipping to a freight forwarder address. The attacker deliberately keeps TransactionAmt below the account's historical maximum by $50-$100 to avoid automatic hard blocks. Session duration from login to checkout is extremely compressed: 8-12 minutes versus the victim's typical 25+ minute browsing pattern. Card verification (CVV) passes because saved payment methods don't require re-entry, but AVS fails due to shipping address change.",
+  "indicators": [
+    "device_id never seen in account history (device_match=0) combined with password reset within 45 minutes",
+    "P_emaildomain changed to disposable service (guerrillamail, tempmail, 10minutemail) within same session",
+    "dist1 > 500km between historical addr1 and current transaction location",
+    "TransactionAmt $850-$2,400, positioned $50-$100 below account's historical max transaction",
+    "Session duration 8-12 minutes from login to purchase completion vs account average 25+ minutes",
+    "ProductCD = 'W' (electronics) or 'C' (gift cards) with R_emaildomain != historical shipping contact",
+    "AVS mismatch on shipping address despite CVV match on stored payment method"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A login from a never-before-seen device is followed within minutes by a password reset, email change to a disposable domain (guerrillamail, tempmail), and a rushed checkout (8-12 minutes vs. typical 25+) for high-value electronics or gift cards shipped 500+ km away from the account's normal location.",
+  "reasoning": "The attacker is racing to extract maximum value before the legitimate owner notices, using stolen credentials to hijack the account, lock out the victim with new email/password, and ship goods to a drop address while deliberately staying just under transaction limits to avoid automatic fraud blocks.",
+  "indicator_explanations": [
+    "Brand new device appears right after password gets reset",
+    "Account email suddenly switches to a disposable throwaway service",
+    "Transaction originates hundreds of miles from cardholder's usual location",
+    "Purchase amount deliberately stays just under account's historical spending ceiling",
+    "Attacker rushes through checkout far faster than legitimate account owner",
+    "High-risk items shipped to email address that doesn't match account history",
+    "Shipping address fails verification while stored card details pass security"
+  ]
+}

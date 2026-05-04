@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_006",
+  "title": "Fresh BIN Breach Exploitation with Geographic Dispersal Pattern",
+  "pattern": "bin_attack",
+  "narrative": "A compromised BIN range (first 8 digits) surfaces 48-96 hours after a data breach disclosure, characterized by cards from the affected issuer attempting low-value test transactions followed by rapid escalation. The attacker cycles through 15-30 cards from the same IIN within 6 hours, initially probing with $1-$15 amounts to validate cards, then immediately executing $200-$800 purchases. Geographic fingerprints show card-present transactions historically centered in one metro area (addr1 consistent, dist1 under 50km) now generating CNP transactions with mismatched P_emaildomain patterns (temporary email services) and R_emaildomain nulls. The card1_txn_count_1day spikes from typical 0-2 to 8-12 attempts. Transactions cluster in is_night hours (22:00-04:00 UTC) with ProductCD switching from historical 'W' (wireless service) to 'C' (cash-out) or 'H' (home/furniture). AVS mismatches exceed 70% and CVV failures precede successful approvals by 3-8 minutes.",
+  "indicators": [
+    "15-30 unique card numbers sharing first 8 digits transacting within 6-hour window",
+    "Initial transaction amounts $1-$15 followed within 12 minutes by $200-$800 attempts per card",
+    "card1_txn_count_1day elevated 4-6x above BIN's historical baseline (8-12 vs 0-2)",
+    "Geographic inconsistency: dist1 historically <50km now showing P_emaildomain from temporary providers with R_emaildomain null",
+    "70%+ AVS mismatch rate across BIN with CVV failures 3-8 minutes before approval",
+    "ProductCD shift from historical 'W' pattern to 'C' or 'H' categories",
+    "Transaction clustering in is_night period (22:00-04:00 UTC) versus historical daytime pattern"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Within hours of a breach disclosure, 15-30 cards from the same bank (sharing first 8 digits) attempt small $1-$15 test purchases followed immediately by $200-$800 charges, with transaction counts spiking 4-6x normal and 70%+ address verification failures. Cards historically used for local wireless payments now generate nighttime online purchases from temporary email addresses with mismatched billing details.",
+  "reasoning": "Fraudsters validate stolen card data through micro-transactions before maxing out limits, exploiting the narrow window before issuers can block the compromised BIN range. The geographic mismatches, temporary emails, AVS failures, and nighttime clustering reveal organized criminals systematically monetizing freshly stolen credentials rather than legitimate cardholders changing behavior.",
+  "indicator_explanations": [
+    "Multiple cards from same bank batch hitting the system simultaneously",
+    "Fraudsters test with small amounts then immediately max out the cards",
+    "This card family sees dramatically more activity than their normal usage",
+    "Email addresses don't match the cardholder's home location or history",
+    "Wrong addresses submitted repeatedly before finding one that slips through",
+    "Purchase types suddenly different from what these cardholders normally buy",
+    "Activity happens during graveyard shift when legitimate cardholders typically sleep"
+  ]
+}

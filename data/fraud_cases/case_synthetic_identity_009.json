@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_009",
+  "title": "Frankenstein Identity: Valid Components Never Previously Combined Together",
+  "pattern": "synthetic_identity",
+  "narrative": "A fraudster assembles synthetic identity from separately verified but never co-occurring elements. SSN shows 8-year credit history with different name. Phone number active 3+ years but linked to different address in telecom databases. Email domain legitimate (P_emaildomain 'gmail.com') but account age only 14 days per WHOIS. Billing addr1 matches utility records for different surname. First transaction $847 appears 6 hours after account creation. Card1 shows zero historical txn_count with this email-address pair despite both existing independently. Dist1 between billing and shipping addresses is 0 (same location) but R_emaildomain differs from P_emaildomain. Device fingerprint new but IP geolocation matches addr1 perfectly. Each fragment passes individual verification but the specific combination has no transaction history, social media footprint, or cross-reference in fraud consortiums.",
+  "indicators": [
+    "card1_txn_count_with_email = 0 despite email age >180 days and card age >90 days",
+    "P_emaildomain legitimate but email account creation within 21 days of first transaction",
+    "addr1 utility records show 24+ month occupancy under different name than cardholder",
+    "SSN credit file active 6+ years but zero shared transaction history with current phone number",
+    "First transaction amount $500-$1200 within 12 hours of account profile completion",
+    "dist1 = 0 but R_emaildomain != P_emaildomain with no prior linkage in fraud databases",
+    "Device fingerprint age <7 days but behavioral confidence score from device vendor shows 'new profile' flag"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Each identity component validates individually—SSN has years of credit history, phone number is active, email domain is legitimate—but this specific combination has never transacted together before and shows no shared history across any systems.",
+  "reasoning": "Fraudsters harvest real, verified identity fragments from different people or sources and stitch them into a new synthetic profile that passes automated checks while having no genuine relationship history, allowing them to open accounts and make high-value purchases before the Frankenstein identity unravels.",
+  "indicator_explanations": [
+    "Card and email have never been used together despite both existing for months",
+    "Email account was created just weeks before the first purchase attempt",
+    "Address shows long-term resident but name doesn't match the cardholder claiming it",
+    "Social security number is established but phone number has no transaction history with it",
+    "Large purchase happens immediately after the account profile was assembled",
+    "Shipping matches billing location but emails are from completely unrelated domains",
+    "Device appears brand new but shows no genuine user behavior patterns"
+  ]
+}

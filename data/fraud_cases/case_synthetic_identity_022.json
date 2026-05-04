@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_022",
+  "title": "Frankenstein Identity Credit Builder: Real SSN Paired with Fabricated Applicant Profile",
+  "pattern": "synthetic_identity",
+  "narrative": "Fraudster obtains legitimate SSN (often from deceased individual or child) and combines it with completely fabricated name, DOB, and contact information to create synthetic identity. Pattern begins with small authorized-user tradeline piggybacking or secured card at $300-500 limit. Over 8-14 months, performs meticulous payment behavior: 3-5 transactions monthly at $15-45 each, always paid in full, establishing 720+ credit score. Initial transactions cluster at gas stations (MCC 5541) and grocery (MCC 5411). Email domain typically free provider (gmail.com, yahoo.com) created within 90 days of first application. Address maps to mail drop or CMRA facility. Billing and shipping addresses identical for first 6+ months (dist1 = 0 consistently). Once credit limit reaches $3,000-8,000, executes bust-out: 8-15 transactions within 72 hours, card1_txn_count_3day spikes from baseline of 0.4 to 12+, all CNP purchases at electronics retailers, TransactionAmt jumps to $800-1,200 range, then account abandonment with zero payment.",
+  "indicators": [
+    "dist1 = 0 for 95%+ of transactions during first 180+ days, then sudden geographic diversity",
+    "P_emaildomain creation date within 60-90 days of first card application date",
+    "card1_txn_count_1day baseline â‰¤0.5 for 6+ months, then spikes to 5-8 transactions in single day",
+    "addr1 maps to commercial mail receiving agency or UPS Store location",
+    "Initial 6-month average TransactionAmt $25-50, then final week averages $900-1,100",
+    "ProductCD shifts from 'C' (card present) to exclusively 'W' (online wallet) in final 48 hours",
+    "Zero transactions during traditional work hours (txn_hour 9-17) for entire account history"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A legitimate Social Security Number is paired with a completely fake name, birthdate, and address (often a mail drop). The account shows 8-14 months of small, methodical transactions that build a high credit score, then suddenly executes 8-15 large purchases within 72 hours before abandoning the account.",
+  "reasoning": "The fraudster is building synthetic credit history to qualify for higher limits, then cashing out with a coordinated bust-out. The meticulous early behavior and sudden shift to rapid high-value purchases indicate planned exploitation rather than a customer experiencing financial hardship.",
+  "indicator_explanations": [
+    "Account stays geographically static for months then suddenly spreads across multiple locations",
+    "Email account was freshly created right before applying for this card",
+    "Card sits nearly dormant for months then suddenly fires off multiple transactions daily",
+    "Shipping address is a commercial mailbox service not a residence",
+    "Small legitimate-looking purchases for months then massive amounts in final days",
+    "Card switches from in-person swipes to online-only wallets right before bust-out",
+    "Every single transaction happens outside normal business hours suggesting automation or avoidance"
+  ]
+}

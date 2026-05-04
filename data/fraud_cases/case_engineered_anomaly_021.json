@@ -1,0 +1,25 @@
+{
+  "id": "case_engineered_anomaly_021",
+  "title": "V200 Elevated Velocity Signature with Clean Behavioral Surface",
+  "pattern": "engineered_anomaly",
+  "narrative": "This pattern represents fraudulent transactions where raw behavioral signals appear completely normal — amounts are typical, timing is reasonable, emails match, and device usage seems legitimate. However, the V200 engineered feature captures a hidden velocity or sequencing anomaly that indicates coordinated fraud activity. V200 encodes complex transaction-sequence patterns across multiple dimensions that aren't visible in any single raw feature. The fraudster has carefully calibrated their attack to stay within normal behavioral bounds, but the mathematical signature of their sequential probing or card-testing behavior leaks through in Vesta's composite velocity calculations. This is a pure model-driven detection where the analyst must trust the engineered feature's signal despite seeing nothing obviously wrong in the transaction details. The pattern often appears in scenarios where multiple cards are being tested through a single merchant or device fingerprint in ways that look individually normal but collectively reveal orchestration.",
+  "indicators": [
+    "V200 > 6 (p90 threshold) indicating severe engineered velocity/sequence anomaly",
+    "card1_amt_zscore between -1.0 and +1.0 (amount fully within cardholder normal range)",
+    "D1 > 30 (device previously seen with card, passing basic trust threshold)",
+    "C1 < 40 (card-level counter below median, no obvious card velocity spike)",
+    "TransactionDT hour-of-day between 09:00-21:00 (normal waking hours, not night fraud)",
+    "dist1 is null or < 100km (email domain distance normal or unavailable)"
+  ],
+  "indicator_explanations": [
+    "Vesta's composite velocity feature shows severe sequential pattern anomaly invisible in raw data",
+    "Transaction amount fits perfectly within the cardholder's established spending habits",
+    "The device has significant history with this card suggesting legitimate pairing",
+    "Card-level activity counter shows no unusual concentration or velocity spike",
+    "Transaction occurs during normal business hours when legitimate cardholders shop",
+    "Email domain geographic distance shows no red flags or mismatch concerns"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Fraudulent transaction where every observable behavioral signal appears normal, but V200 engineered feature detects hidden velocity or sequencing patterns indicating coordinated testing activity across cards or devices.",
+  "reasoning": "When V200 elevates significantly while all raw behavioral, timing, and identity signals remain clean, it indicates the model has detected mathematical signatures of orchestrated fraud — such as card testing sequences, synthetic identity probing, or multi-account takeover patterns — that fraudsters have carefully hidden beneath normal-looking individual transaction characteristics."
+}

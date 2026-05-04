@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_008",
+  "title": "Concert Ticket Scalper Ring with Coordinated Checkout Velocity Surge",
+  "pattern": "velocity_attack",
+  "narrative": "Organized ticket scalping operation targeting high-demand concert and sporting event releases. Ring uses 15-30 stolen cards within a 90-second checkout window immediately after ticket sales open (typically 10:00 AM local time). Each card purchases the maximum allowed tickets (usually 4-6 per transaction) at face values ranging $85-$350 per ticket, totaling $340-$2,100 per transaction. All transactions share identical R_emaildomain (typically privacy-focused domains like protonmail.com or guerrillamail.com), same ProductCD (usually 'C' for entertainment), and dist1 values under 5km indicating shipping addresses clustered in commercial districts. Attackers use residential proxies showing consistent addr1 values but varying card1 BINs across multiple issuers to evade single-bank detection. The bust-out completes in under 3 minutes, with cards never used again after the event sells out. Secondary resale indicators appear when the same delivery addresses list tickets on resale platforms within 24-48 hours at 200-400% markup.",
+  "indicators": [
+    "15-30 unique card1 values with ProductCD='C' completing checkout within 90-second window during known event on-sale times",
+    "TransactionAmt clustering at $340-$2,100 with exactly 4-6 items per transaction matching venue ticket limits",
+    "All transactions share identical R_emaildomain from privacy email providers and dist1 < 5km indicating commercial shipping cluster",
+    "card1_txn_count_1day = 1 for all cards (first and only use), with card1 BINs spanning 5+ different issuing banks",
+    "Transactions occur during is_night=0 with txn_hour concentrated at 10-11 (matching typical event sales launch times)",
+    "addr1 values show 3-5 distinct shipping addresses reused across multiple card1 values within the velocity burst",
+    "card1_amt_zscore > 3.5 for each card relative to its BIN's typical transaction profile, indicating unusual high-value first purchase"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A burst of 15-30 different stolen cards all buy maximum-allowed tickets (4-6 each) for the same event within 90 seconds of sales opening, using privacy email domains and shipping to a few clustered commercial addresses. Each card is used exactly once and never again, with purchase amounts far above normal for those card types.",
+  "reasoning": "Scalpers coordinate stolen payment details to bypass per-card ticket limits and instantly secure inventory for resale at markup, completing the operation before fraud detection systems can respond and discarding cards to avoid later scrutiny.",
+  "indicator_explanations": [
+    "Dozens of different cards hit the same event checkout simultaneously",
+    "Purchase amounts perfectly match ticket pricing and venue purchase limits",
+    "All orders ship to tight geographic cluster using disposable emails",
+    "Every card making its virgin purchase then vanishing from system",
+    "Attack timing synchronized precisely with event ticket release windows",
+    "Small set of delivery addresses recycled across the card swarm",
+    "First purchase on each card dramatically exceeds that BIN's normal"
+  ]
+}

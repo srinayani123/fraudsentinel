@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_027",
+  "title": "Coordinated Event Ticket Scalping Ring with Rotation Pattern",
+  "pattern": "velocity_attack",
+  "narrative": "Fraud ring exploits event ticket release windows by rotating through 8-15 compromised cards in synchronized bursts. Attack begins within 90 seconds of on-sale time, targeting high-demand concerts or sports events. Each card executes 3-4 purchases of $180-$450 (standard ticket + fees) within 2-3 minutes before switching to next card. Total ring volume reaches $12,000-$28,000 in under 20 minutes. All transactions share identical R_emaildomain (burner email service), same dist1 value suggesting single shipping address despite varied billing addresses, and ProductCD='C' (event category). Cards show no prior velocity history but zero failed CVV attempts, indicating fresh fullz data. Timing concentration at txn_hour matching release time (often 10 AM or 12 PM local) distinguishes from organic fan purchases which show more temporal spread.",
+  "indicators": [
+    "8-15 unique card1 values purchasing identical ProductCD='C' within 20-minute window",
+    "Per-card velocity of 3-4 transactions averaging $180-$450 within 2-3 minutes then stopping",
+    "All transactions share same R_emaildomain from temporary email provider (guerrillamail, tempmail, etc.)",
+    "Identical dist1 value across cards indicating single shipping address despite billing mismatches",
+    "Zero CVV/AVS mismatch rate across all cards suggesting fresh stolen data not carded credentials",
+    "Transaction start time within 90 seconds of known event ticket release timestamp",
+    "card1_txn_count_1day jumps from 0 to 3-4 with no prior transaction history on any card"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Within 20 minutes of a ticket sale going live, 8-15 different cards each make 3-4 purchases of event tickets ($180-$450) in rapid 2-3 minute bursts, all sharing the same temporary email domain and shipping address despite different billing addresses. Cards show perfect payment credentials with zero failed attempts and no purchase history.",
+  "reasoning": "This is a professional scalping ring using fresh stolen card data to bypass per-card purchase limits during high-demand ticket releases. The synchronized timing, rotation strategy, and shared delivery point reveal organized resale fraud rather than legitimate fans, who would show varied purchase timing and wouldn't share email domains or shipping addresses.",
+  "indicator_explanations": [
+    "Multiple different cards hit the same event ticket within minutes",
+    "Each card fires a quick burst then goes silent immediately",
+    "All orders share a disposable email service across different cards",
+    "Everything ships to one address despite different billing information",
+    "All cards pass security checks suggesting freshly stolen card data",
+    "Purchases start within seconds of tickets going on sale publicly",
+    "Cards appear brand new with instant burst activity and no history"
+  ]
+}

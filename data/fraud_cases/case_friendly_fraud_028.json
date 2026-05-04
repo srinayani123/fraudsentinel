@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_028",
+  "title": "Post-Event Ticket Dispute: Digital Delivery with Day-After Chargeback",
+  "pattern": "friendly_fraud",
+  "narrative": "Cardholder purchases premium event tickets ($450-$1,200 range) through secondary marketplaces or direct venue platforms, receives instant digital delivery via email/mobile app, attends the event (scannable proof of entry exists in venue systems), then files a chargeback 24-72 hours post-event claiming non-delivery or service not rendered. Pattern frequently involves ProductCD 'C' (digital goods), legitimate R_emaildomain matching cardholder, successful delivery confirmation timestamp, and dispute reason code 30 (service not provided). Perpetrators exploit the gap between event attendance and merchant's ability to produce physical proof of service consumption. Often clusters around high-demand concerts, sports playoffs, or festival events where tickets approached $800+ secondary market prices.",
+  "indicators": [
+    "TransactionAmt between $450-$1,200 for ProductCD 'C' with entertainment MCC 7922 or 7929",
+    "R_emaildomain matches known consumer domains (gmail, yahoo, outlook) with successful delivery confirmation within 2 hours of purchase",
+    "Chargeback filed 24-72 hours after event_date timestamp with reason code 30 (service not provided/rendered)",
+    "card1_txn_count_7day = 1 (single transaction), no prior disputes on card1 in 180-day window",
+    "Transaction hour between 09:00-17:00 (txn_hour 9-17), matching typical ticket sale windows",
+    "dist1 < 50km (delivery address near billing address), addr1 stability > 90 days",
+    "No failed authentication attempts or declined transactions preceding successful purchase"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Customer buys expensive digital event tickets, receives them instantly via email or app with verified delivery, attends the event (venue scan records prove entry), then disputes the charge 1-3 days later claiming they never got the tickets or service.",
+  "reasoning": "The cardholder is exploiting the difficulty of proving they consumed a digital service by falsely claiming non-delivery after already attending the event, essentially trying to get a free experience worth hundreds of dollars despite venue entry records showing they used the tickets.",
+  "indicator_explanations": [
+    "High-value entertainment ticket purchased in the typical event pricing range",
+    "Buyer used personal email and received tickets successfully within hours",
+    "Chargeback claims non-delivery but filed right after the event occurred",
+    "Card shows isolated purchase with clean dispute history suggesting opportunistic claim",
+    "Purchase made during normal business hours when legitimate ticket sales occur",
+    "Delivery and billing addresses match closely with stable residential presence",
+    "Clean purchase with no friction suggesting buyer had valid credentials"
+  ]
+}

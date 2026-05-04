@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_019",
+  "title": "OAuth Third-Party App Token Hijack with Credential Pivot",
+  "pattern": "account_takeover",
+  "narrative": "Fraudster compromises OAuth tokens from legitimate budgeting or payment apps (Mint, Venmo-linked services) that have stored account credentials. Initial access shows the third-party app's typical API fingerprint, but within 60-180 minutes, direct account access emerges from new device. Pattern starts with 2-4 small transactions ($1.99-$4.99) using original OAuth session to test limits, followed by rapid email change via compromised token, then 8-15 transactions from different IP/device within 3 hours totaling $2,400-$8,500. Distinct signature: ProductCD shifts from original 'W' (digital wallet) to 'C' (card-not-present) while card1 remains constant. P_emaildomain changes from established domain (gmail.com, 4+ years old) to fresh disposable (tempmail.*, created <48 hours). The OAuth app's normal transaction cadence (weekly) suddenly shows 12+ daily transactions.",
+  "indicators": [
+    "P_emaildomain change within 90 minutes of first transaction, new domain age <72 hours",
+    "card1_txn_count_24h jumps from baseline 0.2 to 12+ transactions",
+    "ProductCD transitions from 'W' to 'C' with same card1 within 3-hour window",
+    "dist1 (distance between billing/shipping) increases from typical <50km to >800km",
+    "TransactionAmt pattern: 2-4 transactions under $5, then 8+ transactions $180-$950 each",
+    "DeviceInfo changes mid-session while card1/addr1 remain constant",
+    "is_night=1 for 70%+ of new transactions vs. historical 15% night usage"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A legitimate third-party app's OAuth session shows normal activity, then within 1-3 hours the same card suddenly processes 12+ transactions from a different device and IP address, with the email changed to a brand-new disposable domain and transaction types shifting from wallet to card-not-present.",
+  "reasoning": "The attacker has stolen OAuth tokens from a budgeting or payment app to gain initial access, tested the account with small charges, then pivoted to direct control by changing the email and rapidly draining funds before the victim notices—the sudden spike in volume, new device, and disposable email reveal this isn't the legitimate account holder.",
+  "indicator_explanations": [
+    "Email address switches to a brand-new domain right after account access",
+    "Card suddenly explodes from nearly dormant to a dozen transactions today",
+    "Purchase types flip from virtual goods to physical items under same card",
+    "Shipping address jumps to a distant location far from billing address",
+    "Small test charges confirm card works before hitting it with large purchases",
+    "Device suddenly changes while card and address stay the same mid-session",
+    "Transactions now happen at night when cardholder historically shops during daytime"
+  ]
+}

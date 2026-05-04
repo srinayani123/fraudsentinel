@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_003",
+  "title": "Ghost Travel Card-Present Pattern: Sudden International POS After Domestic-Only History",
+  "pattern": "geo_anomaly",
+  "narrative": "A card with 8-12 months of exclusive domestic POS history suddenly executes chip-authenticated retail transactions in Southeast Asia or Eastern Europe within 18-36 hours of last US use. The cardholder's email domain and registered address remain unchanged, yet physical card reads occur 7,000+ miles away. Attackers clone cards via skimming, then test internationally where fraud controls are weaker. The pattern shows card1_txn_count_7d jumping from 2-4 to 12-18 transactions, all under $85 to avoid manual review thresholds. dist1 (distance between card billing and transaction) spikes from <50 miles to 8,000+ miles. Transactions cluster in tourist-heavy MCCs (5812 restaurants, 5411 grocery, 5999 misc retail) during local business hours (txn_hour 9-22 local time). No prior international transactions in card1_hist_intl_flag. TransactionAmt pattern shifts from $40-120 domestic to consistent $35-80 foreign amounts.",
+  "indicators": [
+    "card1_txn_count_7d increases 4-6x baseline within 48 hours of geography change",
+    "dist1 exceeds 5,000 miles with no historical international transactions (card1_hist_intl_flag = 0)",
+    "All transactions card-present (ProductCD = 'C' or 'H') in foreign country within 18-36 hours of last domestic POS",
+    "TransactionAmt consistently $35-$85 (below $100 manual review threshold) across 8+ transactions",
+    "MCC codes cluster in tourist categories (5812, 5411, 5999) during destination local daytime hours",
+    "P_emaildomain and addr1 unchanged while physical card location changes by 7,000+ miles",
+    "Zero cooling period: continuous transaction stream with avg 45-90 minute gaps between purchases"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card used exclusively in the US for 8-12 months suddenly shows chip-present transactions in Southeast Asia or Eastern Europe within 18-36 hours, with transaction frequency jumping 4-6x and all purchases under $85. The cardholder's email and billing address remain unchanged while the physical card appears 7,000+ miles away.",
+  "reasoning": "Criminals have cloned the card through skimming and are rapidly testing it in tourist areas abroad where fraud detection is weaker, staying below manual review thresholds to maximize purchases before the account is frozen. Legitimate cardholders don't teleport internationally without any profile changes or prior international transaction history.",
+  "indicator_explanations": [
+    "Card activity suddenly explodes to several times normal volume after location shift",
+    "Card appears thousands of miles away despite never leaving the country before",
+    "Physical card is being swiped repeatedly overseas within a day of domestic use",
+    "Every purchase stays just under the hundred-dollar manual review trigger point",
+    "Transactions hit typical tourist spots during local business hours at destination",
+    "Billing address and email stay domestic while card physically travels internationally",
+    "No pauses between purchases suggesting automated testing or rapid-fire fraud spree"
+  ]
+}

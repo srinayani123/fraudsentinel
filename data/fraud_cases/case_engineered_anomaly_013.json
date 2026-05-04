@@ -1,0 +1,25 @@
+{
+  "id": "case_engineered_anomaly_013",
+  "title": "V-Field Magnitude Divergence from Observed Behavioral Baseline",
+  "pattern": "engineered_anomaly",
+  "narrative": "Transactions display normal raw behavioral characteristics — amounts within expected range, standard timing patterns, consistent velocity, matching identity fields — yet Vesta engineered features register extreme values that contradict the clean surface presentation. V200, V258, and V307 register magnitudes in the 90th+ percentile while corresponding raw features remain unremarkable. This divergence suggests the transaction sequence contains hidden complexity invisible to human analysts: the model detects encoded relationships between device attributes, card metadata, and transaction context that fraudsters cannot replicate authentically. The V-field ensemble captures multi-dimensional interactions (device-card-amount-time combinations) that appear normal when examined individually but form statistically improbable patterns when evaluated as composite signatures. These engineered features often encode fraud-ring coordination signals where multiple operators use slightly varied parameters that individually pass validation but collectively form detectable clusters in high-dimensional feature space.",
+  "indicators": [
+    "V200 >= 6 (p90 threshold), elevated sequence-pattern encoding despite normal behavioral metrics",
+    "V258 > p85 while card1_amt_zscore between -1.0 and +1.0, magnitude inconsistency",
+    "V307 in top decile while TransactionDT hour-of-day distribution matches cardholder baseline",
+    "V280 elevated above p80 with D1 > 5 indicating device-card pairing looks established",
+    "V305 > median + 2*IQR while C1-C14 card counters all within normal ranges",
+    "V320 magnitude exceeds p90 despite email domain and addr1 both matching prior transactions"
+  ],
+  "indicator_explanations": [
+    "Model's sequence-pattern feature flags unusual transaction ordering despite clean behavior",
+    "Engineered amount-context feature shows anomaly while actual amount appears normal",
+    "Time-based composite feature elevated despite transaction occurring during typical hours",
+    "Device-metadata interaction feature flags risk even though device appears established",
+    "Multi-feature interaction score anomalous while individual card-activity counters look fine",
+    "Identity-relationship encoding feature elevated despite email and billing matching history"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Transactions where Vesta engineered features register extreme values (p85-p90+) while all corresponding raw behavioral signals remain within normal ranges. The model detects complex multi-feature interactions invisible to direct observation.",
+  "reasoning": "Fraudsters can replicate individual behavioral patterns but cannot authentically reproduce the high-dimensional feature interactions that Vesta engineering captures. When V-fields diverge from their expected values given clean raw features, it indicates synthetic transaction construction rather than genuine cardholder behavior."
+}

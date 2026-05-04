@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_007",
+  "title": "Strategic Deadline Dispute: Chargeback Window Edge Filing Pattern",
+  "pattern": "friendly_fraud",
+  "narrative": "Cardholder makes legitimate high-value purchases ($800-$2,500) for digital goods or services (ProductCD=W, C), uses the product extensively for 115-119 days, then files dispute on day 118-120â€”precisely at the outer edge of the 120-day chargeback window. Transaction history shows normal AVS/CVV match, consistent device fingerprints, and email domain stability. The cardholder's account exhibits 8-15 prior purchases over 6+ months with zero disputes, establishing credibility. Post-purchase behavior includes account logins, downloads, or service usage logged up to 48-72 hours before dispute filing. The timing precision (filing within 48 hours of deadline expiration) combined with complete product consumption suggests intentional exploitation rather than genuine dissatisfaction. Often targets merchants with weak representment capabilities or digital goods where proving delivery/usage is difficult.",
+  "indicators": [
+    "Dispute filed 115-120 days post-transaction, within 5 days of chargeback deadline expiration",
+    "TransactionAmt between $800-$2,500 for digital/service products (ProductCD=W or C)",
+    "card1_txn_count_90day shows 8-15 prior transactions with zero historical disputes",
+    "Perfect AVS and CVV match at purchase, consistent device_id across transaction history",
+    "Account activity logs show product usage/logins continuing 48-72 hours before dispute",
+    "P_emaildomain stable for 180+ days with verified status at time of original purchase",
+    "No contact with merchant support or refund requests in 120-day window before dispute"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Customer with 8-15 clean transactions over six months suddenly files a dispute on day 118-120 after purchase—precisely at the chargeback deadline—despite documented product usage up to 48-72 hours beforehand. High-value digital purchase ($800-$2,500) with perfect payment verification and zero merchant contact throughout the entire window.",
+  "reasoning": "The cardholder consumed the digital product for nearly four months then weaponized the chargeback deadline to get a refund while keeping access, exploiting the difficulty of proving usage in representment. The mathematical precision of filing at day 118-120 combined with continued usage signals premeditated theft rather than legitimate dissatisfaction, which would have surfaced earlier or involved merchant contact.",
+  "indicator_explanations": [
+    "Dispute filed strategically at the last possible moment before deadline expires",
+    "Purchase amount hits sweet spot where merchants often won't fight back",
+    "Cardholder has clean transaction history suggesting calculated first-time fraud attempt",
+    "All verification checks passed perfectly indicating legitimate authorized purchase originally",
+    "Customer actively used the product days before claiming they never received it",
+    "Email address shows long-term stability proving this isn't a compromised account",
+    "Zero merchant contact attempts suggest dispute is opportunistic rather than service issue"
+  ]
+}

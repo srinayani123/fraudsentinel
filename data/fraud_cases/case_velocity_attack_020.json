@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_020",
+  "title": "Sub-Minute Micro-Transaction Probing Before Large Authorization Burst",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster tests stolen card with 12-15 micro-transactions ($0.50-$2.99) within 90 seconds to verify card validity and available credit, followed immediately by 8-10 larger authorizations ($89-$299) in the subsequent 3 minutes. Initial probes target low-risk MCCs (5499 misc food, 5912 drug stores) with ProductCD=W to avoid merchant friction, then pivot to electronics/digital goods (MCC 5732, 5815) for cash-out phase. All transactions share identical card1, addr1, and P_emaildomain, but dist1 shows impossible geography (2800+ km between first and fifth transaction). Card1_txn_count_1min exceeds 10 before first large authorization hits. Card1_amt_zscore spikes from -0.8 (micro-txns) to +3.2 (large burst) within 4-minute window. Timestamps cluster: 11 transactions between seconds :05-:47 of same minute, followed by 9 more before minute :04 elapsed.",
+  "indicators": [
+    "12+ transactions with TransactionAmt < $3.00 completed in first 90 seconds",
+    "card1_txn_count_1min >= 10 before any transaction exceeds $50",
+    "card1_amt_zscore shifts from negative (<-0.5) to strongly positive (>3.0) within 240 seconds",
+    "dist1 values indicate 2800+ km geographic separation between transactions occurring within 5-minute window",
+    "MCC transition from low-fraud categories (5499, 5912) to high-risk (5732, 5815) mid-burst",
+    "10+ transactions share identical card1, addr1, P_emaildomain with no variation in billing details",
+    "Total burst duration under 300 seconds with no idle gaps exceeding 20 seconds between authorizations"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card shows 12-15 tiny purchases under $3 in the first 90 seconds, then immediately switches to 8-10 large transactions ($89-$299) in the next 3 minutes, with impossible geographic distances (2800+ km) between charges and merchant categories shifting from groceries to electronics.",
+  "reasoning": "The fraudster is testing if a stolen card works and how much credit is available using small amounts that won't trigger alerts, then racing to drain the account with big-ticket items before the cardholder or bank notices and blocks the card.",
+  "indicator_explanations": [
+    "Card is being tested with throwaway micro-purchases before the real theft",
+    "Rapid-fire transactions pile up before any meaningful dollar amount appears",
+    "Spending pattern flips from tiny amounts to suspiciously large charges instantly",
+    "Card appears in physically impossible locations within minutes of each other",
+    "Purchase types shift from innocent groceries to electronics during the attack",
+    "Same card and billing details hammer through identical transaction after transaction",
+    "Attack runs continuously without normal pauses a real shopper would take"
+  ]
+}

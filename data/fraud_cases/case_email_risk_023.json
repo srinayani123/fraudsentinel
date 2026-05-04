@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_023",
+  "title": "Corporate Email Masking with High-Risk Recipient Redirect Pattern",
+  "pattern": "email_risk",
+  "narrative": "Fraudster uses legitimate corporate P_emaildomain (microsoft.com, ibm.com, oracle.com) to pass initial email reputation checks, then redirects goods to a recently-created R_emaildomain on high-risk providers (tempmail.com, guerrillamail.com, mailinator.com). Typically targets digital goods or gift cards ($75-$500 range) with immediate fulfillment. The purchaser email shows 18+ months account history and clean transaction records, while recipient email was created within 72 hours. Pattern emerges when dist1 (distance between billing/shipping) exceeds 1500km despite domestic transaction. Card appears legitimate with normal card1_txn_count_7d (2-4 transactions), but R_emaildomain has zero prior transaction history in merchant database. Transactions cluster during business hours (txn_hour 9-17) to mimic corporate purchasing, but recipient domain MX records point to disposable email infrastructure. AVS shows full match, but CVV frequently missing on initial attempt.",
+  "indicators": [
+    "P_emaildomain is established corporate domain (age >18 months), R_emaildomain is disposable service created within 72 hours",
+    "dist1 exceeds 1500km despite both addresses in same country code",
+    "TransactionAmt between $75-$500 targeting ProductCD = 'C' (digital goods) or gift cards",
+    "R_emaildomain MX records resolve to known temporary email providers (SPF/DKIM validation fails)",
+    "P_emaildomain shows 15+ successful prior transactions, R_emaildomain has zero merchant history",
+    "CVV match failure on first attempt, followed by successful retry within 8 minutes",
+    "Transactions occur during business hours (txn_hour 9-17) on weekdays only"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "The purchaser's email is from a well-established corporate domain with a long history of clean transactions, but the recipient email was created within the last 72 hours on a disposable email service, and the shipping distance exceeds 1500km despite being a domestic order.",
+  "reasoning": "The fraudster is exploiting the trust associated with legitimate corporate email addresses to bypass initial fraud checks, then redirecting digital goods or gift cards to a throwaway email address they control, making it nearly impossible to trace or recover the stolen merchandise once delivered.",
+  "indicator_explanations": [
+    "Legitimate corporate sender email paired with brand-new throwaway recipient address",
+    "Sender and recipient locations impossibly far apart despite sharing country",
+    "Amount targets sweet spot for digital goods or gift card fraud",
+    "Recipient email fails authentication and routes through temporary provider infrastructure",
+    "Sender has clean transaction history while recipient has never bought anything",
+    "First CVV attempt fails then succeeds minutes later suggesting guessing attack",
+    "Activity confined to standard business hours on weekdays mimicking legitimate patterns"
+  ]
+}

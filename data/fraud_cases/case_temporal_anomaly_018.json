@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_018",
+  "title": "Nighttime Velocity Spike During Cardholder Geographic Displacement",
+  "pattern": "temporal_anomaly",
+  "narrative": "Legitimate card shows steady daytime usage pattern in EST timezone (txn_hour 9-22) averaging 2.1 transactions per day. Card suddenly generates 11 transactions totaling $3,847 between 02:00-05:45 EST while cardholder's device location shows active session in London (dist1 >3,400 miles). All fraud transactions show is_night=1 for billing timezone, ProductCD switches from mixed W/C to exclusively H (digital goods), and P_emaildomain changes from verified gmail to newly-seen protonmail. Card1_txn_count_3hr jumps from historical maximum of 2 to 11, while card1_amt_zscore exceeds 4.2Ïƒ. Transactions cluster in gaming (MCC 7995) and cryptocurrency exchanges (MCC 6051), categories absent from 90-day history. Amounts follow deliberate pattern: $297, $299, $348, $351 suggesting just-under-threshold testing. AVS mismatch on 9 of 11 attempts.",
+  "indicators": [
+    "11 transactions in 3h45m window during cardholder's normal sleep hours (is_night=1, txn_hour 2-5)",
+    "card1_txn_count_3hr = 11 versus 90-day maximum of 2",
+    "dist1 >3,400 miles between transaction location and active device session",
+    "card1_amt_zscore = 4.2Ïƒ, total session amount $3,847 versus 90-day daily average $184",
+    "ProductCD shifts from W/C mix to 100% H (digital goods) in abnormal MCCs 7995, 6051",
+    "P_emaildomain changes from verified gmail.com to first-seen protonmail.com",
+    "9 of 11 transactions show AVS mismatch with amounts clustering $297-$351"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card suddenly fires 11 transactions in under 4 hours during the cardholder's nighttime (2-5 AM their timezone), totaling $3,847—far exceeding the normal daily average of $184 and historical 3-hour maximum of 2 transactions. These transactions show the cardholder's device actively logged in over 3,400 miles away, amounts cluster just under $350, the email switches to a newly-seen protonmail address, and 9 of 11 fail address verification while targeting gaming and cryptocurrency merchants never used before.",
+  "reasoning": "A fraudster has obtained the card details and is exploiting the nighttime window when the legitimate cardholder is asleep and unlikely to notice alerts. The velocity spike, geographic impossibility, category shift to high-risk digital goods, just-under-threshold amounts, new anonymizing email, and AVS failures collectively indicate a takeover attack designed to extract maximum value before the card is blocked.",
+  "indicator_explanations": [
+    "Card is being used heavily during hours when the cardholder is normally asleep",
+    "Transaction volume in this window is five times the cardholder's historical maximum",
+    "Purchases occur thousands of miles from where the cardholder's device is actively connected",
+    "Total spending in this session is twenty times the cardholder's typical daily amount",
+    "Card suddenly switches to buying only digital goods in suspicious merchant categories",
+    "Email changes from verified long-term address to brand-new encrypted email provider",
+    "Nearly all transactions fail address verification with suspiciously similar dollar amounts"
+  ]
+}

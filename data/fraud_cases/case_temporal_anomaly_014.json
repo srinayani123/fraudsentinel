@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_014",
+  "title": "Cross-Continental Night-Shift Fraud: Timezone-Mismatched Transaction Clustering",
+  "pattern": "temporal_anomaly",
+  "narrative": "A compromised card from Los Angeles (addr1: 90210, typically transacting 9AM-11PM PST) suddenly executes seven transactions between 2:47AM-4:23AM PST, all under $87 to avoid velocity triggers. The txn_hour distribution (2-4) aligns perfectly with Eastern European business hours (11AM-1PM EET), suggesting attacker operational timezone. All transactions hit different MCCs (5732, 5411, 5999) with identical P_emaildomain suffix patterns and sequential card1_txn_count increments. The cardholder's historical is_night flag shows 2% night activity over 180 days, but this 96-minute window contains 100% night transactions. AVS mismatches on billing addr1, CVV provided correctly (suggesting full card data compromise), and dist1 values cluster around 2,840 miles from historical centroid. ProductCD shifts from typical 'W' (wallet) to 'C' (card-not-present digital goods).",
+  "indicators": [
+    "Seven transactions concentrated in 2:47AM-4:23AM window, cardholder's historical is_night rate: 2% over 180 days",
+    "txn_hour clustering (2-4) maps to 11AM-1PM in UTC+2/+3 timezone regions",
+    "TransactionAmt capped at $87 across all attempts, suggesting manual sub-threshold testing",
+    "dist1 geolocation shift: 2,840 miles from 180-day transaction centroid",
+    "P_emaildomain patterns repeat with sequential numeric suffixes across transactions",
+    "ProductCD categorical shift from 'W' to 'C' coinciding with timezone anomaly",
+    "AVS mismatch on addr1 despite correct CVV provision"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card normally used during West Coast daytime hours suddenly fires seven transactions in a 96-minute window between 2:47AM-4:23AM, all under $87, from locations 2,840 miles away—timing that matches Eastern European business hours. The cardholder's historical nighttime activity is 2%, but this burst is 100% nocturnal with email domains showing sequential numeric suffixes.",
+  "reasoning": "Fraudsters operating from a different timezone compromise card details and transact during their own daytime, which falls in the victim's sleep hours. Keeping amounts under $87 and spreading across different merchant categories are deliberate evasion tactics, while the geographic and temporal clustering reveals the attacker's true location and work schedule.",
+  "indicator_explanations": [
+    "Transactions flood a late-night window when cardholder never shops at this hour",
+    "Attack timing aligns with business hours in Eastern European fraud hotspot zones",
+    "Amounts stay just under ninety dollars across all attempts to avoid triggers",
+    "Purchases originate nearly three thousand miles from cardholder's normal shopping area",
+    "Email addresses cycle through numbered variants suggesting scripted account generation",
+    "Product type switches from physical goods to digital during the attack sequence",
+    "Billing address fails verification while CVV passes indicating partial credential compromise"
+  ]
+}

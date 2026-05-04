@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_022",
+  "title": "Privacy Mail Ghost Account with Virgin Card Burst Pattern",
+  "pattern": "email_risk",
+  "narrative": "Account registers with ProtonMail or Tutanota domain, then executes 3-6 transactions totaling $800-$1,400 within first 72 hours of card appearance in system. Card shows zero prior TransactionID linkage across any merchant or BIN. Transactions cluster in digital goods (ProductCD='W') or gift card MCCs. Email domain appears for first time in database concurrent with card1's first use. Shipping address (addr1) is either null or shows dist1 > 3000km from P_emaildomain geolocation when determinable. Velocity pattern suggests automated checkout: 90-180 second intervals between transactions, all approved, no step-up auth. Card1_txn_count_1day spikes from 0 to 5+ with no gradual ramp. Pattern exploits privacy-mail legitimacy while card and email are both operationally invisible until burst completes.",
+  "indicators": [
+    "P_emaildomain in privacy-focused providers (ProtonMail, Tutanota, Mailfence) with zero historical transaction count in system",
+    "card1 first appearance: card1_txn_count_lifetime = 0 before burst, then 3-6 transactions in 72 hours",
+    "Total burst TransactionAmt between $800-$1,400 with ProductCD='W' or MCC 5815/5944",
+    "dist1 > 3000km when P_emaildomain geodata available, or dist1 null in 60%+ of burst transactions",
+    "Inter-transaction intervals 90-180 seconds, suggesting scripted checkout without human browsing delays",
+    "addr1 either null or shows single-use pattern: no other cards linked to same address hash",
+    "All transactions approved in initial burst, no declines or CVV/AVS mismatches to trigger fraud review"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A brand-new privacy email address (ProtonMail, Tutanota) and a never-before-seen card both appear simultaneously, then execute 3-6 digital goods or gift card purchases worth $800-$1,400 within 72 hours at automated 90-180 second intervals. The shipping address is either missing or shows extreme geographic distance from the email domain, and no other cards or emails share this address.",
+  "reasoning": "Fraudsters use privacy email services and freshly compromised cards to remain invisible until a rapid burst completes, exploiting the legitimacy of privacy providers while the automated checkout cadence and high-value digital goods indicate they are racing to extract value before the real cardholder notices unauthorized charges.",
+  "indicator_explanations": [
+    "Email comes from privacy-oriented service with no previous purchase history",
+    "Brand new card suddenly fires off multiple transactions within three days",
+    "Burst totals mid-range amount targeting digital goods or subscription merchants",
+    "Geographic indicators either missing or show implausible international distance",
+    "Transactions space out mechanically like automated script cycling through checkouts",
+    "Billing address appears nowhere else or is completely absent from records",
+    "Every transaction sails through approval without triggering standard fraud checks"
+  ]
+}

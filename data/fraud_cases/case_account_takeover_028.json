@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_028",
+  "title": "Third-Party OAuth Token Hijack with Cross-Device Transaction Pattern",
+  "pattern": "account_takeover",
+  "narrative": "Attacker compromises OAuth tokens from poorly secured third-party apps (fitness trackers, budget tools, shopping extensions) that retain payment credentials. Within 2-4 hours of token theft, fraudster initiates transactions from different device_id and IP geo than victim's 30-day baseline. Typical pattern: $47-$89 digital goods purchases (ProductCD='W') to test token validity, followed by 3-6 transactions totaling $800-$1,900 within 90 minutes. The C_emaildomain remains legitimate (victim's), but DeviceInfo and id_31 (browser signature) abruptly shift to unfamiliar values. Fraudster often targets accounts with card1_txn_count_7day > 8, assuming high activity masks anomaly. R_emaildomain switches to burner domains for delivery confirmations. TransactionAmt shows sudden deviation: card1_amt_zscore jumps from 0.3-0.8 baseline to 2.4-3.1 range as attacker maximizes stolen session before detection.",
+  "indicators": [
+    "DeviceInfo and id_31 values never observed in victim's 30-day transaction history",
+    "dist1 (distance between billing/shipping) increases from <5km baseline to 400-2,800km",
+    "card1_txn_count_2hour reaches 4-7 transactions versus 30-day average of 0.8 per 2-hour window",
+    "card1_amt_zscore exceeds 2.2 when historical pattern shows 85th percentile at 1.1",
+    "R_emaildomain switches from victim's primary domain to newly registered or disposable email services",
+    "ProductCD shifts exclusively to 'W' (digital/virtual goods) when account history shows 70%+ 'C' (physical goods)",
+    "First transaction occurs during is_night=1 when victim's 90-day profile shows 92% daytime activity (txn_hour 9-20)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple transactions from a completely new device and location within hours of each other, with amounts significantly higher than the account's normal spending pattern. The purchase types shift to digital goods and delivery emails change to disposable addresses, while the victim's actual email remains on the account.",
+  "reasoning": "The attacker has stolen OAuth credentials from a connected third-party app and is racing to extract maximum value before the victim notices. The new device, unfamiliar location, spike in transaction frequency, and switch to instantly deliverable digital goods reveal someone exploiting temporary access rather than the legitimate account owner's behavior.",
+  "indicator_explanations": [
+    "Device and browser fingerprint have never been used by this account before",
+    "Shipping destination is suddenly hundreds of kilometers from the billing address",
+    "Card experiences burst of transactions far exceeding normal hourly activity rate",
+    "Purchase amount wildly exceeds this cardholder's typical spending deviation range",
+    "Recipient email suddenly switches to throwaway or recently created email service",
+    "Account abruptly pivots to digital goods after consistent physical merchandise purchases",
+    "First fraudulent charge hits overnight when cardholder normally shops during business hours"
+  ]
+}

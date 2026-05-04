@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_020",
+  "title": "Synthetic Identity Credit Builder with Planned Bust-Out After 90-Day Seasoning",
+  "pattern": "synthetic_identity",
+  "narrative": "Fraudster establishes synthetic identity with manufactured credit profile through strategic payment behavior over 90-120 days before bust-out. Account opens with small purchases ($15-$45) at grocery and gas stations (MCC 5411, 5541) with same-day or next-day full payments to build positive history. After 75-90 days of this pattern, card1_txn_count_24h jumps from baseline 1-2 to 8-12 transactions totaling $3,500-$8,000 across electronics retailers (MCC 5732, 5734) and digital goods platforms (ProductCD='W'). Velocity signatures show TransactionAmt_mean shifts from $28 during seasoning to $640 during bust-out window. P_emaildomain often free provider created within 6 months of first transaction. Final phase shows 15-25 transactions over 48-72 hours with declining authorization rates before account abandonment and inevitable chargebacks.",
+  "indicators": [
+    "Initial 75-90 day period showing card1_txn_count_7d consistently 2-4 with TransactionAmt range $15-$45 and payment_within_24h flag=1 on 85%+ transactions",
+    "Sudden velocity spike where card1_txn_count_24h increases from historical mean 1.2 to 8+ transactions",
+    "TransactionAmt_mean increases 20x+ from seasoning period baseline (e.g., $28 to $640+) within 48-hour window",
+    "MCC shift from low-risk categories (5411, 5541, 5814) to high-risk electronics/digital goods (5732, 5734, ProductCD='W')",
+    "P_emaildomain age less than 180 days with free provider (gmail.com, yahoo.com) and addr1 PO box or commercial mail receiving agency",
+    "Final 48-72 hour burst showing 15-25 transactions with authorization decline rate climbing from 0% to 40%+ as limits exhaust",
+    "card1_amt_zscore spikes to 3.5+ standard deviations above account historical mean during bust-out phase"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Account builds trust over 75-90 days with small, immediately-paid purchases at groceries and gas stations, then suddenly shifts to 8-12 high-value electronics transactions within 24-48 hours showing 20x increase in average transaction amount and climbing decline rates.",
+  "reasoning": "The fraudster is deliberately establishing credibility with responsible payment behavior to increase credit limits, then executing a coordinated bust-out where they max out available credit on easily-resold goods before abandoning the synthetic identity entirely.",
+  "indicator_explanations": [
+    "Account shows deliberate trust-building with small purchases and prompt payments for three months",
+    "Transaction frequency suddenly explodes from steady low-volume to frantic burst activity",
+    "Purchase amounts skyrocket twenty-fold overnight from established small-dollar pattern",
+    "Spending pivots from groceries and gas to high-value electronics and digital goods",
+    "Email account is recent with free provider tied to mail drop address",
+    "Final surge shows repeated attempts as card approaches limit with mounting declines",
+    "Transaction sizes become extreme outliers compared to the account's entire history"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_024",
+  "title": "Memorial Day Weekend Hijack with Geographic Shift Pattern",
+  "pattern": "temporal_anomaly",
+  "narrative": "Account takeover exploiting holiday weekend inattention where cardholder historically ignores statements until month-end. Fraudster accesses credentials Friday evening before Memorial Day, validates card with $4.99 streaming service charge (ProductCD=S), then executes 11 CNP transactions totaling $2,847 over 72-hour weekend. Card shows 18-month history of zero Memorial Day weekend usage and strict geographic consistency (addr1 stable, dist1 always <15km). Attack originates 847km from cardholder location with new device fingerprint. Fraudster targets retailers with delayed fulfillment (furniture, electronics) and one $750 P2P transfer. Card1_txn_count_7day jumps from baseline 2.1 to 12 transactions. Pattern relies on 4-day detection window before cardholder reviews Tuesday statement.",
+  "indicators": [
+    "11 transactions over 72-hour Memorial Day weekend vs. zero weekend transactions in prior 18 months same period",
+    "dist1 = 847km from historical addr1 centroid (baseline dist1 mean = 8.2km)",
+    "card1_txn_count_72hr = 12 vs. historical holiday weekend mean = 0.0",
+    "Initial validation charge $4.99 followed by 10 transactions ranging $87-$750 within 68 hours",
+    "New device fingerprint and P_emaildomain change (gmail.com replacing historical employer domain)",
+    "TransactionAmt 72hr cumulative $2,847 vs. cardholder's Memorial Day weekend 3yr total = $0",
+    "ProductCD mix includes first-ever W (wholesale/high-ticket) category and C (cash-out) transaction"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card suddenly shows 11 transactions over a holiday weekend after 18 months of complete inactivity during Memorial Days, originating 847km away from the cardholder's consistent location with a new device and email domain. The spending includes a small validation charge followed by high-value purchases in categories the cardholder never used before, including a cash-out transaction.",
+  "reasoning": "Fraudsters exploit holiday weekends when cardholders delay checking statements, using stolen credentials to maximize theft during the detection gap. The validation charge confirms the card works, the geographic and device shifts prove account takeover, and the rush of unfamiliar high-value purchases reveals the attacker liquidating the account before discovery.",
+  "indicator_explanations": [
+    "Card suddenly active on holiday weekend after years of complete weekend inactivity",
+    "Transactions occur 847km away from where this cardholder normally shops",
+    "Twelve transactions in holiday weekend versus cardholder's normal zero activity pattern",
+    "Classic test-then-exploit: tiny validation charge followed by escalating larger purchases",
+    "New device and personal email replacing the cardholder's work email domain",
+    "Weekend spending spree totals more than three years of holiday transactions combined",
+    "Card hits wholesale and cash-out categories never touched in purchase history"
+  ]
+}

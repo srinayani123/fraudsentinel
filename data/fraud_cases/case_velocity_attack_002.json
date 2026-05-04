@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_002",
+  "title": "Cross-Category Shopping Spree with Geographic Dispersion Pattern",
+  "pattern": "velocity_attack",
+  "narrative": "Compromised card executes 8-14 purchases across unrelated merchant categories within 45-75 minutes, suggesting automated credential testing before card is blocked. Attacker cycles through grocery (MCC 5411), gas stations (MCC 5542), electronics (MCC 5732), and digital goods (MCC 5816) to maximize approval odds across different fraud screening thresholds. Transaction amounts deliberately stay under $85 to avoid manual review triggers. Geographic data shows dist1 values exceeding 500km between consecutive purchases while card_txn_count_1hr spikes from baseline of 0-1 to 11+. Email domain remains consistent (typically free provider like gmail) but shipping addresses rotate through 4+ distinct addr1 values. Pattern commonly observed 18:00-23:00 UTC when fraud monitoring teams are understaffed, with ProductCD switching between 'W' (web) and 'C' (credit card transaction) as attacker pivots between e-commerce and card-present terminals using cloned magstripe data.",
+  "indicators": [
+    "card1_txn_count_1hr increases from 0-1 baseline to 8-14 transactions within 60-minute window",
+    "4+ distinct MCC codes across unrelated categories (grocery, fuel, electronics, digital goods) in single session",
+    "dist1 geographic distance exceeds 500km between consecutive transactions while maintaining sub-90-minute timespan",
+    "TransactionAmt consistently ranges $35-$85 across all purchases, avoiding common review thresholds",
+    "addr1 shows 4+ unique shipping addresses despite single P_emaildomain remaining constant",
+    "txn_hour concentrated between 18-23 UTC with is_night flag true for 70%+ of burst transactions",
+    "ProductCD alternates between 'W' and 'C' indicating mixed online/physical channel exploitation"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card shows 8-14 purchases across unrelated merchant types (grocery, gas, electronics, digital goods) within 45-75 minutes, with transaction amounts under $85 and geographic distances exceeding 500km between purchases. The same email is used but shipping addresses rotate through 4+ different locations, often occurring during evening hours (18:00-23:00 UTC).",
+  "reasoning": "Fraudsters use stolen card credentials to rapidly test limits across multiple merchant categories before the card is blocked, deliberately keeping amounts low to avoid manual review. The impossible travel distances and rotating addresses indicate an automated attack designed to maximize approvals and extract value quickly, not legitimate customer behavior.",
+  "indicator_explanations": [
+    "Card suddenly fires off eight to fourteen transactions in one hour",
+    "Purchases jump between grocery stores, gas stations, electronics, and online services",
+    "Transactions appear hundreds of miles apart within an impossibly short timeframe",
+    "Every purchase stays in the thirty-five to eighty-five dollar sweet spot",
+    "Four different shipping addresses used despite same email account throughout",
+    "Attack concentrates in evening hours with most transactions happening at night",
+    "Fraudster alternates between online purchases and physical store card-present transactions"
+  ]
+}

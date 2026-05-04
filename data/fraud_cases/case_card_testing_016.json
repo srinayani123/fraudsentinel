@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_016",
+  "title": "App Store Micro-Transaction Card Validation Before High-Value Fraud",
+  "pattern": "card_testing",
+  "narrative": "Fraudster validates stolen card credentials through iTunes, Google Play, or similar app stores using $0.99-$1.99 transactions before attempting larger purchases. Pattern shows 1-3 app store purchases (ProductCD='W') within 15-45 minutes, all approved, followed by 2-6 hours of dormancy, then sudden shift to high-value electronics or digital goods ($300-$2,500) at different merchant categories. Card shows no prior transaction history (card1_txn_count_1day=0). Email domain shifts from legitimate provider on validator (P_emaildomain='gmail.com') to disposable service on exploitation phase (P_emaildomain='tempmail.org' or similar). Validator transactions often occur during business hours (txn_hour 9-17) while exploitation happens overnight (txn_hour 23-4, is_night=1). AVS and CVV match on validators but may show mismatches on subsequent fraud attempts. TransactionAmt z-score jumps from -0.8 to +4.2 between phases.",
+  "indicators": [
+    "1-3 app store transactions $0.99-$1.99 within 45 minutes, ProductCD='W', all approved",
+    "2-6 hour gap between validator cluster and exploitation transactions",
+    "card1_txn_count_1day=0 or card1_txn_count_7dayâ‰¤2 indicating new/dormant card",
+    "TransactionAmt increases 150x-2000x from validator to exploitation phase",
+    "P_emaildomain changes from major provider to disposable/temporary service between phases",
+    "txn_hour shift from daytime (9-17) validators to overnight (23-4) exploitation",
+    "card1_amt_zscore jumps >3.5 standard deviations between transaction clusters"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card with little or no history makes 1-3 small app store purchases under $2 that all succeed, goes quiet for 2-6 hours, then suddenly attempts high-value purchases ($300-$2,500) in completely different categories, often with a different email domain and at night.",
+  "reasoning": "Criminals test stolen card details with tiny, low-risk app store charges to confirm the card works before executing their real target: large fraudulent purchases hours later when the cardholder is less likely to notice or intervene.",
+  "indicator_explanations": [
+    "Fraudster tests card with tiny app purchases to confirm it's active",
+    "Attack pauses between test and cashout to avoid instant detection patterns",
+    "Card shows no recent history suggesting stolen credentials or account takeover",
+    "Purchase amount explodes from pennies to hundreds or thousands of dollars",
+    "Email switches from legitimate service to burner address for the big hit",
+    "Testing happens during business hours but exploitation waits until overnight",
+    "Spending amount becomes statistically extreme compared to the test transactions"
+  ]
+}

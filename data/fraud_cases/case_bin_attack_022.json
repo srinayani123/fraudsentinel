@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_022",
+  "title": "Regional Credit Union BIN Exploitation with Geographic Dispersion",
+  "pattern": "bin_attack",
+  "narrative": "Fraudsters target a small regional credit union's 491863 BIN range, exploiting slower fraud detection infrastructure typical of smaller issuers. Attack begins with 12-18 test transactions under $3.00 across different merchants to identify active card ranges within the BIN. Once validated, attackers execute 40-60 transactions per card across 8-12 hours, carefully staying below the issuer's $500 single-transaction threshold but accumulating $2,800-$4,200 per card. Transactions disperse across 15-25 merchant IDs in different states to avoid single-merchant velocity triggers. The crew uses rotating P_emaildomain addresses from disposable providers (guerrillamail, tempmail) while maintaining consistent device fingerprints. Purchases concentrate on high-liquidity ProductCD 'W' (electronics) with shipping to commercial addr1 locations flagged as freight forwarders.",
+  "indicators": [
+    "card1 prefix 491863 with card1_txn_count_24hr between 40-60 transactions",
+    "TransactionAmt pattern: 10-18 transactions under $3.00, followed by 30-50 transactions between $185-$499",
+    "Geographic dispersion: dist1 values indicate 15+ different merchant locations across 6+ states",
+    "P_emaildomain rotating through 8-12 disposable email providers within same card1 sequence",
+    "card1_amt_zscore exceeds 4.5 when compared to typical BIN 491863 spending patterns",
+    "Temporal clustering: 85% of high-value transactions occur during is_night=1 or txn_hour between 22-06",
+    "addr1 shipping addresses match known freight forwarder database with 90%+ confidence"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Attackers test small transactions under $3 on a regional credit union's BIN to find active cards, then rapidly execute 40-60 purchases per card across many states and merchants while staying under $500 per transaction. They use disposable email addresses, ship to freight forwarders, and concentrate activity during nighttime hours.",
+  "reasoning": "Criminals exploit smaller issuers' weaker fraud systems by dispersing transactions geographically and temporally to avoid velocity triggers, while the pattern of micro-tests followed by coordinated high-value purchases to commercial shipping addresses reveals organized card testing and merchandise liquidation rather than legitimate customer behavior.",
+  "indicator_explanations": [
+    "Single card from this credit union shows abnormally high transaction volume",
+    "Card tests with micro-purchases then escalates to hundreds in merchandise",
+    "Purchases scatter across dozens of merchants spanning multiple states rapidly",
+    "Email address cycles through numerous throwaway providers during the spree",
+    "Purchase amounts drastically exceed normal spending for this card issuer",
+    "Fraudster concentrates high-dollar purchases during overnight hours when monitoring lags",
+    "Shipping destinations match warehouses used for international package forwarding schemes"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_engineered_anomaly_020",
+  "title": "Vesta Refund-Recharge Cycle Detection via V-Field Sequence Encoding",
+  "pattern": "engineered_anomaly",
+  "narrative": "This pattern identifies organized fraud rings exploiting merchant refund policies by executing tightly-timed refund-then-recharge cycles that appear legitimate in isolation. Fraudsters initiate transactions, immediately request refunds to test card validity and merchant response times, then quickly re-transact at higher amounts before fraud detection triggers. The refund serves dual purposes: validating stolen card details and establishing a 'legitimate' transaction history. Vesta's engineered features encode the temporal signature and sequencing logic of these cycles across V280 (refund-pattern encoding), V305 (recharge velocity), and V307 (amount-delta sequences). Individual transactions show normal behavioral characteristics — reasonable amounts, consistent device usage, proper email formats — making the pattern invisible without composite feature analysis. The fraud signal exists entirely in how Vesta encodes the refund-recharge relationship across multiple V-field dimensions.",
+  "indicators": [
+    "V280 > 4.5 indicating encoded refund-precursor transaction pattern",
+    "V305 > 3.2 flagging rapid recharge velocity following refund window",
+    "V307 between 2.1 and 4.8 capturing amount-escalation sequence post-refund",
+    "V201 > 2.8 (p85) indicating composite transaction-pair anomaly score",
+    "C1 < 15 showing limited card history masking the cycle pattern",
+    "D1 between 50 and 180 indicating device reuse across refund-recharge pair",
+    "card1_amt_zscore between -0.8 and +1.2 with amounts appearing normal for cardholder"
+  ],
+  "indicator_explanations": [
+    "Engineered feature detects a transaction preceded by refund-request behavior patterns",
+    "Feature flags unusually quick follow-on transaction after a refund window",
+    "Sequence encoder identifies escalating amount pattern following a refund event",
+    "Composite feature scores the transaction-pair relationship as anomalous for this card",
+    "Card shows minimal transaction history hiding the refund-recharge cycle from aggregates",
+    "Same device appears in both refund and recharge transactions within tight timeframe",
+    "Transaction amounts fit the cardholder's normal spending profile masking fraud intent"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Fraudsters execute refund-then-recharge cycles to test cards and exploit merchant policies, with individual transactions appearing behaviorally normal. Vesta V-fields encode the temporal and sequential signature of these cycles, detecting the fraud pattern across transaction pairs that look legitimate in isolation.",
+  "reasoning": "Legitimate cardholders rarely exhibit tight refund-recharge cycles with amount escalation patterns. The V-field composite encoding captures this multi-transaction sequence signature that indicates organized testing and exploitation of refund policies by fraud rings using stolen card credentials."
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_014",
+  "title": "Prepaid BIN Sequential Test-and-Exploit Attack with Low-Value Priming",
+  "pattern": "bin_attack",
+  "narrative": "Fraudster acquires a full prepaid BIN range (typically 416xxx, 438xxx, or 486xxx IINs with low issuer oversight) and sequentially tests cards with $1.00-$4.99 authorizations to identify active accounts, then immediately escalates approved cards to $85-$175 digital goods purchases within 3-8 minutes. The prepaid nature means no cardholder statements, delayed fraud detection, and minimal AVS/address enforcement. Attack runs 02:00-06:00 local time targeting gaming (ProductCD=C) and streaming subscriptions. Fraudster uses residential proxies with consistent P_emaildomain (temp-mail services like guerrillamail, tempmail.com) across the BIN range. Successful cards show card1_txn_count_1hr jumping from 1 to 3-5, with TransactionAmt z-score spiking above 2.8 on second transaction. The prepaid issuer's low decline rate (often 85%+ approval on valid cards) enables rapid enumeration before risk systems adapt.",
+  "indicators": [
+    "Sequential card1 values within same BIN6, incrementing by 1-10 across 15-40 transactions in 20-90 minute window",
+    "Two-phase amount pattern: initial $1.00-$4.99 test, then $85-$175 escalation within 3-8 minutes for approved cards",
+    "card1_txn_count_1hr increases from 1 to 3-5 for same card1 value within 10-minute window",
+    "Prepaid BIN range (416xxx, 438xxx, 486xxx) with approval rate >80% and ProductCD=C or W",
+    "Consistent P_emaildomain from disposable services (guerrillamail, tempmail, mailinator) across 70%+ of transactions in sequence",
+    "TransactionAmt z-score jump from <0.5 to >2.8 between first and second transaction on same card1",
+    "txn_hour concentrated in 2-6 range with is_night=1, dist1 values indicating VPN/proxy (null or >2000km)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Sequential card numbers from the same prepaid BIN are tested with small $1-5 charges, then immediately escalated to $85-175 purchases within minutes if approved, all using disposable email addresses and occurring overnight through proxies.",
+  "reasoning": "The fraudster is systematically probing a stolen BIN range to find active prepaid cards that lack statement oversight, then rapidly draining approved cards before detection systems catch up or cardholders notice unauthorized charges.",
+  "indicator_explanations": [
+    "Attacker is testing consecutive card numbers from the same issuer block",
+    "Small test charges confirm valid cards before immediately hitting them harder",
+    "Same card suddenly fires multiple transactions after sitting dormant",
+    "Prepaid cards from known BIN ranges show suspicious approval clustering",
+    "Throwaway email services repeat across the attack sequence",
+    "Transaction amount spikes dramatically after the initial test succeeds",
+    "Activity clusters in overnight hours from VPN or geographically impossible locations"
+  ]
+}

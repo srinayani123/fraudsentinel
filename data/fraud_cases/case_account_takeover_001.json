@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_001",
+  "title": "Phone Swap Pre-Transaction Account Takeover with Velocity Spike",
+  "pattern": "account_takeover",
+  "narrative": "Fraudster gains account credentials, immediately updates the registered phone number to facilitate authentication bypass or intercept 2FA codes, then executes multiple high-value transactions within 30-90 minutes. Pattern shows phone_last_updated timestamp within 1-3 hours of first fraud transaction. Typical sequence: phone change at 14:22, first $487 transaction at 15:48, second $612 transaction at 16:03, third $891 transaction at 16:27. Card shows historical card1_txn_count_24h of 0-2, jumps to 8+ during attack window. Shipping address (addr1) differs from billing in 78% of cases. P_emaildomain remains unchanged (original victim email), but dist1 distance spikes to 250+ miles. Transactions cluster in ProductCD 'W' (digital goods) or 'C' (services). Attack window typically 18:00-02:00 local time when victim less likely monitoring.",
+  "indicators": [
+    "phone_last_updated timestamp within 3 hours before first transaction",
+    "card1_txn_count_24h increases from â‰¤2 to â‰¥6 within 2-hour window",
+    "TransactionAmt values $400-$950 with 3+ transactions in 90 minutes",
+    "dist1 distance >200 miles from historical addr1 pattern",
+    "addr1 mismatch between shipping and billing on 75%+ of transactions",
+    "txn_hour concentrated in 18-02 window (nighttime attacks)",
+    "ProductCD predominantly 'W' or 'C' (instant delivery items)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "The phone number on the account was changed within 1-3 hours of the fraud, followed by 3+ high-value transactions ($400-$950 each) clustered in a 90-minute window, often to a new shipping address 200+ miles away. The card goes from minimal activity (0-2 transactions in 24 hours) to 6+ transactions during the attack, typically targeting digital goods or services between 6pm and 2am.",
+  "reasoning": "The fraudster changes the phone number first to intercept authentication codes and lock out the victim, then rushes multiple purchases before the victim notices, targeting digital items for instant delivery and operating at night when the victim is less likely to be monitoring their account.",
+  "indicator_explanations": [
+    "Phone number was just changed hours before the spending spree started",
+    "Card activity explodes from quiet to aggressive within two hours",
+    "Multiple mid-to-high dollar purchases hammered through in ninety minutes",
+    "Shipping destination is hundreds of miles from cardholder's usual addresses",
+    "Shipping and billing addresses don't match on most of the transactions",
+    "Purchases cluster during late night hours when fraud goes unnoticed",
+    "Items chosen are instantly delivered or easily liquidated digital goods"
+  ]
+}

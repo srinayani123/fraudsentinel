@@ -1,0 +1,27 @@
+{
+  "id": "case_device_takeover_007",
+  "title": "Device Takeover via Headless Browser Automation Tooling",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster executes account takeover using stolen credentials but operates through automated browser frameworks (Puppeteer, Selenium, PhantomJS) that leave distinct device fingerprint signatures. The transaction pattern mimics legitimate cardholder behavior—amounts within normal spending range, typical daytime hours, matching email domains, and controlled velocity. However, device fingerprint analysis reveals telltale signs of headless browser environments: missing or spoofed browser plugins, inconsistent user-agent strings, absent canvas fingerprinting elements, and unusual JavaScript execution contexts. The D-fields capture these automation artifacts that human-driven sessions would never exhibit. Card counters show elevated activity levels suggesting systematic credential testing across multiple merchants, while the device-card pairing is completely novel. This represents sophisticated fraud infrastructure attempting to bypass behavioral detection by maintaining clean transaction patterns while the device substrate betrays the automated attack vector.",
+  "indicators": [
+    "D1 = 0 indicating first-time device-card pairing with no historical association",
+    "D10 > 219 (p90 threshold), elevated device anomaly score flagging automation signatures",
+    "D15 > 346 (p90 threshold), browser fingerprint inconsistency metric detecting headless environment",
+    "C1 > 48 (elevated card activity counter across multiple merchants)",
+    "card1_amt_zscore between -1.2 and +1.2 (deliberately in-pattern amount masking fraud surface)",
+    "V307 > 0.82 OR V308 > 0.79 (Vesta browser-environment feature detecting automation tooling)",
+    "D4 > 297 (p90), device-session feature capturing missing plugin ecosystem typical of headless browsers"
+  ],
+  "indicator_explanations": [
+    "The device has never been previously associated with this payment card",
+    "Device anomaly metrics show unusual patterns consistent with automated browser frameworks",
+    "Browser fingerprint reveals inconsistencies typical of headless automation tools like Puppeteer",
+    "Card shows elevated transaction activity suggesting systematic merchant probing",
+    "Transaction amount deliberately falls within cardholder's normal spending pattern to avoid detection",
+    "Engineered browser-environment features flag characteristics of automated non-human sessions",
+    "Device session exhibits missing browser plugin signatures that legitimate users would possess"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Account takeover where fraudster uses stolen credentials through headless browser automation while maintaining clean behavioral signals. Device fingerprints reveal automation tooling artifacts that human-driven sessions never exhibit.",
+  "reasoning": "Legitimate cardholders browse from standard consumer browsers with full plugin ecosystems and consistent fingerprints. Headless automation frameworks leave distinct signatures in device features despite behavioral camouflage, exposing the fraudulent infrastructure layer."
+}

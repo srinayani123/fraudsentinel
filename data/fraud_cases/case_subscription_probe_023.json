@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_023",
+  "title": "Streaming Service Rapid-Fire Validation Pattern with Sequential Trial Exploitation",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster tests stolen card across 6-9 streaming platforms (Netflix $15.49, Hulu $7.99, Disney+ $10.99, HBO Max $15.99, Paramount+ $9.99, Peacock $4.99, Apple TV+ $6.99) within 45-90 minute window, all charging immediately despite being marketed as 'free trials'. Pattern exploits assumption that entertainment MCCs (5735, 5815) trigger lower friction. Cardholder unaware until statement arrives showing $70-90 in entertainment charges. Fraudster often uses single burner email domain across all signups (tempmail.com, guerrillamail.com) but varies slight spelling. Following successful validation, card is either resold on carding forum at premium ($45-65 per fullz with streaming validation proof) or used for higher-value fraud within 12-18 hours before victim notices cluster.",
+  "indicators": [
+    "6-9 transactions to entertainment MCC 5735/5815 merchants within 45-90 minutes",
+    "TransactionAmt values cluster tightly: $4.99-$15.99 range, all standard streaming price points",
+    "card1_txn_count_entertainment_1hr >= 6 with zero prior streaming merchant history on card",
+    "P_emaildomain matches disposable/temporary email services (90%+ of cases use same domain across all signups)",
+    "All transactions occur 22:00-04:00 local time (is_night=1, txn_hour between 22-4)",
+    "dist1 (distance card billing to transaction IP) exceeds 500km for 80%+ of the sequence",
+    "card1_amt_zscore spikes from baseline <0.5 to >3.2 within the transaction window"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Six to nine streaming service charges ($4.99-$15.99 each) appear within 45-90 minutes during late night hours, all from a cardholder with no prior entertainment subscription history and using a temporary email domain across signups.",
+  "reasoning": "The fraudster is testing a stolen card across multiple platforms to confirm it works before reselling it at a premium on carding forums or using it for larger purchases within hours, exploiting the low-friction nature of entertainment transactions and the delay before victims check statements.",
+  "indicator_explanations": [
+    "Card hits multiple streaming services in rapid succession during short window",
+    "All amounts match typical monthly subscription fees for streaming platforms",
+    "Card suddenly floods entertainment merchants after zero streaming purchase history",
+    "Same throwaway email domain appears across all the streaming signup attempts",
+    "All activity happens late night or early morning hours when monitoring lags",
+    "Transactions originate from IP addresses hundreds of miles from card's billing address",
+    "Spending pattern explodes far above the card's normal transaction size baseline"
+  ]
+}

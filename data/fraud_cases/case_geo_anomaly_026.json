@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_026",
+  "title": "Ghost Traveler: Card Roams Without Legitimate Travel Footprint",
+  "pattern": "geo_anomaly",
+  "narrative": "Card appears in 4+ countries over 8-12 days with transactions totaling $3,200-$8,500, but zero charges to airlines (MCC 3000-3299), hotels (MCC 3501-3838), or car rentals (MCC 3351-3441). Instead, pattern shows CNP purchases at electronics retailers (MCC 5732, 5065) within 3-6 hours of each geographic shift, followed by point-of-sale transactions 18-36 hours later. Genuine travelers leave clear booking trails; this pattern suggests stolen card credentials being tested online, then physical card manufactured and used locally by mules in each region. Typical sequence: UK online purchase Â£840, then Romania ATM withdrawal 22 hours later, then Spain restaurant charges, then Thailand electronicsâ€”all without a single travel-related merchant. The card1_dist1 value exceeds 8000km between consecutive transactions, yet no corresponding travel merchant appears in 72-hour windows.",
+  "indicators": [
+    "4+ distinct countries (via addr1 or IP geolocation) within 8-12 day window",
+    "Zero transactions to MCC 3000-3299 (airlines), 3501-3838 (lodging), or 3351-3441 (car rental)",
+    "CNP transactions (ProductCD='W') within 3-6 hours of each geographic shift",
+    "card1_dist1 exceeds 8000km between consecutive transactions at least twice",
+    "Electronics/high-value retail (MCC 5732, 5065, 5944) appears in 75%+ of new-location transactions",
+    "Mean TransactionAmt per country: $650-$2,100 with card1_amt_zscore > 1.8",
+    "Time gap between online and physical card use in same country: 18-36 hours"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card appears in four or more countries within 8-12 days with transactions totaling $3,200-$8,500, yet shows zero airline, hotel, or car rental charges—only electronics purchases and ATM withdrawals appearing within hours of each geographic jump, often with distances exceeding 8,000km between consecutive transactions.",
+  "reasoning": "Legitimate international travelers leave clear booking trails; this pattern indicates stolen card credentials being tested online first, then physical cards manufactured and distributed to mules in each region who make high-value purchases locally, explaining the impossible travel speed and absence of any actual travel expenses.",
+  "indicator_explanations": [
+    "Card appears in multiple countries within days without realistic travel pattern",
+    "No airline, hotel, or rental car purchases despite international movement",
+    "Online purchases happen immediately after each geographic location change",
+    "Card crosses continents between transactions with physically impossible timing",
+    "Nearly every new location targets electronics or high-ticket retail stores",
+    "Purchase amounts per country are elevated beyond normal cardholder spending",
+    "Physical card emerges in country shortly after online use there"
+  ]
+}

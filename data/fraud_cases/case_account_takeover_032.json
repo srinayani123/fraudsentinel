@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_032",
+  "title": "Express Shipping Address Injection Prior to High-Value Electronics Purchase",
+  "pattern": "account_takeover",
+  "narrative": "Account taken over via credential stuffing shows immediate address book manipulation followed by rapid high-value purchase. Attacker logs in, adds new shipping address (dist1 >1000km from previous addr1), then within 45-90 minutes places $1,200-$2,800 order for electronics (ProductCD='W') or gift cards (ProductCD='C'). Original account holder's R_emaildomain remains unchanged but shipping addr2 now differs from billing addr1. Transaction velocity spikes from baseline 0.8 txns/week to 3+ transactions in single session. Card_txn_count_24hr jumps from 0 to 4-6 as attacker tests limits. No prior purchases to new addr1 in account history. Expedited shipping selected despite account showing 18+ months of standard shipping preference. Purchase occurs during is_night=1 hours when legitimate user historically transacts during business hours.",
+  "indicators": [
+    "dist1 exceeds 1000km between new shipping addr1 and historical billing address",
+    "Address added to account 45-90 minutes before TransactionAmt $1,200-$2,800 purchase",
+    "card1_txn_count_24hr increases from 0 to 4-6 transactions in single session",
+    "ProductCD='W' (electronics) or ProductCD='C' (gift cards) with expedited shipping flag",
+    "txn_hour during is_night=1 contradicts 18+ month history of daytime transactions",
+    "addr2 (shipping) differs from addr1 (billing) for first time in account tenure",
+    "card1_amt_zscore exceeds 3.5 standard deviations above 90-day account baseline"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Account shows a new shipping address added 1000+ km away from billing, followed within 45-90 minutes by a high-value electronics or gift card purchase with expedited shipping during nighttime hours—contradicting 18+ months of daytime, standard-shipping behavior.",
+  "reasoning": "The attacker gained access through credential stuffing and immediately inserted a distant drop address to intercept expensive goods before the legitimate owner notices, using express shipping to minimize detection window and choosing resellable items to quickly monetize the fraud.",
+  "indicator_explanations": [
+    "Shipping address is over 1000km away from the cardholder's billing location",
+    "New address appears on account less than two hours before expensive purchase",
+    "Card activity spikes from zero to multiple transactions in one session",
+    "High-value electronics or gift cards ordered with rush delivery",
+    "Purchase happens at night when cardholder normally shops during the day",
+    "Items shipping to different address than billing for first time ever",
+    "Purchase amount drastically exceeds the account's normal spending pattern"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_001",
+  "title": "Sequential BIN Enumeration with Incremental Card Testing Pattern",
+  "pattern": "bin_attack",
+  "narrative": "Fraudster systematically tests sequential card numbers from a single BIN range (e.g., 453266XXXXXX1001 through 1050) using low-value authorization attempts. Within a 45-minute window, 30-80 unique card numbers from the same IIN appear, each attempting one or two transactions of $1.00 to $4.99 at the same merchant or MID. The pattern shows strict sequential ordering in card1 values with increments of 1-5 between attempts. All transactions share identical P_emaildomain (often disposable services like tempmail or guerrillamail), same addr1, and identical dist1 values indicating single origination point. Transactions cluster in is_night=1 periods (txn_hour between 1-5 AM merchant local time) to avoid real-time fraud monitoring. The card1_txn_count_24h metric shows 0 for all cards, indicating fresh enumeration. Failed transactions show AVS mismatch patterns while CVV may be guessed (often 999, 123, or sequential patterns).",
+  "indicators": [
+    "30-80 unique card1 values from identical 6-digit BIN within 45-minute window",
+    "Card numbers increment sequentially with gaps of 1-5 between consecutive attempts",
+    "TransactionAmt concentrated between $1.00-$4.99 for authorization testing",
+    "100% of attempts share identical P_emaildomain from disposable email services",
+    "All transactions show card1_txn_count_24h = 0 indicating untested card numbers",
+    "Identical addr1 and dist1 values across all sequential card attempts",
+    "Transaction timing clusters in txn_hour 1-5 AM with is_night=1"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Within 45 minutes, 30-80 untested card numbers from the same bank appear in sequential order (incrementing by 1-5), each making a single low-value transaction ($1-$5) using identical email addresses from disposable services and the same billing address, typically occurring between 1-5 AM.",
+  "reasoning": "Criminals are systematically guessing valid card numbers within a stolen BIN range to identify active accounts for later high-value fraud, testing at night with small amounts to avoid detection while building a list of confirmed working cards.",
+  "indicator_explanations": [
+    "Attacker is systematically testing dozens of cards from the same bank",
+    "Card numbers follow a predictable counting pattern with small skips",
+    "Amounts are deliberately tiny to slip under fraud-detection radar",
+    "Every transaction uses the same throwaway email address",
+    "None of these cards have been used anywhere in the past day",
+    "Billing address and distance fields are cloned across all attempts",
+    "Attack unfolds in the dead of night when monitoring is weakest"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "case_engineered_anomaly_002",
+  "title": "Merchant-History Amount Mismatch with Clean Behavioral Profile",
+  "pattern": "engineered_anomaly",
+  "narrative": "Fraudster operates a compromised card at a legitimate merchant account where the cardholder has established transaction history, but attempts amounts significantly outside the cardholder's prior spending pattern at that specific merchant. V307 engineered feature encodes the amount-vs-merchant-history deviation that raw amount fields cannot capture because the transaction value itself falls within the card's overall spending range. The fraud is invisible in behavioral signals: amount appears normal for the card, device fingerprint may show prior legitimate use, email and address match issuer records. Only the merchant-specific spending anomaly encoded in V307 reveals the attack. This pattern exploits merchant familiarity to bypass behavioral velocity checks while the fraudster tests higher-value purchases than the cardholder's established merchant relationship would support.",
+  "indicators": [
+    "V307 > 1.8 (p85), elevated merchant-specific amount-history deviation score",
+    "card1_amt_zscore between -1.2 and +1.2, amount within cardholder's normal range",
+    "C1 < 45 (p50), card-counter aggregation showing established but not excessive card activity",
+    "V258 < 120 (p40), engineered transaction-sequence feature in normal range masking merchant anomaly",
+    "D1 > 0 indicating prior device-card pairing exists",
+    "V320 between 0.3 and 0.8 (mid-range), identity-verification composite not flagging mismatch"
+  ],
+  "indicator_explanations": [
+    "Amount is significantly outside the cardholder's historical spending pattern at this specific merchant",
+    "Transaction value fits the card's overall spending baseline across all merchants",
+    "Card shows moderate established usage history consistent with legitimate account activity",
+    "Transaction sequence timing and pattern appear normal for this cardholder profile",
+    "The device has been used with this card before in prior transactions",
+    "Identity verification elements show moderate consistency not triggering address or email flags"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Card used at familiar merchant but for amounts inconsistent with that specific merchant relationship, detected only through merchant-history comparison features while all raw behavioral signals remain clean.",
+  "reasoning": "Fraudsters leverage compromised cards at merchants where legitimate history exists to bypass velocity rules, but request amounts outside the cardholder's established spending pattern at that merchant. V307 encodes this merchant-specific deviation that aggregate card-level amount statistics cannot detect."
+}

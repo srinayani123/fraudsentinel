@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_002",
+  "title": "Proxy-Masked Card Testing with Sequential Geographic Drift",
+  "pattern": "geo_anomaly",
+  "narrative": "Fraudster uses rotating proxy infrastructure to mask location while testing stolen card portfolios. Initial transactions appear from consistent IP geolocation (dist1 >5000km from billing addr1), but sequential transactions show impossible geographic drift patternsâ€”appearing from Seattle, then Miami, then Phoenix within 90 minutes despite identical device fingerprint. Tests start with low-value digital goods ($1-$15, ProductCD='W') to validate cards, then escalate to $200-$800 purchases if successful. email_to_IP_dist values exceed 3000km consistently, while C_emaildomain remains stable (gmail/yahoo). Card velocity shows 8-12 transactions across 4+ distinct dist1 values within 6-hour window, but device_id and UserAgent remain constant, indicating same actor behind proxy rotation.",
+  "indicators": [
+    "dist1 values change by >2000km between consecutive transactions within 2-hour windows",
+    "email_to_IP_dist consistently >3000km across 5+ transactions",
+    "card1_txn_count_1hr shows 8-12 transactions with 4+ distinct IP geolocations",
+    "ProductCD sequence: 3+ 'W' (digital) transactions under $15, then sudden jump to 'C'/'H' over $200",
+    "device_id and UserAgent remain identical despite dist1 geographic impossibilities",
+    "TransactionAmt escalation: $1-$15 range for first 2-4 txns, then $200+ within same session",
+    "addr1 to IP country mismatch maintained across 100% of transaction sequence"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "The same device rapidly makes purchases from impossible locations—Seattle, Miami, Phoenix within 90 minutes—while email-to-IP distances stay above 3000km. Transactions start with small digital goods under $15, then jump to $200-800 purchases using the same cards.",
+  "reasoning": "The fraudster rotates proxy servers to hide their real location while testing stolen cards with low-value purchases first. Geographic impossibilities combined with consistent device fingerprints reveal someone deliberately masking their identity to validate and exploit stolen payment credentials.",
+  "indicator_explanations": [
+    "Card location jumps thousands of kilometers between purchases within hours",
+    "Email owner's location is consistently far from transaction IP addresses",
+    "Card racks up transactions from multiple countries in single hour",
+    "Small digital purchases suddenly escalate to large physical goods orders",
+    "Same device fingerprint appears despite physically impossible location changes",
+    "Transaction amounts climb from tiny tests to major purchases rapidly",
+    "Billing address country never matches any transaction location throughout session"
+  ]
+}

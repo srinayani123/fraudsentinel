@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_017",
+  "title": "VOIP-Anchored Synthetic Identity with Gradual Account Seasoning Pattern",
+  "pattern": "synthetic_identity",
+  "narrative": "A synthetic identity is established using a freshly-minted VOIP number (typically from Burner, TextNow, or Google Voice) combined with a generated SSN and fabricated address. The fraudster opens a low-limit secured card or retail credit account, making 8-12 small legitimate purchases ($12-$45) over 45-60 days to build transaction history. The VOIP number shows zero telecom history when cross-referenced with LexisNexis or similar databases. After the seasoning period, card1_txn_count_7d jumps from 2 to 18 transactions, all CNP purchases totaling $3,200-$5,800 within 72 hours. The P_emaildomain switches from a temporary provider (guerrillamail, temp-mail) used during account opening to a seemingly legitimate Gmail account created within 30 days of the bust-out. TransactionAmt values cluster tightly at merchant authorization limits ($499, $999, $1,499), and dist1 shows inconsistent geolocation relative to addr1 during the final spree.",
+  "indicators": [
+    "Phone number registered to VOIP service with account age under 90 days and zero billing history",
+    "card1_txn_count_60d shows exactly 8-12 transactions under $50 followed by 15+ transactions over $200 within 72 hours",
+    "P_emaildomain changes from temporary email service to major provider (Gmail/Yahoo) created within 30 days of application",
+    "TransactionAmt values concentrate at $499, $999, or $1,499 representing common merchant authorization thresholds",
+    "dist1 (distance between billing and IP geolocation) exceeds 500km during bust-out phase after showing under 50km during seasoning",
+    "card1_amt_zscore jumps from -0.3 to +2.8 within 48-hour window indicating dramatic spending pattern shift",
+    "Address (addr1) shows no utility or rental payment history when verified against credit bureau data"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A new account uses a VOIP phone number with no telecom history, makes 8-12 small purchases under $50 over 45-60 days, then suddenly executes 15+ transactions totaling thousands of dollars within 72 hours at common authorization limits like $499 or $999. The email switches from a temporary provider to a recently-created Gmail account, and the distance between billing address and transaction location jumps from under 50km to over 500km during the spending spree.",
+  "reasoning": "The fraudster is building artificial credibility by mimicking normal customer behavior with small purchases, then maximizing stolen funds once the account gains trust. The VOIP number avoids identity verification, the temporary email hides true identity during setup, and the sudden geographic inconsistency combined with threshold-hugging transactions reveals coordinated extraction rather than legitimate spending.",
+  "indicator_explanations": [
+    "Phone is from a disposable VOIP service with no payment track record",
+    "Small purchases build trust before sudden explosion of high-value transactions",
+    "Email upgrades from throwaway to mainstream provider right before application",
+    "Purchase amounts cluster at exact thresholds merchants use for fraud reviews",
+    "Buyer's location jumps hundreds of miles away once the attack begins",
+    "Spending suddenly rockets from modest to extreme within two days",
+    "Address has no utility bills or rent payments verifying real occupancy"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_017",
+  "title": "P2P Layering Attack: Rapid Money Mule Network Dispersion via Cash Apps",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster executes 12-25 peer-to-peer transfers within 45-90 minutes after initial fraudulent funding, systematically dispersing $8,000-$15,000 across multiple cash app accounts to obscure the money trail. The pattern mimics layering in traditional money laundering: funds enter via compromised card (CNP transaction, ProductCD='W'), then immediately fragment into $250-$900 P2P sends to 8-15 distinct recipient emails. Card holder's legitimate addr1 shows dist1 values of 0-50km, but recipient R_emaildomain patterns reveal temporary/burner domains (mailinator, guerrillamail). The velocity signature is distinctive: card1_txn_count_1hour jumps from 0-2 baseline to 18-26, while card1_amt_zscore exceeds 4.5. Transfers cluster in is_night=1 windows (txn_hour 1-5 AM local). Chargebacks typically appear 48-72 hours later as legitimate cardholder discovers unauthorized initial funding transaction.",
+  "indicators": [
+    "card1_txn_count_1hour increases from â‰¤2 baseline to 18-26 P2P transactions within 45-90 minute window",
+    "Initial CNP funding transaction $8K-$15K (ProductCD='W') followed by 12-25 outbound P2P transfers averaging $400-$750 each",
+    "R_emaildomain patterns show 60%+ recipients using temporary email services (mailinator.com, guerrillamail.com, 10minutemail)",
+    "card1_amt_zscore exceeds 4.5 during the dispersion window compared to cardholder's 30-day transaction history",
+    "85%+ of P2P transfers occur during is_night=1 window (txn_hour between 1-5 AM in cardholder's timezone)",
+    "dist1 values for legitimate cardholder addr1 remain 0-50km while recipient diversity suggests 8-15 distinct accounts",
+    "Chargeback filed on initial funding transaction within 48-96 hours while P2P dispersion transactions remain uncontested"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A compromised card funds a large cash app deposit ($8K-$15K), then within 45-90 minutes the money fragments into 12-25 rapid P2P transfers to different recipients using temporary email domains, all happening between 1-5 AM. Transaction count per hour spikes from a normal 0-2 to 18-26, and the amount is 4.5+ standard deviations above the cardholder's usual pattern.",
+  "reasoning": "The attacker is racing to move stolen funds through a network of mule accounts before the real cardholder notices and disputes the initial charge. The overnight timing, temporary email addresses, and immediate fragmentation into many smaller transfers are designed to obscure the money trail and make recovery difficult once the victim reports fraud 48-72 hours later.",
+  "indicator_explanations": [
+    "Card suddenly explodes from normal activity to firing off dozens of P2P payments",
+    "Large cash-in followed by immediate scattering into many smaller outbound transfers",
+    "Most recipients are using disposable throwaway email addresses for their accounts",
+    "Transfer amounts are massively out of character for this cardholder's spending habits",
+    "The entire money movement happens in the dead of night",
+    "Cardholder location stays local while money scatters to many different recipient accounts",
+    "Victim disputes the big deposit but never contests the outbound transfers"
+  ]
+}

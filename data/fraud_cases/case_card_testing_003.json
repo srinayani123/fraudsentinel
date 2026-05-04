@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_003",
+  "title": "Cross-Merchant Micro-Transaction Card Validation Sweep",
+  "pattern": "card_testing",
+  "narrative": "Fraudster distributes tiny authorization tests across 8-15 low-scrutiny merchant accounts within a 45-90 minute window to validate stolen card data while evading single-merchant velocity controls. Transactions cluster at $0.50-$2.99 to multiple digital goods merchants (ProductCD='W'), often targeting MCC 5815 (digital media) and 5968 (subscription services). Each merchant sees only 1-2 transactions per card, but the cardholder experiences 10+ micro-charges in rapid succession. Pattern exploits merchant-siloed fraud detection systems. Successful validation precedes same-day or next-day high-value fraud at unrelated merchants. Email domains rotate across free providers (P_emaildomain in gmail.com, yahoo.com, outlook.com pool). Billing and shipping addresses often null or mismatched (dist1 > 5000km). Night-time transactions (txn_hour 1-5 AM merchant local time) account for 70%+ of attempts.",
+  "indicators": [
+    "card1_txn_count_1hr between 8-15 with TransactionAmt all under $3.00",
+    "Transactions span 5+ distinct merchant IDs (card1_merchant_diversity_1hr >= 5)",
+    "ProductCD exclusively 'W' (digital/virtual goods) across all test charges",
+    "P_emaildomain cycles through 3+ free providers within same session",
+    "dist1 exceeds 3000km or null in 80%+ of transactions",
+    "txn_hour clusters 01:00-05:00 in merchant timezone for 70%+ of attempts",
+    "card1_amt_zscore remains below 0.5 during testing phase, then spikes above 3.0 within 24 hours"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single card generates 8-15 tiny purchases (under $3) across multiple different digital goods merchants within 1-2 hours, typically between 1-5 AM, with mismatched or missing address data and rotating free email providers.",
+  "reasoning": "Criminals test stolen cards with micro-transactions that slip under individual merchant radar, then use validated cards for large fraudulent purchases within 24 hours at different stores.",
+  "indicator_explanations": [
+    "Card is being tested with small-dollar charges to verify it's still active",
+    "Attacker is hitting multiple unrelated merchants to avoid single-merchant fraud blocks",
+    "All purchases are virtual goods that ship instantly with no physical address verification",
+    "Email address rotates between Gmail, Yahoo, Outlook to evade linking",
+    "Location data is absent or shows impossible geography across the testing run",
+    "Testing happens in the dead of night when fraud monitoring is lightest",
+    "Tiny test amounts suddenly jump to large fraudulent purchase after validation succeeds"
+  ]
+}

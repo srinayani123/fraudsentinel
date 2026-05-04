@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_030",
+  "title": "Sustained E-commerce Card Drain via Low-Amount Digital Goods Purchases",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster executes 50-80 transactions over a 24-hour period targeting digital product merchants (ProductCD='W' or 'C') to drain a compromised card below fraud alert thresholds. Typical pattern shows $15-45 gift card or gaming credit purchases every 15-35 minutes, cycling through 4-6 merchant IDs to avoid single-merchant velocity blocks. Attack begins during off-hours (txn_hour 1-5 AM) when legitimate cardholder is unlikely to notice push notifications, then continues through business hours. Total drainage reaches $2,400-3,200 before card issuer blocks. Fraudster uses consistent device fingerprint and shipping address (addr1 unchanged) but rotates P_emaildomain across free providers. Card velocity metrics spike dramatically while individual transaction amounts remain innocuous.",
+  "indicators": [
+    "card1_txn_count_24h between 50-80 transactions with median gap under 30 minutes",
+    "TransactionAmt consistently $15-45 with standard deviation under $8 across the series",
+    "ProductCD limited to 'W' (digital wallet loads) or 'C' (digital content) for 90%+ of transactions",
+    "4-6 distinct merchant IDs (card1_mid_count_24h) but single addr1 value throughout",
+    "Attack initiation during is_night=1 (txn_hour 1-5) followed by continuous daytime activity",
+    "P_emaildomain rotates across 3+ free providers (gmail.com, yahoo.com, outlook.com) while R_emaildomain remains NULL",
+    "card1_amt_zscore remains below 2.0 per transaction but cumulative 24h amount exceeds 15x cardholder's historical daily average"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A compromised card shows 50-80 small purchases ($15-45 each) for gift cards or digital content within 24 hours, starting overnight and continuing through the day with transactions every 15-35 minutes across multiple merchants but using the same shipping address.",
+  "reasoning": "The fraudster keeps each transaction small to avoid triggering amount-based alerts while draining the card quickly before the legitimate owner notices, rotating email addresses and merchants to evade velocity blocks but maintaining address consistency for successful digital delivery.",
+  "indicator_explanations": [
+    "Card shows relentless purchasing pace with barely any breaks between transactions",
+    "Every purchase amount clusters tightly around same low dollar range",
+    "Attacker exclusively targets easy-to-monetize digital products throughout the drain",
+    "Multiple merchants hit but billing address stays locked to single location",
+    "Attack launches in dead of night then continues nonstop through business hours",
+    "Email rotates between popular free services while recipient email stays blank",
+    "Individual charges fly under radar but daily total dwarfs cardholder's normal spending"
+  ]
+}

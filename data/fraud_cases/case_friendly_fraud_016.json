@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_016",
+  "title": "Full-Cycle Subscription Exploitation with Terminal Month Chargeback",
+  "pattern": "friendly_fraud",
+  "narrative": "Customer enrolls in monthly subscription service (streaming, software, meal kit) at $29.99-$79.99/month, uses service throughout billing cycle including final week, then disputes charge 25-29 days post-transaction claiming \"unauthorized recurring charge.\" Pattern shows normal usage behavior: streaming 15-40 hours/week, software logins 4-6 days/week, or meal deliveries accepted. Chargeback filed 1-3 days before next billing cycle would initiate. Cardholder typically disputes only most recent charge while keeping subscription active or re-enrolling under different email. Common in ProductCD='W' (digital services) with 60-90 day subscription histories. Exploits issuer bias toward cardholders on recurring billing disputes despite clear service consumption.",
+  "indicators": [
+    "Chargeback filed 25-29 days after TransactionAmt posted, timing correlates with end of service period",
+    "card1_txn_count_28day shows 2-12 prior identical recurring charges same MID, all successful",
+    "Dispute reason code 4853/4541 (\"not as described\" or \"recurring transaction cancelled\") despite no cancellation request in merchant logs",
+    "Service utilization logs show 12+ access events during disputed billing period, including activity 1-4 days before chargeback",
+    "P_emaildomain differs from email on 1-3 prior subscription periods same card1, suggesting serial re-enrollment",
+    "TransactionAmt matches merchant's standard monthly tier pricing exactly ($29.99, $49.99, $79.99), not prorated or discounted",
+    "No failed authorization attempts or card1_amt_zscore anomalies preceding dispute, indicating normal payment acceptance"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A customer uses a subscription service normally throughout the entire billing month, then files a chargeback 25-29 days after payment claiming the charge was unauthorized or the subscription was cancelled, despite logs showing active usage up until days before the dispute.",
+  "reasoning": "The customer is deliberately timing the chargeback to extract a full month of service for free while appearing as a victim of unauthorized billing, exploiting card issuers' tendency to side with cardholders on recurring charge disputes even when service consumption is documented.",
+  "indicator_explanations": [
+    "Chargeback filed precisely when subscription service period ends, suggesting planned timing",
+    "Card successfully paid identical monthly charges before suddenly disputing the latest one",
+    "Customer claims service issue but never contacted merchant to cancel or complain",
+    "User actively consumed the service throughout the month they're now disputing",
+    "Email address changed between subscription cycles indicating potential serial abuse pattern",
+    "Amount is standard full-month pricing, customer received complete billing period of service",
+    "Payment processed normally with no payment issues, then disputed after service consumed"
+  ]
+}

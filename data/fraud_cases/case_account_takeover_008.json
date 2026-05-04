@@ -1,0 +1,25 @@
+{
+  "id": "case_account_takeover_008",
+  "title": "Chain Recovery Takeover via Compromised Secondary Email Domain",
+  "pattern": "account_takeover",
+  "narrative": "Attacker gains control of victim's recovery email account (often older webmail services like Yahoo, AOL, or defunct ISP domains) and uses it to reset credentials on higher-value primary accounts. Pattern shows legitimate activity for 90-180 days on P_emaildomain (primary account), then sudden P_emaildomain change request from R_emaildomain (recovery email) that itself shows geographic mismatch. Within 6-18 hours post-reset, rapid card testing begins: 8-15 transactions of $1-$3 at different MIDs (ProductCD=W for digital wallets), followed by 2-4 higher-value purchases ($340-$890) at electronics/gift card MCCs. Key signature: R_emaildomain shows dist1 values >3000km from historical addr1, recovery email domain is legacy provider (emaildomain_suffix match to known-vulnerable list), and card1_txn_count_24hr spikes from 0.2 average to 12+ immediately after email change timestamp.",
+  "indicators": [
+    "P_emaildomain change initiated from R_emaildomain with dist1 >3000km from user's historical addr1",
+    "R_emaildomain matches legacy provider list (Yahoo, AOL, ISP domains) with known credential stuffing exposure",
+    "card1_txn_count_24hr increases from baseline <1/day to 12+ transactions within 18 hours of email reset",
+    "Initial 8-15 micro-transactions ($1-$3, ProductCD=W) followed by 2-4 purchases $340-$890 at MCC 5732 or 5946",
+    "txn_hour concentration: 85%+ of new activity occurs during is_night=1 periods, opposite of 180-day historical pattern",
+    "card1_amt_zscore exceeds 4.5 for transactions initiated within 24 hours of P_emaildomain modification event"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A customer's primary email address is changed via a request from their recovery email (often Yahoo, AOL, or old ISP domains), followed within hours by a burst of small test charges and then several high-value electronics or gift card purchases—all from locations thousands of kilometers away from the user's normal address.",
+  "reasoning": "Fraudsters compromise weak secondary email accounts to hijack higher-value primary accounts, then immediately test stolen payment methods with micro-transactions before cashing out on expensive items, exploiting the trust chain between recovery and primary emails.",
+  "indicator_explanations": [
+    "Account email change originates from distant location never seen in user history",
+    "Recovery email sits on older platform repeatedly breached in credential dumps",
+    "Card suddenly fires off dozens of transactions after months of quiet usage",
+    "Attacker tests card with tiny charges then pivots to high-ticket electronics purchases",
+    "All suspicious activity happens overnight when legitimate user typically sleeps",
+    "Purchase amounts wildly exceed what this cardholder normally spends per transaction"
+  ]
+}

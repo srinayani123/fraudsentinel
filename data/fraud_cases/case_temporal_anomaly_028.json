@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_028",
+  "title": "Shift-Change Exploitation with Coordinated Evening Burst Activity",
+  "pattern": "temporal_anomaly",
+  "narrative": "Fraudsters exploit 11 PM to 1 AM window during fraud team shift handover, executing rapid-fire CNP transactions that span two operational periods to delay detection consolidation. A compromised card shows dormancy for 8-14 days, then suddenly fires 12-18 transactions between 23:15-00:45 targeting digital goods (ProductCD='W') with amounts clustering $47-$89. Transactions deliberately straddle midnight (6-8 before, 6-10 after) so automated daily reconciliation splits the pattern across two reporting cycles. The attacker uses 3-4 distinct P_emaildomains rotating every 20-35 minutes, all temporary providers, with matching addr1 values but incrementing card1_txn_count_1hr from 0 to 17. CVV matches decline after transaction 5, suggesting card-testing completion. R_emaildomain remains consistent across burst while shipping addresses (dist1) show 890-2400 mile variance, indicating digital fulfillment or mule network activation during minimal analyst oversight.",
+  "indicators": [
+    "12-18 transactions concentrated in 23:15-00:45 window with 6+ before midnight, 6+ after",
+    "Card dormant 8-14 days then card1_txn_count_1hr escalates 0â†’17 within 90 minutes",
+    "TransactionAmt clusters $47-$89 across all transactions targeting ProductCD='W' exclusively",
+    "3-4 distinct P_emaildomains rotate every 20-35 minutes, all temporary email providers",
+    "CVV match rate drops from 100% to 0% after transaction 5 in sequence",
+    "dist1 variance 890-2400 miles across transactions while addr1 remains constant",
+    "is_night=1 for entire burst with txn_hour transitioning from 23â†’00â†’01"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card sits idle for over a week, then suddenly fires 12-18 transactions in a 90-minute window spanning midnight, with amounts between $47-$89 all targeting digital products. Email addresses rotate every 20-35 minutes while shipping distances vary wildly despite a constant billing address, and CVV matches stop after the fifth transaction.",
+  "reasoning": "The attacker times the burst across the midnight boundary to split the pattern across two daily reports, exploiting reduced analyst coverage during shift changes. The dormancy-then-frenzy pattern combined with email rotation and failed CVV checks reveals card testing followed by immediate monetization before the compromise is detected.",
+  "indicator_explanations": [
+    "Attack targets midnight shift change when monitoring gaps are widest",
+    "Card suddenly erupts from complete inactivity to extreme burst pattern",
+    "All amounts fall in narrow range suggesting automated script control",
+    "Throwaway email addresses swap out every half hour during the attack",
+    "Fraudster stops providing correct CVV after initial authorization attempts succeed",
+    "Transactions bounce across distant locations while billing address stays frozen",
+    "Entire sequence executes during overnight hours spanning midnight crossover point"
+  ]
+}

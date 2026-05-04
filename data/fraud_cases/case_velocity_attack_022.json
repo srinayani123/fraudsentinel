@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_022",
+  "title": "Cross-Merchant Burst Testing with Escalating Authorization Amounts",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster conducts rapid-fire authorization testing across 8-12 distinct merchant categories within 45-75 minutes, deliberately varying transaction amounts from $1.47 to $287.50 to map card limits and merchant-specific fraud controls. Pattern shows same card4 hitting gas stations (MCC 5541), digital goods (MCC 5816), electronics retailers (MCC 5732), and travel sites sequentially, with each merchant receiving 1-2 attempts before moving to next target. The attacker uses a consistent device fingerprint (same DeviceInfo hash) but rotates P_emaildomain across free providers (gmail, yahoo, outlook). Card velocity explodes from baseline 2 transactions/week to 11 transactions in 67 minutes, with card1_txn_count_1hr spiking to 11 while card1_txn_count_24hr remains under 15. Fraudster seeks merchants with delayed settlement or weak 3DS enforcement before committing to larger purchases. Final 2-3 transactions jump to $200+ once authorization boundaries are mapped.",
+  "indicators": [
+    "card1_txn_count_1hr >= 8 with 6+ distinct MCC codes represented",
+    "TransactionAmt shows stair-step pattern: starts $1-5, mid-sequence $25-75, final attempts $200+",
+    "8+ different merchant IDs (card1_merchant_count_1hr >= 8) with 100% new merchant relationships",
+    "Consistent DeviceInfo hash across all transactions despite varying P_emaildomain",
+    "card1_amt_zscore exceeds 4.5 when comparing 1-hour window to 90-day baseline",
+    "Time between transactions averages 4-8 minutes with no gaps exceeding 12 minutes",
+    "70%+ of transactions occur within is_night=1 window (22:00-05:00 local merchant time)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "The same card hits 8-12 different merchant types in under an hour with amounts climbing from $1.47 to $287.50, while the device fingerprint stays identical but email domains rotate across free providers. Transaction velocity spikes from a normal 2 per week to 11 in 67 minutes, predominantly during nighttime hours.",
+  "reasoning": "The fraudster is systematically probing stolen card limits and testing which merchants have weak fraud controls before committing to high-value purchases. The escalating amounts, rapid merchant-hopping, and nighttime timing reveal deliberate reconnaissance rather than legitimate shopping behavior.",
+  "indicator_explanations": [
+    "Card rapidly hits multiple unrelated merchant categories in single hour",
+    "Transaction amounts climb systematically from pennies to large purchases",
+    "Card contacts eight different merchants never used by this cardholder before",
+    "Same device is used throughout but email address keeps changing",
+    "Hourly spending is drastically higher than this card's normal pattern",
+    "Transactions maintain steady drumbeat timing with no natural shopping pauses",
+    "Most activity concentrates during overnight hours when monitoring is minimal"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_028",
+  "title": "VOIP-Anchored Synthetic Identity with Gradual Credit Building Phase",
+  "pattern": "synthetic_identity",
+  "narrative": "A synthetic identity is established using a fabricated SSN linked to a newly provisioned VOIP number from Bandwidth.com or similar provider. The fraudster opens a secured credit card with $500 limit, makes 8-12 small legitimate purchases ($15-$45 each) over 90 days to establish payment history. Phone carrier lookup returns VOIP classification with activation date within 6 months. After the nurture period, the identity applies for unsecured credit, receives $3,500 limit, and immediately executes bust-out: 4 transactions totaling $3,200 within 72 hours at high-risk MCCs (5732 electronics, 5944 jewelry). Email domain is a free provider (gmail.com, yahoo.com) created within same 30-day window as phone provisioning. No device fingerprint history exists prior to first application. Address resolves to mail drop service (CMRA) rather than residential dwelling.",
+  "indicators": [
+    "Phone number carrier lookup returns VOIP provider with service activation <180 days prior to application",
+    "card1_txn_count_7day = 0 followed by card1_txn_count_30day jumping to 8-12 transactions in $15-$45 range",
+    "P_emaildomain creation date within 45 days of phone provisioning date per WHOIS/account metadata",
+    "addr1 resolves to commercial mail receiving agency (CMRA) rather than residential address type",
+    "Bust-out signature: TransactionAmt sum >85% of credit limit across 3-5 transactions within 72 hours after 90-day dormancy",
+    "Device fingerprint first-seen timestamp matches application date, no prior browsing/session history",
+    "All transactions occur at MCC 5732, 5944, or 5661 (high-resale categories) with is_night=1 for 60%+ of volume"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A new identity uses a VOIP phone number and mail drop address to open a secured credit card, makes 8-12 small purchases over 90 days to build history, then maxes out a new unsecured card with large electronics and jewelry purchases within 72 hours.",
+  "reasoning": "The fraudster is manufacturing a credible credit profile using fake credentials to qualify for higher credit limits, then immediately cashing out before the synthetic identity collapses—normal customers don't combine brand-new VOIP numbers, mail drops, and sudden spending spikes after careful payment behavior.",
+  "indicator_explanations": [
+    "Phone service is brand new and comes from a disposable VOIP provider",
+    "Card goes from zero activity to sudden regular purchases after initial silence",
+    "Email account was created at the same time as the phone number",
+    "Address is a mailbox service, not where someone actually lives",
+    "After months of inactivity, card is maxed out in a frenzied spending spree",
+    "Device appears for the first time at application with no prior usage history",
+    "Purchases concentrate on easily resold goods and happen mostly at night"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_012",
+  "title": "Disposable Email Domain with High-Value Goods Rapid Checkout Pattern",
+  "pattern": "email_risk",
+  "narrative": "Fraudster uses temporary email services (mailinator.com, guerrillamail.com, 10minutemail.net) to create throwaway accounts for high-value electronics purchases. P_emaildomain shows disposable provider while R_emaildomain is null or mismatched legitimate domain. Typical pattern involves $800-$2,400 transactions for ProductCD='W' (wireless/electronics) with expedited shipping. Account shows card1_txn_count_1day = 1 (first use), no prior history with merchant. Checkout completed in under 90 seconds from account creation timestamp. Shipping address (addr1) frequently points to freight forwarders or commercial mail drops. CVV match but AVS shows partial or no match. Transaction occurs during business hours (txn_hour 9-17) to avoid fraud team scrutiny. Disposable email domains lack MX record longevity and show recent WHOIS registration dates under 30 days.",
+  "indicators": [
+    "P_emaildomain matches known disposable email service list (mailinator, guerrillamail, tempmail, 10minutemail, etc)",
+    "TransactionAmt between $800-$2,400 with ProductCD = 'W' and card1_txn_count_1day = 1",
+    "Account age under 2 minutes at transaction time with checkout duration under 90 seconds",
+    "R_emaildomain is null or domain mismatch (P_emaildomain != R_emaildomain)",
+    "addr1 type classified as commercial/freight forwarder with dist1 > 500 miles from billing",
+    "CVV_match = 1 but AVS_match shows partial (address only) or no match",
+    "Email domain WHOIS registration date within 30 days of transaction timestamp"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A brand new account using a temporary email service (like mailinator or guerrillamail) makes a high-value electronics purchase with expedited shipping, completing checkout in under 90 seconds with no prior transaction history.",
+  "reasoning": "Fraudsters use disposable emails to avoid detection and accountability when using stolen payment cards, allowing them to quickly abandon the throwaway account after the fraudulent purchase ships to a mail forwarding address.",
+  "indicator_explanations": [
+    "Buyer uses a throwaway email service designed for anonymous temporary accounts",
+    "High-dollar electronics purchase on brand-new card with no purchase history",
+    "Account created seconds before checkout with suspiciously fast purchase completion",
+    "Recipient email is missing or doesn't match the purchaser's domain",
+    "Shipping to freight forwarder hub hundreds of miles from card billing address",
+    "CVV correct but physical address verification fails or partially matches",
+    "Email domain was just registered within the past month"
+  ]
+}

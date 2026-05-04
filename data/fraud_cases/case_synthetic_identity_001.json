@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_001",
+  "title": "Synthetic Identity Bust-Out: 90-Day Nurture to Sudden $8K-$15K Depletion",
+  "pattern": "synthetic_identity",
+  "narrative": "A synthetic identity is aged through 12-18 small legitimate purchases ($15-$75) over 90-120 days, establishing clean payment history across 2-3 merchants with matching MCC codes (5411 grocery, 5912 pharmacy). The account maintains static P_emaildomain (free provider like yahoo.com) and consistent addr1 but shows no organic behavior variation. On day 91-95, the pattern shifts violently: 6-9 transactions within 48 hours totaling $8,000-$15,000, all CNP with ProductCD='W' (internet purchases), hitting high-risk MCCs (5732 electronics, 5944 jewelry). Card velocity metrics spike from baseline 0.4 txn/week to 4+ txn/day. The bust-out targets credit limits established during the nurture phase, often cleared within 72 hours before first payment due date.",
+  "indicators": [
+    "card1_txn_count_7day jumps from 0-1 baseline to 6-9 within 48-hour window after 90+ days dormancy",
+    "TransactionAmt mean shifts from $15-$75 range to $800-$2,500 per transaction with no gradual escalation",
+    "All bust-out transactions share ProductCD='W' and occur during business hours (txn_hour 9-17) versus prior varied timing",
+    "P_emaildomain remains unchanged free provider but R_emaildomain switches to high-risk temporary domains",
+    "card1_amt_zscore exceeds 3.5 standard deviations above 90-day account baseline within 48-hour period",
+    "Merchant category switches from low-risk MCCs (5411, 5912) to high-risk (5732, 5944, 5999) exclusively",
+    "Total exposure reaches 85-100% of estimated credit limit within 72 hours of first elevated transaction"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Account shows 90-120 days of small, consistent purchases at grocery or pharmacy merchants, then suddenly executes 6-9 large online transactions ($8K-$15K total) within 48 hours at electronics or jewelry retailers. Transaction velocity spikes from less than one per week to over four per day, with individual amounts jumping from $15-$75 to $800-$2,500.",
+  "reasoning": "Fraudsters build synthetic identities with months of normal activity to establish credit limits and trust, then execute a coordinated bust-out to max out available credit before disappearing. The abrupt shift from patient nurturing behavior to aggressive spending at high-value merchants signals the account was never a real customer, just a vehicle for final exploitation.",
+  "indicator_explanations": [
+    "Card suddenly springs to life with burst activity after three months of silence",
+    "Purchase amounts skyrocket from modest to massive with no warm-up period",
+    "All high-value hits use identical product code during standard business hours only",
+    "Recipient email flips to sketchy throwaway domains while sender email stays put",
+    "Spending shoots far beyond what this account has ever done historically",
+    "Card abruptly switches from grocery stores to electronics and cash-equivalent merchants",
+    "Account gets maxed out to near credit limit within three days"
+  ]
+}

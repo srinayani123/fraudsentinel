@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_005",
+  "title": "Dormant Account Reactivation via Credential Stuffing with Geographic Shift",
+  "pattern": "account_takeover",
+  "narrative": "Account shows zero activity for 90+ days, then abruptly executes 3-8 transactions within 72 hours totaling $800-$2,400. The reactivation coincides with email domain change from corporate (company.com) to generic webmail (P_emaildomain switches to gmail/yahoo). New transactions originate from dist1 values 500+ km from historical addr1, often in different timezones. Fraudster tests with $15-$40 digital goods (ProductCD='W') in first 6 hours, then escalates to $200-$400 electronics if successful. Card1_txn_count_1day jumps from 0 to 5-7. Original cardholder's pattern was daytime purchases (txn_hour 9-17), but takeover shows is_night=1 clustering. No failed login attempts visible in transaction data, suggesting valid credentials obtained from breach lists.",
+  "indicators": [
+    "Account dormancy period exceeds 90 days with sudden burst of 3-8 transactions in 72-hour window",
+    "P_emaildomain changes from corporate/ISP domain to gmail.com, yahoo.com, or outlook.com during reactivation",
+    "dist1 geographic distance exceeds 500 km from historical addr1 pattern",
+    "Initial test transactions $15-$40 for digital goods (ProductCD='W') followed by $200-$400+ physical goods within 24 hours",
+    "card1_txn_count_1day spikes from 0 to 5-7 transactions",
+    "Shift to nighttime activity (is_night=1, txn_hour 22-04) contradicting historical daytime pattern (txn_hour 9-17)",
+    "card1_amt_zscore exceeds 3.5 compared to historical transaction amounts"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A long-dormant account suddenly springs to life with multiple transactions from a new geographic location 500+ km away, paired with an email address change from corporate to generic webmail. The spending pattern shows small digital goods purchases followed rapidly by higher-value electronics, all occurring at unusual nighttime hours.",
+  "reasoning": "Attackers use stolen credentials from data breaches to access inactive accounts that legitimate owners aren't monitoring. They test the account with low-value digital purchases to confirm the card works, then quickly escalate to expensive items before the victim notices, exploiting the window before fraud detection triggers.",
+  "indicator_explanations": [
+    "Account sits unused for months then suddenly explodes with multiple purchases",
+    "Email switches from legitimate provider to free webmail service during comeback",
+    "Purchases originate from location hundreds of miles from cardholder's normal area",
+    "Attacker tests with cheap digital items then quickly escalates to expensive goods",
+    "Card goes from zero activity to flurry of purchases in single day",
+    "Transactions happen late night when cardholder historically shops during business hours",
+    "Purchase amounts are dramatically larger than cardholder's typical spending"
+  ]
+}

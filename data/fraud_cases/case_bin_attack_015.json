@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_015",
+  "title": "BIN Validation Pre-Flight Pattern with Card Type Verification Probing",
+  "pattern": "bin_attack",
+  "narrative": "Fraudster systematically queries card type and issuer metadata before each transaction attempt by submitting $0.00 or $1.00 authorization-only requests with varying BINs. Pattern shows 12-40 micro-transactions within 90 seconds, each testing different first-six digits, followed by 2-8 genuine purchase attempts at $89-$340 within 3-5 minutes using only BINs that validated successfully. All probes originate from identical device fingerprint (DeviceInfo hash) and IP address (dist1=0 across sequence). Failed validations show declined_auth codes, while successful probes immediately precede purchase attempts with matching card1 prefixes. The card1_txn_count_1day shows 18-45 events clustered in single session, with card1_amt_zscore spiking to 8.2+ on actual purchase attempts after probe phase completes.",
+  "indicators": [
+    "$0.00-$1.00 authorization requests in rapid succession (12-40 within 90 seconds)",
+    "card1 first-six varies across sequence while DeviceInfo and dist1 remain constant",
+    "Declined authorization codes on 70-85% of micro-transactions",
+    "Purchase attempts ($89-$340) within 180-300 seconds using only validated BINs",
+    "card1_txn_count_1day = 18-45 with temporal clustering coefficient >0.92",
+    "Identical P_emaildomain and dist1=0 across entire probe-to-purchase sequence",
+    "card1_amt_zscore jumps from <0.5 during probes to 8.2+ on purchase attempts"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Dozens of $0-$1 authorization requests test different card BINs in under 90 seconds from the same device and IP, followed by real purchase attempts only using the BINs that validated successfully.",
+  "reasoning": "The fraudster is mapping which stolen card numbers are active before committing to actual purchases, minimizing detection by only attempting transactions with cards they've confirmed will process.",
+  "indicator_explanations": [
+    "Attacker fires dozens of tiny test charges to find working cards",
+    "Different card numbers tested from same device and location simultaneously",
+    "Most probe transactions fail as attacker discovers which cards are dead",
+    "Real purchase attempts follow immediately after finding cards that validate successfully",
+    "Single card attempts many transactions in tight time clusters during validation",
+    "Same email and location used throughout entire validation and purchase sequence",
+    "Spending jumps dramatically from tiny probe amounts to large fraudulent purchases"
+  ]
+}

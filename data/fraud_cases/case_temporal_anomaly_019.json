@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_019",
+  "title": "Flight Mode Exploitation: Transactions During Confirmed Air Travel",
+  "pattern": "temporal_anomaly",
+  "narrative": "Fraudster exploits cardholder's predictable offline window during international flights. Legitimate cardholder books round-trip flight (MCC 4511) from JFK to London departing 18:00 EST. Between 19:30-06:45 EST (flight duration plus boarding), card shows 8-12 transactions totaling $2,400-$4,100 across digital goods merchants (ProductCD=W, MCC 5816, 5815). Transactions originate from cardholder's home zip (addr1 matches) but IP geolocation shows domestic US cities while plane is mid-Atlantic. Email domain switches from P_emaildomain=gmail.com to P_emaildomain=protonmail.com. Card present at airline lounge 17:15, then CNP-only afterward. Fraudster uses flight booking confirmation access to time the attack window when cardholder cannot receive SMS alerts or check accounts. Pattern includes card1_txn_count_24h jumping from 1 to 13, all during is_night=1 hours (txn_hour 19-06), with dist1 values showing impossible travel from airport location.",
+  "indicators": [
+    "8-12 CNP transactions within 11-hour window immediately following airline purchase (MCC 4511)",
+    "card1_txn_count_6h increases from 1 to 9+ while cardholder's flight status is 'in-air'",
+    "All fraud transactions show is_night=1 and txn_hour between 19-06 EST",
+    "P_emaildomain changes from established domain to newly-seen disposable domain mid-flight",
+    "dist1 values indicate 0-50 mile radius from departure airport while flight tracking shows 2000+ miles traveled",
+    "TransactionAmt average jumps from $87 baseline to $310 per transaction during flight window",
+    "ProductCD switches from cardholder's typical 'C' (card-present) to exclusively 'W' (digital wallet/goods)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A burst of 8-12 card-not-present transactions occurs during the exact window when the legitimate cardholder is confirmed to be on an international flight, with purchases originating from their home zip code while they're mid-air and unreachable. The email domain switches to a disposable provider and transaction amounts spike to $310 average compared to the cardholder's $87 baseline.",
+  "reasoning": "The fraudster uses knowledge of the cardholder's flight schedule to attack during a guaranteed offline period when the victim cannot receive fraud alerts or respond to verification attempts. This timing exploitation, combined with email switching and impossible geographic presence, reveals deliberate coordination to maximize theft during a predictable communication blackout.",
+  "indicator_explanations": [
+    "Card goes on spending spree right after booking a flight",
+    "Transaction count explodes while the real cardholder is airborne",
+    "All suspicious activity happens overnight when monitoring is weakest",
+    "Email suddenly switches to burner address during the flight",
+    "Purchases cluster near the departure airport while cardholder flies cross-country",
+    "Average purchase amount triples during the flight window",
+    "Payment method flips from physical card to online-only channels"
+  ]
+}

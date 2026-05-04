@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_005",
+  "title": "Multi-Merchant BIN Range Probing with Distributed MID Targeting",
+  "pattern": "bin_attack",
+  "narrative": "Fraudsters systematically probe a narrow BIN range (typically 100-500 sequential card numbers from same issuing bank) across 8-15 different merchant IDs within a 45-90 minute window to identify valid card numbers while evading single-merchant velocity controls. Transactions cluster at $1.00-$4.99 to stay below authorization floor limits at convenience stores and digital goods merchants (MCC 5499, 5815, 5816). Each card attempt hits 3-5 distinct merchants before being abandoned or escalated. Email domains rotate through 40+ temporary providers while billing addresses use consistent ZIP+4 patterns. The attack creates a signature cross-merchant BIN concentration invisible to individual merchant fraud systems but detectable in network-wide aggregation.",
+  "indicators": [
+    "Same 6-digit BIN appears across 8+ unique merchant IDs (MID) within 60-minute window",
+    "card1 sequences show consecutive or near-consecutive patterns (card1 differs by â‰¤50 between transactions)",
+    "85%+ of transactions between $1.00-$4.99 with ProductCD='C' or 'W'",
+    "P_emaildomain shows 30+ distinct domains with card1_email_count=1 for each",
+    "addr1 (billing ZIP) repeats for 60%+ of attempts despite varying card1 values",
+    "card1_txn_count_merchant â‰¤3 while card1_txn_count_network â‰¥12 within 90 minutes",
+    "Transactions distributed across merchants with no single MID receiving >25% of volume"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "The same bank identification number (first 6 digits of card) appears across 8+ different merchants within an hour, with card numbers differing by only 1-50 digits and transaction amounts consistently under $5. Each card is tested at 3-5 merchants while using throwaway email addresses and the same billing ZIP code.",
+  "reasoning": "Criminals are systematically guessing card numbers from a single bank's range to find valid accounts, spreading attempts across multiple merchants to avoid triggering any one store's fraud alerts. The low dollar amounts and disposable emails confirm these are test transactions to validate stolen or generated card numbers before larger fraud.",
+  "indicator_explanations": [
+    "Same card issuer range is being tested across many different merchants simultaneously",
+    "Card numbers are sequential or nearly sequential suggesting automated generation",
+    "Tiny dollar amounts indicate testing validity before attempting larger fraud",
+    "Each card paired with unique throwaway email suggesting scripted account creation",
+    "Same billing ZIP reused across different card numbers indicating fake address recycling",
+    "Card appears new to each merchant but burning through network-wide attempts rapidly",
+    "Attack volume intentionally spread thin to avoid triggering individual merchant alarms"
+  ]
+}

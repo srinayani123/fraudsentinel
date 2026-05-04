@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_013",
+  "title": "Refund Cycling Volume Inflation with Rapid Recharge Pattern",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster initiates legitimate-appearing purchases of $45-$85 digital goods (ProductCD=W or C), immediately requests refunds through customer service channels, then within 15-45 minutes uses the same card to make identical purchases. This creates artificial transaction velocity while maintaining near-zero net spend. Over 6-8 hours, the actor completes 12-18 purchase-refund-repurchase cycles on the same card. The pattern inflates card1_txn_count_7day from baseline 2-3 to 30+ while card1_net_amt_24h remains under $200. Refunds occur at MIDs different from purchase MIDs but same merchant umbrella. Goal is to age the card rapidly, establish transaction history for later fraud, or exploit velocity-blind authorization systems that don't weight refunded transactions appropriately in real-time decisioning.",
+  "indicators": [
+    "card1_txn_count_6h exceeds 12 with card1_net_amt_6h under $250",
+    "70%+ of transactions are refunds (TransactionDT gaps of 15-45 min between purchase and corresponding refund)",
+    "TransactionAmt variance under $25 across all purchase events (tight clustering)",
+    "Alternating TransactionDT pattern: purchase at T, refund at T+20min, purchase at T+35min, refund at T+55min",
+    "Same P_emaildomain and addr1 across all cycles but rotating MID values",
+    "card1_amt_zscore_24h exceeds 3.5 despite low net amount",
+    "ProductCD consistency (all W or all C) with identical item descriptions in metadata"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single card shows 12+ transactions in 6 hours but the net spend stays under $250 because most transactions are refunds that occur 15-45 minutes after each purchase, all for similar amounts ($45-$85) and the same product type.",
+  "reasoning": "The fraudster is artificially aging the card and building transaction history through rapid purchase-refund-repurchase cycles, either to prepare the card for larger fraud later or to exploit systems that don't properly account for refunds when checking velocity limits.",
+  "indicator_explanations": [
+    "Card runs through a dozen transactions in six hours with minimal net spending",
+    "Most transactions are refunds happening within minutes of the original purchase",
+    "Purchase amounts stay tightly bunched in a narrow dollar range",
+    "Transactions follow a mechanical buy-refund-buy-refund rhythm with predictable timing",
+    "Email and address stay constant while merchant identifiers keep rotating",
+    "Transaction volume is abnormally high compared to card's typical daily behavior",
+    "Product type and descriptions are suspiciously identical across all purchases"
+  ]
+}

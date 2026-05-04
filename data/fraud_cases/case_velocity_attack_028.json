@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_028",
+  "title": "Micro-Transaction Merchant Flooding with Card Validation Probing",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster executes 40-80 transactions at a single merchant within 90-180 minutes, each for $0.50-$3.99, testing stolen card validity before attempting larger fraudulent purchases elsewhere. Pattern emerges at low-risk MCCs (5732 electronics, 5651 family clothing) where small purchases seem plausible. Attacker cycles through 15-25 different email domains while maintaining same card instrument, suggesting automated testing infrastructure. TransactionAmt deliberately stays below fraud alert thresholds ($5) but card1_txn_count_1hour spikes dramatically. Night-time execution (txn_hour 1-5) coincides with reduced merchant fraud monitoring. CVV matches initially but degrades after first 10-15 attempts as fraudster begins guessing. Following this probing phase, validated cards typically appear at different merchants within 6-12 hours for high-value purchases ($400-$1200), creating clear two-stage attack signature.",
+  "indicators": [
+    "card1_txn_count_1hour exceeds 35 transactions at single MID",
+    "TransactionAmt consistently $0.50-$3.99 across all attempts",
+    "P_emaildomain changes 15+ times while card1 remains constant",
+    "85%+ of transactions occur during txn_hour 1-5 (night window)",
+    "CVV match rate drops from 100% to below 40% after transaction 12-15",
+    "card1_amt_zscore remains negative (below historic spending pattern)",
+    "Same dist1 value across all transactions despite changing email domains"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single card is used for 40-80 tiny purchases ($0.50-$3.99) at one merchant within a few hours, typically overnight, while the email address changes constantly—creating an extreme spike in transaction count with minimal dollar amounts.",
+  "reasoning": "Criminals are testing whether stolen card numbers work before using them for large fraudulent purchases elsewhere; the micro-amounts avoid triggering fraud alerts while they systematically validate which cards are still active.",
+  "indicator_explanations": [
+    "Card hits the same merchant repeatedly in a concentrated time burst",
+    "Transaction amounts stay suspiciously small across all attempts",
+    "Email address rotates constantly while the same card keeps trying",
+    "Activity clusters in overnight hours when monitoring is weakest",
+    "CVV failures spike midway through suggesting guessing or testing phase",
+    "Amounts are deliberately kept below cardholder's normal spending threshold",
+    "Distance identifier stays fixed despite rotating email addresses"
+  ]
+}

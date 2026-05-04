@@ -1,0 +1,45 @@
+# ============================================================================
+# FraudSentinel — Hugging Face Spaces requirements
+# ============================================================================
+# Production-only deps. No mlflow, jupyter, kaggle, dev/test tools.
+# Versions pinned for reproducible builds.
+# ============================================================================
+
+# ---- Core data ----
+pandas==2.2.3
+numpy==1.26.4
+pyarrow==16.1.0
+
+# ---- ML models ----
+xgboost==2.0.3
+scikit-learn==1.5.2
+shap==0.46.0
+
+# ---- Deep learning ----
+# CPU-only torch — HF Spaces free tier doesn't have GPU, this saves ~2GB
+torch==2.4.1 --index-url https://download.pytorch.org/whl/cpu
+# Fallback if the above index fails on HF (rare):
+# torch==2.4.1+cpu
+
+# ---- Embeddings ----
+sentence-transformers==3.0.1
+transformers==4.44.2
+
+# ---- Vector store ----
+chromadb==0.5.5
+
+# ---- LLM ----
+anthropic==0.39.0
+
+# ---- Web framework ----
+streamlit==1.39.0
+plotly==5.24.1
+
+# ---- Auth ----
+supabase==2.7.4
+python-dotenv==1.0.1
+
+# ---- API (optional — keeps FastAPI surface available if needed) ----
+fastapi==0.115.0
+uvicorn==0.30.6
+pydantic==2.9.2

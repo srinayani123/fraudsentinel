@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_018",
+  "title": "Serial Trial Exploiter with Synthetic Identity Rotation",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster creates 8-15 synthetic identities using sequential name variations (J. Smith, John S., J. A. Smith) paired with temporary email domains (tempmail.com, guerrillamail.com) to repeatedly claim free trials on premium subscription services. Each identity initiates a $0.00 or $1.00 authorization followed by immediate cancellation within 24-48 hours, avoiding the $29.99-$79.99 full subscription charge. Pattern cycles every 30-45 days as trials expire. All accounts share the same card1 (tokenized PAN), addr1 (billing ZIP), and dist1 values (distance between billing/IP), but P_emaildomain rotates across 6-10 disposable providers. Transactions cluster in late evening hours (txn_hour 22-02) suggesting automated script execution. The card1_txn_count_7day spikes to 12-18 before dropping to zero, then repeating monthly. Total fraud loss is zero but represents $400-$1200 in foregone legitimate subscription revenue per card annually.",
+  "indicators": [
+    "card1_txn_count_7day reaches 8-15 transactions all with TransactionAmt <= $1.00",
+    "100% of transactions tagged ProductCD='S' (subscription) with txn_hour between 22-02",
+    "P_emaildomain rotates across 6+ temporary/disposable email providers while addr1 and dist1 remain constant",
+    "Each transaction followed by cancellation event within 24-48 hours per subscription metadata",
+    "Pattern repeats every 30-45 days with identical card1, addr1, dist1 triplet but new P_emaildomain values",
+    "Name variations show high string similarity (85-95% Levenshtein match) across sequential transactions",
+    "Zero chargebacks but card1_amt_zscore remains at -2.5 to -3.0 (persistently low-value transactions)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single card repeatedly initiates 8-15 low-value subscription authorizations ($0-$1) within a week, all from the same billing address but rotating through 6+ disposable email domains and slight name variations, with every transaction canceled within 48 hours. The pattern recurs monthly during late-night hours (10pm-2am) when the trial window reopens.",
+  "reasoning": "The fraudster exploits free trial loopholes to access premium subscription content indefinitely without paying, using synthetic identity variations to circumvent per-customer trial limits while the shared card and address reveal it's the same actor. Though technically zero-loss, this represents systematic theft of service worth $400-$1200 annually per card in foregone revenue.",
+  "indicator_explanations": [
+    "Card racks up numerous tiny-dollar transactions over a week",
+    "All activity hits subscription merchants during late-night hours only",
+    "Email keeps changing to throwaway addresses while physical location stays fixed",
+    "Every subscription gets cancelled within two days of the initial charge",
+    "Same card and address return monthly with fresh disposable email addresses",
+    "Customer names are slightly modified versions of each other across attempts",
+    "Transaction amounts stay consistently tiny far below the card's normal range"
+  ]
+}

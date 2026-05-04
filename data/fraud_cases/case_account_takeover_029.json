@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_029",
+  "title": "Sequential Recovery Chain Takeover via Compromised Backup Email",
+  "pattern": "account_takeover",
+  "narrative": "Attacker gains access to victim's recovery email account first, then uses it to reset passwords on linked financial accounts. Pattern shows 2-4 password reset requests within 15-45 minutes across different services, followed by email forwarding rule creation and rapid purchase activity. The compromised recovery email (often older Yahoo/AOL domains in P_emaildomain history) suddenly shows login from new device_id and IP geolocation (dist1 > 3000km from user's addr1). Within 90 minutes of first reset, fraudulent transactions begin: typically 3-6 purchases of $180-$450 each in ProductCD='W' (digital goods), all shipping to newly-added addr1. Card verification shows card1_txn_count_1day jumps from 0-1 to 8-12. Original account email domain switches from corporate to free webmail in R_emaildomain. Chargeback requests cite 'account hacked, didn't recognize charges' within 72 hours.",
+  "indicators": [
+    "dist1 value exceeds 3000km between historical addr1 and new login location within 60 minutes of password reset timestamp",
+    "P_emaildomain switches from premium/corporate domain to free webmail provider (yahoo.com, aol.com) coinciding with account changes",
+    "card1_txn_count_1day increases from baseline 0-1 to 8-12 transactions within first 90 minutes post-reset",
+    "3-6 consecutive transactions in ProductCD='W' ranging $180-$450 each, all within 120-minute window",
+    "New addr1 value appears for first time in shipping records, differs from all historical addr1 entries for card1",
+    "Email forwarding rule created within 20 minutes of password reset, visible in account modification logs",
+    "All fraudulent transactions occur during is_night=1 hours (txn_hour 22-05) when victim typically inactive"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "An attacker first compromises the victim's backup email (often an old Yahoo or AOL account), then uses it to reset passwords on 2-4 financial accounts within 45 minutes. Login suddenly appears from a new device over 3,000km away, followed by 3-6 digital goods purchases ($180-$450 each) to a newly-added shipping address within 90 minutes.",
+  "reasoning": "The attacker exploits the recovery email as a master key to breach multiple accounts in sequence, creating forwarding rules to hide alerts while rapidly extracting value through digital goods before the victim notices. The geographic distance, unfamiliar device, nighttime activity, and spike from 0-1 to 8-12 daily transactions reveal coordinated criminal access rather than legitimate customer behavior.",
+  "indicator_explanations": [
+    "Account logs in from completely different country moments after password change",
+    "Primary email suddenly switches from business domain to disposable free service",
+    "Card goes from dormant to hyperactive immediately after account reset",
+    "Attacker runs quick succession of digital goods purchases in narrow timeframe",
+    "Shipping address has never appeared in this cardholder's purchase history",
+    "Email auto-forward rule added right after takeover to hide notifications",
+    "All fraudulent activity happens overnight when legitimate owner is asleep"
+  ]
+}

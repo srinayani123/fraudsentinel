@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_019",
+  "title": "$0 Trial Probe with Rapid Paid Conversion Across Multiple Merchants",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster validates stolen cards through legitimate $0.00 trial authorizations at streaming/SaaS platforms, then immediately upgrades to paid tiers ($9.99-$49.99) within 2-8 minutes if authorization succeeds. The pattern exploits merchant trust in trial-to-paid conversion as normal behavior. Attacker cycles through 15-40 compromised cards in 90-minute windows, each receiving $0.00 auth followed by real charge at same merchant. Email domains rotate across disposable providers (tempmail.com, guerrillamail.com, 10minutemail.com) with card1_txn_count_1day showing 8-15 merchants. Failed $0 trials are abandoned instantly while successful ones convert to paid within single session, creating distinctive temporal clustering at ProductCD='W' merchants with MCC 5968 or 7372.",
+  "indicators": [
+    "TransactionAmt sequence: $0.00 auth followed by $9.99-$49.99 charge within 2-8 minutes at same MID",
+    "card1_txn_count_1day shows 8-15 unique MCCs, all subscription/digital services (5968, 7372, 4816)",
+    "P_emaildomain matches disposable email patterns: tempmail, guerrillamail, 10minutemail domains",
+    "Failed $0.00 trials (declined auth) show no retry attempts; successful $0 auths convert 100% to paid tier",
+    "Temporal clustering: 15-40 card attempts within 90-minute window, all following $0-then-paid sequence",
+    "card1_amt_zscore exceeds 2.5 for paid tier charges compared to card's 30-day history",
+    "addr1 and dist1 inconsistent across trial-to-paid conversion (geolocation mismatch within 5 minutes)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card receives a $0.00 trial authorization at a subscription merchant, then converts to a paid charge ($9.99-$49.99) within 2-8 minutes, repeating this sequence across 8-15 different merchants in a single day using disposable email addresses.",
+  "reasoning": "Criminals use free trials to test if stolen cards are active, then immediately upgrade to paid subscriptions before the victim notices, cycling through dozens of compromised cards to monetize as many as possible before they're frozen.",
+  "indicator_explanations": [
+    "Free trial instantly converts to paid subscription within minutes at same merchant",
+    "Card hits numerous subscription services spanning many unrelated digital merchant categories",
+    "Email address comes from temporary throwaway service designed to evade tracking",
+    "Declined free trials are immediately abandoned with no legitimate retry behavior",
+    "Massive burst of cards all running identical free-to-paid sequence in tight timeframe",
+    "Paid subscription amount is abnormally high compared to card's recent spending pattern",
+    "Billing location jumps between trial signup and paid conversion moments later"
+  ]
+}

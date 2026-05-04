@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_013",
+  "title": "ProtonMail Zero-Footprint Account with Immediate High-Value Digital Purchase",
+  "pattern": "email_risk",
+  "narrative": "Account created with ProtonMail/Tutanota domain shows first transaction within 15 minutes of registration, purchasing digital goods ($450-$850 ProductCD=W) with expedited delivery. Card shows card1_txn_count_1day=1, card1_txn_count_7day=1, no prior relationship with P_emaildomain. Billing address (addr1) maps to commercial/virtual office space per geolocation enrichment. No R_emaildomain provided or matches generic gmail.com despite P_emaildomain being privacy-focused. Transaction occurs during business hours (txn_hour 9-17) contradicting typical privacy-user behavior patterns. Device fingerprint shows single-use browser session with cleared cache indicators (C1-C14 feature nulls). This pattern exploits merchant hesitancy to decline privacy-conscious users while leveraging anonymity for card testing or stolen credential monetization.",
+  "indicators": [
+    "P_emaildomain matches ProtonMail/Tutanota/similar with account age <24 hours",
+    "card1_txn_count_7day=1 and TransactionAmt $450-$850 for digital/downloadable ProductCD",
+    "Time delta between email registration timestamp and transaction <20 minutes",
+    "addr1 geolocation resolves to commercial address or UPS Store type facility",
+    "R_emaildomain null or mismatched generic domain (gmail/yahoo) vs. privacy P_emaildomain",
+    "Device features show >6 null C-columns suggesting anti-fingerprinting or VM environment",
+    "Transaction during business hours (txn_hour 9-17) inconsistent with privacy-user demographics"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A brand-new account using ProtonMail or similar privacy email completes a high-value digital purchase ($450-$850) within 15 minutes of registration, with the card showing no prior transaction history and the billing address pointing to a commercial facility or mailbox service. The device fingerprint reveals multiple missing browser features and the recipient email is a generic domain despite using a privacy-focused sender email.",
+  "reasoning": "Legitimate privacy-conscious users typically build account history before large purchases and show consistent privacy practices across all email fields. This instant high-value transaction with mismatched anonymity signals and a disposable digital footprint indicates a fraudster using stolen payment credentials and exploiting merchant reluctance to challenge privacy tools, aiming to quickly extract value before the card is reported.",
+  "indicator_explanations": [
+    "Email account uses privacy-focused service and was created within last day",
+    "Card's first weekly transaction is a mid-range digital goods purchase",
+    "Purchase happens within minutes of email account being registered",
+    "Billing address is a mail drop or commercial facility, not residential",
+    "Recipient email is generic provider despite sender using privacy email",
+    "Device fingerprint is unusually sparse indicating tracking evasion tools",
+    "Transaction timing fits business fraud patterns not typical privacy user behavior"
+  ]
+}

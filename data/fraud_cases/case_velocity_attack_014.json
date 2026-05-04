@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_014",
+  "title": "Subscription Service Cascade Attack via Stolen Card Credentials",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster exploits a compromised card by rapidly enrolling in 8-15 low-friction subscription services ($9.99-$29.99 each) within a 45-90 minute window, typically between 2am-5am cardholder local time. Attacker targets services with instant digital activation and no AVS enforcementâ€”streaming platforms, cloud storage, VPN providers, meal kit trials. Transactions cluster at $14.99 and $19.99 price points. The card shows first-time use with each merchant (card1_MID_count=1 for all), ProductCD='W' (web-initiated), and identical P_emaildomain across all subscriptions but mismatched to card's historical email pattern. The dist1 values (distance between billing and IP geolocation) exceed 800km consistently. Card velocity jumps from 1-2 monthly subscriptions to 12+ in under an hour. Fraudster monetizes by reselling accounts on dark web forums within 6-12 hours before chargebacks materialize.",
+  "indicators": [
+    "8-15 transactions with ProductCD='W' and MCC 5968/5815/5817 (digital subscriptions) within 45-90 minutes",
+    "TransactionAmt clusters at $9.99, $14.99, $19.99, $24.99 with 80%+ of transactions in this range",
+    "card1_MID_count=1 for all merchants (first transaction with each subscription provider)",
+    "dist1 >800km on 90%+ of transactions indicating IP geolocation far from billing address",
+    "Transactions concentrated between txn_hour 2-5 with is_night=1 flag",
+    "P_emaildomain identical across all subscriptions but domain age <72 hours or disposable email pattern",
+    "card1_txn_count_24hr spikes from baseline <3 to >10 within single session"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card suddenly registers 8-15 first-time subscription purchases ($10-$30 each) in under 90 minutes during overnight hours, all using the same newly-created email address and originating from an IP location 800+ km from the billing address.",
+  "reasoning": "Criminals with stolen card details rush to extract maximum value before the legitimate cardholder notices, targeting low-friction subscription services they can quickly resell on dark web marketplaces before chargebacks arrive.",
+  "indicator_explanations": [
+    "Card rapidly signs up for multiple streaming and digital subscription services",
+    "Transaction amounts match common subscription tiers across different providers",
+    "Every merchant in the burst is seeing this card for the first time",
+    "IP location is hundreds of miles away from the cardholder's billing address",
+    "All activity happens during overnight hours when cardholder likely sleeping",
+    "Same fresh or throwaway email used to register all the subscriptions",
+    "Card goes from normal low activity to frenzied burst in one session"
+  ]
+}

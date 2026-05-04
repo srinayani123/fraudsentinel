@@ -1,0 +1,25 @@
+{
+  "id": "case_device_takeover_010",
+  "title": "Cross-Timezone Device Takeover with Clean Transaction Behavior",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster gains access to cardholder credentials and payment information but operates from a device in a substantially different timezone than the billing country. While transaction amounts, velocity, and timing appear normal for the legitimate cardholder, the device timezone offset reveals the attacker's true location. The fraudster attempts to blend in by maintaining typical spending patterns and transacting during what appears to be reasonable hours in their own timezone, but this creates a timezone mismatch with the billing address country. Device fingerprint shows first-time pairing with the compromised card, and identity verification features flag the geographic inconsistency between device location signals and billing country metadata.",
+  "indicators": [
+    "D1 = 0 indicating first-time device-card pairing with no historical association",
+    "D10 > 200 (p90 threshold), device timezone offset substantially misaligned with billing country",
+    "card1_amt_zscore between -1.0 and +1.0, amount within cardholder's typical spending range",
+    "D15 > 300 (p90), browser timezone metadata conflicts with billing country expected timezone",
+    "C1 = 1 or C2 = 1, card counter shows single transaction from this device-identity combination",
+    "V258 > 0.65 (upper quartile), Vesta engineered feature detecting timezone-geography discrepancy"
+  ],
+  "indicator_explanations": [
+    "The card has never been used with this particular device before",
+    "Device timezone is offset by many hours from the billing country's expected timezone",
+    "Purchase amount matches the cardholder's normal spending habits and does not stand out",
+    "Browser or device metadata reports a timezone incompatible with the billing address location",
+    "This is the first and only transaction from this specific device-card-identity pairing",
+    "Fraud model detects an unusual timezone pattern relative to the billing geography"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Fraudster uses stolen credentials from a device in a different timezone than the cardholder's billing country, while maintaining normal transaction amounts and velocity to avoid behavioral detection.",
+  "reasoning": "Legitimate cardholders typically transact from devices in timezones consistent with their billing country. A never-before-seen device operating from a drastically different timezone, combined with normal spending behavior, indicates credential compromise where the attacker operates from their own geographic location."
+}

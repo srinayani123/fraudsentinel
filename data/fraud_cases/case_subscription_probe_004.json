@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_004",
+  "title": "Cloud Storage Trial Signup with Rapid Progressive Capacity Testing",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster uses stolen card to register for free cloud storage trials (Google Drive, Dropbox, OneDrive) at $0.00 authorization holds, then immediately upgrades to paid tiers in escalating storage increments within 45-90 minutes. Pattern shows $9.99 (100GB), $19.99 (1TB), then $99.99 (2TB) charges across different cloud providers using same card and email domain. The email is typically a newly-registered temporary domain (guerrillamail.com, tempmail.org) with addr1 matching residential IP but dist1 showing 800+ km distance between billing and IP geolocation. Transactions cluster between 2-5 AM local time (is_night=1) when cardholder unlikely to notice alerts. ProductCD remains 'S' (subscription) with identical device fingerprints. The fraudster tests multiple storage providers sequentially, creating 4-6 paid subscriptions within 2 hours before card is blocked, often targeting services with delayed chargeback windows.",
+  "indicators": [
+    "3-6 cloud storage subscriptions (MCC 5968) created within 90-120 minutes using identical card1",
+    "Progressive TransactionAmt escalation: $9.99 â†’ $19.99 â†’ $99.99 within same session",
+    "P_emaildomain matches temporary email services (tempmail.org, guerrillamail.com, 10minutemail.net)",
+    "dist1 exceeds 800 km between card billing addr1 and transaction IP geolocation",
+    "All transactions occur during 2-5 AM window (txn_hour 2-5, is_night=1)",
+    "card1_txn_count_24h jumps from 0-1 to 4-6 within 2-hour period",
+    "Identical device_id across all subscription activations with ProductCD='S'"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card creates 3-6 cloud storage subscriptions in 90 minutes with the same device fingerprint, escalating from $9.99 to $99.99 charges across different providers between 2-5 AM. The email uses a temporary domain, and the IP geolocation sits 800+ km from the billing address.",
+  "reasoning": "The fraudster tests a stolen card's limits by rapidly upgrading storage tiers across multiple services during nighttime hours when the cardholder won't notice alerts. The temporary email, geographic mismatch, and aggressive spending pattern reveal someone exploiting a compromised card before it gets blocked.",
+  "indicator_explanations": [
+    "Multiple cloud storage trials created with same card in narrow timeframe",
+    "Purchase amounts climb systematically from small to large within session",
+    "Email uses disposable temporary service known for avoiding verification",
+    "Card billing address is hundreds of miles from transaction location",
+    "All activity happens in deep overnight hours when monitoring is lighter",
+    "Card goes from dormant to highly active in just two hours",
+    "Same device fingerprint ties all subscription signups together"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_021",
+  "title": "Commute-Time Hijack with Geographically Impossible Terminal Placement",
+  "pattern": "temporal_anomaly",
+  "narrative": "Fraudster exploits cardholder's predictable routine by timing transactions during their known commute window but from a terminal 200+ miles away. Victim typically makes $4-12 gas or coffee purchases between 7:15-7:45 AM on weekdays at consistent locations (dist1 < 15km from addr1). Attack pattern shows $87-$340 transactions at 7:23 AM on Tuesday and 7:31 AM on Thursday at electronics retailers (MCC 5732) where dist1 = 340-890km. Fraudster relies on behavioral velocity systems trained on time-of-day patterns to ignore the transaction, assuming commute activity is low-risk. Card present with correct PIN suggests skimming or card duplication. Prior 60-day history shows card1_txn_count_7to9am averaging 8-11 transactions monthly, all within 25km radius. Attack transactions match temporal profile perfectly but spatial profile is impossible without supersonic travel.",
+  "indicators": [
+    "Transaction occurs within victim's established commute window (Â±15 minutes of historical 7:15-7:45 AM pattern)",
+    "dist1 exceeds 200km from addr1 despite transaction timestamp matching routine local purchases",
+    "MCC shift from typical commute codes (5541 gas, 5814 fast food) to high-value electronics (5732) or jewelry (5944)",
+    "TransactionAmt $87-$340 vs. historical commute average $4-12 over prior 90 days",
+    "card1_txn_count_7to9am shows consistent monthly pattern (8-11 txns) but all prior dist1 < 25km",
+    "Card-present with PIN despite geographically impossible location given time constraints",
+    "No corresponding travel indicators: no airport MCC codes, no hotel charges, no fuel purchases along route in preceding 24 hours"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Card-present transactions occur during the cardholder's normal commute hours (7:15-7:45 AM) but at terminals 200+ miles away, with purchase amounts jumping from typical $4-12 coffee or gas to $87-$340 electronics, all while maintaining the victim's established time-of-day pattern.",
+  "reasoning": "The fraudster uses a skimmed or cloned card with PIN to exploit velocity systems that recognize familiar transaction times as low-risk, betting that temporal matching will override spatial impossibility checks—the cardholder cannot physically travel 200+ miles during their morning routine without any supporting travel transactions.",
+  "indicator_explanations": [
+    "Purchase happens exactly when the cardholder normally commutes to work",
+    "Transaction location is hundreds of miles from cardholder's home address",
+    "Merchant type suddenly shifts from coffee shops to expensive electronics stores",
+    "Purchase amount is thirty times larger than typical morning spending",
+    "Morning transaction pattern is steady but always near home until now",
+    "Chip and PIN were used despite physical impossibility of cardholder presence",
+    "No plane tickets, hotels, or gas stations suggest legitimate travel occurred"
+  ]
+}

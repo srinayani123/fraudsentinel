@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_010",
+  "title": "Customer Service Device Addition with Immediate High-Value Digital Goods Drain",
+  "pattern": "account_takeover",
+  "narrative": "Fraudster socially engineers customer support into authorizing a new device fingerprint on legitimate account, typically claiming phone replacement or app reinstall. Within 15-45 minutes of device addition, attacker executes 3-8 digital goods purchases (ProductCD='W' or 'C') totaling $800-$2,400. Transactions originate from previously unseen addr1 hash and dist1 distance exceeding 500km from account's historical centroid. Email domain remains unchanged but device_id, device_info, and id_30-id_38 browser signatures show complete discontinuity from 30-day baseline. Fraudster exploits the brief window before legitimate cardholder notices unauthorized device. Purchases target easily monetized items: gaming currency, gift cards, streaming subscriptions. Card1_txn_count_24h spikes from baseline 0-2 to 6-9 transactions. All purchases occur during single session lasting 8-22 minutes with consistent id_31 browser hash but rotating merchant MCCs (5816, 5734, 7995).",
+  "indicators": [
+    "New device fingerprint (id_30-id_38 signatures) added via customer service ticket 15-45 minutes before transaction burst",
+    "3-8 digital goods purchases (ProductCD='W'/'C') totaling $800-$2,400 within 22-minute session window",
+    "Dist1 distance >500km from account's historical addr1 centroid with no prior transactions from new addr1 hash",
+    "Card1_txn_count_24h increases from 0-2 baseline to 6-9 transactions with card1_amt_zscore >3.5",
+    "Complete device signature discontinuity: new id_31 browser, id_33 screen resolution, id_36/id_38 OS version vs 30-day history",
+    "MCCs rotating across 5816 (digital goods), 5734 (software), 7995 (gambling) with no prior account activity in these categories",
+    "P_emaildomain unchanged but first transactions ever from current device_id/device_info combination"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A new device is added to the account through customer support, then within 15-45 minutes that device makes 3-8 rapid digital goods purchases ($800-$2,400 total) from a location 500+ km away using completely different browser signatures and screen details than the account's 30-day history.",
+  "reasoning": "The fraudster tricked customer service into authorizing their device, then immediately drained value through easily resold items like gift cards and gaming currency before the real customer notices the unauthorized device on their account.",
+  "indicator_explanations": [
+    "New device was added through support channel minutes before fraud attack",
+    "Rapid succession of digital goods purchases draining significant funds quickly",
+    "Transactions originate from location hundreds of miles from customer's usual area",
+    "Card suddenly erupts from quiet baseline to intense burst activity",
+    "Every device characteristic changed completely compared to legitimate customer's history",
+    "Purchases jump between unrelated digital categories never touched before",
+    "Email stays same but device has zero history with account"
+  ]
+}

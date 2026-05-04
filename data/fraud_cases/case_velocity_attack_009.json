@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_009",
+  "title": "Micro-Transaction Grinding Attack on Single Merchant (Card Testing Via Small Purchases)",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster conducts rapid-fire card validation through a single cooperative or compromised merchant using minimal transaction amounts. Over 2-4 hours, 25-60 transactions of $0.50-$3.99 hit the same MID with identical ProductCD (typically 'W' for digital/wallet products). Each transaction uses slight variations in cardholder name or email permutations to evade simple duplicate blocks. The merchant shows unusually high approval rates (92%+ when industry average is 78%) suggesting relaxed fraud controls or merchant complicity. Card BINs span multiple issuers but cluster in specific IIN ranges (431000-432999, 453200-453599) indicating systematic list testing. Transactions occur in tight 45-90 second intervals with card1_txn_count_1hr spiking from 0 to 38+. No CVV failures despite high volume suggests stolen full card data rather than guessed credentials. This grinding phase precedes larger fraudulent purchases once valid cards are confirmed.",
+  "indicators": [
+    "25-60 transactions to identical MID within 2-4 hour window, all under $4.00",
+    "card1_txn_count_1hr increases from 0 to 35+ with no prior merchant history",
+    "TransactionAmt consistently between $0.50-$3.99 with 85%+ transactions under $2.00",
+    "Approval rate 92%+ versus merchant baseline 75-80% for similar ProductCD",
+    "Card BINs cluster in 2-3 narrow IIN ranges (e.g., 4310xx, 4532xx) across different issuer banks",
+    "Identical P_emaildomain across 15+ transactions with numerical suffixes (user1@domain, user2@domain)",
+    "Zero CVV mismatch flags despite 40+ card presentations suggesting full track data compromise"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Rapid-fire micro-transactions ($0.50-$3.99) hitting one merchant in tight intervals, with card counts jumping from zero to 35+ per hour and approval rates exceeding 92%. Card numbers cluster in narrow BIN ranges with no CVV failures, indicating full card data rather than guessing.",
+  "reasoning": "Fraudsters validate stolen card lists by making tiny purchases that won't alert cardholders, using a merchant with weak controls. Once cards pass this test phase, they're used for high-value fraud elsewhere—the small amounts and tight timing reveal systematic testing rather than legitimate shopping.",
+  "indicator_explanations": [
+    "Merchant sees dozens of tiny purchases from same card in hours",
+    "Card goes from zero activity to explosive micro-transaction burst instantly",
+    "Every purchase is deliberately kept below typical fraud review thresholds",
+    "Approvals are suspiciously higher than normal for this merchant category",
+    "Multiple cards share narrow BIN ranges suggesting batch from same source",
+    "Email pattern shows automated account generation with sequential numbering scheme",
+    "Perfect CVV matches across dozens of attempts indicates full card data"
+  ]
+}

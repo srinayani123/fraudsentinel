@@ -1,0 +1,25 @@
+{
+  "id": "case_engineered_anomaly_010",
+  "title": "Vesta Refund-Cycle Anomaly with Clean Transaction Behavior Pattern",
+  "pattern": "engineered_anomaly",
+  "narrative": "Fraudster exploits merchant refund policies by executing legitimate-appearing transactions followed by refunds, then immediately recharging the card with different merchants or MCCs. Raw behavioral signals remain within normal parameters — amounts are modest, velocity is controlled, device appears consistent. However, Vesta V-fields encode the refund-recharge cycle signature through transaction-sequence features that track refund timing, cross-merchant patterns, and charge-reversal-charge triplets. V307 captures the refund-then-charge sequence velocity while V280 flags the cross-MCC pattern anomaly. The fraud operates by gaming refund windows to extract value through gift cards or cryptocurrency purchases made immediately after securing refunds, creating a value-extraction loop invisible in single-transaction analysis.",
+  "indicators": [
+    "V307 > 4.5 (p85), elevated refund-sequence timing feature indicating charge-refund-recharge cycle",
+    "V280 between 2.8 and 5.2, cross-MCC transaction pattern anomaly score",
+    "V305 > 3.0 (p80), transaction-reversal sequence encoding elevated",
+    "C13 > 45 (p75), card-level refund counter aggregation above typical cardholder baseline",
+    "V201 between 1.2 and 2.8, refund-window timing feature flagging rapid recharge pattern",
+    "card1_amt_zscore between -0.8 and +1.2, amount within normal cardholder spending range"
+  ],
+  "indicator_explanations": [
+    "Transaction-sequence timing suggests a charge followed by refund then immediate recharge pattern",
+    "Card has been used across multiple merchant categories in an unusual sequence",
+    "Pattern indicates transaction reversals followed by new charges within short timeframe",
+    "Card shows elevated refund activity compared to typical legitimate cardholders",
+    "Time between refund and subsequent charge is unusually short for legitimate behavior",
+    "Transaction amount appears normal for this cardholder masking the fraud operation"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Fraudster cycles through charge-refund-recharge sequences to extract value while keeping individual transactions appearing legitimate. Raw behavioral signals like amount and velocity remain clean, but Vesta engineered features detect the refund-exploitation pattern.",
+  "reasoning": "Legitimate cardholders rarely execute rapid refund-recharge cycles across different merchant categories. The pattern indicates systematic exploitation of refund policies to extract value through secondary purchases like gift cards or cryptocurrency, with the refund-recharge timing signature captured in V-field sequence encodings invisible to standard fraud rules."
+}

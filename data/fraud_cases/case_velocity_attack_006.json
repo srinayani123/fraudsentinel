@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_006",
+  "title": "P2P Rapid-Fire Layering with Incrementing Send Amounts",
+  "pattern": "velocity_attack",
+  "narrative": "A compromised account executes 8-15 P2P transfers within a 35-minute window to fragment and disperse stolen funds across multiple wallets or payment apps. TransactionAmt values increment systematically ($47, $53, $61, $68, $74) to evade static threshold rules while card1_txn_count_6hr spikes from baseline of 0-1 to 12+. All transfers share ProductCD=C (cash-out) and identical P_emaildomain, but R_emaildomain rotates across 6+ different domains (gmail, yahoo, protonmail, outlook variants). Transactions cluster in txn_hour 2-4 AM (is_night=1) when legitimate user historically inactive. Card1_amt_zscore exceeds 4.5 indicating extreme deviation from cardholder's normal P2P behavior. No failed transactions precede the burst, suggesting scripted automation rather than manual entry. Dist1 values show recipient addresses span 200+ miles from each other, incompatible with genuine peer payments.",
+  "indicators": [
+    "8-15 P2P transactions (ProductCD=C) completed within 35-minute window",
+    "TransactionAmt values increment in systematic pattern ($47, $53, $61, $68, $74)",
+    "card1_txn_count_6hr jumps from 0-1 baseline to 12+ transactions",
+    "R_emaildomain rotates across 6+ distinct providers while P_emaildomain constant",
+    "All transactions occur during txn_hour 2-4 AM with is_night=1, outside user's historic active hours",
+    "card1_amt_zscore > 4.5 indicating extreme deviation from cardholder norm",
+    "dist1 values show recipient locations 200+ miles apart incompatible with peer network"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A compromised account fires off 8-15 peer-to-peer transfers in under 40 minutes during the middle of the night, with send amounts climbing in a stair-step pattern and recipients scattered across different email providers and distant geographic locations.",
+  "reasoning": "The fraudster is rapidly splitting stolen funds into smaller chunks and routing them to multiple mule accounts before the victim notices, using incremental amounts to slip under detection thresholds and scripted timing that conflicts with the cardholder's normal sleep schedule.",
+  "indicator_explanations": [
+    "Card is blasting out P2P sends in a concentrated half-hour burst",
+    "Send amounts follow an unnatural stair-step pattern suggesting automation",
+    "Card activity explodes from dormant to hyperactive within hours",
+    "Recipient emails rotate through multiple providers while sender stays fixed",
+    "All activity crammed into graveyard hours when cardholder normally sleeps",
+    "Send amounts are dramatically larger than this card's typical behavior",
+    "Recipients are scattered across distant cities incompatible with real peer network"
+  ]
+}

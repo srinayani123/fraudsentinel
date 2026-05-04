@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_009",
+  "title": "Post-Consumption Dispute: Premium Content Extraction with Delayed Chargeback",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster subscribes to premium streaming or digital content service at $29.99-$79.99/month using valid card details, immediately downloads or streams maximum allowable content within 48-72 hours, then files chargeback claiming \"unauthorized transaction\" on day 25-35 post-purchase. Pattern shows intensive usage (300+ streaming hours, 50+ downloads) followed by dispute filing just before next billing cycle. Often uses temporary email domains and VPN to mask digital footprint. Multiple accounts from same device fingerprint may show staggered subscription dates across 60-90 day windows to harvest content libraries systematically. Card shows no prior disputes but pattern repeats across 3-4 merchants in entertainment/digital goods MCC 5815-5817 within 6 months.",
+  "indicators": [
+    "TransactionAmt between $29.99-$79.99 for ProductCD=subscription in MCC 5815-5817",
+    "Chargeback filed 25-35 days post-transaction, before second billing cycle",
+    "P_emaildomain matches temporary/disposable providers (guerrillamail, tempmail, 10minutemail)",
+    "Device fingerprint shows 3+ separate subscriptions to different merchants within 90 days",
+    "Card1_txn_count_30d shows 0 prior disputes but 3-4 digital goods merchants",
+    "Account usage logs show 300+ hours streaming or 50+ downloads within 72 hours of signup",
+    "Subsequent card activity normal (groceries, gas) suggesting legitimate cardholder orchestrating fraud"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Customer subscribes to premium streaming service, consumes massive amounts of content (300+ hours or 50+ downloads) within 72 hours, then files a chargeback claim 25-35 days later claiming the charge was unauthorized. The same device fingerprint appears across multiple subscription services over 60-90 days, each time following the same consume-then-dispute pattern.",
+  "reasoning": "The fraudster is systematically harvesting digital content libraries for free by exploiting the chargeback system—the extreme front-loaded usage followed by a precisely-timed dispute indicates deliberate theft rather than genuine unauthorized use. Legitimate cardholders who discover fraudulent charges don't consume hundreds of hours of content first, and the staggered pattern across merchants shows this is a repeatable extraction scheme rather than an isolated billing error.",
+  "indicator_explanations": [
+    "Premium subscription charge falls in the sweet spot fraudsters exploit for disputes",
+    "Chargeback timing strategically hits after content extraction but before renewal",
+    "Email address is from a throwaway service designed to evaporate after use",
+    "Same device is cycling through multiple subscription services in rapid succession",
+    "Card shows recent pattern of hitting digital merchants without prior dispute history",
+    "User binged massive amounts of content immediately after signup then vanished",
+    "Cardholder continues normal spending elsewhere proving they control the card"
+  ]
+}

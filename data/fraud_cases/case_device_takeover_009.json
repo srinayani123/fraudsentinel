@@ -1,0 +1,25 @@
+{
+  "id": "case_device_takeover_009",
+  "title": "Multi-Card Device Rotation: Serial Credential Testing from Single Hardware",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster operates from a single device but rotates through multiple compromised card credentials, testing each in succession. The device fingerprint (D-fields) shows abnormally high card-pairing counts while individual card behaviors remain clean. Each transaction appears normal in isolation: amounts fit cardholder spending patterns, timing is daytime hours, email domains match card records. However, the device itself has been paired with an excessive number of distinct cards in recent history, revealing systematic credential enumeration. This pattern exploits the fact that anti-fraud systems often examine card-level behavior separately from device-level aggregations. The fraudster maintains low per-card velocity to avoid behavioral triggers while the device accumulates evidence of multi-victim exploitation. Identity verification fields may show subtle mismatches as the fraudster reuses the same browser configuration across different cardholder profiles.",
+  "indicators": [
+    "D4 > 77 (p75), indicating device has been paired with unusually high number of distinct cards",
+    "D10 > 219 (p90), showing elevated device-to-card association counter in recent window",
+    "D1 = 0, confirming this specific device-card pairing has never been seen before",
+    "card1_amt_zscore between -1.5 and +1.5, transaction amount within cardholder's normal range",
+    "D15 > 346 (p90), device shows extreme card-diversity count across transaction history",
+    "card1_txn_count_24h < 8, maintaining low per-card velocity to mask fraud activity"
+  ],
+  "indicator_explanations": [
+    "The device has been used with far more different cards than typical legitimate customers",
+    "Recent device activity shows connections to an abnormal number of separate card accounts",
+    "This particular device has never processed a transaction with this card before",
+    "The transaction amount fits the cardholder's established spending pattern and appears normal",
+    "The device's overall history reveals association with an extreme number of unique cards",
+    "The card shows low recent transaction count, avoiding velocity-based fraud detection rules"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "A single device processes transactions across many different cards while keeping each card's individual behavior clean. The device fingerprint reveals systematic credential rotation that individual card-level analysis would miss.",
+  "reasoning": "Legitimate customers use consistent device-card pairings; a device associated with dozens or hundreds of different cards indicates credential enumeration. The fraudster maintains clean per-card behavior to bypass behavioral detection while the device-level aggregation exposes the multi-victim attack pattern."
+}

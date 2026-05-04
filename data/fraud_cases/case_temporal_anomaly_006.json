@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_006",
+  "title": "Shift-Change Exploitation: Coordinated Burst During Handoff Window",
+  "pattern": "temporal_anomaly",
+  "narrative": "Fraudster targets the 30-minute window between 6:45-7:15 AM EST when night shift fraud analysts hand off to day shift. Attack begins with a $47 test transaction at 6:43 AM, then launches 11-15 transactions between 6:48-7:08 AM across multiple merchant categories (MCC 5411, 5732, 5812) totaling $4,200-$6,800. Card velocity jumps from baseline 2 transactions/day to 13 in 20 minutes. Fraudster exploits reduced monitoring during shift overlap when alert queues are transferred and new analysts are ramping up. Transactions use same card with varying billing addresses (addr1 changes 3+ times) and mix of digital goods (ProductCD=W) with physical items. Pattern repeats on consecutive business days at identical time window, demonstrating knowledge of operational schedule.",
+  "indicators": [
+    "card1_txn_count_1hr exceeds 10 when historical daily average is under 3",
+    "All transactions clustered within 6:45-7:15 AM time window (txn_hour=6-7, is_night=0 transitioning)",
+    "Initial sub-$50 test transaction followed by 10+ transactions averaging $380-450 within 25 minutes",
+    "addr1 changes 3-5 times across transaction sequence while card1 remains constant",
+    "Transactions span 4+ MCC codes with no prior purchase history in those categories",
+    "card1_amt_zscore spikes to 8+ (amount is 8 standard deviations above cardholder norm)",
+    "Pattern recurs at same time window on 2+ consecutive weekdays"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card suddenly fires 10-15 transactions in a 20-minute window during early morning shift change (6:45-7:15 AM), spiking from a normal 2-3 transactions per day to 13 in one burst, with billing addresses changing multiple times and purchases spanning unfamiliar merchant categories.",
+  "reasoning": "The fraudster exploits the operational blind spot when night analysts hand off alert queues to day shift and new team members are ramping up, using a stolen card to maximize approved transactions before detection, with the identical timing on consecutive days revealing insider knowledge of monitoring schedules.",
+  "indicator_explanations": [
+    "Card suddenly hits ten times its normal daily transaction volume",
+    "All activity concentrates in the early morning shift-change vulnerability window",
+    "Attacker tests the card with small amount then unleashes high-value barrage",
+    "Billing address rotates repeatedly while the same stolen card keeps firing",
+    "Card suddenly purchases across merchant types it has never touched before",
+    "Transaction amounts are drastically larger than this cardholder ever spends",
+    "Attack pattern repeats at identical time window on multiple consecutive days"
+  ]
+}

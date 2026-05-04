@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_005",
+  "title": "Subscription Cascade Attack via Compromised Card Testing Multiple Services",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster exploits a stolen card by rapidly enrolling in 8-15 low-value subscription services within a 45-90 minute window, typically targeting streaming platforms ($9.99-$14.99), software trials ($4.99-$19.99), and digital content memberships ($7.99-$12.99). Attack occurs between 01:00-05:00 local time when cardholder is likely asleep. Each subscription uses a different merchant (unique MCC codes: 5815, 5968, 7372, 7399) but identical billing details. Fraudster uses temporary email domains (guerrillamail, tempmail, 10minutemail) with sequential variations. ProductCD shows 'S' or 'W' for service/web purchases. Pattern enables fraudster to extract maximum value before card is blocked, while individual amounts stay below many velocity thresholds. Legitimate users rarely sign up for more than 2-3 new subscriptions in a single session, and almost never during night hours.",
+  "indicators": [
+    "card1_txn_count_24h increases from 0-2 baseline to 8+ transactions within 90 minutes",
+    "All TransactionAmt values between $4.99-$19.99 with 85%+ clustering at common subscription price points ($9.99, $14.99)",
+    "Unique MCC count 6+ within session, all in digital services range (5815, 5968, 7372, 7399, 5817)",
+    "P_emaildomain matches temporary email providers (list: guerrillamail.com, temp-mail.org, 10minutemail.com) with sequential numeric patterns in local part",
+    "100% of transactions occur during is_night=1 flag (txn_hour between 1-5)",
+    "addr1 and dist1 remain constant while merchant diversity is 90%+ (no repeat MIDs)",
+    "ProductCD exclusively 'S' or 'W' indicating service/web transactions with zero physical goods ('C', 'H', 'R')"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card suddenly initiates 8-15 small subscription charges ($4.99-$19.99) across different streaming, software, and digital services within 90 minutes during overnight hours (1-5 AM), all using disposable email addresses with sequential patterns. The billing address stays constant while each transaction hits a different merchant, with amounts clustering at common subscription price points like $9.99 and $14.99.",
+  "reasoning": "Criminals use stolen cards at night when the real cardholder is asleep to delay detection, rapidly monetizing the card across multiple services before it gets blocked. Legitimate customers don't sign up for 8+ new subscriptions in one sitting during the middle of the night using throwaway email addresses—this pattern shows a fraudster maximizing theft while keeping individual amounts below common fraud alerts.",
+  "indicator_explanations": [
+    "Card goes from quiet to hammered with burst of transactions in under two hours",
+    "All amounts cluster around typical monthly subscription pricing sweet spots",
+    "Card races through six-plus different service merchant categories in one session",
+    "Email addresses rotate through throwaway providers with sequential numbered accounts",
+    "Entire attack unfolds during graveyard shift hours when monitoring is weakest",
+    "Billing address stays fixed while hitting completely different merchants every transaction",
+    "Every purchase is digital service or web product with zero physical goods"
+  ]
+}

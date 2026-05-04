@@ -1,0 +1,25 @@
+{
+  "id": "case_device_takeover_026",
+  "title": "Multi-Card Device Exploitation: Single Device Cycling Through Stolen Card Portfolio",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster operates from a single compromised device, systematically cycling through multiple stolen card credentials to conduct transactions. Each individual card's behavioral profile appears normal—amounts fall within expected ranges, transaction timing is daytime hours, velocity remains unremarkable, and email domains match cardholder records. However, the device fingerprint (D-fields) reveals an anomalous pattern: the same hardware has been paired with an excessive number of distinct payment cards in a compressed timeframe. This pattern indicates a professional card-testing operation where the attacker maintains operational security by keeping per-card activity below detection thresholds while the device itself becomes the smoking gun. The fraudster likely acquired card credentials through phishing, database breach, or dark web purchase and is methodically validating and exploiting each card before moving to the next. Cross-card device aggregations expose what single-card analysis cannot detect.",
+  "indicators": [
+    "D10 > 219 (p90 threshold), indicating device has processed excessive distinct card numbers",
+    "D15 > 346 (p90 threshold), elevated device-to-card pairing counter across rolling window",
+    "D4 > 297 (p90 threshold), device shows abnormally high card-association frequency",
+    "card1_amt_zscore between -1.2 and +1.2, transaction amount within cardholder normal range",
+    "D1 = 0, confirming first-time pairing between this specific device and card combination",
+    "TransactionAmt between 45 and 180, moderate amount designed to avoid large-transaction alerts"
+  ],
+  "indicator_explanations": [
+    "The device has been used with far more different cards than typical legitimate shoppers",
+    "Device shows persistent pattern of being paired with new cards over time",
+    "The hardware fingerprint appears across an unusually large card portfolio",
+    "Individual transaction amount fits the cardholder's historical spending pattern perfectly",
+    "This specific device has never been seen with this particular card before",
+    "Transaction value stays in the middle range to avoid triggering amount-based fraud rules"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "A single device processes transactions across numerous different stolen cards, with each card's behavioral profile appearing normal but device-level aggregations revealing systematic credential exploitation. The fraudster masks activity by keeping per-card metrics clean while the device fingerprint accumulates incriminating cross-card evidence.",
+  "reasoning": "Legitimate cardholders rarely share devices across many unrelated cards, and new device-card pairings combined with elevated device-to-card counters indicate organized credential abuse. The behavioral camouflage—normal amounts, velocity, and timing—suggests sophisticated fraud operations specifically designed to evade single-card monitoring while the device becomes the unifying fraud indicator."
+}

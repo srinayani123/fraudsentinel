@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_006",
+  "title": "Privacy Service Signup with Stolen Card and Disposable Email Infrastructure",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster tests stolen card credentials by purchasing 1-3 month VPN or encrypted email subscriptions ($4.99-$14.99 range) using temporary email services. The attacker rapidly cycles through multiple privacy service providers within 45-90 minutes, creating accounts with burner emails from domains like guerrillamail, tempmail, or 10minutemail. Transaction sequence shows card1_txn_count_24h jumping from 0 to 4-6 attempts, all targeting ProductCD='S' (subscription services) with MCC 5968 (continuity/subscription merchants). Digital goods nature means no shipping validation occurs. P_emaildomain rotates across disposable providers while card remains constant. Transactions cluster in txn_hour 22-4 (late night in cardholder timezone based on issuing bank IIN). dist1 values exceed 800km between P_emaildomain registration location and card billing addr1. Successful authorizations are immediately followed by service activation and sometimes real fraud attempts at higher-value merchants within 3-6 hours, using validated card.",
+  "indicators": [
+    "card1_txn_count_24h increases from 0 to 4-6 within 90 minutes, all MCC 5968",
+    "TransactionAmt range $4.99-$14.99 across 3-5 different privacy service MIDs",
+    "P_emaildomain matches disposable email pattern (guerrillamail, tempmail, 10minutemail variants)",
+    "dist1 > 800km between P_emaildomain geo and card billing addr1",
+    "All transactions occur during is_night=1 window (txn_hour 22-4)",
+    "ProductCD='S' exclusively, followed by higher-value attempt within 6 hours at different merchant",
+    "card1_amt_zscore remains low (<1.2) while card1_txn_count_6h_zscore exceeds 3.5"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single payment card makes 4-6 small subscription purchases ($5-$15) at different privacy service providers within 90 minutes late at night, each using a different disposable email address from services like guerrillamail or tempmail, with the email locations over 800km from the card's billing address.",
+  "reasoning": "The fraudster is testing if a stolen card works by making low-value purchases that auto-approve without shipping checks, cycling through burner emails to avoid detection, then using the validated card for larger fraud within hours once they confirm it's active.",
+  "indicator_explanations": [
+    "Card suddenly lights up with multiple privacy service subscriptions in tight timeframe",
+    "Small-dollar charges spread across different VPN and privacy subscription merchants",
+    "Email comes from throwaway service designed to vanish after initial signup",
+    "Cardholder's location and email registration geography are impossibly far apart",
+    "Activity clusters in late-night hours when legitimate cardholders rarely subscribe",
+    "Subscription services used as test ground before attempting larger purchase elsewhere",
+    "Transaction count spikes abnormally while individual amounts stay under cardholder's radar"
+  ]
+}

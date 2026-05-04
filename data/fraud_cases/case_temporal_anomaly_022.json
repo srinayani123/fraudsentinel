@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_022",
+  "title": "Nocturnal Overseas Transaction Burst During Cardholder Sleep Window",
+  "pattern": "temporal_anomaly",
+  "narrative": "Fraudster exploits stolen credentials during cardholder's predictable sleep hours (2-6 AM local time) while legitimate user has established daytime transaction history. Account shows 4-6 months of normal 9 AM-11 PM activity pattern, then suddenly fires 7-12 transactions between 2:47-5:23 AM totaling $2,400-$4,800. Transactions originate from IP addresses 4,000+ miles from card billing address (dist1 >4000), often Southeast Asia or Eastern Europe when US cardholder is asleep. Multiple digital goods purchases (ProductCD='W') at gaming/software merchants (MCC 5816, 5815) with amounts clustered $180-$450. Card1_txn_count_1hr spikes from baseline 0.3 to 9, card1_amt_zscore exceeds 4.5. P_emaildomain switches from established gmail.com to suspicious disposable domains. AVS and CVV match rates drop to 40% as fraudster tests multiple delivery addresses.",
+  "indicators": [
+    "7-12 transactions concentrated in 2:47-5:23 AM window when cardholder historically inactive",
+    "dist1 value >4000 indicating IP geolocation 4,000+ miles from billing address",
+    "card1_txn_count_1hr jumps from 0.3 baseline to 9 transactions per hour",
+    "card1_amt_zscore exceeds 4.5 representing extreme deviation from spending pattern",
+    "Transaction amounts clustered $180-$450 at digital goods merchants MCC 5815/5816",
+    "P_emaildomain changes from established provider to disposable/suspicious domain",
+    "AVS match rate drops to 40% with multiple distinct shipping addresses tested"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple transactions fire between 2 AM and 6 AM local time when the cardholder normally sleeps, originating from IP addresses thousands of miles away in different time zones. Transaction frequency spikes from near-zero to 9+ per hour with amounts clustered around $180-$450 at digital goods merchants, while email domains switch to disposable providers and address verification fails at abnormal rates.",
+  "reasoning": "The fraudster uses stolen card details during the victim's sleep window to delay detection, rushing through as many high-value digital purchases as possible before the cardholder wakes and notices. The geographic mismatch, changed contact details, and failed address verifications reveal someone other than the legitimate owner controlling the account.",
+  "indicator_explanations": [
+    "Card transacts heavily during hours when owner is typically asleep",
+    "Purchase location is thousands of miles from cardholder's billing address",
+    "Card suddenly erupts from quiet to nine transactions per hour",
+    "Spending amounts are radically outside this cardholder's normal range",
+    "Purchases cluster at digital goods merchants in tight dollar bands",
+    "Email switches from legitimate provider to throwaway or suspicious domain",
+    "Address verification failing as attacker probes multiple shipping destinations"
+  ]
+}

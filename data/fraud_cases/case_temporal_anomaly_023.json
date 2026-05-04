@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_023",
+  "title": "Dormant Weekend Break-In: Strictly Business Card Shows First Saturday Activity",
+  "pattern": "temporal_anomaly",
+  "narrative": "A corporate purchasing card with 847 historical transactions spanning 19 months suddenly processes its first-ever weekend transactions. The cardholder's established pattern shows exclusively Monday-Friday activity between 8 AM-6 PM EST, averaging $340 per transaction at B2B merchants (MCC 5044, 5065, 5072). On Saturday at 2:17 AM, the card processes $1,847 at an electronics retailer, followed by $923 at a gaming site 14 minutes later, then $2,104 at a luxury goods merchant at 3:51 AM. All three transactions occur during hours the legitimate user has never transacted (card1_txn_count_weekend=0 historically, txn_hour range historically 8-18). The addr1 changes from the business ZIP to a residential location 340 miles away. P_emaildomain switches from corporate domain to generic webmail. Card1_amt_zscore jumps to 4.2 standard deviations above historical mean.",
+  "indicators": [
+    "card1_txn_count_weekend transitions from 0 to 3 in single session after 847 weekday-only transactions",
+    "All three transactions occur between 2:00-4:00 AM when historical txn_hour range is 8-18",
+    "TransactionAmt values ($1,847, $923, $2,104) exceed historical mean by 4.2 standard deviations",
+    "addr1 changes from established business ZIP to location 340 miles distant",
+    "P_emaildomain switches from corporate domain pattern to generic webmail provider",
+    "MCC shift from B2B categories (5044/5065/5072) to consumer retail (5732/7995/5094)",
+    "Transaction velocity of 3 purchases in 94 minutes vs historical average of 1.2 per day"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A business card with 847 weekday-only transactions (8 AM-6 PM) suddenly makes its first three weekend purchases at 2-4 AM, with amounts 4.2 standard deviations above normal, shipping to a new address 340 miles away, and the email changing from corporate to personal webmail.",
+  "reasoning": "Criminals who compromised the card are rushing to extract value during off-hours when the legitimate business owner won't notice, using a different shipping address and personal email to receive goods before the fraud is detected on Monday morning.",
+  "indicator_explanations": [
+    "Business card that never transacted on weekends suddenly fires three Saturday purchases",
+    "Transactions hit during graveyard hours when card historically only operates business hours",
+    "Purchase amounts are dramatically larger than this card's established spending pattern",
+    "Billing address jumps hundreds of miles away from the business location",
+    "Email changes from company domain to free consumer email service",
+    "Card shifts from wholesale business purchases to consumer electronics and entertainment",
+    "Card fires three times in 90 minutes when it normally spaces transactions throughout the day"
+  ]
+}

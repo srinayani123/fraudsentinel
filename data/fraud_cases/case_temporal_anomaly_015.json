@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_015",
+  "title": "Graveyard Shift Card Testing on Dormant Merchant Window",
+  "pattern": "temporal_anomaly",
+  "narrative": "A compromised card list is tested against a merchant whose legitimate business operates 9am-11pm local time but whose payment gateway remains active 24/7. Fraudsters exploit the 2am-6am window when no merchant staff monitors alerts. Between 2:47am-4:13am, 23 transactions hit the same MID, all $1.00-$4.99 authorization tests followed by three successful $847, $923, and $1,215 purchases at 4:31am, 4:33am, and 4:35am. All cards share different card1 values but identical P_emaildomain (tempmail-generator pattern). The merchant's txn_hour histogram shows zero volume in hours 2-5 for the prior 90 days. Fraudster calculates that by 9am when staff arrives, cards will be maxed and abandoned. The is_night flag triggers on all events, and card1_txn_count_1hr jumps from merchant baseline of 0.1 to 8.3 transactions per distinct card.",
+  "indicators": [
+    "23 transactions occurring in txn_hour 2-5 when merchant's 90-day histogram shows zero historical activity in this window",
+    "Initial 19 transactions all $1.00-$4.99 (authorization testing) followed by 3 high-value purchases $847-$1,215 within 4-minute span",
+    "All 23 cards share identical P_emaildomain pattern (disposable email service) despite different card1 values",
+    "card1_txn_count_1hr averaging 8.3 vs merchant's nighttime baseline of 0.1 transactions per card",
+    "100% of transactions flagged is_night=1 against merchant operating hours of 9am-11pm local time",
+    "Time clustering: all high-value attempts within 240-second window at 4:31-4:35am",
+    "Zero addr1 repetition across 23 distinct billing addresses but single-digit dist1 values suggesting geolocation spoofing"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Twenty-three transactions hit a merchant between 2am-6am when their business is normally closed and historical data shows zero nighttime activity. Small test charges ($1-$5) are followed by three large purchases ($847-$1,215) within four minutes, all using different cards but the same disposable email domain.",
+  "reasoning": "Fraudsters test stolen cards during hours when merchant staff won't notice alerts, then quickly drain validated cards before the business opens. The overnight timing, disposable emails, and progression from test charges to high-value purchases reveal deliberate exploitation of an unmonitored window rather than legitimate customer behavior.",
+  "indicator_explanations": [
+    "Merchant is being hit during dead hours when they've never processed transactions before",
+    "Small test charges confirm cards work before attackers swing for big purchases",
+    "All different cards traced back to same throwaway email provider pattern",
+    "Card velocity spiking wildly above what this merchant sees at night",
+    "Attack happening in dead-of-night window when merchant is normally closed",
+    "High-dollar thefts compressed into four-minute smash-and-grab window",
+    "Billing addresses all different but distance values suggest coordinated location spoofing"
+  ]
+}

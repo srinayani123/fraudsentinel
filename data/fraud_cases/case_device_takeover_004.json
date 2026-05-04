@@ -1,0 +1,27 @@
+{
+  "id": "case_device_takeover_004",
+  "title": "Mobile Device Anomaly on Desktop-Only Cardholder Account",
+  "pattern": "device_takeover",
+  "narrative": "A cardholder who exclusively transacts from desktop browsers suddenly makes purchases through a mobile device, while all behavioral signals remain consistent with their normal patterns. The transaction amount falls within their typical spending range, occurs during regular daytime hours, and uses matching email addresses. However, device fingerprint analysis reveals this is the first mobile session associated with the card, and device-level counters show no historical relationship between the device and cardholder identity. The fraudster has successfully compromised account credentials and is operating from their personal mobile device, creating a device-channel mismatch that betrays the takeover despite otherwise clean behavioral indicators. This pattern often emerges when victims maintain strong password hygiene but fall prey to phishing attacks that capture login credentials without triggering password reset notifications.",
+  "indicators": [
+    "D1 = 0 indicating first-time device-card pairing with no prior association",
+    "D10 < 5 showing minimal device-level transaction history across all accounts",
+    "D4 between 0 and 20 reflecting new or rarely-used device in the ecosystem",
+    "card1_amt_zscore between -1.2 and +1.2 maintaining in-pattern spending amounts",
+    "DeviceType = mobile where cardholder historical pattern shows DeviceType = desktop in 95%+ of transactions",
+    "D15 < 30 indicating limited device-identity linkage strength in fraud-detection models",
+    "card1_txn_count_24h < 8 with normal velocity masking the device-channel switch"
+  ],
+  "indicator_explanations": [
+    "The mobile device has never been used with this payment card before",
+    "Device shows very limited overall transaction history across the payment network",
+    "Device fingerprint indicates newly introduced or infrequently seen hardware in the fraud system",
+    "Transaction amount aligns perfectly with the cardholder's normal spending behavior",
+    "Cardholder suddenly using mobile channel despite established desktop-only transaction history",
+    "Weak historical connection between device identifier and cardholder identity records",
+    "Transaction frequency remains within normal daily limits for this cardholder"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "A desktop-only cardholder suddenly transacts from a never-before-seen mobile device while maintaining completely normal spending amounts, timing, and velocity patterns. The device-channel switch is the sole fraud indicator.",
+  "reasoning": "Legitimate cardholders who consistently use desktop devices rarely switch to mobile without any prior mobile transactions in their history. The complete absence of device-card relationship combined with a channel-type mismatch indicates credential theft rather than organic payment behavior evolution."
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_004",
+  "title": "Dormant Holiday Period Exploitation with Geographic Shift",
+  "pattern": "temporal_anomaly",
+  "narrative": "Fraudster exploits a cardholder's predictable travel absence during recurring religious or cultural holidays. Analysis of a compromised card showed zero transactions during Ramadan for three consecutive years, then suddenly processed $847, $923, and $1,240 CNP transactions during the fourth year's observance period. Transactions originated from IP addresses 2,100+ miles from cardholder's addr1, targeting digital goods (ProductCD=W) and gift card merchants (MCC 5815). The attacker identified the pattern from previous years' transaction gaps and timed the fraud during the 29-day window when the legitimate user historically showed card1_txn_count_7d=0. Email domain switched from long-established P_emaildomain to a burner domain registered 4 days prior. All transactions occurred during cardholder's typical sleep hours (txn_hour 2-5 AM in home timezone) compounding detection delays.",
+  "indicators": [
+    "card1_txn_count_30d drops to zero during same calendar period in 2+ prior years, then shows 3+ transactions during current year's equivalent period",
+    "dist1 exceeds 2,000 miles between transaction location and cardholder addr1 during historically dormant window",
+    "P_emaildomain age less than 7 days while card tenure exceeds 800 days",
+    "All transactions occur during txn_hour 0-6 when cardholder's 365-day transaction history shows 96% activity during txn_hour 9-22",
+    "TransactionAmt clustering in $800-$1,300 range with 100% ProductCD=W or MCC 5815/5816 (gift cards)",
+    "card1_amt_zscore exceeds 2.5 compared to cardholder's non-holiday period baseline",
+    "Zero successful transactions in 15-30 day period preceding the holiday dormancy window (establishing clean baseline before exploitation)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Card shows zero activity during the same holiday period for multiple years, then suddenly processes high-value gift card and digital goods purchases from a distant location during that same period. The new email domain was registered days ago despite the card being years old, and all transactions happen during the cardholder's typical sleeping hours.",
+  "reasoning": "The fraudster studied the cardholder's predictable travel patterns during religious observances and deliberately waited for that window when the victim is historically offline and unlikely to notice alerts. The combination of breaking a multi-year dormancy pattern with distant locations, fresh email domains, and overnight timing indicates intentional exploitation rather than legitimate changed behavior.",
+  "indicator_explanations": [
+    "Card sits idle every holiday season historically, suddenly active this year",
+    "Transactions originate thousands of miles from cardholder's billing address during dormant period",
+    "Brand new email paired with card that's been around for years",
+    "Purchases happen overnight when cardholder always shops during daytime hours",
+    "All transactions buy gift cards in narrow dollar bands near limits",
+    "Amounts spike well above what this card normally spends outside holidays",
+    "Card went completely quiet before the holiday attack window began"
+  ]
+}

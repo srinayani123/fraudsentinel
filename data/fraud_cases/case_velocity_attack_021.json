@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_021",
+  "title": "Sustained Card Drain with Escalating Transaction Amounts Over 24-Hour Period",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster executes a methodical 24-hour extraction strategy on a compromised card, starting with small test transactions ($8-$15) to confirm card validity, then gradually escalating to medium-value purchases ($45-$120) over 18 hours before accelerating to maximum approved amounts in final 6 hours. Total of 52-68 transactions totaling $3,200-$4,800. Pattern shows deliberate pacing to avoid instant velocity blocks: 2-3 transactions per hour during business hours (9am-6pm), ramping to 5-8 per hour overnight. Transactions span multiple MCCs (5411 grocery, 5812 restaurants, 5999 misc retail, 5541 gas stations) to simulate normal spending diversity. All CNP with consistent P_emaildomain (temporary email services like guerrillamail or tempmail), but varying ProductCD between C (card not present) and W (website). Card1_txn_count_24h climbs from 0 to 65, while legitimate cardholder typically shows card1_txn_count_24h under 8.",
+  "indicators": [
+    "card1_txn_count_24h between 52-68 transactions with median legitimate baseline of 3-7 for same BIN",
+    "TransactionAmt shows clear escalation pattern: first 15 txns average $11, next 30 average $67, final 12 average $185",
+    "card1_amt_zscore exceeds 4.2 relative to historical cardholder behavior by hour 18",
+    "P_emaildomain matches known temporary email providers (guerrillamail.com, tempmail.org, 10minutemail.com) across all 50+ transactions",
+    "Transactions clustered in 2-3 hour active windows separated by 1-2 hour gaps, consistent pattern across 24 hours",
+    "MCC diversity of 4-6 different categories with no geographic consistency in addr1 or dist1 fields",
+    "Zero declined transactions despite high volume, suggesting fraudster testing already completed on different merchant"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A compromised card shows 52-68 transactions over 24 hours with amounts escalating from $8-$15 test purchases to $185+ final withdrawals, using temporary email addresses across multiple merchant categories while transaction counts spike from a normal baseline of 3-7 to over 65.",
+  "reasoning": "The fraudster is systematically draining the card before detection by pacing transactions to avoid velocity triggers and escalating amounts only after confirming the card works, with temporary emails and diverse merchants masking the coordinated attack as normal spending.",
+  "indicator_explanations": [
+    "Card processes 10x more transactions than normal cardholders in this segment",
+    "Transaction amounts climb systematically from small tests to large cashouts",
+    "Spending level becomes extreme compared to cardholder's historical patterns",
+    "All transactions use throwaway email services designed to evade tracking",
+    "Activity occurs in deliberate bursts with suspicious cooling-off periods between",
+    "Card bounces across unrelated merchant types with no geographic pattern",
+    "Perfect approval rate indicates fraudster already validated the card elsewhere"
+  ]
+}

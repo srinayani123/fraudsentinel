@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_026",
+  "title": "Cookie Replay Attack Following Legitimate Web Session Establishment",
+  "pattern": "account_takeover",
+  "narrative": "Fraudster captures session cookies from a legitimate user's browser through malware or XSS exploit, then replays those cookies from a geographically distant location within 15-45 minutes of the original login. The attacker maintains the same user-agent string and device_id but originates from an IP address 800+ miles away (dist1 > 800). Initial legitimate session shows normal browsing: 3-5 page views, 2-3 minutes dwell time, no transactions. Cookie replay session immediately attempts high-value purchases: $450-$1200 transactions within 90 seconds of connection, skipping product pages entirely. The fraudster reuses saved payment methods without re-entering CVV, triggering 0-1 AVS match codes. Transactions cluster in digital goods (ProductCD = 'C' or 'R') or gift cards. The legitimate user's device remains idle during fraud window, creating dual-session signature where card1_txn_count_1day shows sudden spike but device_count remains 1.",
+  "indicators": [
+    "dist1 > 800 between legitimate login IP and subsequent transaction IP within 15-45 minute window",
+    "Transaction initiated within 90 seconds of new IP session start, zero product browsing time",
+    "TransactionAmt between $450-$1200 on first replayed session transaction, 3-8x higher than user's 30-day median",
+    "device_id unchanged but IP geolocation shift crosses state/country boundaries mid-session",
+    "card1_txn_count_1day increases by 2+ while device fingerprint count remains static at 1",
+    "ProductCD switches to 'C' or 'R' (digital/gift cards) when user history shows 'W' or 'H' physical goods",
+    "CVV not re-entered on stored payment method, AVS mismatch or partial match (0-1 AVS code)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A user logs in normally from one location, then within 15-45 minutes the same session credentials are used from 800+ miles away to make immediate high-value purchases ($450-$1200) without browsing, while the original device sits idle.",
+  "reasoning": "Attackers steal session cookies via malware or exploits to hijack authenticated sessions, skipping login authentication entirely and rushing to extract value through digital goods purchases before the victim notices or the session expires.",
+  "indicator_explanations": [
+    "Session jumps hundreds of miles between legitimate login and next transaction",
+    "Attacker moves straight to checkout with no browsing after hijacking session",
+    "Purchase amount spikes dramatically above victim's normal spending pattern",
+    "Device stays identical but location suddenly crosses state or country lines",
+    "Multiple transactions fire while device fingerprint suggests single active session",
+    "Switches to high-liquidity digital goods when victim normally buys physical items",
+    "Stored payment bypasses security checks showing address mismatch or incomplete verification"
+  ]
+}

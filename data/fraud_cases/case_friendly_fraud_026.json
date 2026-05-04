@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_026",
+  "title": "Serial Wardrobing: Established Customer with Seasonal Dispute Cycles",
+  "pattern": "friendly_fraud",
+  "narrative": "Account with 18-month history and $4,200 lifetime value systematically disputes 60-70% of purchases 45-90 days post-delivery, always after implicit usage period. Customer orders high-ticket apparel or electronics ($180-$450 range) biweekly, maintains card1_txn_count_30d between 8-12, then files chargebacks claiming 'not as described' exactly 2-3 days before return window expires. Pattern intensifies around holidays: September-October (back-to-school), November-December (holidays), March-April (spring events). Disputes cluster at 47, 62, and 89 days post-transaction. Account uses consistent P_emaildomain (gmail.com), stable addr1, but rotates between 3-4 different card4 (card types) suggesting managed float across credit lines. TransactionAmt shows consistent $200-$400 sweet spot below merchant fraud review thresholds. All disputed transactions show confirmed delivery via dist1=0 (billing=shipping match).",
+  "indicators": [
+    "card1_dispute_rate_90d between 0.58-0.72 despite account age >500 days",
+    "Dispute timing clusters: 85% occur 45-90 days post-transaction, never <30 days",
+    "TransactionAmt for disputed txns averages $287, undisputed averages $94 (3x differential)",
+    "card1_txn_count_30d remains 8-12 perpetually, suggesting calculated spend management",
+    "Seasonal dispute spikes: 3.2x baseline rate September-October, 4.1x November-December",
+    "100% disputed transactions have dist1=0 and confirmed_delivery=1",
+    "Account rotates card4 types quarterly while maintaining same P_emaildomain and addr1"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "An established customer with 18-month history repeatedly disputes 60-70% of purchases 45-90 days after delivery, timing chargebacks 2-3 days before return windows close. Disputes spike during back-to-school and holiday seasons, target $200-$400 items, and show confirmed delivery to matching billing addresses.",
+  "reasoning": "The customer is intentionally using items for 6-12 weeks then falsely claiming defects to avoid payment, rotating between multiple credit cards to sustain continuous purchasing while disputing previous orders. The precise timing before return deadlines and seasonal clustering around events reveal deliberate exploitation rather than genuine product dissatisfaction.",
+  "indicator_explanations": [
+    "Customer disputes over half their purchases despite being a long-established account holder",
+    "Disputes are filed strategically after the return window closes but before chargeback deadline",
+    "Customer only disputes high-value purchases while keeping small transactions uncontested",
+    "Purchase frequency stays suspiciously consistent month after month like clockwork behavior",
+    "Dispute activity explodes during holiday shopping periods then drops off predictably",
+    "Every disputed transaction was delivered successfully to the cardholder's verified address",
+    "Customer cycles through different card types while keeping same email and shipping address"
+  ]
+}

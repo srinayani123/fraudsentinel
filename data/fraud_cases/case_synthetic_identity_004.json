@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_004",
+  "title": "Authorized User Add-On Bust-Out on Thin-File Synthetic Account",
+  "pattern": "synthetic_identity",
+  "narrative": "A synthetic identity with 4-7 months of light payment history (card1_txn_count_90d under 15, total credit line $1,200-$2,500) suddenly adds an authorized user. Within 48-96 hours, coordinated dual-location spending begins: primary cardholder in addr1 zip making $40-$85 grocery/gas purchases (MCC 5411, 5542) while new AU initiates $300-$750 electronics transactions (MCC 5732, 5946) from addr2 located 400+ miles away (dist1>400). The AU email uses disposable domain (P_emaildomain: gmx.de, protonmail.com) registered within 14 days of card modification. Total spending velocity jumps 600-900% above baseline (card1_amt_zscore exceeds +4.5) within first week. Pattern climaxes with simultaneous $1,800-$2,400 purchases at both locations within 3-hour window, maxing available credit before bust-out. No payments posted after AU addition.",
+  "indicators": [
+    "card1_txn_count_90d under 15 prior to authorized user addition, then 25+ transactions in 7 days post-addition",
+    "Dual-location spending with dist1 values exceeding 400 miles between primary and AU transactions within same 24-hour period",
+    "card1_amt_zscore jumps from baseline 0.5-1.2 to 4.5+ within 72 hours of AU activation",
+    "AU P_emaildomain from disposable/temporary provider (gmx.de, protonmail.com, guerrillamail.com) registered less than 14 days before",
+    "Simultaneous high-value transactions ($1,800-$2,400 range) from both locations within 3-hour window",
+    "Total credit line utilization increases from under 30% to 95-100% within 5-7 days of AU addition",
+    "ProductCD shift from recurring low-ticket (W: wallet topup, C: card present) to high-ticket electronics/jewelry (H: home/electronics)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A synthetic identity with minimal transaction history suddenly adds an authorized user, then both cardholders begin spending simultaneously from locations 400+ miles apart—primary making small grocery purchases while the AU buys high-value electronics. Within days, spending velocity spikes 600-900% above baseline and both max out the credit line with coordinated large purchases in a 3-hour window.",
+  "reasoning": "Fraudsters build a thin credit file to establish legitimacy, then add a conspirator as authorized user to double their theft capacity before abandoning the account. The geographic separation, disposable email, explosive spending increase, and synchronized final purchases reveal a planned bust-out rather than legitimate authorized user activity.",
+  "indicator_explanations": [
+    "Dormant card suddenly explodes with activity right after authorized user gets added",
+    "Purchases happen in two distant cities impossibly fast after user addition",
+    "Spending amounts skyrocket far beyond normal patterns within days of AU",
+    "Authorized user email is throwaway service created right before being added",
+    "Both cardholders max out purchases at same moment from different locations",
+    "Credit line goes from responsible use to completely maxed in one week",
+    "Purchase types flip from small everyday items to expensive liquidatable goods"
+  ]
+}

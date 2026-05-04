@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_011",
+  "title": "Sequential BIN Enumeration Attack with Increment Pattern Testing",
+  "pattern": "bin_attack",
+  "narrative": "Fraudster systematically tests card numbers from a compromised BIN range by incrementing the last 4-6 digits sequentially. Attack observed across 47 card numbers from BIN 453266, with consecutive PANs like 4532660012**3401, 3402, 3403** tested against low-value digital goods ($0.50-$2.99 ProductCD='W'). All transactions share identical P_emaildomain 'tempmail.org' and dist1=0 indicating shipping address matches billing. Testing occurs during off-hours (txn_hour between 2-5 AM EST) to evade real-time monitoring. Valid cards in the sequence generate approved transactions before issuer flags the pattern, typically after 8-12 attempts. Failed attempts show consistent AVS mismatch 'N' responses. The card1 field increments by exactly 1 between consecutive transactions, occurring 15-45 seconds apart, creating a distinctive staircase pattern in card sequencing that's invisible when examining individual transactions but obvious in aggregate BIN-level analysis.",
+  "indicators": [
+    "card1 values increment by exactly 1 across 40+ consecutive transactions from same BIN prefix",
+    "All transactions share identical P_emaildomain and dist1=0 despite different card numbers",
+    "TransactionAmt consistently under $3.00 targeting ProductCD='W' digital goods",
+    "Time gaps between sequential card tests range 15-45 seconds with txn_hour concentrated 2-5 AM",
+    "card1_txn_count_1day shows value of 1 for each card (no prior history)",
+    "AVS response code 'N' appears in 70%+ of the sequential attempts",
+    "BIN-level velocity exceeds 40 unique card1 values within 30-minute window"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Card numbers from the same BIN increment by exactly 1 across 40+ transactions, all using the same email domain and occurring 15-45 seconds apart during early morning hours. Each card shows no prior history and attempts small purchases under $3 on digital goods, with most failing AVS checks.",
+  "reasoning": "The attacker is testing stolen or generated card numbers from a compromised BIN range to identify which are valid and active. The sequential incrementing, identical non-card details, timing patterns, and low-value test purchases reveal systematic enumeration rather than legitimate customers independently making purchases.",
+  "indicator_explanations": [
+    "Attacker is systematically testing card numbers in sequential numerical order",
+    "Same email and location anchor all attempts despite rotating card numbers",
+    "Small amounts probe card validity without triggering high-dollar fraud alerts",
+    "Testing happens during overnight hours when monitoring may be reduced",
+    "Every card is brand new with no transaction history whatsoever",
+    "Address verification is failing repeatedly across the sequential test attempts",
+    "Same bank prefix is being hit with dozens of different card numbers"
+  ]
+}

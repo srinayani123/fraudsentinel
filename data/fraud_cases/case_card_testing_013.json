@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_013",
+  "title": "Micro-Validation Followed by Split-Tender Large Purchase Pattern",
+  "pattern": "card_testing",
+  "narrative": "Fraudster validates a stolen card with a $1.00-$2.99 test transaction at an online merchant, then returns 8-25 minutes later to make a $450-$1,200 purchase split across 2-3 separate transactions to avoid single-transaction limits. The test charge typically uses ProductCD='W' (digital wallet top-up or gaming credit), while follow-up purchases shift to ProductCD='C' or 'H' (electronics, luxury goods). The card1_txn_count_1day jumps from 0 to 4+ within the window. Distinct signature: all transactions share identical dist1 (distance between billing/shipping), same P_emaildomain (often disposable like 'guerrillamail.com'), but the addr1 changes slightly between test and exploitation phase. The card1_amt_zscore spikes from -0.8 to +3.2 within 30 minutes, indicating the cardholder's normal spending pattern doesn't include this merchant category or amount range.",
+  "indicators": [
+    "Initial transaction $1.00-$2.99 followed by 2-3 transactions totaling $450-$1,200 within 8-25 minutes at same MID",
+    "card1_txn_count_1day increases from 0 to 4+ during attack window",
+    "ProductCD switches from 'W' (test) to 'C' or 'H' (exploitation phase)",
+    "card1_amt_zscore jumps from below -0.5 to above +3.0 between test and purchase phases",
+    "P_emaildomain remains constant (disposable domain like 'guerrillamail.com' or 'temp-mail.org') but addr1 billing digits change by 1-3 characters",
+    "dist1 value identical across all transactions (fraudster reuses same fake billing/shipping combination)",
+    "All transactions occur within txn_hour 22-04 (night hours) with is_night=1 flag consistent"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card is tested with a tiny charge ($1-$3) at a digital wallet or gaming site, then within 8-25 minutes the same card makes multiple larger purchases ($450-$1,200 total) split across 2-3 transactions, all using a disposable email and occurring late at night. The card's transaction count jumps from zero to four or more in under half an hour, and the purchase amounts spike far above the cardholder's normal spending pattern.",
+  "reasoning": "The fraudster is confirming the stolen card works before quickly maximizing theft by splitting a large purchase to dodge transaction limits, then abandoning the card. The disposable email, overnight timing, dramatic spending spike, and rapid sequence reveal someone racing to extract value before the cardholder notices and reports the card stolen.",
+  "indicator_explanations": [
+    "Fraudster validates card with tiny charge then splits large purchase into chunks",
+    "Card goes from dormant to hyperactive in hours during the attack",
+    "Transaction type shifts from test product to real merchandise after validation",
+    "Purchase amount rockets from unusually small to far above cardholder norm",
+    "Email stays fixed but billing address digits shift slightly between transactions",
+    "Same exact distance value repeats showing fraudster reuses stolen address pair",
+    "All activity concentrates in overnight hours when cardholder likely asleep"
+  ]
+}

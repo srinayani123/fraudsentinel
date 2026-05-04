@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_018",
+  "title": "VPN-Masked Cross-Border Card Testing with Sequential BIN Probing",
+  "pattern": "geo_anomaly",
+  "narrative": "Fraudster uses commercial VPN services to mask their true location while testing stolen card numbers from a specific country. The attacker's IP resolves to US datacenter ranges (Digital Ocean, AWS) while billing addresses cluster in Nigeria, Philippines, or Romania. Transactions show $1-3 authorization tests across 15-40 different card1 values within 90 minutes, all sharing identical P_emaildomain (typically disposable services like guerrillamail, tempmail). The dist1 feature shows 8000+ km separation between IP geolocation and billing addr1. Attacks occur during night hours (2-6 AM) in the billing country timezone but normal business hours in the IP timezone. ProductCD consistently shows 'W' (digital goods) to avoid shipping verification. Card testing succeeds at 12-18% rate before moving to larger purchases.",
+  "indicators": [
+    "dist1 exceeds 8000 km between IP and billing address country",
+    "15-40 unique card1 values from single device/IP in 90-minute window",
+    "IP resolves to known VPN/datacenter ASN while addr1 in high-risk country",
+    "P_emaildomain matches disposable email services for 85%+ of attempts",
+    "TransactionAmt under $5 for initial wave, then jumps to $200-800 for successful cards",
+    "txn_hour indicates 2-6 AM in billing country timezone, 9 AM-1 PM in IP timezone",
+    "card1_txn_count_24h shows 1 for each card (first-time use pattern)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single device in a US datacenter IP address tests 15-40 different cards within 90 minutes, all with billing addresses 8000+ km away in Nigeria, Philippines, or Romania, using disposable email domains and making small $1-3 charges at night in the cardholder's timezone.",
+  "reasoning": "The attacker is hiding behind a VPN to rapidly test stolen card numbers from a specific country, using tiny charges to identify which cards are still active before making larger fraudulent purchases with the validated cards.",
+  "indicator_explanations": [
+    "IP location is on a different continent from the cardholder's billing address",
+    "Dozens of different cards cycle through the same device within minutes",
+    "Connection originates from commercial VPN hiding a suspicious origin country",
+    "Nearly all attempts use throwaway email addresses instead of legitimate domains",
+    "Small test charges suddenly spike to large amounts once card validates",
+    "Purchases happen during cardholder's sleep hours but attacker's business hours",
+    "Every card in the sequence is being used for the very first time"
+  ]
+}

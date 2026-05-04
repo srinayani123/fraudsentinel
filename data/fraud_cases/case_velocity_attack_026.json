@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_026",
+  "title": "Sequential P2P Burst Laundering with Fresh Account Activation",
+  "pattern": "velocity_attack",
+  "narrative": "A compromised account or money mule executes 8-15 P2P transfers within a 45-90 minute window, typically between $180-$495 per transaction, immediately after a prolonged dormancy period of 60+ days. The pattern involves newly activated recipient accounts (R_emaildomain created within 72 hours) receiving funds that are immediately forwarded in a chain structure. Transactions cluster in non-business hours (txn_hour 22-04) with ProductCD='C' designating P2P. The sending card shows card1_txn_count_24h spiking from baseline 0-1 to 12+, while card1_amt_zscore exceeds 4.5 indicating extreme deviation from historical spend. Recipient addresses (addr1) are often mismatched or show dist1 values exceeding 500km from sender, suggesting geographic laundering. The burst typically depletes 85-100% of available balance before account abandonment, with no subsequent legitimate activity.",
+  "indicators": [
+    "card1_txn_count_1h between 8-15 transactions after 60+ day account dormancy",
+    "TransactionAmt consistently $180-$495 per P2P transfer (ProductCD='C')",
+    "R_emaildomain account age less than 72 hours for 70%+ of recipients",
+    "txn_hour concentrated in 22-04 window with 10+ transactions in 45-90 minutes",
+    "card1_amt_zscore exceeds 4.5 relative to historical 90-day baseline",
+    "dist1 values greater than 500km between sender addr1 and recipient addr1",
+    "Account balance depletion of 85-100% within single session with no follow-up activity"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A dormant account suddenly springs to life with 8-15 rapid P2P transfers ($180-$495 each) in under 90 minutes, usually late at night, sending funds to brand-new recipient accounts across distant geographic locations. The burst drains 85-100% of the account balance with transaction volumes and amounts wildly exceeding the account's historical norms.",
+  "reasoning": "Criminals use compromised accounts or money mules to rapidly move stolen funds through freshly created receiver accounts in a laundering chain, deliberately spreading the money across geography and identities to obscure the trail before the fraud is detected and the account is frozen.",
+  "indicator_explanations": [
+    "Dormant account suddenly springs to life with concentrated transaction burst",
+    "Transfer amounts cluster in narrow mid-range band across the sequence",
+    "Most money goes to brand-new recipient accounts created days ago",
+    "Activity compressed into late-night hours with rapid-fire execution pattern",
+    "Transfer sizes dramatically exceed what this account normally moves",
+    "Sender and recipients are separated by impossible geographic distances",
+    "Account drains nearly completely in one session then goes silent"
+  ]
+}

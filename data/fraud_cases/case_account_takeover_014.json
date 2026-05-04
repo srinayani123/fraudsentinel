@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_014",
+  "title": "Device-Switch Password Reset with Immediate High-Value Digital Purchase",
+  "pattern": "account_takeover",
+  "narrative": "Attacker gains credential access through phishing or credential stuffing, then logs in from a new device_id (never seen in card1 180-day history). Within 8-15 minutes of login, they trigger password reset to lock out legitimate user, then immediately purchase high-value digital goods ($400-$900 ProductCD=C or W). The transaction shows device_fingerprint mismatch against all prior card1 sessions, P_emaildomain change from original registration (often to tempmail or burner domains like guerrillamail.com), and addr1 geolocation 500+ miles from historical billing. Card1_txn_count_24h jumps from 0 to 3-5 attempts as attacker tests limits. CVV and AVS match (stolen from data breach), but txn_hour shifts to 2-6 AM when legitimate user historically transacts 9 AM-10 PM. No prior card1 association with this device_id, browser_version, or screen_resolution combination in 12-month lookback.",
+  "indicators": [
+    "device_id with zero prior card1 transactions in 180-day history appears for purchase within 15 minutes of password reset event",
+    "P_emaildomain changed from original registration domain within 10 minutes before transaction (e.g., gmail.com â†’ tempmail.com)",
+    "addr1 geolocation distance (dist1) exceeds 500 miles from card1 historical billing mode location",
+    "ProductCD equals C or W (digital goods) with TransactionAmt between $400-$900 in single transaction",
+    "card1_txn_count_24h shows 3-5 rapid attempts where historical card1_txn_count_24h_mean is 0.2",
+    "txn_hour between 02:00-06:00 when card1 historical txn_hour mode is 09:00-22:00 window",
+    "device_fingerprint (browser_version + screen_resolution + OS combination) has no match in card1 12-month device history"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card appears on a brand-new device immediately after a password reset, purchasing high-value digital goods from an unfamiliar location at an unusual hour, with the email changed to a disposable domain. The device fingerprint, geography, and timing all break from the card's 6-12 month transaction history.",
+  "reasoning": "The attacker uses stolen credentials to hijack the account, resets the password to lock out the real user, then rushes to buy easily resold digital products before detection. The sudden device switch, location jump, odd-hour timing, and disposable email reveal someone exploiting brief access rather than the legitimate cardholder's normal behavior.",
+  "indicator_explanations": [
+    "Brand new device appears immediately after password reset to make a purchase",
+    "Email address switched to disposable service moments before the transaction",
+    "Billing location is hundreds of miles from cardholder's normal address",
+    "High-value digital goods purchase in single transaction",
+    "Card suddenly shows burst of activity versus normal dormant pattern",
+    "Transaction occurs in middle of night outside cardholder's normal hours",
+    "Device fingerprint has never been associated with this card historically"
+  ]
+}

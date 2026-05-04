@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_013",
+  "title": "Corporate Card BIN Attack Targeting B2B Software and Services Merchants",
+  "pattern": "bin_attack",
+  "narrative": "Fraudsters exploit stolen corporate card BINs (typically Purchasing or T&E cards with 16-digit PANs starting with specific IINs like 559688 or 434769) to make high-value B2B purchases at software-as-a-service, cloud computing, and business services merchants. Attack spans 18-36 hours with 12-25 cards from the same BIN range hitting 2-4 merchants in MCC 5734, 5817, or 7372. Transaction amounts cluster tightly between $1,850-$4,950 to stay under typical corporate authorization thresholds. Attackers use rotating residential proxy IPs with consistent device_id patterns and fabricated business email domains (P_emaildomain shows generic patterns like 'bizmail[number].com' or 'corp-services[variant].net'). Billing addresses (addr1) reference legitimate business districts but with non-existent suite numbers. All transactions occur ProductCD='S' (service/subscription) with is_night=1 concentration (78% between txn_hour 22-06). Card velocity shows card1_txn_count_24h jumping from 0 to 3-7, while card1_amt_zscore exceeds 2.8 within first 6 hours of card appearance.",
+  "indicators": [
+    "12-25 cards sharing first 8 digits (BIN+issuer identifier) transact within 18-36 hour window",
+    "TransactionAmt tightly clustered $1,850-$4,950 across 89% of transactions in sequence",
+    "card1_txn_count_24h shows 0-to-3+ acceleration within 6 hours for each new card in BIN range",
+    "P_emaildomain contains sequential numeric patterns or generic business terms (15+ domains following '[word][1-99].com' structure)",
+    "78% of transactions have is_night=1 with txn_hour concentrated 22-06, ProductCD='S' exclusively",
+    "card1_amt_zscore exceeds 2.8 within first 6 hours of each card's initial transaction",
+    "addr1 references valid business ZIP codes but dist1 (distance billing-to-IP) shows 450+ miles for 70% of attempts"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A cluster of 12-25 corporate cards sharing the same BIN (first 8 digits) suddenly appear within 18-36 hours, all making tightly-priced purchases ($1,850-$4,950) at B2B software or cloud service merchants, predominantly overnight (78% between 10pm-6am), with suspicious email domains following patterns like 'bizmail47.com' or 'corp-services12.net'.",
+  "reasoning": "Criminals have obtained a batch of stolen corporate card numbers from the same issuing bank and are racing to extract maximum value before the fraud is detected, deliberately keeping amounts below corporate review thresholds while using the cover of night and fabricated business identities to appear as legitimate B2B purchases rather than consumer fraud.",
+  "indicator_explanations": [
+    "A dozen or more cards from the same bank batch hit merchants in a day",
+    "Purchase amounts stay suspiciously consistent across the entire card sequence",
+    "Each new card goes from zero to multiple transactions within hours",
+    "Email addresses follow robotic numbering schemes suggesting automated account creation",
+    "Activity concentrates in late-night hours when fraud monitoring is thinner",
+    "First purchases on each card are unusually large compared to normal patterns",
+    "Billing addresses look legitimate but IP locations are hundreds of miles away"
+  ]
+}

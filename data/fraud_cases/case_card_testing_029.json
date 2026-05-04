@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_029",
+  "title": "Deferred Capture Authorization Testing with Staged Batch Validation",
+  "pattern": "card_testing",
+  "narrative": "Fraudsters exploit merchants using auth-then-capture flows (hotels, car rentals, subscription services) to test cards without immediate settlement visibility. They submit 15-40 authorization requests in 90-minute windows, typically $1.00-$25.00 test amounts that mimic legitimate pre-authorizations. Since capture happens 24-72 hours later, fraudsters validate card viability before issuer fraud systems flag the testing pattern. They rotate through 8-12 unique card1 values against same merchant MID, often using identical P_emaildomain and addr1 combinations. After authorization success, they immediately pivot to high-value CNP purchases elsewhere before the deferred captures post and trigger fraud alerts. Pattern common with MCC 3351 (car rental), 7011 (lodging), and subscription ProductCD='W' merchants.",
+  "indicators": [
+    "20-35 authorization transactions from same IP/device in 60-90 minutes with no captures in same session",
+    "TransactionAmt consistently between $1.00-$25.00 matching typical pre-auth holds for merchant category",
+    "8-15 distinct card1 values sharing identical P_emaildomain and addr1 within 2-hour window",
+    "card1_txn_count_1day = 1 for each card tested, card1_txn_count_7day = 0 (fresh cards)",
+    "All transactions to single MID with MCC 3351, 7011, or ProductCD='W' (subscription services)",
+    "Immediate cessation of activity after authorization phase, no returns to complete captures",
+    "card1_amt_zscore < -1.5 for test amounts compared to merchant's typical transaction profile"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple authorization requests (15-40) with small dollar amounts ($1-$25) hit the same merchant within 90 minutes using different card numbers but identical email domains and billing addresses, with no follow-up captures in the same session. The tested cards show no prior transaction history and amounts fall well below the merchant's typical transaction profile.",
+  "reasoning": "Fraudsters are validating stolen card data against merchants with delayed settlement processes (hotels, car rentals, subscriptions) because authorizations succeed before fraud systems detect the pattern, allowing them to confirm which cards work and then immediately use those validated cards for high-value purchases elsewhere before the original test transactions settle and trigger alerts.",
+  "indicator_explanations": [
+    "Attacker fires authorization requests nonstop but never completes any purchases",
+    "Transaction amounts stay tiny and consistent to avoid fraud alerts",
+    "Multiple different cards all use the same email and billing address",
+    "Every card appears brand new with zero history of prior use",
+    "All test transactions hit one merchant in lodging or subscription category",
+    "Activity stops cold after authorization phase with no follow-through attempts",
+    "Test amounts are far below what this merchant normally processes"
+  ]
+}

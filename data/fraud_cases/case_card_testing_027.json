@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_027",
+  "title": "Charitable Organization Donation Card Validation Testing Pattern",
+  "pattern": "card_testing",
+  "narrative": "Fraudsters exploit nonprofit merchant accounts (MCC 8398, 8641) for card validation, betting on delayed fraud detection due to donor privacy policies and high legitimate transaction variance. Attack begins with 8-15 donations of $1.00-$3.00 spread across 12-48 hours to religious charities, disaster relief funds, or animal welfare organizations. Valid cards then receive secondary charges of $47-$89 at high-risk MCCs (5816 digital games, 5999 misc retail) within 6-18 hours. The charity donations originate from residential IPs with clean email domains (gmail, yahoo) but share identical card1_addr1 mismatches and sequential card numbers differing by 1-3 digits. Charities rarely challenge micro-donations, creating a low-friction validation environment before the bust-out phase at digital goods merchants.",
+  "indicators": [
+    "card1 shows 8+ transactions under $5.00 at MCC 8398/8641 within 48-hour window",
+    "TransactionAmt pattern: initial cluster of $1-3 donations followed by $47-89 charges at MCC 5816/5999 within 18 hours",
+    "card1_txn_count_24hr jumps from 8-12 (charity phase) to 15-23 (exploitation phase) within same day",
+    "addr1 field constant across donation transactions but dist1 varies 150-800+ km between charity and secondary merchants",
+    "Sequential card1 values (last 4 digits differ by 1-3) sharing identical P_emaildomain and txn_hour clustering (22:00-04:00 UTC)",
+    "card1_amt_zscore spikes from -0.8 to +2.4 within 12-hour period as transaction amounts shift from micro to mid-range",
+    "ProductCD switches from 'C' (charity/services) to 'W' (digital goods) with no intervening legitimate purchase history"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple small donations ($1-3) to charities within 48 hours, followed by larger charges ($47-89) at digital goods merchants within 18 hours, using sequential card numbers with mismatched billing addresses.",
+  "reasoning": "Fraudsters use low-scrutiny charity donations to validate stolen cards before quickly switching to high-value digital goods purchases, exploiting nonprofits' reluctance to challenge small donor transactions and privacy policies that delay fraud detection.",
+  "indicator_explanations": [
+    "Card is being validated with multiple tiny charity donations in quick succession",
+    "Amounts jump from test donations to larger fraudulent purchases once card validates",
+    "Transaction volume explodes from donation testing phase to full exploitation phase",
+    "Billing address stays fixed while purchases span impossible geographic distances",
+    "Sequential card numbers hit same charities using identical email and late-night timing",
+    "Spending pattern shifts dramatically from micro-donations to unusually large purchases",
+    "Purchase type pivots from charitable services to digital goods with no organic progression"
+  ]
+}

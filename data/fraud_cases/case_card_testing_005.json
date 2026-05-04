@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_005",
+  "title": "Merchant Collusion Card Testing via Strategic Refund Cycling",
+  "pattern": "card_testing",
+  "narrative": "Fraudsters collaborate with a complicit merchant (or operate their own low-volume MID) to test stolen cards through purchase-refund loops that appear legitimate. A card makes a $47.99 purchase at a digital goods merchant (ProductCD='W'), receives immediate refund to original card within 90 seconds, then repeats 3-8 times across 48 hours. The refund amounts precisely match purchase amounts, creating zero net loss while validating card active status and available credit. Fraudsters use multiple cards against the same MID, testing 15-40 stolen PANs before moving validated cards to high-value fraud at unrelated merchants. The testing MID shows abnormal refund rates (68-85% of transactions) but maintains processing to avoid immediate shutdown. Once cards pass testing, they're used for $800-$2,400 purchases at electronics or luxury MCCs within 6-12 hours.",
+  "indicators": [
+    "card1 shows 4-9 transactions at single MID with refund_status='approved' within 48 hours, each refund occurring 45-180 seconds post-purchase",
+    "TransactionAmt variance near-zero across card1 transaction series: standard deviation <$3.50 on amounts between $35-$85",
+    "MID-level refund rate 65-90% when aggregated across all cards transacting there in 7-day window",
+    "Same card1 transitions from testing MID (ProductCD='W') to high-value MID (ProductCD='C' or 'H') within 12 hours, TransactionAmt jumps 15-40x",
+    "12-45 distinct card1 values share identical P_emaildomain, R_emaildomain='gmail.com', and addr1 while transacting at testing MID",
+    "card1_txn_count_24hr shows 6-14 transactions but card1_distinct_MID_count=1 during testing phase, then MID diversity spikes",
+    "Testing transactions cluster in non-business hours: 72% occur when is_night=1 or txn_hour between 23-05"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple stolen cards repeatedly make small purchases at the same digital goods merchant, receiving full refunds within minutes, creating zero net loss while validating the cards are active. After testing, the same cards immediately jump to high-value purchases 15-40x larger at electronics or luxury merchants within hours.",
+  "reasoning": "Fraudsters use a complicit merchant to test stolen card validity without financial loss before committing larger fraud elsewhere. The instant refund loop confirms cards work and have available credit, while the abnormally high refund rate and identical customer details across many cards reveal organized testing rather than legitimate returns.",
+  "indicator_explanations": [
+    "Card hits the same merchant repeatedly with instant refunds after each purchase",
+    "All transaction amounts are suspiciously identical or within a few dollars",
+    "This merchant refunds the vast majority of all cards that shop there",
+    "Card graduates from small test purchases to huge transactions at different merchants",
+    "Dozens of different cards share the same email and address at this merchant",
+    "Card exclusively hits one merchant during testing then suddenly diversifies attack targets",
+    "Testing activity concentrates in overnight hours when monitoring is weakest"
+  ]
+}

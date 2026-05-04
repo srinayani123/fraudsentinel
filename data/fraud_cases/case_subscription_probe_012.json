@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_012",
+  "title": "Streaming Service Cascade Testing with Geographic Mismatch",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster validates stolen card credentials through sequential streaming platform subscriptions, exploiting free trial periods and low-value authorization holds. Pattern begins with $0.99-$1.99 authorization holds at 3-5 major streaming services (Netflix, Hulu, Disney+, HBO Max, Spotify) within 45-90 minute window during off-peak hours. Cardholder billing address (addr1) maps to Iowa or Nebraska while device geolocation (dist1) shows 800+ mile separation to urban center like Miami or Los Angeles. Email domains cycle through temporary providers (P_emaildomain: guerrillamail.com, 10minutemail.net). Successful validations typically escalate to higher-value entertainment MCCs within 2-4 hours. TransactionAmt progression shows distinct stairstepping: $0.99, $1.00, $1.99, $8.99, $14.99. All transactions occur ProductCD=S (subscription service) with identical card1 but rotating P_emaildomain values, indicating automated credential stuffing toolkit.",
+  "indicators": [
+    "4-6 streaming service MCCs (5815, 7841) within 90-minute window, all $0.99-$1.99 holds",
+    "dist1 exceeds 800 miles between billing addr1 and transaction origin",
+    "card1_txn_count_1hr shows 5+ transactions with card1_txn_count_24hr_prior = 0",
+    "P_emaildomain rotates across 3+ disposable providers (guerrillamail, tempmail, 10minutemail)",
+    "All transactions occur txn_hour between 1-5 AM EST (is_night=1)",
+    "TransactionAmt shows stairstepping pattern: $0.99, $1.00, $1.99 within first 3 transactions",
+    "ProductCD=S for all transactions with identical card1 but zero R_emaildomain matches to P_emaildomain"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple small streaming service charges ($0.99-$1.99) hitting the same card within 90 minutes during overnight hours, with the card's billing address hundreds of miles from where transactions originate and different throwaway email addresses used each time.",
+  "reasoning": "Criminals test stolen card details through low-dollar streaming trials that rarely trigger alerts, using geographic distance and disposable emails to hide their location while confirming the card works before moving to larger fraudulent purchases.",
+  "indicator_explanations": [
+    "Multiple streaming services hit with tiny test charges in rapid succession",
+    "Billing address and transaction location are separated by extreme geographic distance",
+    "Card suddenly becomes active after being completely dormant for a full day",
+    "Email rotates through multiple temporary disposable email providers across attempts",
+    "All activity clusters in the dead of night when cardholders rarely shop",
+    "Charge amounts escalate in deliberate small increments testing authorization limits",
+    "Service purchases use mismatched billing and recipient emails on same card"
+  ]
+}

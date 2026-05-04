@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_011",
+  "title": "Cloned Card CP Transaction in High-Risk Tourism Corridor",
+  "pattern": "geo_anomaly",
+  "narrative": "Physical card used at terminals in Southeast Asian tourist zones (Thailand, Philippines, Vietnam) within 8-14 hours of legitimate domestic CP transactions in cardholder's home country. Fraudster obtained card details through skimming at fuel stations or ATMs, cloned physical card, and executed CP transactions at jewelry stores, electronics retailers, or luxury goods shops in tourist-heavy districts. Transactions range $380-$1,850, structured below common authorization thresholds. The cardholder's genuine card remains active domestically, creating impossible travel scenarios. Fraudsters exploit MCC codes 5944 (jewelry) and 5732 (electronics) where CP+PIN bypass is common. The cloned card shows different terminal IDs but consistent merchant categories across the fraud chain.",
+  "indicators": [
+    "CP transaction in country code TH/PH/VN within 12 hours of domestic CP transaction, dist1 > 8000 km",
+    "TransactionAmt between $380-$1,850 across 2-4 transactions in 6-hour window",
+    "MCC concentration in 5944, 5732, or 5311 (department stores) with 100% CP auth method",
+    "card1_txn_count_24h shows 3-5 transactions with alternating country codes (domestic then foreign)",
+    "addr1 and P_emaildomain remain US-based while card_country shifts to SE Asia codes",
+    "No prior international transaction history in card1_country_diversity_90d feature",
+    "Transactions occur during cardholder's typical sleep hours (txn_hour 2-7 AM home timezone) but daytime in fraud location"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "The same physical card appears in Southeast Asian tourist zones (Thailand, Philippines, Vietnam) for jewelry or electronics purchases within hours of legitimate domestic transactions, creating an impossible travel pattern across 8,000+ kilometers.",
+  "reasoning": "Fraudsters cloned the card through skimming and are using it at high-value retailers in tourist districts while the genuine cardholder continues normal activity at home, exploiting terminals where chip-and-PIN verification is weak.",
+  "indicator_explanations": [
+    "Card appears in Southeast Asia hours after being used physically domestically",
+    "Spending stays in narrow mid-range band across multiple closely-timed transactions",
+    "All purchases concentrate on department stores using physical card swipes",
+    "Card bounces between home country and foreign locations in rapid sequence",
+    "Billing address and email stay domestic while card swipes overseas",
+    "Card suddenly goes international after never leaving the country before",
+    "Purchases happen while legitimate cardholder is likely asleep at home"
+  ]
+}

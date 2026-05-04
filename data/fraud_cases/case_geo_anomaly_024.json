@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_024",
+  "title": "High-Risk Geography Card-Present Card Used for Remote CNP Purchases",
+  "pattern": "geo_anomaly",
+  "narrative": "A Visa credit card with historical usage exclusively in Nigeria (high CNP fraud jurisdiction) suddenly processes online purchases from US-based e-commerce merchants. The cardholder's P_emaildomain shows Nigerian provider (e.g., yahoo.com.ng), but billing addr1 claims Florida zip code with dist1 distance of 8,400+ km from email registration location. Transactions cluster at digital goods merchants (ProductCD=W) totaling $2,100-$4,800 across 6-9 purchases within 72 hours. All transactions occur during US business hours (txn_hour 9-17) despite card's prior transaction history showing consistent African timezone patterns (txn_hour 20-04 UTC). Card1_txn_count_24h jumps from baseline 0.3 to 7, with card1_amt_zscore exceeding 4.2. AVS returns partial match (Z-code) and CVV passes, suggesting card details harvested but not physical possession.",
+  "indicators": [
+    "Card historical usage 100% in Nigeria or similar high-risk CNP jurisdiction (last 90 days)",
+    "Sudden shift to US merchant MCCs with dist1 exceeding 8,000 km from P_emaildomain registration country",
+    "6+ digital goods transactions (ProductCD=W) totaling $2,100-$4,800 in 48-72 hour window",
+    "Transaction timezone misalignment: txn_hour 9-17 UTC contradicts cardholder's historical 20-04 pattern",
+    "card1_txn_count_24h spike from baseline <1 to 6+, card1_amt_zscore >4.0",
+    "AVS mismatch (partial Z-code) with billing addr1 in different continent than P_emaildomain origin",
+    "R_emaildomain absent or differs from established P_emaildomain country suffix"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card with exclusive Nigerian transaction history suddenly makes multiple US online purchases for digital goods, with billing address in Florida but email domain registered in Nigeria. Transaction timing shifts from African nighttime patterns to US business hours, while purchase frequency spikes from less than one to six-plus transactions per day.",
+  "reasoning": "Fraudsters have obtained card details without physical possession and are racing to extract value through hard-to-reverse digital goods before the legitimate cardholder notices. The geographic contradictions, timezone shifts, and velocity spikes indicate the card is being used remotely by someone other than the genuine owner who established the original usage patterns.",
+  "indicator_explanations": [
+    "Card has only been used in a high-fraud country for months",
+    "Purchase suddenly appears thousands of miles from the email's registered location",
+    "Burst of digital goods purchases racks up thousands in two days",
+    "Transactions happen during hours the cardholder has never shopped before",
+    "Card goes from rarely used to hammered with elevated spending amounts",
+    "Billing address is on a different continent than the email domain origin",
+    "Recipient email missing or from different country than purchaser's email"
+  ]
+}

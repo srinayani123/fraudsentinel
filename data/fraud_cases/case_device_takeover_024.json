@@ -1,0 +1,27 @@
+{
+  "id": "case_device_takeover_024",
+  "title": "Headless Browser Device Signature with Clean Transaction Profile",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster uses stolen credentials to transact from an automated headless browser environment, generating distinctive device fingerprint anomalies while carefully keeping transaction amounts, timing, and velocity within the cardholder's normal patterns. The device signature reveals automation tooling (Selenium, Puppeteer, PhantomJS) through missing browser plugins, absent JavaScript execution traces, and non-human interaction timings. D-fields capture these automation artifacts: D10 showing zero plugin count, D15 elevated due to missing standard browser components, D4 reflecting non-standard screen resolution ratios common to headless environments. The fraudster maintains transactional discipline—amounts fit historical spending, hours align with daytime patterns, email verification passes—creating a surface that appears legitimate to behavioral rules but fails device-authenticity checks. This pattern exploits merchant environments with weak device-fingerprinting infrastructure while bypassing amount-based and velocity-based fraud controls.",
+  "indicators": [
+    "D1 = 0 indicating first-time device-card pairing with no prior history",
+    "D10 < 5 (below p25), severely depressed browser plugin count suggesting headless environment",
+    "D15 > 300 (p90), elevated browser-feature absence score flagging automation tooling",
+    "D4 between 200-400 (p75-p90 range), screen resolution metric abnormal for consumer devices",
+    "card1_amt_zscore between -1.0 and +1.0, amount fits cardholder historical spending pattern",
+    "TransactionAmt between 60-180 (p25-p75 range), mid-range amount avoiding fraud-rule thresholds",
+    "C1 or C2 < 3 (low card-counter values), limited recent card activity consistent with normal usage"
+  ],
+  "indicator_explanations": [
+    "The device has never been used with this card before today",
+    "Browser shows almost no plugins installed, typical of automated browser environments",
+    "Device fingerprint reveals missing standard browser features consistent with headless tools",
+    "Screen resolution falls in ranges commonly used by automation frameworks rather than real users",
+    "Purchase amount fits within the cardholder's typical spending range",
+    "Transaction value sits in the middle of normal consumer purchase sizes",
+    "Card activity counters show reasonable recent usage levels without suspicious spikes"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Fraudster operates from headless browser automation tooling while maintaining normal transaction amounts, timing, and velocity patterns. Device fingerprint features reveal automation signatures that legitimate browsers would not exhibit.",
+  "reasoning": "Legitimate cardholders do not transact from headless browsers with minimal plugins and automation-framework screen resolutions. The combination of first-time device pairing with headless signatures indicates credential theft where the fraudster uses automated tooling for efficiency while carefully mimicking normal spending behavior."
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_008",
+  "title": "Charity MCC Card Validation with Sequential Escalation Pattern",
+  "pattern": "card_testing",
+  "narrative": "Fraudsters exploit charitable organizations (MCC 8398, 8641) for card validation by initiating $1.00 donations that face minimal fraud screening due to low amounts and perceived legitimacy. The pattern begins with 3-8 micro-donations of $0.50-$2.00 within 15-30 minutes across multiple charity merchant IDs, all using identical card but varying CVV2 responses to identify valid card-CVV combinations. Once validation succeeds (approved transaction with matching CVV), the fraudster pivots within 2-4 hours to high-value purchases at different MCCs (electronics, digital goods, luxury retail). Detection signature includes card1_txn_count_1hr showing 5+ charity transactions followed by sudden MCC switch, TransactionAmt jumping from sub-$5 to $300-$2500 range, and dist1 values indicating card billing address far from charity merchant locations (typically >500km). P_emaildomain often shows disposable services (mailinator, tempmail) while TransactionDT clustering reveals sub-hour burst followed by exploitation phase.",
+  "indicators": [
+    "5-8 transactions at MCC 8398/8641 merchants with TransactionAmt between $0.50-$2.00 within 20-minute window",
+    "card1_txn_count_1hr shows charity donations followed by 2-5 non-charity purchases within same hour",
+    "TransactionAmt escalation from <$5 charity tests to $300+ purchases at different MCC within 2-4 hours",
+    "dist1 values exceed 500km between card billing addr1 and charity merchant locations for all test transactions",
+    "P_emaildomain matches disposable email patterns (temporary email services) in 80%+ of charity transactions",
+    "CVV response codes vary across charity donations (match/no-match pattern) suggesting CVV enumeration attempts",
+    "ProductCD switches from donation (S/C) to high-risk categories (W for digital, H for electronics) post-validation"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple small donations ($0.50-$2) to charities within 20 minutes, followed within hours by large purchases ($300+) at electronics or digital goods merchants using the same card. The card's billing address is typically 500+ km from the charity merchants, and disposable email addresses are common.",
+  "reasoning": "Criminals use low-value charity donations to test stolen card numbers with minimal fraud detection, cycling through CVV codes until finding a valid combination. Once validated, they immediately exploit the card for high-value purchases before the cardholder notices, taking advantage of charities' lighter fraud screening.",
+  "indicator_explanations": [
+    "Multiple tiny charity donations test if the card works before larger fraud",
+    "Card validated at charities then immediately used for unrelated purchases",
+    "Transaction amounts jump from small test donations to large fraudulent purchases",
+    "Donations made to charities located impossibly far from cardholder's billing address",
+    "Throwaway email addresses used repeatedly for charity donation test transactions",
+    "Different CVV codes tried across donations indicating guessing attempts",
+    "Purchase types shift from donations to high-value digital goods after validation"
+  ]
+}

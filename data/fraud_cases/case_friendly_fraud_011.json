@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_011",
+  "title": "Post-Delivery Dispute with Tracking Confirmation Reversal Pattern",
+  "pattern": "friendly_fraud",
+  "narrative": "Customer completes purchase of physical goods ($180-$450 range), item ships with carrier tracking showing successful delivery signature confirmation within 3-7 days. Customer waits 45-75 days post-delivery before initiating chargeback with reason code 'merchandise not received' despite signed proof-of-delivery on file. Pattern shows card1_txn_count_7day = 1 at purchase time suggesting legitimate initial intent, then sudden dispute after maximum product trial period. Fraudster leverages knowledge that merchants often don't retain delivery documentation past 60 days. Shipping addr1 matches billing in 95% of cases. Transactions cluster in ProductCD = 'W' (wellness/supplements) or 'C' (electronics accessories) where subjective quality disputes are harder to prove. R_emaildomain frequently shows temporary email services (mailinator, guerrillamail) despite successful AVS match, suggesting premeditated dispute setup.",
+  "indicators": [
+    "TransactionAmt between $180-$450 with ProductCD in ('W', 'C', 'H')",
+    "Chargeback filed 45-75 days post-transaction, exceeding typical dispute window",
+    "card1_txn_count_30day = 1-2 showing low legitimate velocity at purchase time",
+    "R_emaildomain matches disposable email provider list (30+ known domains)",
+    "dist1 (billing-shipping distance) < 5 km despite later 'not received' claim",
+    "Merchant records show carrier tracking with delivery confirmation signature",
+    "card1_dispute_rate_historical > 0.15 indicating repeat friendly fraud behavior"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A customer receives merchandise with confirmed delivery signature, then disputes the charge 45-75 days later claiming non-receipt—right before merchants typically purge shipping records. The purchase uses a disposable email address despite matching billing and shipping addresses, and the customer has a history of similar disputes.",
+  "reasoning": "The fraudster is exploiting the gap between delivery confirmation retention periods and chargeback windows to get free merchandise. The combination of proven delivery, strategic timing, throwaway email, and repeat dispute history reveals intentional abuse rather than a genuine delivery problem.",
+  "indicator_explanations": [
+    "Purchase amount sits in sweet spot for disputing without triggering merchant scrutiny",
+    "Dispute arrives deliberately late, after merchant retention policies expire",
+    "Cardholder shows minimal legitimate activity before the disputed transaction",
+    "Email address uses throwaway domain suggesting planned dispute evasion",
+    "Billing and shipping addresses are virtually identical despite delivery denial",
+    "Carrier confirms package was delivered and signed for at destination",
+    "Cardholder has history of disputing legitimate purchases after receiving goods"
+  ]
+}

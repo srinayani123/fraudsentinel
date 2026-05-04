@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_015",
+  "title": "Impossible Travel: Domestic to International CNP Burst Within 60 Minutes",
+  "pattern": "geo_anomaly",
+  "narrative": "Cardholder completes legitimate in-store chip transaction in Des Moines, Iowa at 14:22 UTC, followed by online purchase from London-based merchant at 14:48 UTC (26 minutes later), then Singapore digital goods vendor at 15:03 UTC. Physical distance exceeds 8,000 miles between first and final transaction with zero possibility of cardholder travel. Fraudster obtained card details through skimming or data breach, then monetizes through high-margin CNP channels before card block. Domestic transaction shows normal addr1 consistency and dist1 under 50km, while international transactions exhibit mismatched P_emaildomain (suspicious temporary email services), elevated card1_amt_zscore above 3.5, and ProductCD shift from physical goods to digital/services. Pattern peaks during US business hours when cardholders less likely monitoring accounts.",
+  "indicators": [
+    "Geographic impossibility: 8,000+ mile distance between transactions within 60-minute window",
+    "Channel switch: chip-verified in-store followed by two CNP transactions",
+    "P_emaildomain changes from established provider to disposable/temporary email service",
+    "card1_amt_zscore spikes above 3.5 for international transactions versus cardholder baseline",
+    "dist1 jumps from <50km (domestic) to null/inconsistent for cross-border transactions",
+    "ProductCD shifts from 'W' (physical) to 'C'/'H' (digital goods/services) for international purchases",
+    "International merchants in high-risk MCCs: 5816 (digital games), 5734 (software), 4816 (telecom)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A legitimate chip transaction in one country is followed within 60 minutes by card-not-present purchases from merchants 8,000+ miles away in different countries, with email addresses switching to temporary services and transaction amounts spiking above the cardholder's normal baseline.",
+  "reasoning": "The cardholder cannot physically travel thousands of miles in under an hour, so the international online purchases represent a fraudster using stolen card details to quickly buy high-value digital goods that can be resold before the card is blocked.",
+  "indicator_explanations": [
+    "Card appears in locations thousands of miles apart impossibly fast",
+    "Legitimate in-person purchase immediately followed by remote online transactions",
+    "Email switches from trusted provider to throwaway disposable service",
+    "International purchase amounts wildly exceed this cardholder's normal spending",
+    "Distance tracking breaks down as transactions cross international borders",
+    "Card pivots from buying physical goods to intangible digital products",
+    "International merchants sell high-risk digital goods frequently targeted by fraudsters"
+  ]
+}

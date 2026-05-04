@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_015",
+  "title": "Post-Event Ticket Chargeback After Date Validation Pattern",
+  "pattern": "friendly_fraud",
+  "narrative": "Cardholder purchases premium event tickets ($450-$1200) from secondary marketplaces or primary vendors 45-90 days before the event, successfully validates entry at venue using mobile QR codes or hard tickets, then disputes the charge 15-35 days post-event claiming non-receipt or unauthorized transaction. Typical pattern shows initial purchase from residential IP matching billing addr1, email confirmation retrieved 3-8 times in week before event (suggesting legitimate access), and chargeback filed precisely after the event organizer's 14-day dispute window closes. The ProductCD is 'W' (digital goods/tickets), P_emaildomain frequently personal (gmail.com, yahoo.com), and transaction occurs during business hours (txn_hour 9-17). Card shows clean history with card1_txn_count_24h of 1-2, making fraud detection difficult. Dispute reason code typically RC 13.1 (merchandise not received) despite proof of ticket scan at gate.",
+  "indicators": [
+    "TransactionAmt between $450-$1200 for ProductCD 'W' with MCC 5816 (digital goods/entertainment)",
+    "Chargeback filed 15-35 days after event date, beyond organizer dispute window",
+    "Email confirmation accessed 3-8 times in 7-day period before event date",
+    "Purchase made 45-90 days pre-event from residential IP matching addr1",
+    "card1_txn_count_24h shows 1-2 transactions, card1_amt_zscore below 1.5 (normal spend)",
+    "Dispute reason code 13.1 (non-receipt) despite venue ticket scan timestamp exists",
+    "P_emaildomain is personal free provider, transaction during txn_hour 9-17"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Customer buys premium event tickets 45-90 days ahead, accesses confirmation emails multiple times before the event, scans ticket at venue, then files a chargeback 15-35 days after the event claiming non-receipt or unauthorized charge.",
+  "reasoning": "The cardholder attended the event using valid tickets they purchased, then exploited the post-event dispute window to get a refund while keeping the experience, effectively receiving free admission through deliberate false claims.",
+  "indicator_explanations": [
+    "Ticket purchase sits in premium price tier for digital entertainment events",
+    "Chargeback arrives strategically after the event organizer can no longer contest",
+    "Customer repeatedly checked confirmation suggesting they planned to attend the event",
+    "Purchase originated from customer's home network months before the event date",
+    "Card shows stable single-transaction behavior with amount matching normal spending patterns",
+    "Customer claims non-receipt but venue systems logged their ticket being scanned",
+    "Personal email used during business hours indicating legitimate planned purchase behavior"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_016",
+  "title": "Dormant Card Reactivation in Foreign Currency Zone with Sequential Probing",
+  "pattern": "geo_anomaly",
+  "narrative": "A card shows 8-14 months of inactivity, then suddenly processes 3-7 transactions within 72 hours in a country whose currency never appeared in the cardholder's historical transaction data. The revival begins with small-value purchases ($8-$25) at digital goods or telecommunications MCCs (5815, 4814) in the foreign currency, then escalates to $180-$450 transactions at travel or electronics merchants within 36 hours. The card's addr1 and email domains remain unchanged from the dormant period, but dist1 jumps to 4,500+ km. Transactions cluster in unusual hours for the original issuing country (2AM-6AM local time of issuer). No AVS or CVV verification failures occur, suggesting full card data compromise rather than testing. The foreign currency remains consistent across all new transactions, typically EUR, GBP, or AUD when the historical currency was exclusively USD.",
+  "indicators": [
+    "card1_txn_count_180d = 0 followed by 3+ transactions in 72 hours",
+    "TransactionAmt begins $8-$25, escalates to $180-$450 within 36 hours",
+    "dist1 increases from NULL/0 to 4,500+ km on reactivation",
+    "All new transactions in single foreign currency never seen in card history",
+    "First transactions at MCC 5815 or 4814, later at MCC 4511 or 5732",
+    "txn_hour maps to 2AM-6AM in card issuer's timezone across 60%+ of transactions",
+    "card1_amt_zscore spikes from 0 to 2.8+ relative to historical profile"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card inactive for 8-14 months suddenly processes multiple transactions in a new foreign currency, starting with small digital goods purchases that escalate to larger amounts within 36 hours, all occurring during unusual hours for the cardholder's home country.",
+  "reasoning": "Fraudsters who obtained full card details are testing the card with low-risk purchases before moving to high-value goods they can resell, exploiting the dormancy period to avoid immediate detection while operating from a location that matches neither the card's history nor the cardholder's legitimate travel patterns.",
+  "indicator_explanations": [
+    "Card sat completely idle for six months then suddenly fires off multiple transactions",
+    "Purchase amounts start small like testing then jump to significant dollar values",
+    "Card instantly appears thousands of kilometers from its normal operating location",
+    "Every transaction now uses a foreign currency the cardholder never used before",
+    "First hits are at telecom or phone services then shifts to airlines or electronics",
+    "Transactions cluster in the dead of night back in the cardholder's home timezone",
+    "Spending amounts suddenly deviate far above what this card normally charges"
+  ]
+}

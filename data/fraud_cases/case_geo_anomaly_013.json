@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_013",
+  "title": "High-Risk Country CNP Surge with Synthetic Email Patterns",
+  "pattern": "geo_anomaly",
+  "narrative": "Card suddenly processes 8-12 CNP transactions totaling $2,400-$4,800 from Nigeria, Romania, or Indonesia within 48 hours after 6+ months of domestic US activity. Transactions use newly-created email domains (P_emaildomain age <30 days) with sequential numeric patterns in local part. All purchases are digital goods (ProductCD='W') from high-risk MCCs (5816, 5967). card1_txn_count_24h jumps from baseline 0.2 to 9+ while card1_amt_zscore exceeds 4.5. Billing address (addr1) remains US-based while dist1 shows 8,000+ km separation. Transactions cluster in 3-4 hour windows during US night hours (txn_hour 2-5 AM EST). AVS returns 'N' on all attempts; CVV match rate drops to 0%.",
+  "indicators": [
+    "card1_txn_count_24h increases from 0-1 baseline to 8-12 transactions",
+    "All transactions from countries with CNP fraud index >7.5 (Nigeria, Romania, Indonesia)",
+    "P_emaildomain registration age <30 days with numeric sequential patterns",
+    "dist1 (card-to-transaction distance) >8,000 km while addr1 remains unchanged",
+    "100% ProductCD='W' (digital goods) with MCC 5816 or 5967",
+    "card1_amt_zscore >4.5 indicating severe amount deviation",
+    "Transaction clustering in 3-4 hour windows during txn_hour 2-5 AM cardholder timezone"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card with a long history of US domestic purchases suddenly processes 8-12 high-value transactions from Nigeria, Romania, or Indonesia within 48 hours, all using newly-registered email domains with sequential numbers and targeting digital goods during US nighttime hours. The billing address stays in the US but transactions originate 8,000+ km away, with all AVS checks failing and transaction amounts spiking 4.5+ standard deviations above normal.",
+  "reasoning": "Fraudsters who've obtained stolen card details are rushing to extract maximum value before the card is blocked, choosing high-risk countries with weak enforcement, untraceable digital products, and disposable email accounts to avoid detection. The nighttime clustering and geographic impossibility indicate the legitimate cardholder is asleep and unaware while criminals halfway around the world burn through the card's limit.",
+  "indicator_explanations": [
+    "Card goes from dormant to multiple transactions in single day",
+    "All purchases originate from nations with severe CNP fraud histories",
+    "Email account is brand new with suspicious number sequences",
+    "Card transacts thousands of miles away while billing address stays put",
+    "Every transaction targets digital merchandise that vanishes instantly",
+    "Purchase amounts are drastically higher than cardholder's normal behavior",
+    "Activity concentrates in middle-of-night hours when victim is asleep"
+  ]
+}

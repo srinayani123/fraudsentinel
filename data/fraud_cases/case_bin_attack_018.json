@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_018",
+  "title": "Compromised BIN Range with Coordinated Low-Value Testing Phase",
+  "pattern": "bin_attack",
+  "narrative": "A recently breached BIN range from a regional credit union (IIN 489376) exhibits coordinated testing behavior across 40+ newly appearing card numbers within 72 hours. Fraudsters probe with transactions under $15 at digital goods merchants (ProductCD='W') to validate card active status before larger fraudulent purchases. The BIN shows card1_txn_count_1day spiking from baseline 3-5 to 85+ transactions, with 78% occurring during off-peak hours (txn_hour between 02:00-06:00 EST). Distinct feature: P_emaildomain clustering on 6 throwaway domains (mailinator.com, guerrillamail.com variants) despite cards supposedly from same issuer geography. After 48-hour testing window, surviving cards escalate to $200-$800 electronics purchases at different merchant IDs, all CNP transactions with AVS mismatch codes 'N' or 'U'. The dist1 values show impossible geographyâ€”cardholders supposedly in Ohio making purchases with IP locations in Lagos, Manila, and Bucharest within same 3-hour window.",
+  "indicators": [
+    "40+ new card numbers from single BIN (489376) appearing within 72-hour window with no prior transaction history",
+    "Initial transaction amounts under $15 at ProductCD='W' merchants, 78% occurring between 02:00-06:00 txn_hour",
+    "P_emaildomain concentrated on 6 disposable email services despite regional issuer expectations",
+    "card1_txn_count_1day for BIN range spikes from 3-5 baseline to 85+ transactions",
+    "Escalation pattern: surviving cards move to $200-$800 purchases within 48 hours of initial test",
+    "dist1 values showing 8000+ km discrepancies between card billing addr1 and transaction IP location",
+    "100% AVS mismatch ('N' or 'U' codes) across all transactions in affected BIN range"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A group of 40+ card numbers from the same bank identification range all appear within 72 hours and immediately start making tiny test purchases (under $15) at digital merchants, mostly during overnight hours. Email addresses cluster on throwaway domains like mailinator.com, and transaction locations show impossible geography—cards issued in Ohio used simultaneously from Lagos, Manila, and Bucharest.",
+  "reasoning": "Criminals have obtained a batch of stolen card data from a single compromised source and are systematically testing which cards are still active before committing larger fraud. The coordinated timing, disposable emails, overnight activity, and geographic impossibilities reveal organized fraud rather than legitimate cardholders making coincidentally similar purchases.",
+  "indicator_explanations": [
+    "Dozens of fresh card numbers from same bank suddenly emerge with zero history",
+    "Small test purchases hit digital merchants during overnight hours when monitoring is weakest",
+    "Email addresses cluster on throwaway domains despite cards being from regional issuer",
+    "Transaction volume for this card range explodes from normal levels to massive spike",
+    "Successfully tested cards quickly escalate to high-dollar purchases within two days",
+    "Billing addresses and transaction locations are separated by intercontinental distances",
+    "Every transaction shows billing address verification failure across entire compromised range"
+  ]
+}

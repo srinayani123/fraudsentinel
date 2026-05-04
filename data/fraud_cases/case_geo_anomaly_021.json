@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_021",
+  "title": "Rapid Domestic-to-International Jump with Card Testing Signature",
+  "pattern": "geo_anomaly",
+  "narrative": "Card is used for a $47 CNP transaction at a US-based merchant (MCC 5411, grocery) at 14:22 EST, then 38 minutes later processes a $892 transaction at a UK gaming site (MCC 7995). The domestic transaction shows normal dist1 value of 127km from billing addr1, while the international charge has dist1=NULL and mismatched P_emaildomain (yahoo.com vs original hotmail.com). The card1_txn_count_1hr jumps from 1 to 4, with two additional declined $1-$5 micro-transactions appearing between the domestic and UK charges. The international transaction occurs at txn_hour=19 (2AM UK time),ProductCD switches from W (wallet/food) to C (digital goods), and card1_amt_zscore spikes to 4.2 when historical average is $63. No legitimate cardholder crosses 3,500 miles in under an hour; this pattern indicates card compromise with immediate international monetization preceded by balance-checking attempts.",
+  "indicators": [
+    "Domestic transaction followed by international charge within 60 minutes with dist1 geographically impossible (e.g., 3,500+ miles)",
+    "card1_txn_count_1hr increases from 1 to 4+ with micro-transactions ($1-$5) declined between legitimate and fraud events",
+    "P_emaildomain changes between transactions (yahoo.com replacing hotmail.com) indicating account takeover element",
+    "International transaction amount $800+ with card1_amt_zscore above 3.5 vs cardholder baseline",
+    "ProductCD shift from physical/wallet category (W) to digital goods (C) or gaming",
+    "International charge occurs during graveyard hours (txn_hour 1-5 AM local merchant time) in high-risk MCC 7995",
+    "dist1 value present for domestic charge but NULL for international, indicating address verification failure"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card processes a normal domestic grocery purchase, then 38 minutes later shows an $892 UK gaming charge—physically impossible travel across 3,500 miles. Between these, multiple small declined transactions appear (card testing), the email domain switches from hotmail to yahoo, and the amount is 4.2 standard deviations above the cardholder's typical spending.",
+  "reasoning": "Fraudsters who steal card details immediately test the card with small charges to verify it's active, then rush to extract maximum value through high-dollar international digital goods before the cardholder notices. The impossible geography, email swap, and 2AM UK transaction time reveal this isn't the legitimate owner but a criminal racing against detection timelines.",
+  "indicator_explanations": [
+    "Card appears in impossible location thousands of miles away within an hour",
+    "Multiple tiny test charges get declined before the big fraudulent hit",
+    "Email address switches between transactions suggesting stolen account credentials",
+    "International purchase amount vastly exceeds cardholder's normal spending pattern",
+    "Card suddenly switches from physical purchases to high-risk digital goods",
+    "Large international charge processes in the middle of the night",
+    "Billing address verification fails completely on the international transaction"
+  ]
+}

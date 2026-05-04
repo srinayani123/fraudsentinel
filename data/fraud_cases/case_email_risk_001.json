@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_001",
+  "title": "Domain Registration Timing Attack with Rushed High-Value Purchases",
+  "pattern": "email_risk",
+  "narrative": "Fraudster registers a disposable email domain (typically .com, .net, or .org) 5-15 days before launching coordinated attacks. Within 72 hours of first transaction, the domain is used across 8-20 accounts making purchases averaging $180-$450. Pattern shows P_emaildomain registration date within 30 days, but critically concentrated activity occurs in narrow 48-72 hour window. Transactions cluster in electronics (ProductCD='W') and digital goods (ProductCD='C'). WHOIS records show privacy-protected registration from high-risk registrars. Email addresses follow formulaic patterns: firstname.lastname@ or random 8-12 character strings. Billing addresses (addr1) frequently mismatch shipping locations with dist1 values exceeding 500km. Card velocity shows card1_txn_count_1day spiking to 6-12 attempts per card before abandonment. Fraudster burns through domain quickly, expecting detection within 5-7 days, maximizing transaction volume before chargebacks materialize.",
+  "indicators": [
+    "P_emaildomain registration date 5-30 days old with WHOIS privacy protection enabled",
+    "8-20 distinct accounts sharing same email domain within 72-hour window",
+    "TransactionAmt concentrated $180-$450 range with 85%+ targeting ProductCD='W' or 'C'",
+    "card1_txn_count_1day showing 6-12 transactions per card before switching",
+    "dist1 values >500km between billing addr1 and shipping locations in 70%+ of transactions",
+    "Email local-part follows patterns: 60%+ random 8-12 alphanumeric OR 30%+ firstname.lastname format",
+    "Transaction clustering: 75%+ volume occurs within 48-hour spike period after initial transaction"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A newly registered email domain (5-30 days old with privacy protection) suddenly spawns 8-20 accounts within 72 hours, all making purchases between $180-$450 for electronics or digital goods, with cards used 6-12 times daily before being abandoned and shipping distances exceeding 500km from billing addresses.",
+  "reasoning": "Criminals register a disposable domain in advance and then execute a coordinated blitz attack to maximize stolen card usage before detection, burning through the domain within a week as they know chargebacks will trigger shutdowns, making the tight timing window and volume spike the hallmark of organized fraud rather than legitimate customer growth.",
+  "indicator_explanations": [
+    "Email domain was just registered and owner is hiding behind privacy protection",
+    "Multiple fake accounts suddenly appear using the same suspicious email domain",
+    "Purchase amounts cluster in a narrow mid-range targeting specific product categories",
+    "Each stolen card gets hit repeatedly then abandoned for the next victim",
+    "Billing and shipping addresses are separated by impossible or suspicious distances",
+    "Email addresses alternate between gibberish strings and plausible-looking fake names",
+    "Attack concentrates all its activity into a frantic two-day spending spree"
+  ]
+}

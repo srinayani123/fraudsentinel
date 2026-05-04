@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_023",
+  "title": "Subscription Trial Validation: Sequential Low-Amount Authorization Testing via Free Trial Mechanisms",
+  "pattern": "card_testing",
+  "narrative": "Fraudsters exploit subscription services offering free trials or $1 authorization holds to validate stolen card credentials without triggering fraud alerts from significant charges. A single device or IP address initiates 8-15 separate subscription trials within 45-90 minutes, each generating a $0.00-$1.00 authorization on different card numbers. The attacker uses ProductCD 'W' (digital subscription) transactions with identical P_emaildomain patterns (often temporary email services like 'guerrillamail.com' or 'tempmail.org') but rotating card1 values. Each authorization attempt includes matching billing/shipping addresses (dist1 = 0) to avoid AVS mismatches. Successful authorizations indicate valid cards for later high-value fraud, while declined attempts are immediately discarded. The pattern shows card1_txn_count_1day = 1 for each card but device_txn_count_1day exceeding 10, with TransactionAmt consistently under $1.50 and all transactions occurring during is_night = 1 periods (txn_hour between 1-5 AM) to evade real-time monitoring.",
+  "indicators": [
+    "8-15 transactions from single device_id or IP within 45-90 minute window",
+    "TransactionAmt values uniformly $0.00-$1.50 across all attempts with ProductCD = 'W'",
+    "P_emaildomain from temporary email services (guerrillamail, tempmail, 10minutemail) with sequential numeric prefixes",
+    "card1_txn_count_1day = 1 for each unique card1 while device_txn_count_1day > 10",
+    "dist1 = 0 (perfect address match) across all transactions despite rotating card credentials",
+    "All transactions concentrated in txn_hour 1-5 (is_night = 1) avoiding business hours",
+    "card1_amt_zscore near 0 for each individual card but device_amt_zscore > 3.5"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A single device creates 8-15 separate subscription trials in under 90 minutes, each with a different card number but identical email domains from temporary services and perfect address matches, all for amounts under $1.50 during overnight hours (1-5 AM).",
+  "reasoning": "Criminals test stolen card credentials through low-value authorization holds that won't alert cardholders or trigger fraud systems, discarding declined cards immediately while keeping validated ones for future high-value purchases.",
+  "indicator_explanations": [
+    "Same device or IP address fires off a rapid sequence of attempts in under two hours",
+    "All transaction amounts cluster in the penny-to-dollar range for trial subscriptions",
+    "Email addresses rotate through disposable services with sequential numbered prefixes",
+    "Each card appears for the first time while the device racks up many attempts",
+    "Billing address stays identical despite constantly rotating through different cards",
+    "Attack happens in the middle of the night when monitoring is weakest",
+    "Each card shows normal amounts individually but the device pattern is abnormally high"
+  ]
+}

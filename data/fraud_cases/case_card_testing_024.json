@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_024",
+  "title": "Micro-Validation Escalation Attack with Same-Day Merchant Return",
+  "pattern": "card_testing",
+  "narrative": "Fraudster validates stolen card credentials with a $1.00-$2.99 authorization at a specific merchant (often digital goods, MCC 5816 or 5968), then returns within 2-6 hours for a purchase 150-400x larger at the identical MID. The initial test charge deliberately stays under fraud alert thresholds while confirming card is active, has available credit, and won't trigger velocity blocks. The cardholder rarely notices micro-charges in real-time. Attack succeeds because same-merchant repeat transactions often bypass additional authentication. Common targets include gaming platforms, streaming services, and cloud hosting where $1 tests validate and $300-$800 follow-ups purchase gift cards or premium accounts for resale. The fraudster may cycle through 8-15 cards daily using this pattern.",
+  "indicators": [
+    "Initial transaction $1.00-$2.99 followed by second transaction at identical merchant_id within 2-6 hours with TransactionAmt ratio >150:1",
+    "card1_txn_count_24h shows only 2 transactions total, both at same merchant, with 98%+ of spend in second transaction",
+    "P_emaildomain is temporary/disposable service (guerrillamail, tempmail, 10minutemail) created within 72 hours of transactions",
+    "Both transactions occur ProductCD='W' or 'C' (digital goods) with dist1=0 or null indicating no physical shipping",
+    "Second transaction card1_amt_zscore exceeds 4.5 relative to cardholder's 90-day transaction history",
+    "Time gap between transactions is 120-360 minutes with both occurring during txn_hour 22-04 or is_night=1",
+    "addr1 and R_emaildomain show no prior transaction history with this merchant despite 'returning customer' flag"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A tiny $1-2 test charge at a digital merchant is followed 2-6 hours later by a purchase 150-400 times larger at the exact same merchant, both using a disposable email and occurring late at night with no shipping address.",
+  "reasoning": "The fraudster uses the micro-charge to confirm the stolen card is active without alerting the victim, then exploits the same-merchant trust window to make a large fraudulent purchase before the cardholder notices, targeting resellable digital goods like gift cards or premium accounts.",
+  "indicator_explanations": [
+    "Tiny test charge followed by massive purchase at same store within hours",
+    "Card shows only two transactions today, second one drains the account",
+    "Email address comes from throwaway service created days before the attack",
+    "Both purchases are digital downloads with no physical delivery trail",
+    "Second transaction amount wildly exceeds cardholder's normal spending pattern",
+    "Purchases happen late night or early morning hours with suspicious timing gap",
+    "Billing address has no history with merchant despite system flagging repeat customer"
+  ]
+}

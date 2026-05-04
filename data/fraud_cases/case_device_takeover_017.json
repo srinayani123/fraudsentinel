@@ -1,0 +1,25 @@
+{
+  "id": "case_device_takeover_017",
+  "title": "Multi-Card Device Recycling with Clean Behavioral Masking",
+  "pattern": "device_takeover",
+  "narrative": "A fraud operation systematically reuses compromised devices across multiple stolen card credentials, creating a distinctive multi-card device signature while carefully maintaining normal behavioral patterns. The attacker operates from a single device or small device pool to process transactions for numerous different cards, each appearing individually benign. D-field aggregations reveal the device has been paired with an abnormally high number of distinct cards, far exceeding legitimate multi-user scenarios. While transaction amounts remain within expected ranges and velocity appears normal per card, the device-level aggregation exposes the coordinated fraud campaign. Identity verification mismatches at the device level further confirm the takeover, as the device history is inconsistent with any single cardholder's legitimate usage pattern.",
+  "indicators": [
+    "D4 > 77 (p75 threshold), indicating device has been associated with unusually high number of distinct cards",
+    "D1 = 0, confirming this specific device-card pairing has never been observed before",
+    "D15 > 83 (p75), showing elevated device-level identity counter suggesting multiple account associations",
+    "card1_amt_zscore between -1.0 and +1.2, amount fits normal cardholder spending pattern",
+    "D10 < 50 while D4 > 77, recent device activity limited despite high historical card diversity",
+    "TransactionAmt between 60 and 200, mid-range amount avoiding fraud detection thresholds"
+  ],
+  "indicator_explanations": [
+    "The device has been seen with far more different cards than typical legitimate usage",
+    "This particular card has never been used on this device in historical data",
+    "Device-level identity metrics show associations with multiple distinct account profiles",
+    "Transaction amount is consistent with the cardholder's normal spending behavior",
+    "Device shows limited recent activity despite extensive history with many cards",
+    "Amount selection stays within common transaction ranges to avoid automated alerts"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Fraudster operates from a recycled device processing transactions for multiple compromised cards, each transaction appearing behaviorally normal in isolation. Device-level aggregations reveal the multi-card reuse pattern inconsistent with legitimate single-user or household device sharing.",
+  "reasoning": "Legitimate devices rarely accumulate associations with dozens of different cards unless in commercial environments with distinct MCC patterns. The combination of high cross-card device usage (D4) with zero device-card history (D1) and clean behavioral signals indicates systematic credential stuffing from compromised hardware rather than organic multi-user scenarios."
+}

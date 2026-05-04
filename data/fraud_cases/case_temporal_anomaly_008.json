@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_008",
+  "title": "Monthly Budget Exhaustion Mimicry with Account Takeover Signature",
+  "pattern": "temporal_anomaly",
+  "narrative": "Compromised card exhibits 8-12 transactions in final 48 hours of billing cycle totaling $2,400-$3,800, dramatically exceeding cardholder's historical month-end spending of $150-$400. Fraudster exploits merchant assumption that legitimate cardholders deplete credit limits near cycle close. Pattern shows card1_txn_count_24hr jumping from baseline of 1.2 to 9+ transactions, with card1_amt_zscore exceeding 4.5 in final two days versus prior 28-day window. Transactions cluster in 6-hour bursts between 22:00-04:00 (is_night=1), contradicting victim's 09:00-17:00historical txn_hour profile. Attack targets electronics and prepaid MCCs (5732, 5815) with shipping addresses 300+ miles from card_addr1 (dist1>300). Email domain switches from established P_emaildomain to disposable R_emaildomain services. CNP transactions bypass AVS but match CVV, suggesting phished credentials rather than physical card theft.",
+  "indicators": [
+    "card1_txn_count_24hr increases from 1-2 baseline to 9-12 in final 48 hours of billing cycle",
+    "card1_amt_zscore exceeds 4.5 when comparing month-end 48hr window to prior 28-day period",
+    "70%+ of month-end transactions occur txn_hour 22-04 (is_night=1) versus historical 09-17 pattern",
+    "dist1 value jumps to 300+ miles for shipping address versus card_addr1 in final cycle transactions",
+    "P_emaildomain changes to disposable service (guerrillamail, tempmail) for 80%+ of end-cycle orders",
+    "Total TransactionAmt in final 48hrs ($2,400-$3,800) exceeds 6x the cardholder's typical month-end spending",
+    "ProductCD shifts to 'C' (electronics) and 'H' (prepaid) categories unused in prior 90-day history"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A compromised card suddenly shows 9-12 transactions totaling $2,400-$3,800 in the final 48 hours of the billing cycle—6x the cardholder's normal month-end spending of $150-$400—with purchases clustered in late-night 6-hour bursts (22:00-04:00) instead of the victim's usual daytime activity (09:00-17:00). Shipping addresses jump 300+ miles from the card's billing address, the email switches to disposable services, and purchases shift to electronics and prepaid cards never bought before.",
+  "reasoning": "Fraudsters mimic legitimate budget exhaustion behavior to blend in with cardholders who spend heavily at cycle close, banking on the assumption that month-end splurges look normal to merchants and issuers. The overnight timing, distant shipping, disposable email, and product category switch reveal an attacker using phished credentials to drain the account before the cardholder notices the statement, not a legitimate customer managing their monthly budget.",
+  "indicator_explanations": [
+    "Card suddenly sees massive spike in transactions during billing cycle's final two days",
+    "Purchase amounts during month-end are radically larger than the entire preceding month",
+    "Transactions flip to late-night hours when cardholder typically shops during business day",
+    "Shipping destination suddenly leaps hundreds of miles from cardholder's billing address",
+    "Email switches to throwaway services for nearly all end-of-month purchases",
+    "Final two days show spending six times higher than cardholder's normal month-end pattern",
+    "Card starts buying electronics and prepaid items never purchased in three-month history"
+  ]
+}

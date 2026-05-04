@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_027",
+  "title": "Sequential Free-Trial Harvesting with Progressive Email Domain Rotation",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster exploits multiple merchant free-trial offers by systematically creating accounts, extracting trial benefits, then canceling before the first paid charge posts. Pattern shows card1 linked to 12-20 distinct subscription merchants over 45-60 days, each with $0.00-$1.00 authorization followed by cancellation within 5-7 days. Unique P_emaildomain used per merchant (gmail, yahoo, outlook rotation), but consistent addr1 and dist1 values across all trials. Transactions cluster in late-night hours (txn_hour 22-04) with ProductCD consistently 'W' for digital services.Card exhibits card1_txn_count_7day maintaining steady 2-3 per week cadence. After trial window, zero conversion to paid subscriptions despite 15+ successful authorizations, indicating systematic benefit extraction rather than legitimate service evaluation.",
+  "indicators": [
+    "card1 linked to 12-20 distinct subscription MCCs (5816, 5968, 7372) within 60 days",
+    "Each merchant shows $0.00-$1.00 auth followed by cancellation in 5-7 days, zero paid conversions",
+    "Unique P_emaildomain per merchant but consistent addr1 and dist1 across all transactions",
+    "Transaction timing concentrated in txn_hour 22-04 window across 85%+ of authorizations",
+    "card1_txn_count_7day maintains 2-3 steady weekly rate over 8+ week period",
+    "ProductCD = 'W' for 100% of transactions with no variation to physical goods",
+    "Zero post-trial charges despite 15+ successful trial initiations"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "The same payment card signs up for 12-20 different subscription services over two months, each time using a different email domain but the same billing address, canceling within a week before any paid charge appears. All transactions happen late at night for digital services, maintaining a steady 2-3 signups per week with zero conversions to paid subscriptions.",
+  "reasoning": "The actor is systematically harvesting free trials across multiple platforms to extract benefits without ever intending to pay, rotating email addresses to avoid merchant detection while the consistent address and nighttime timing reveal coordinated abuse rather than a legitimate customer exploring services.",
+  "indicator_explanations": [
+    "Card rotates through numerous subscription services across two-month window",
+    "Every merchant gets trial authorization then immediate cancellation with no revenue",
+    "Email changes per service but physical address stays identical across trials",
+    "Activity clusters heavily during late-night early-morning hours across sessions",
+    "Card maintains deliberate low-volume pattern week after week without escalation",
+    "Exclusively digital services with zero attempts at physical merchandise purchases",
+    "Pattern shows serial trial abuse with no legitimate paid subscriptions following"
+  ]
+}

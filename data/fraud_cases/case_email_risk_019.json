@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_019",
+  "title": "Gmail Plus-Addressing Farm for Multi-Account Payment Fraud",
+  "pattern": "email_risk",
+  "narrative": "Fraudster exploits Gmail's plus-addressing feature to create hundreds of distinct email identities (baseaccount+001@gmail.com through baseaccount+247@gmail.com) that all route to a single inbox, enabling mass account creation at a payment platform. Over 72 hours, 83 accounts are registered using sequential plus-suffixes, each completing 1-3 test transactions of $4.99-$9.99 before a coordinated bust-out where all accounts attempt $200-$450 purchases within a 6-hour window. The P_emaildomain is consistently gmail.com, but email prefixes share identical base strings before the plus symbol. Card BINs rotate across 4-5 stolen card families, with card1_txn_count_24h spiking to 40+ as the same cards cycle through multiple plus-addressed accounts. All accounts share addr1 and identical device fingerprints despite claiming unique user identities. The pattern mimics legitimate multi-user behavior but collapses under velocity and email-prefix clustering analysis.",
+  "indicators": [
+    "50+ accounts registered within 72 hours all sharing P_emaildomain=gmail.com with sequential plus-addressing (e.g., name+001, name+002, name+003)",
+    "Identical email prefix before '+' symbol across 40+ distinct registered email addresses",
+    "card1_txn_count_24h exceeds 35 with same card used across 8+ different plus-addressed email accounts",
+    "All accounts share identical addr1 and device_id despite unique email addresses",
+    "Initial test transactions $4.99-$9.99 per account followed by synchronized burst of $200-$450 attempts within 6-hour window",
+    "Email registration timestamps show sub-minute intervals (median 18 seconds between account creations)",
+    "Zero R_emaildomain variation across all accounts; 100% of shipping confirmations route to same plus-addressed base"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Dozens of Gmail accounts registered within 72 hours share the same base email address with sequential plus-suffixes (user+001, user+002, etc.), all conducting low-value test purchases before simultaneously attempting high-value transactions from the same address and device.",
+  "reasoning": "The fraudster is exploiting Gmail's aliasing feature to create the illusion of many unique customers while funneling all communications to one inbox, enabling them to test stolen cards at scale and coordinate a synchronized bust-out attack across fake identities.",
+  "indicator_explanations": [
+    "Massive wave of Gmail accounts created in days using sequential numbered aliases",
+    "Same email base repeats across dozens of accounts with only numbers changing",
+    "Single card fires transactions across multiple aliased email accounts in one day",
+    "Different emails share identical shipping address and device fingerprint",
+    "Small test purchases immediately followed by coordinated high-value transaction wave",
+    "Accounts created in rapid machine-like succession with inhuman timing precision",
+    "All order confirmations funnel back to the same underlying email inbox"
+  ]
+}

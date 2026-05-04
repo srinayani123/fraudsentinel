@@ -1,0 +1,27 @@
+{
+  "id": "case_velocity_attack_023",
+  "title": "Refund-Cycling Volume Inflation via Sequential Purchase-Return Loops",
+  "pattern": "velocity_attack",
+  "narrative": "Fraudster initiates 12-18 legitimate-appearing purchases of $47-$89 each within a 90-minute window, then immediately requests refunds on 8-10 of those transactions before submitting a new wave of purchases using the same card and device. The pattern repeats 3-4 times across 6-8 hours, creating artificial transaction volume to age the account and evade new-card velocity filters. Each cycle increases TransactionAmt slightly ($47â†’$63â†’$81) to test limits. All transactions share identical addr1, dist1 under 2km, and P_emaildomain matching a free provider. The final cycle typically includes one high-value purchase ($340-$580) immediately after the last refund batch clears, exploiting the inflated card1_txn_count_24hr (38-52 transactions) to appear as an established customer. Refund requests occur 8-15 minutes post-purchase, never triggering chargeback workflows but creating processing confusion.",
+  "indicators": [
+    "card1_txn_count_24hr between 38-52 with card1_refund_count_24hr between 22-31",
+    "3-4 distinct purchase waves separated by 85-140 minute gaps, each preceded by refund cluster",
+    "TransactionAmt progression within session: incremental increases of $14-$22 per wave until final spike",
+    "Refund timing: 85% of refunds occur 8-15 minutes after original purchase timestamp",
+    "card1_amt_zscore exceeds 2.8 for final transaction despite high txn_count suggesting normalization",
+    "dist1 consistency under 2km across all transactions with identical addr1 and DeviceInfo",
+    "P_emaildomain matches R_emaildomain on 100% of refund requests, both free providers (gmail/yahoo)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "The same card makes 38-52 purchases and refunds in 24 hours, organized into 3-4 waves separated by 85-140 minute gaps, with refund requests occurring 8-15 minutes after each purchase and transaction amounts climbing from $47 to over $340. All transactions share the same address, device, and location within 2km, with matching free email domains for both purchase and refund requests.",
+  "reasoning": "The attacker artificially inflates transaction history to make the card look established and bypass new-account velocity checks, using rapid purchase-refund cycles to age the account before attempting a high-value fraudulent purchase that exploits the inflated transaction count to appear legitimate.",
+  "indicator_explanations": [
+    "Card shows dozens of purchases with nearly half immediately refunded same day",
+    "Activity comes in distinct bursts separated by consistent cooling-off periods",
+    "Purchase amounts creep upward across waves then suddenly jump at finale",
+    "Refunds arrive suspiciously fast after purchases in tight time windows",
+    "Final transaction amount defies the card's established normal spending despite volume",
+    "All activity pinned to identical location and device throughout the scheme",
+    "Purchaser and refund requester emails always match using free provider accounts"
+  ]
+}

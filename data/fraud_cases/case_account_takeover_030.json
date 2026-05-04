@@ -1,0 +1,27 @@
+{
+  "id": "case_account_takeover_030",
+  "title": "Customer Service Device Addition with Immediate High-Value Withdrawal Pattern",
+  "pattern": "account_takeover",
+  "narrative": "Fraudster social engineers customer service to add a new device to a legitimate account, typically claiming lost phone access. Within 45-90 minutes of device registration, account shows digital wallet funding ($800-$2,500) or peer-to-peer transfers that were never historically present. The new device hash has no prior history with the customer's email domain or billing address. Original device shows last activity 12-36 hours before the service call, creating plausible deniability. Fraudster exploits the brief window before victim notices account alerts on compromised email. The pattern shows card1_txn_count_24h spiking from 0-2 baseline to 6-9 transactions, all CNP with ProductCD='W' (wallet). Device fingerprint geolocation (dist1) shows 850+ miles from addr1, contradicting customer service notes claiming local access issues.",
+  "indicators": [
+    "New device_id registered via customer service interaction, then 3+ transactions within 90 minutes from that device",
+    "card1_txn_count_24h increases from 0-2 historical baseline to 6-9 transactions immediately post-device addition",
+    "All new transactions are ProductCD='W' with TransactionAmt between $800-$2,500, no prior wallet funding history",
+    "dist1 (device-to-billing distance) exceeds 850 miles despite service call claiming local device replacement",
+    "Original device shows final activity 12-36 hours before service interaction, then permanent inactivity",
+    "P_emaildomain access logs show concurrent login from new device within 15 minutes of customer service call",
+    "Transaction velocity: 6+ CNP transactions in 3-hour window following device addition, versus 30-day average of 1.2 daily transactions"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A new device is added to the account through customer service, then immediately performs 6-9 wallet transactions totaling $800-$2,500 within 90 minutes—a dramatic spike from the normal 0-2 transactions per day. The device location is 850+ miles from the billing address, and the original device went silent 12-36 hours before the service call.",
+  "reasoning": "The fraudster tricked customer service into adding their device by pretending to be the account owner with a lost phone, then rushed to drain funds before the real customer notices. The geographic mismatch, transaction spike, and narrow time window reveal someone exploiting temporary access rather than legitimate account recovery.",
+  "indicator_explanations": [
+    "Device added through support call then instantly used for multiple transactions",
+    "Card suddenly shifts from minimal activity to burst of transactions",
+    "All transactions are cash withdrawals with no funding setup history",
+    "New device is hundreds of miles away despite claiming local replacement",
+    "Legitimate device goes permanently silent right before the support call",
+    "Email account accessed from new device moments after the support interaction",
+    "Transaction rate explodes from typical daily pace to rapid-fire spree"
+  ]
+}

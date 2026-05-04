@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_014",
+  "title": "Adult Subscription Validator Using Low-Friction Legacy Processors",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudsters exploit adult content subscriptions ($29.95-$39.95 trial charges) processed through legacy high-risk merchant aggregators with minimal AVS/CVV enforcement. Card is validated via adult site trial (MCC 5967) at 02:00-05:00 UTC when fraud monitoring is lightest, followed 8-14 hours later by high-value electronics purchases ($800-$2,400) from different geographies. Adult merchants historically accept higher declines and rarely challenge chargebacks, making them ideal low-scrutiny validators. Fraudsters use temporary email domains (guerrillamail, tempmail) for subscription signup. Pattern exploits the psychological reluctance of cardholders to dispute adult charges immediately, providing 48-72 hour window before card shutdown. Subscription processor typically shows ProductCD='C' (continuous payment) with addr1 mismatch and dist1 values >500km between validator and exploitation transactions.",
+  "indicators": [
+    "Initial transaction $29.95-$39.95 at MCC 5967 between txn_hour 2-5",
+    "P_emaildomain in temporary provider list (guerrillamail, 10minutemail, tempmail)",
+    "Follow-on transaction 8-14 hours later with TransactionAmt >$800 and different MCC (5732, 5946, 5411)",
+    "dist1 value between transactions exceeds 500km",
+    "addr1 mismatch between subscription and follow-on purchase (null on first, populated on second)",
+    "card1_txn_count_24hr increases from 1 to 3+ with card1_amt_zscore jump >2.5",
+    "ProductCD changes from 'C' to 'W' or 'H' between validator and exploitation"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "An adult subscription trial charge ($29.95-$39.95) appears at MCC 5967 during late-night hours (02:00-05:00 UTC) using a temporary email domain, followed 8-14 hours later by high-value purchases ($800+) from a different location over 500km away with mismatched address details.",
+  "reasoning": "Criminals use adult merchant trials as low-scrutiny card validators because victims hesitate to dispute these charges immediately, buying fraudsters a 48-72 hour window to make expensive purchases before the card is shut down.",
+  "indicator_explanations": [
+    "Small-dollar adult subscription purchase hits during graveyard shift hours",
+    "Burner email from a disposable service masks the true cardholder",
+    "High-value purchase in unrelated category follows hours after the test charge",
+    "Subsequent transaction appears hundreds of miles away from the initial test",
+    "Address field left empty on validator then suddenly populated for fraud purchase",
+    "Card accelerates from single transaction to multiple with large amount spike",
+    "Purchase type switches from digital content to physical goods or wallet transfer"
+  ]
+}

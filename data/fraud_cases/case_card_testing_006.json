@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_006",
+  "title": "CVV Brute-Force With Strategic Success Positioning",
+  "pattern": "card_testing",
+  "narrative": "Fraudster systematically tests stolen card numbers by cycling through CVV combinations (typically 000-999) until achieving authorization, then immediately executing high-value transactions. Pattern shows 8-15 declined transactions with decline_code 'N' (CVV mismatch) clustered within 45-90 seconds, all under $1.00 on digital ProductCD='W', followed by 1-3 successful transactions of $200-$850 within 2-5 minutes. The successful attempts often shift to ProductCD='C' or 'H' (physical goods). Fraudster uses same card1, addr1, and P_emaildomain across all attempts but may rotate dist1 values. TransactionAmt pattern shows exact values like $0.50 or $0.99 during testing phase, then jumps to amounts ending in .00 or .99 during exploitation phase.",
+  "indicators": [
+    "8-15 consecutive declined transactions with decline_code='N' within 45-90 seconds",
+    "card1_txn_count_24h increases from 0 to 15+ within single session",
+    "TransactionAmt under $1.00 during failures, then $200+ within 5 minutes of first success",
+    "ProductCD switches from 'W' (digital) during testing to 'C'/'H' (physical) post-success",
+    "Identical P_emaildomain and addr1 across all attempts with same card1",
+    "card1_amt_zscore spikes from near-zero to 3.5+ after successful CVV match",
+    "Time gap between last decline and first success: 8-45 seconds"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A burst of 8-15 sub-dollar transactions decline with CVV mismatch codes within 90 seconds, then 1-3 high-value purchases ($200-$850) succeed minutes later using the same card and email but shifting from digital to physical goods.",
+  "reasoning": "The attacker is systematically guessing CVV codes on a stolen card number until finding the correct one, then immediately cashing out with expensive purchases before the cardholder notices or the card is blocked.",
+  "indicator_explanations": [
+    "Rapid-fire string of failed transactions shows systematic CVV guessing attempts",
+    "Card goes from dormant to hyperactive in minutes during testing spree",
+    "Tiny test amounts suddenly jump to high-value once CVV is cracked",
+    "Purchase type shifts from throwaway digital to valuable physical goods after breakthrough",
+    "All attempts use identical email and address showing automated script control",
+    "Spending pattern explodes from baseline after attacker finds working CVV code",
+    "Success follows final failure suspiciously fast indicating immediate exploitation window"
+  ]
+}

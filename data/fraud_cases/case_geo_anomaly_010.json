@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_010",
+  "title": "Dormant Home Country with Sudden High-Value Foreign Reactivation",
+  "pattern": "geo_anomaly",
+  "narrative": "A card shows 90+ days of zero activity in cardholder's registered billing country (addr1 match to historical pattern), then suddenly executes 3-7 high-value transactions ($800-$2,400 each) within 72 hours from a distant foreign country with dist1 values exceeding 5,000 km. The reactivation occurs exclusively in digital goods or luxury MCCs (ProductCD='W' or MCC 5944/5094) during cardholder's night hours (txn_hour suggests 2-5 AM in addr1 timezone). Email domains shift from established P_emaildomain (gmail/yahoo with 400+ day tenure) to disposable or recently created R_emaildomain for delivery. Card velocity metrics show card1_txn_count_24hr jumping from 0 to 6+ with card1_amt_zscore above 3.5 standard deviations from historical baseline. AVS shows address mismatch while CVV passes, suggesting mag stripe data compromise used for CNP fraud after prolonged card monitoring period.",
+  "indicators": [
+    "90+ days zero transaction volume in cardholder's registered addr1 country code",
+    "Sudden cluster of 3-7 transactions totaling $2,400-$12,000 within 72 hours from foreign location with dist1 > 5,000 km",
+    "All reactivation transactions occur during cardholder's night hours (txn_hour corresponds to 2-5 AM in addr1 timezone)",
+    "ProductCD='W' (digital goods) or luxury MCCs (5944, 5094) exclusively, no mundane purchases",
+    "R_emaildomain differs from established P_emaildomain, often disposable or created within 30 days",
+    "card1_txn_count_24hr escalates from 0 to 6+ with card1_amt_zscore > 3.5 above historical mean",
+    "AVS mismatch on billing address while CVV match suggests compromised card data rather than physical card theft"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card sits completely unused in its home country for over 90 days, then suddenly fires off multiple high-value purchases ($800-$2,400 each) from a distant foreign location over 5,000 km away, all happening during the cardholder's nighttime hours and using a different email address than the original account.",
+  "reasoning": "Fraudsters monitor compromised card data for months to avoid detection triggers, then exploit it from abroad once they believe the card is forgotten or the cardholder is asleep, targeting easily resold digital goods and luxury items while the legitimate owner is unlikely to notice or respond quickly.",
+  "indicator_explanations": [
+    "Card sat completely idle in home country for three months straight",
+    "Massive spending spree erupts from distant foreign location within three days",
+    "All purchases happen during the middle of the night back home",
+    "Only high-end or digital items purchased, skipping everyday spending categories",
+    "Recipient email suddenly switches to new or throwaway address",
+    "Card velocity rockets from dormant to six transactions in one day",
+    "Billing address fails verification but CVV passes suggesting stolen card details"
+  ]
+}

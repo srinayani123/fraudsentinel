@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_023",
+  "title": "Thin-File Synthetic Aged Account Rapid Monetization Pattern",
+  "pattern": "synthetic_identity",
+  "narrative": "A synthetic identity with 3-6 month credit history suddenly activates after dormancy. The account shows minimal historical usage (1-3 small transactions monthly under $50) to establish legitimacy, then erupts with 8-15 card-not-present transactions over 48-72 hours totaling $3,200-$7,500. Purchases concentrate in high-resale categories (electronics MCC 5732, sporting goods MCC 5941) with consistent P_emaildomain from free providers (gmail.com, yahoo.com). The cardholder address (addr1) has no prior transaction history in issuer data, and dist1 values show 250+ mile separation between billing and shipping addresses. Transactions cluster in evening hours (txn_hour 19-23) suggesting manual execution. Card1_txn_count_24hr spikes from baseline 0.1 to 12+, while card1_amt_zscore exceeds 8.5 against the thin historical profile. This represents the bust-out phase where fraudsters extract maximum value before inevitable chargebacks.",
+  "indicators": [
+    "Card1_txn_count_7day increases from 0-1 baseline to 8-15 transactions within 72 hours",
+    "Card1_amt_zscore exceeds 7.0 when compared to 90-day moving average of prior activity",
+    "Dist1 shows 250+ miles between billing addr1 and shipping address on 70%+ of spike transactions",
+    "P_emaildomain is free provider (gmail/yahoo/outlook) with account age under 180 days",
+    "TransactionAmt clustering at $400-$650 per transaction in high-resale MCCs (5732, 5941, 5946)",
+    "Historical txn_count shows 1-3 transactions monthly for 3-6 months, then sudden burst pattern",
+    "Txn_hour concentration in 19-23 window for 80%+ of monetization transactions"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A credit account with 3-6 months of minimal activity (1-3 small monthly purchases under $50) suddenly executes 8-15 card-not-present transactions totaling $3,200-$7,500 over 48-72 hours, targeting high-resale items like electronics and sporting goods, with shipping addresses 250+ miles from billing and evening transaction timing.",
+  "reasoning": "Fraudsters built a synthetic identity with just enough transaction history to appear legitimate, then execute a coordinated bust-out to extract maximum value through high-resale purchases before the account collapses under chargebacks, exploiting the thin credit file that lacks normal spending patterns to compare against.",
+  "indicator_explanations": [
+    "Card usage explodes from quiet to extremely active within three days",
+    "Transaction amounts spike far beyond the card's established spending history",
+    "Most purchases ship hundreds of miles away from the billing address",
+    "Email is a free throwaway account created less than six months ago",
+    "Amounts cluster in resale-friendly price range across electronics and sporting goods",
+    "Card sits dormant with minimal activity then suddenly erupts into action",
+    "Fraudulent buying spree concentrates in evening hours when monitoring is lighter"
+  ]
+}

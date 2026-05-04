@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_022",
+  "title": "Shared Account Gaming Purchase Dispute After Prolonged Usage Pattern",
+  "pattern": "friendly_fraud",
+  "narrative": "Cardholder disputes $89-$299 gaming platform purchases (Steam, Xbox Live, PlayStation Network) 45-90 days post-transaction, claiming unauthorized use by household member. Pattern emerges when ProductCD='C' (digital content) transactions show successful account login history and continued platform usage for 30-60 days before dispute filing. Transaction occurs during cardholder's typical usage hours (txn_hour matches 80%+ of historical pattern), same device fingerprint as previous legitimate purchases, and P_emaildomain matches cardholder's primary email domain on file. Chargeback filed precisely at merchant's dispute window closing (typically day 58-62 for digital goods). Card continues normal usage pattern for other merchants throughout dispute period. Represents exploitation of digital goods' delayed delivery verification and bank dispute timelines.",
+  "indicators": [
+    "Single gaming/digital content transaction $89-$299 disputed 45-90 days post-purchase",
+    "P_emaildomain matches cardholder's verified email domain on 3+ prior transactions",
+    "txn_hour falls within cardholder's normal activity window (Â±3 hours of 70%+ transactions)",
+    "Device fingerprint (DeviceInfo hash) matches 5+ previous successful transactions same card",
+    "Chargeback filed day 58-65 post-transaction (near merchant policy deadline)",
+    "Card shows 8+ successful transactions at other merchants during dispute investigation period",
+    "dist1 value indicates billing/shipping address match (dist1 < 50km or null for digital goods)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A cardholder disputes a gaming platform charge 45-90 days after purchase, claiming a family member made it without permission, but the transaction used the same device, email, and time-of-day patterns as the cardholder's previous legitimate purchases. The dispute is filed precisely near the merchant's deadline window while the card continues normal spending elsewhere.",
+  "reasoning": "The cardholder likely authorized or enjoyed the digital content for weeks, then filed a dispute near the deadline to get a refund while keeping the game access. The matching device, email, timing, and continued card use all point to buyer's remorse disguised as unauthorized use rather than actual fraud.",
+  "indicator_explanations": [
+    "Single mid-value gaming purchase disputed two months after delivery and usage",
+    "Email matches cardholder's verified address used on multiple legitimate purchases",
+    "Transaction occurred during cardholder's typical shopping hours across transaction history",
+    "Device has completed several successful purchases with this exact card previously",
+    "Dispute filed strategically close to merchant's refund policy expiration window",
+    "Cardholder continues using card normally at other merchants during dispute",
+    "Delivery address matches billing or transaction is digital with no location mismatch"
+  ]
+}

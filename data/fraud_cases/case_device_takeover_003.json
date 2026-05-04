@@ -1,0 +1,27 @@
+{
+  "id": "case_device_takeover_003",
+  "title": "Device Takeover via Anomalous Screen Resolution and Timezone Offset",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster authenticates with stolen credentials and operates from a device with uncommon screen dimensions or timezone configuration that deviates from the cardholder's established pattern. The transaction amount, velocity, and timing all appear normal—consistent with the cardholder's historical behavior. However, device fingerprint analysis reveals a first-time device-card pairing combined with unusual screen resolution (D10) or timezone offset values (D4) that fall outside typical consumer device profiles. Email and address verification pass cleanly because the fraudster has full account access. The fraud surface is detectable only through device hardware characteristics and engineered feature anomalies that flag the unusual device profile despite otherwise clean behavioral signals.",
+  "indicators": [
+    "D1 = 0 indicating first-time device-card pairing with no prior transaction history",
+    "D10 > 219 (p90 threshold), screen resolution width outside standard consumer device range",
+    "D4 > 297 (p90 threshold), timezone offset value inconsistent with cardholder geography",
+    "card1_amt_zscore between -1.5 and +1.5, transaction amount within cardholder's normal spending pattern",
+    "D15 > 346 (p90 threshold), browser screen height dimension flagged as anomalous",
+    "TransactionAmt between 50-200, typical purchase range masking the fraudulent nature",
+    "V200-series > p90 threshold, Vesta engineered feature detecting device fingerprint inconsistency"
+  ],
+  "indicator_explanations": [
+    "The device has never been used with this payment card before today",
+    "Screen width is unusually large or small compared to typical consumer laptops and phones",
+    "Device timezone setting does not match the cardholder's known location or travel pattern",
+    "Purchase amount fits perfectly within what this cardholder normally spends per transaction",
+    "Screen height dimension falls outside the profile of common consumer device models",
+    "Dollar amount appears routine and unsuspicious based on historical cardholder activity",
+    "Advanced model feature flags the device fingerprint as inconsistent with legitimate user sessions"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Fraudster uses stolen credentials from an unusual device with atypical screen dimensions or timezone configuration while maintaining normal transaction amounts and timing. Device fingerprint reveals hardware characteristics inconsistent with the cardholder's established device profile.",
+  "reasoning": "Legitimate cardholders consistently use devices with standard screen resolutions and timezone configurations matching their geography. A first-time device with anomalous hardware characteristics (D10, D15, D4 all exceeding p90) combined with otherwise clean behavioral signals indicates credential compromise rather than authorized account-holder activity."
+}

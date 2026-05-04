@@ -1,0 +1,25 @@
+{
+  "id": "case_engineered_anomaly_026",
+  "title": "Vesta Merchant-Pattern Vector: Known-Bad MCC-BIN-Channel Signature Encoded in V-Fields",
+  "pattern": "engineered_anomaly",
+  "narrative": "Fraudster exploits a merchant configuration known to Vesta's risk intelligence as previously compromised or associated with CNP abuse rings. The attack uses cards issued by specific BINs processed through merchant category codes (MCCs) that have historical fraud patterns when combined with certain payment channels. Raw transaction data shows normal amounts, clean velocity, matching identity fields, and no device red flags. The fraud signal exists entirely in Vesta's engineered V-fields which encode the risky merchant-BIN-channel triplet based on network-level intelligence unavailable to the merchant. Features like V307 (merchant risk encoding), V320 (BIN-MCC interaction), and V201 (channel-pattern risk) fire simultaneously, creating a composite signature invisible in raw behavioral data. The model detects this known-bad configuration pattern through multi-dimensional V-field interactions calibrated from historical fraud networks.",
+  "indicators": [
+    "V307 > 4 (p85), elevated merchant-pattern risk encoding flagging known problematic merchant configuration",
+    "V320 > 3 (p80), BIN-MCC interaction feature elevated indicating risky issuer-category combination",
+    "V201 > 2 (p75), channel-pattern risk feature above baseline for this merchant-type",
+    "V258 = 1 or V280 = 1, binary Vesta flags indicating match to known-bad merchant-network signature",
+    "card1_amt_zscore between -1.0 and +1.0, amount within cardholder's normal range masking the risk pattern",
+    "D1 > 50 (established device-card pairing) and C1 < 40 (normal card counter), behavioral signals appear clean"
+  ],
+  "indicator_explanations": [
+    "Merchant configuration matches a pattern previously associated with fraud networks in Vesta intelligence",
+    "The combination of card issuer and merchant category has elevated historical fraud rates",
+    "Payment channel and merchant type combination shows risk characteristics from network analysis",
+    "Binary risk flag indicates this merchant-network signature matches known compromised configurations",
+    "Transaction amount fits the legitimate cardholder's typical spending pattern perfectly",
+    "Device and card both show established history with normal activity counters"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Transaction processes through a merchant-BIN-channel combination that Vesta's network intelligence has flagged as historically risky, while all visible behavioral and identity signals appear completely normal. The fraud pattern is detectable only through engineered V-fields encoding multi-dimensional merchant-risk signatures.",
+  "reasoning": "Fraudsters identify specific merchant configurations with weak controls or compromised payment infrastructure, then route stolen cards through these known-bad pathways. The merchant-BIN-MCC-channel combination encodes fraud risk invisible in raw transaction features but captured in Vesta's proprietary network intelligence features derived from cross-merchant pattern analysis."
+}

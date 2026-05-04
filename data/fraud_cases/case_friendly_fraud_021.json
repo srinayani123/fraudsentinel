@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_021",
+  "title": "High-Value Gaming Currency Dispute After In-Game Asset Transfer",
+  "pattern": "friendly_fraud",
+  "narrative": "Cardholder purchases $200-$500 of in-game currency or digital items (ProductCD=W for digital goods) from gaming platforms, completes the transaction with immediate delivery confirmation, then disputes 8-14 days later claiming card was stolen. Pattern shows legitimate cardholder behavior: matching P_emaildomain to previous transaction history, correct CVV, AVS full match, txn_hour consistent with account's historical gaming sessions (typically 18:00-23:00). The cardholder actively uses the purchased items in-game for 5-12 days before initiating chargeback with reason code 4837 (No Cardholder Authorization). Transaction shows card1_txn_count_24h of 1-2, normal for gaming purchases, TransactionAmt consistently in $249-$499 range, and dist1 under 50km. Device fingerprint matches prior approved transactions. The timing patternâ€”purchase during game event or expansion launch, dispute filed just before 15-day optimal window closesâ€”reveals intentional fraud rather than genuine unauthorized use.",
+  "indicators": [
+    "TransactionAmt between $200-$500 for ProductCD=W with immediate digital delivery",
+    "Chargeback filed 8-14 days post-transaction with 4837 reason code",
+    "Perfect match on CVV, AVS, P_emaildomain consistent with 3+ prior transactions on same card",
+    "txn_hour falls within cardholder's historical active gaming window (Â±2 hours of previous sessions)",
+    "card1_txn_count_24h of 1-2, card1_amt_zscore under 1.5 (normal spending pattern)",
+    "dist1 under 50km from billing addr1, device fingerprint matches 2+ approved historical transactions",
+    "Purchase timestamp aligns with game event launch (within 48 hours), dispute filed day 8-14"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Digital gaming purchases ($200-$500) show perfect authentication matches—correct CVV, address, email domain, device fingerprint, and normal transaction timing—followed by chargebacks 8-14 days later claiming the card was stolen despite all legitimacy signals.",
+  "reasoning": "The cardholder is exploiting the chargeback system to get free in-game items after already using them for over a week, timing the dispute to maximize their play time while still falling within the fraud claim window rather than reflecting genuine card theft.",
+  "indicator_explanations": [
+    "Purchase is a mid-tier digital gaming item delivered instantly to the buyer",
+    "Dispute arrives in the classic friendly fraud window after item was consumed",
+    "All fraud checks passed perfectly matching the legitimate cardholder's verified information",
+    "Transaction occurred during the cardholder's typical gaming hours not anomalous timing",
+    "Spending volume and amount are completely normal for this cardholder's baseline",
+    "Purchase originated from cardholder's home location using their recognized trusted device",
+    "Buyer purchased right after new content dropped then disputed after using it"
+  ]
+}

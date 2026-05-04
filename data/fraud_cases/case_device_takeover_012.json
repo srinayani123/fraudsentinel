@@ -1,0 +1,25 @@
+{
+  "id": "case_device_takeover_012",
+  "title": "Device Takeover via Atypical Screen Resolution and Timezone Configuration",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster compromises cardholder credentials and executes transactions from their own device, which presents an unusual screen resolution (D10) and timezone offset (D15) inconsistent with cardholder history. The transaction amount, velocity, and timing appear completely normal—matching the victim's established spending patterns. However, device fingerprint signals reveal this is a first-time device-card pairing (D1=0) combined with anomalous display and timezone metadata. The fraudster attempts to blend in by mimicking typical transaction amounts and operating during daytime hours with matching email fields, but the underlying device configuration betrays the takeover. This pattern is particularly insidious because all behavioral guardrails pass, requiring deep device-feature analysis to detect the compromise.",
+  "indicators": [
+    "D1 = 0 indicating first-time device-card pairing with no prior transaction history",
+    "D10 > 219 (p90 threshold), screen resolution width highly atypical for cardholder device profile",
+    "D15 > 346 (p90 threshold), timezone offset value inconsistent with cardholder's historical pattern",
+    "card1_amt_zscore between -1.5 and +1.5, amount within cardholder's normal spending range",
+    "D4 < 77 (below p75), browser version metadata inconsistent with elevated D10/D15 anomaly scores",
+    "emails_match = 1 AND txn_hour between 8-22, behavioral masking via credential replay during normal hours"
+  ],
+  "indicator_explanations": [
+    "The device has never been seen with this card before in transaction history",
+    "Screen resolution dimensions are far outside the cardholder's typical device configuration range",
+    "Timezone offset configuration does not match any previously observed sessions for this cardholder",
+    "Transaction amount fits perfectly within the cardholder's established spending baseline to avoid detection",
+    "Browser version appears outdated or inconsistent given the unusual display and timezone configuration detected",
+    "Email fields match and transaction occurs during daytime masking the device compromise through credential theft"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Fraudster uses stolen credentials from their own device with unusual screen resolution and timezone settings while keeping transaction amounts, velocity, and timing within the victim's normal patterns. Device fingerprint features expose the takeover despite clean behavioral signals.",
+  "reasoning": "Legitimate cardholders exhibit stable device configurations across sessions—screen resolution and timezone rarely change unless purchasing new hardware. The combination of first-time device pairing with extreme D10/D15 values while all behavioral signals remain in-pattern indicates credential compromise where the fraudster operates from their own compromised hardware attempting to mimic the victim's transaction profile."
+}

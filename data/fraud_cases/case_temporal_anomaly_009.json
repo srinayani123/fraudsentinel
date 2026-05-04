@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_009",
+  "title": "Graveyard Shift Fraud During Cardholder's Documented Sleep Hours",
+  "pattern": "temporal_anomaly",
+  "narrative": "Fraudster exploits stolen card credentials between 2:00-5:00 AM in cardholder's timezone while legitimate owner maintains zero historical activity during these hours. Account shows 18 months of daytime-only transactions (txn_hour 7-23), then suddenly processes 4 CNP purchases totaling $1,847 between 02:14-04:33 AM. Transactions originate from IP geolocation 840+ miles from addr1, with dist1 values exceeding 850km. Card1_txn_count_24h spikes from baseline 0.2 to 4 overnight. Fraudster targets digital goods (ProductCD='W') and gaming subscriptions requiring no shipping validation. P_emaildomain switches from consistent gmail.com to temporary burner domain. The cardholder's mobile device shows no app activity or network requests during fraud window, confirmed via device fingerprint timestamps.",
+  "indicators": [
+    "Zero historical transactions during 2:00-5:00 AM hours across 18+ month baseline period",
+    "4 transactions totaling $1,847 processed between 02:14-04:33 AM in single session",
+    "dist1 values exceed 850km from established addr1 location",
+    "Card1_txn_count_24h increases from 0.2 baseline to 4 in 2.5-hour window",
+    "P_emaildomain changes from consistent domain to newly-registered burner service",
+    "All fraud-window transactions target ProductCD='W' digital goods with instant delivery",
+    "Device fingerprint shows zero activity while transactions process"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Account with 18 months of daytime-only activity suddenly processes four transactions totaling $1,847 between 2:14-4:33 AM from a location 850+ kilometers away, using a new email domain and targeting instant-delivery digital goods while the cardholder's device shows no activity.",
+  "reasoning": "A fraudster using stolen credentials deliberately operates during the cardholder's sleep hours to maximize time before discovery, selecting digital products that can be monetized immediately and using a burner email to avoid detection while the legitimate owner is unconscious and unable to intervene.",
+  "indicator_explanations": [
+    "Cardholder has never made a purchase during these overnight hours before",
+    "Four purchases worth nearly two thousand dollars hit during dead-of-night hours",
+    "Transactions originate from a location over 500 miles from cardholder's home",
+    "Card activity spikes from near-zero to four transactions in middle of night",
+    "Email suddenly switches from longstanding address to freshly-created throwaway account",
+    "All purchases are digital products that deliver instantly with no reversal window",
+    "No device interaction detected while transactions are actively being processed"
+  ]
+}

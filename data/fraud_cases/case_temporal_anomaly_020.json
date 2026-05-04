@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_020",
+  "title": "Graveyard Shift Takeover on Day-Only Legitimate User Pattern",
+  "pattern": "temporal_anomaly",
+  "narrative": "Account shows 6+ months of consistent daytime activity (8am-6pm, avg transaction hour = 13.2) with typical purchases at grocery stores and gas stations averaging $47. Suddenly experiences 4-7 transactions between 3:17am-4:53am totaling $2,340-$3,890, all CNP digital goods (ProductCD='W') or gift cards. Legitimate user's historical is_night flag = 0 for 183 consecutive transactions, then flips to 1.0 for entire fraud sequence. Geographic mismatch shows dist1 jumping from consistent 0-12 miles to 847+ miles. Card velocity explodes: card1_txn_count_1hr goes from historical max of 1 to 6, card1_amt_zscore spikes to 4.8+. Fraudster maintains same card1/addr1 but switches P_emaildomain from user's consistent gmail.com to newly-seen protonmail.com or cock.li, suggesting credential compromise with email change during sleeping hours.",
+  "indicators": [
+    "txn_hour between 3-5 for current transactions vs. historical mean txn_hour 11-15 over 180+ days",
+    "is_night flag = 1.0 for fraud sequence vs. 0.0 for 100% of prior 6-month transaction history",
+    "card1_txn_count_1hr jumps from historical maximum of 1 to 5-7 transactions",
+    "dist1 distance increases from consistent 0-12 mile pattern to 800+ miles during night window",
+    "TransactionAmt total $2,340-$3,890 in single night session vs. historical daily maximum $180",
+    "P_emaildomain switches from 6-month consistent domain to newly-seen temporary email provider",
+    "ProductCD shifts entirely to 'W' (digital goods) vs. historical 'C'/'H' (retail/physical) mix"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card with 6+ months of consistent daytime activity (8am-6pm, typical $47 retail purchases) suddenly shows 4-7 transactions between 3-5am totaling $2,340-$3,890, all digital goods or gift cards, with the email domain changed to a temporary provider and geographic distance jumping from under 12 miles to 800+ miles.",
+  "reasoning": "A fraudster has compromised the legitimate user's credentials and is exploiting them during sleeping hours when the victim won't notice—changing the email to maintain control, purchasing high-value digital goods that can be quickly monetized, and operating from a completely different location than the cardholder's established pattern.",
+  "indicator_explanations": [
+    "Transactions happening in dead-of-night hours when cardholder normally shops midday",
+    "Activity occurs during nighttime when this card has never transacted before",
+    "Hourly transaction volume spikes far beyond any previous legitimate burst",
+    "Card suddenly appears hundreds of miles away during the overnight session",
+    "Single night spending exceeds months of typical daily purchase totals combined",
+    "Email switches from long-established domain to brand-new throwaway provider",
+    "Purchases flip to digital goods when cardholder only bought physical items"
+  ]
+}

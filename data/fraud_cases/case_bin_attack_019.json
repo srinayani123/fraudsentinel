@@ -1,0 +1,27 @@
+{
+  "id": "case_bin_attack_019",
+  "title": "Co-Branded Loyalty Card BIN Testing with Micro-Purchases",
+  "pattern": "bin_attack",
+  "narrative": "Fraudsters exploit co-branded airline or hotel reward cards by testing stolen BINs through low-value purchases at merchants where the card issuer has weak velocity controls. Attackers target BINs issued by regional banks partnering with major loyalty programs (e.g., 543210-series Visa Signature travel cards). They execute 8-15 transactions between $1.87-$4.50 at digital goods merchants (ProductCD='W') within 45-90 minutes, often using temporary email domains. Valid cards are immediately used for high-value bookings ($850-$2,400) at travel MCCs. The co-branded nature creates delayed fraud detection as issuers attribute initial declines to reward balance checks rather than testing activity. Attackers rotate through 40-60 card1 values sharing the same IIN prefix, with 70%+ showing card1_txn_count_1day=1 and identical P_emaildomain patterns.",
+  "indicators": [
+    "card1 IIN prefix (first 6 digits) shared across 40+ distinct card numbers within 2-hour window",
+    "Initial transaction sequence: 8-15 purchases at $1.87-$4.50, all ProductCD='W', completed in 45-90 minutes",
+    "card1_txn_count_1day=1 for 70%+ of tested cards with identical P_emaildomain suffix pattern",
+    "Successful cards escalate to $850-$2,400 transactions at MCC 4511/3501-3999 within 3 hours of testing",
+    "P_emaildomain rotating through 5-8 temporary providers (mailinator, guerrillamail) across card1 values",
+    "TransactionAmt_card1_mean shows bimodal distribution: cluster at $2-5 and $900-2400",
+    "addr1 field constant across 85%+ of card1 variations despite different cardholder names"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple card numbers sharing the same first 6 digits appear in rapid succession, making tiny purchases ($1.87-$4.50) at digital goods merchants, then immediately switching to large travel bookings ($850-$2,400) for cards that didn't decline. Most cards show only one transaction ever, use temporary email providers like mailinator, and share the same billing address despite different cardholder names.",
+  "reasoning": "Criminals are batch-testing stolen co-branded travel card numbers to identify which ones still work, using small amounts to avoid triggering alerts, then racing to book expensive travel with valid cards before the victim notices. The shared address and temporary emails prove these aren't legitimate cardholders making normal purchases.",
+  "indicator_explanations": [
+    "Same bank identification number appears on dozens of cards tested rapidly",
+    "Attack starts with cheap test purchases to verify which cards are active",
+    "Most tested cards show first-ever use with matching disposable email patterns",
+    "Valid cards immediately pivot to high-value luxury or travel merchant purchases",
+    "Email rotates across throwaway providers as attacker tests each stolen card",
+    "Purchase amounts split cleanly between validation probes and actual fraud hits",
+    "Billing address stays identical across different cardholders revealing centralized operation"
+  ]
+}

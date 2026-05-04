@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_001",
+  "title": "Post-Delivery Dispute Pattern with Carrier Confirmation Mismatch",
+  "pattern": "friendly_fraud",
+  "narrative": "Cardholder initiates chargeback 45-75 days post-purchase claiming non-receipt despite carrier delivery confirmation to registered address. Pattern emerges with digital goods or high-value electronics ($300-$1,200 range) where merchant lacks signature requirement. Fraudster exploits maximum dispute window, filing exactly 2-3 days before 75-day threshold. TransactionAmt typically $450-$850 for apparel/electronics (ProductCD=W or C). Delivery address (addr1) matches billing in 98% of cases. Customer account age 180-365 daysâ€”old enough to appear legitimate but young enough to abandon post-dispute. P_emaildomain often generic (gmail.com, yahoo.com) with account creation within 6 months of purchase. No prior disputes on card1, establishing clean history before strike.",
+  "indicators": [
+    "Chargeback filed 72-75 days post-transaction, maximizing dispute window exploitation",
+    "TransactionAmt between $450-$850 for ProductCD W (apparel) or C (electronics)",
+    "card1_txn_count_30day = 1-2, indicating infrequent usage pattern before dispute",
+    "dist1 (distance between billing/shipping) < 5km, addresses match perfectly",
+    "P_emaildomain from top-3 free providers with domain registration < 180 days prior",
+    "Delivery confirmation timestamp exists but merchant lacks adult signature requirement",
+    "Customer account age 180-365 days at transaction time with zero prior dispute history"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Customer files a chargeback 72-75 days after purchase claiming non-delivery, despite carrier confirmation showing delivery to their registered address. The transaction amount falls in the $450-$850 range for electronics or apparel, the account is 6-12 months old with no dispute history, and billing matches shipping address exactly.",
+  "reasoning": "The fraudster deliberately waits until just before the dispute deadline to exploit the merchant's lack of signature requirement, betting they can claim non-receipt even with delivery confirmation. The clean account history and precise timing reveal calculated abuse rather than genuine customer confusion about a missing package.",
+  "indicator_explanations": [
+    "Dispute filed at maximum allowable window suggesting deliberate timing strategy",
+    "Purchase amount hits sweet spot where disputes are worth effort but avoid scrutiny",
+    "Cardholder rarely uses this card making the transaction pattern look isolated",
+    "Billing and shipping addresses are virtually identical eliminating mismatch defense",
+    "Email uses throwaway provider created recently specifically for this purchase cycle",
+    "Package was delivered but no adult signature captured to prove receipt",
+    "Account matured just long enough to appear legitimate before filing first dispute"
+  ]
+}

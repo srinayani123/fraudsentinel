@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_001",
+  "title": "Micro-Authorization Validation Followed by Rapid High-Value Exploitation",
+  "pattern": "card_testing",
+  "narrative": "Fraudster validates a stolen card with a $1.00 authorization at a merchant, then within 15-45 minutes executes a $800-$2,500 purchase at the same MID before the cardholder notices or issuer flags the account. The initial test is often coded as a specific ProductCD (commonly 'W' for wallet/reload or 'S' for service) to mimic legitimate micro-transactions. The fraudster monitors for successful authorization before committing to the high-value fraud. This pattern exploits the lag between real-time authorization and fraud detection model updates, particularly at merchants with delayed batch settlement. The time compression distinguishes this from standard card testing: the goal is immediate monetization, not building a validated card list for resale.",
+  "indicators": [
+    "card1 has exactly 2 transactions at same MID within 45-minute window",
+    "First transaction $0.50-$2.00, second transaction $800+, TransactionAmt ratio exceeds 400:1",
+    "card1_txn_count_24hr equals 2 with no prior history in 90 days",
+    "Both transactions share identical addr1 and dist1=0.0 (billing/shipping match)",
+    "Second transaction card1_amt_zscore > 3.5 relative to merchant's 30-day average",
+    "Time delta between transactions 900-2700 seconds (15-45 minutes)",
+    "ProductCD changes between transactions (e.g., 'S' then 'C' or 'W' then 'H')"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A stolen card shows exactly two transactions at the same merchant within 45 minutes: first a tiny test charge under $2, then immediately a purchase over $800 with identical billing details. The second transaction is 400+ times larger than the first, and the card has no other activity in the past 90 days.",
+  "reasoning": "The fraudster is checking if the stolen card works with a micro-charge that won't alert the cardholder, then racing to extract maximum value before the victim or bank catches on. The tight timing and extreme amount jump reveal someone exploiting a brief window before fraud systems update, not a legitimate customer making two normal purchases.",
+  "indicator_explanations": [
+    "Card hits the same merchant exactly twice in under an hour",
+    "Tiny test charge followed by massive purchase with extreme amount jump",
+    "Brand new card activity with only these two transactions on record",
+    "Billing and shipping addresses match perfectly on both attempts",
+    "Second purchase amount is far above what this merchant normally sees",
+    "Exploitation charge fires within 15-45 minutes of validation test",
+    "Product type switches between the test and the real fraudulent purchase"
+  ]
+}

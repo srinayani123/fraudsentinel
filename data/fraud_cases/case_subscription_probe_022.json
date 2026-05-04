@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_022",
+  "title": "$0.99 Subscription Validator Probing High-Value Card Portfolio",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster creates 15-30 shell subscription services (fake SaaS, streaming, VPN offerings) to test validity of stolen card database. Each compromised card receives exactly one $0.99 or $1.99 'trial subscription' charge within 72-hour window, cycling through different merchant names with sequential MIDs. Transactions uniformly show ProductCD='S' (subscription), identical R_emaildomain (fraudster's catchall domain like tempmail.ru), but varying P_emaildomain matching cardholder records to avoid immediate email mismatch flags. Key signature: cards showing single micro-subscription followed 4-7 days later by high-dollar CNP transactions at unrelated merchants once validation confirmed. addr1 clusters to 3-5 proxy server locations despite cards from 40+ different BINs. All test charges occur during 02:00-06:00 UTC (is_night=1) when card monitoring systems least active and cardholders asleep in US timezones.",
+  "indicators": [
+    "TransactionAmt exactly $0.99 or $1.99 with ProductCD='S' subscription category",
+    "card1_txn_count_1day = 1 but card appears in batch of 15-30 cards hitting same MID within 72 hours",
+    "R_emaildomain identical across all test transactions (e.g., tempmail.ru, guerrillamail.com) while P_emaildomain varies",
+    "dist1 (distance between billing/shipping) shows extreme values >5000km or null (CNP with no shipping)",
+    "txn_hour concentrated 02:00-06:00 UTC with is_night=1 flag across entire card batch",
+    "addr1 clusters to 3-5 unique values despite 40+ distinct card1/BIN combinations",
+    "Same cards show TransactionAmt spike to $400-$2500 range 4-7 days post-validation at different merchants"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A batch of 15-30 stolen cards each receives exactly one $0.99-$1.99 subscription charge within 72 hours, all sharing the same disposable email domain and clustering to 3-5 proxy addresses despite coming from 40+ different card issuers. These test charges occur overnight (2-6 AM UTC), followed 4-7 days later by high-dollar purchases on the validated cards.",
+  "reasoning": "Fraudsters are testing which stolen cards are still active before committing larger fraud, using tiny subscription charges that cardholders often miss and timing them when monitoring systems are less active. The shared email domain and clustered IP addresses reveal centralized control, while the subsequent high-dollar transactions show the validated cards being monetized once confirmed working.",
+  "indicator_explanations": [
+    "Tiny subscription charges probe whether cards are live and unmonitored",
+    "Card appears isolated but is part of coordinated batch testing pattern",
+    "All probes share identical throwaway email domain despite different billing emails",
+    "Billing and shipping locations are impossibly far apart or shipping is absent",
+    "Entire card batch tests during graveyard hours when fraud teams sleep",
+    "Dozens of different cards funnel through only a handful of billing addresses",
+    "Same cards return days later for high-dollar purchases after validation succeeded"
+  ]
+}

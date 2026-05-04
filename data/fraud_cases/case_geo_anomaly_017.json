@@ -1,0 +1,27 @@
+{
+  "id": "case_geo_anomaly_017",
+  "title": "Ghost Travel Card: Geo-Hopping Without Transportation Anchors",
+  "pattern": "geo_anomaly",
+  "narrative": "A compromised card shows rapid geographic movement across countries (Brazilâ†’UAEâ†’Singapore within 72 hours) without corresponding airline, hotel, or car rental transactions that would support legitimate travel. Pattern emerges with card1_txn_count_24h spiking from baseline 0.2 to 8+ transactions, all ProductCD='C' (card-not-present). Transactions cluster at gas stations (MCC 5541), convenience stores (MCC 5499), and digital goods retailers in each location with amounts $47-$189, always avoiding travel MCCs (3000-3999, 4000-4799, 7000-7999). Dist1 values show 8000+ mile jumps between successive transactions occurring 6-14 hours apart. Email domain remains static (P_emaildomain='gmail.com') while addr1 cycles through three distinct countries. No AVS/CVV mismatch initially, suggesting complete card data compromise. Fraudster tests card domestically first, then executes international purchases once validation succeeds, avoiding merchant categories that would create contradictory travel documentation.",
+  "indicators": [
+    "dist1 >8000 miles between transactions occurring <18 hours apart, minimum 2 continental jumps in 72-hour window",
+    "Zero transactions in travel MCCs (3000-3999 airlines, 4000-4799 hotels, 7011-7033 lodging) during geographic movement period",
+    "card1_txn_count_72h increases 15x+ from 30-day baseline, all ProductCD='C' card-not-present",
+    "addr1 country code changes 3+ times while P_emaildomain and R_emaildomain remain constant",
+    "Transaction amounts $40-$200 at non-travel MCCs (5541 gas, 5499 convenience, 5732 electronics) in each geography",
+    "txn_hour distribution shows purchases during local business hours (08:00-22:00) in each timezone despite impossible travel time",
+    "First international transaction occurs 4-12 hours after successful domestic test transaction at same MCC category"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Card shows purchases across multiple countries within 72 hours (Brazil→UAE→Singapore) with no airline, hotel, or rental car transactions to explain the travel. Transactions cluster at gas stations, convenience stores, and electronics retailers in amounts of $40-$200, always during local business hours in each timezone.",
+  "reasoning": "Fraudsters using stolen card details execute purchases in geographically distant locations without leaving evidence of legitimate travel expenses. The impossibility of physical travel between locations, combined with avoidance of travel-related merchants, reveals the card is being used by multiple criminals or through international networks rather than by the actual cardholder.",
+  "indicator_explanations": [
+    "Card teleports across continents within hours with no physical travel time",
+    "No airline, hotel, or lodging charges despite massive geographic movements",
+    "Card activity explodes to fifteen times normal with all online transactions",
+    "Shipping country jumps repeatedly while email addresses stay suspiciously unchanged",
+    "Small everyday purchases at gas stations and stores in each country",
+    "Purchases happen during waking hours locally in each timezone simultaneously",
+    "International fraud kicks off hours after domestic test proves card works"
+  ]
+}

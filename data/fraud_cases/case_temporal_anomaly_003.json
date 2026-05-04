@@ -1,0 +1,27 @@
+{
+  "id": "case_temporal_anomaly_003",
+  "title": "Dormant Weekend Activation: Strictly Business Card Breached on Saturday",
+  "pattern": "temporal_anomaly",
+  "narrative": "A corporate purchasing card with 47 historical transactions exclusively Monday-Friday 8am-6pm suddenly executes 8 transactions totaling $3,847 on Saturday between 2am-4am. The card's 6-month pattern shows zero weekend activity and consistent MCC codes (5944-jewelry, 5712-furniture stores never appeared before). Attacker tests with $1.50 digital good at 2:14am, then escalates to $847, $615, $892 purchases at electronics/luxury MCCs within 90 minutes. Shipping address changes from established corporate addr1 (98052-Redmond) to residential 33127-Miami with dist1=2,847 miles. Email domain switches from corporate @company.com to free P_emaildomain @protonmail.ch. The card1_txn_count_weekend feature jumps from 0.0 to 8.0 while card1_amt_zscore reaches 4.2 standard deviations above historical mean. CVV provided correctly suggests mag-stripe compromise rather than CNP database leak.",
+  "indicators": [
+    "card1_txn_count_weekend transitions from 0 in 180-day lookback to 8 transactions in single 2-hour window",
+    "All 8 transactions occur txn_hour between 2-4am when card's historical mean_txn_hour=12.3 (noon)",
+    "MCC codes shift from consistent business categories (5111-stationery, 5943-office supplies) to 5732-electronics and 5944-jewelry never seen before",
+    "addr1 ZIP changes from 6-month stable 98052 to new 33127 with dist1=2,847 miles from card's established location",
+    "P_emaildomain switches from corporate domain (100% of history) to @protonmail.ch on first weekend transaction",
+    "card1_amt_zscore=4.2 with TransactionAmt values ($847, $892, $615) vs historical max=$340",
+    "Transaction sequence shows classic test-then-escalate: $1.50 digital ProductCD at 2:14am, then 7 physical goods averaging $549 within 90 minutes"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A business card with 47 prior Monday-Friday daytime purchases suddenly executes 8 transactions on Saturday between 2am-4am, targeting electronics and jewelry at amounts 4.2 standard deviations above normal, with shipping switched from the corporate office to a Miami residential address 2,847 miles away.",
+  "reasoning": "Criminals who compromised the card are racing to extract maximum value during the weekend when corporate cardholders and fraud monitoring are less active, using the early morning hours and a distant residential drop address to complete high-value purchases before the breach is discovered on Monday.",
+  "indicator_explanations": [
+    "Business card suddenly springs to life on weekend after six months of weekday-only usage",
+    "Purchases cluster between 2-4am when cardholder normally shops at midday",
+    "Card pivots from office supplies to electronics and jewelry with no prior pattern",
+    "Billing address jumps nearly 3,000 miles from long-established location",
+    "Corporate email replaced by privacy-focused provider on the first weekend transaction",
+    "Purchase amounts dwarf the card's entire historical spending ceiling",
+    "Tiny test charge validates the card before seven large purchases in ninety minutes"
+  ]
+}

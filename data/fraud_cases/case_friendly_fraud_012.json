@@ -1,0 +1,27 @@
+{
+  "id": "case_friendly_fraud_012",
+  "title": "Teenage Dependent Card Usage Followed by Parental Dispute at Statement Date",
+  "pattern": "friendly_fraud",
+  "narrative": "Primary cardholder's dependent (typically aged 13-19) makes legitimate purchases using authorized card access, then parent disputes charges 28-35 days post-transaction upon receiving statement. Pattern shows 3-8 transactions at gaming/entertainment MCCs (5816, 5735, 7994) ranging $15-89 each, concentrated during after-school hours (15:00-22:00 weekdays). Purchases show consistent device_id and IP geolocation within 5-mile radius of card1_addr1. Chargeback filed as \"unauthorized\" despite matching historical transaction patterns for card_addr_dist1 and P_emaildomain continuity. Critical tell: disputes occur in clusters 1-3 days after statement cycle closes, never immediately after transactions post. ProductCD shows digital goods (C, H) with instant delivery confirmations but parent claims no knowledge despite email receipts to registered P_emaildomain.",
+  "indicators": [
+    "3-8 transactions at entertainment/gaming MCCs (5816, 5735, 7994) within 14-day window, amounts $15-89",
+    "Consistent device_id and IP addr1 matching cardholder's historical 5-mile radius pattern",
+    "Transaction timestamps 82% occurring 15:00-22:00 on weekdays only",
+    "Dispute filed 28-35 days post-transaction, 1-3 days after statement cycle date",
+    "P_emaildomain matches cardholder's registered email receiving all delivery confirmations",
+    "card1_txn_count_7d shows 0.3-0.9 z-score deviation, not anomalous velocity",
+    "Zero AVS/CVV mismatches, all transactions authenticated successfully"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A dependent uses an authorized card for 3-8 small gaming or entertainment purchases ($15-89) during after-school hours from the family's home location, then the parent disputes all charges as unauthorized exactly when the statement arrives 28-35 days later, despite email confirmations going to the registered account and no unusual transaction velocity.",
+  "reasoning": "The parent allowed their teen to use the card but refuses to pay after seeing the total on the statement, falsely claiming the charges were unauthorized to avoid the bill even though the purchases match normal family device/location patterns and the parent received all confirmation emails.",
+  "indicator_explanations": [
+    "Multiple purchases at gaming and entertainment merchants in two-week span",
+    "Same device and location used, matching cardholder's normal activity zone",
+    "Purchases happen during after-school hours on school nights only",
+    "Dispute timing perfectly aligns with statement arrival, not fraud discovery",
+    "Confirmation emails went to cardholder's own registered inbox, not fraudster",
+    "Purchase frequency is slightly elevated but within cardholder's normal range",
+    "All security checks passed, indicating authorized cardholder credential use"
+  ]
+}

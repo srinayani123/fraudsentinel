@@ -1,0 +1,27 @@
+{
+  "id": "case_card_testing_011",
+  "title": "Digital Goods Micro-Validator: Sub-Dollar Steam/Gaming Card Verification",
+  "pattern": "card_testing",
+  "narrative": "Fraudster tests a batch of stolen cards using $0.99-$1.99 charges at digital goods merchants (ProductCD='W' for digital downloads, frequently Steam, Xbox, PlayStation store MCCs 5815-5816). Unlike broader card testing, attacker specifically targets merchants with instant authorization and no AVS enforcement. Pattern shows single transaction per card with no follow-up purchases, distinguishing it from legitimate gamers. Cards typically show card1_txn_count_1d=1, zero prior history at this merchant. Email domains rotate between disposable services (P_emaildomain in ['gmx.de','mailinator.com','guerrillamail.com']). TransactionAmt clusters tightly at $0.99 or $1.49, never varied. Transactions occur in rapid succession (5-12 cards in 15-minute window) from single device fingerprint (DeviceInfo hash constant). Geographic mismatch common: dist1 >2000km between card billing (addr1) and IP location. Successful tests precede high-value fraud at different merchants within 2-6 hours.",
+  "indicators": [
+    "TransactionAmt fixed at $0.99 or $1.49 across multiple cards, ProductCD='W', MCC 5815-5816",
+    "card1_txn_count_1d=1 and card1_txn_count_7d=1 for all tested cards (no purchase history)",
+    "5-12 distinct card1 values sharing identical DeviceInfo within 15-minute window",
+    "P_emaildomain from disposable provider list (mailinator, guerrillamail, gmx.de, tempmail)",
+    "dist1 >2000km indicating card billing address far from transaction IP geolocation",
+    "No follow-up transactions at same merchant within 48 hours despite successful authorization",
+    "card1_amt_zscore >3.5 when compared to merchant's typical transaction distribution"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Multiple different cards make identical small purchases ($0.99-$1.49) for digital goods from the same device within minutes, each card used only once with no purchase history. The billing addresses are thousands of kilometers from the transaction location, and emails come from disposable services.",
+  "reasoning": "Criminals test stolen card numbers with tiny charges at merchants that authorize instantly and don't verify addresses, confirming which cards are active before using them for larger fraud elsewhere within hours.",
+  "indicator_explanations": [
+    "Attacker probes cards with identical tiny amounts at digital goods merchants",
+    "Cards show zero transaction history before this validation attempt",
+    "Multiple different cards funnel through the same device in minutes",
+    "Email addresses come from temporary throwaway services not real accounts",
+    "Card's home location is impossibly far from the purchase IP address",
+    "Successful authorization isn't followed by actual customer purchase behavior",
+    "Tiny test amount is abnormal compared to merchant's typical order sizes"
+  ]
+}

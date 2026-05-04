@@ -1,0 +1,23 @@
+{
+  "id": "case_engineered_anomaly_007",
+  "title": "Merchant-Category-BIN Pattern Encoded in Vesta V-Field Composite Indicators",
+  "pattern": "engineered_anomaly",
+  "narrative": "Transactions appear completely normal across all visible behavioral dimensions: amounts align with cardholder history, velocity is typical, timing is routine, device appears legitimate, and email/address details match expected patterns. However, Vesta engineered features V280, V307, and V320 simultaneously elevate, indicating the model has detected a known-fraudulent combination of merchant category code, BIN range, and transaction-context attributes that historically correlate with compromised card testing at specific merchant types. This pattern exploits merchants with weak fraud controls in categories where the BIN-MCC pairing is statistically anomalous. The V-fields encode merchant risk scoring, category-velocity interactions, and BIN-level authorization patterns that suggest the card is being tested at a merchant deliberately selected for low friction. Analysts cannot directly observe this without model feature importance breakdowns, as raw MCC and card BIN appear individually legitimate.",
+  "indicators": [
+    "V280 > 0.65 (p85), Vesta merchant-risk composite feature significantly elevated",
+    "V307 = 1 indicating binary flag for merchant-category-BIN anomaly pattern",
+    "V320 > 140 (p80), engineered feature capturing merchant-sequence context scoring",
+    "card1_C1 < 15 (below median), card counter shows normal historical usage",
+    "TransactionAmt_card1_zscore between -0.8 and +1.2, amount within cardholder baseline range"
+  ],
+  "indicator_explanations": [
+    "Merchant risk scoring feature shows this merchant-transaction context combination is high-risk",
+    "Binary indicator flags that this merchant category and card BIN pairing matches known fraud patterns",
+    "Engineered feature detects unusual merchant selection relative to cardholder transaction history",
+    "Card has normal usage history with no signs of velocity abuse",
+    "Transaction amount fits the cardholder's typical spending pattern without escalation"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "All observable transaction attributes appear legitimate, but Vesta engineered features flag a statistically anomalous merchant-category-BIN combination that matches known card-testing patterns at merchants with weak controls.",
+  "reasoning": "Fraudsters deliberately select merchants in specific categories where their stolen BIN ranges face minimal friction. The V-field composite encoding captures this merchant-risk pattern that individual raw features cannot reveal, representing learned fraud-operations knowledge embedded in the model."
+}

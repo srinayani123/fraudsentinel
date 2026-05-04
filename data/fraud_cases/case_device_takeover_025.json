@@ -1,0 +1,27 @@
+{
+  "id": "case_device_takeover_025",
+  "title": "Mid-Session Device Fingerprint Swap Following Legitimate Authentication",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster compromises credentials and initiates a session from a device matching the cardholder's known fingerprint, likely through session hijacking or cookie theft. After successful authentication, the device fingerprint changes mid-transaction sequence—indicating the attacker has switched to their own hardware while maintaining the authenticated session token. Behavioral signals remain pristine: amounts match spending patterns, velocity stays normal, transactions occur during regular hours, and email addresses align. The fraud surface manifests exclusively in device telemetry. D1 resets to zero mid-sequence despite continuing session activity, while D4 and D10 show abrupt discontinuities inconsistent with legitimate device evolution. D15 spikes dramatically as the new device fingerprint enters the ecosystem for the first time with this card. The fraudster exploits the trust established by the legitimate login while operating from compromised infrastructure that generates distinct device signatures.",
+  "indicators": [
+    "D1 = 0 indicating first-time pairing of current device fingerprint with this card despite active session",
+    "D4 < 10 showing minimal time elapsed since this device-browser combination first appeared in the network",
+    "D10 = 0 confirming zero prior transactions between this specific device fingerprint and card number",
+    "D15 > 300 (above p90 threshold of 346.30), device identity counter far exceeds typical first-transaction baseline",
+    "card1_amt_zscore between -1.0 and +1.0 keeping transaction amount within cardholder's normal spending envelope",
+    "D4/D10 ratio undefined or extreme indicating device age exists but no card-device transaction history",
+    "Sequential D1 values showing discontinuity: previous transaction D1 > 50, current transaction D1 = 0"
+  ],
+  "indicator_explanations": [
+    "Device appears completely new to this card despite transaction occurring within an authenticated session",
+    "The device-browser fingerprint itself is recently created with minimal network history",
+    "Zero historical transactions exist between this exact device signature and the card being used",
+    "Device identity metrics suggest synthetic or recently spoofed fingerprint rather than organic device evolution",
+    "Transaction amount fits perfectly within the cardholder's established spending pattern masking the device anomaly",
+    "Device has network presence but absolutely no relationship with this specific card suggesting sudden takeover",
+    "Device fingerprint changed abruptly between consecutive transactions indicating mid-session hardware swap"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Fraudster hijacks authenticated session and switches to their own device mid-sequence, causing device fingerprint to reset while behavioral signals remain completely normal. The legitimate login provides cover while device telemetry exposes the hardware substitution.",
+  "reasoning": "Legitimate cardholders do not experience complete device fingerprint resets mid-session—device identifiers evolve gradually or remain stable. Abrupt D1 reset to zero with simultaneous D15 spike while maintaining clean behavioral patterns indicates session token theft followed by device substitution, a signature of credential-compromise attacks where authentication is valid but execution hardware is fraudulent."
+}

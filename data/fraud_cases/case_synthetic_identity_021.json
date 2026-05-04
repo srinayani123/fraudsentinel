@@ -1,0 +1,27 @@
+{
+  "id": "case_synthetic_identity_021",
+  "title": "Synthetic Identity Bust-Out After 90-Day Aging Period",
+  "pattern": "synthetic_identity",
+  "narrative": "A synthetic identity is cultivated through a deliberate aging strategy, maintaining minimal activity for 90-180 days before executing a coordinated bust-out. The account establishes legitimacy with 8-15 small transactions ($12-$45) at grocery stores and gas stations (MCC 5411, 5541) during months 1-3, maintaining card1_txn_count_7day below 3. Between day 85-95, velocity increases sharply: card1_txn_count_24hour jumps from baseline 0-1 to 6-9 transactions. The bust-out window spans 18-36 hours with purchases concentrated in high-resale categories (electronics MCC 5732, jewelry MCC 5944) averaging $850-$1,200 per transaction. Total exposure reaches $8,000-$15,000 before the account stops responding. P_emaildomain often uses free providers (gmail.com, yahoo.com) with recent registration dates. The addr1 field shows high-density apartment complexes or mail-forwarding services. TransactionAmt z-scores (card1_amt_zscore) spike from -0.3 baseline to +3.5 during bust-out phase.",
+  "indicators": [
+    "card1_txn_count_7day baseline 0-2 for 85+ days, then spikes to 8-12 in final 48 hours",
+    "card1_amt_zscore jumps from -0.5 to 0.2 range to +3.0 or higher during bust-out window",
+    "Initial 8-15 transactions all under $50, then 6-9 transactions at $800-$1,500 in 18-36 hour window",
+    "P_emaildomain registration date within 30 days of first transaction (fresh synthetic identity)",
+    "Bust-out transactions concentrated in MCC 5732 (electronics) and 5944 (jewelry) with 80%+ of final transaction volume",
+    "addr1 associated with 15+ other card accounts in historical data (mail drop or synthetic hub)",
+    "Total account exposure increases 400-800% in final 36 hours compared to previous 90-day average"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "Account shows 90+ days of small, legitimate-looking purchases under $50 at grocery stores and gas stations, then suddenly executes 6-9 high-value transactions ($800-$1,500 each) at electronics and jewelry stores within 18-36 hours. Transaction velocity jumps from 0-2 per week to 8-12 in two days, with total spending spiking 400-800% above the 3-month average.",
+  "reasoning": "Fraudsters build synthetic identities using fake or stolen personal information, then deliberately establish payment history to appear legitimate before maxing out all available credit with no intention of repayment. The aging period creates a credible transaction history that bypasses automated fraud controls, while the sudden shift to high-resale items indicates planned liquidation of stolen funds.",
+  "indicator_explanations": [
+    "Card sits nearly dormant for three months then explodes with activity",
+    "Spending amount suddenly jumps to extreme levels after lengthy quiet period",
+    "Small test purchases build trust before sudden high-dollar transaction cluster",
+    "Email was created right before the first purchase suggesting fabricated identity",
+    "Final spree targets high-resale categories like electronics and jewelry exclusively",
+    "Address is shared across dozens of cards indicating fraud mill operations",
+    "Account debt load balloons sixfold in final days before abandonment"
+  ]
+}

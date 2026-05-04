@@ -1,0 +1,25 @@
+{
+  "id": "case_device_takeover_002",
+  "title": "Credential Theft with Novel Browser-OS Configuration Mismatch",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster has obtained valid card credentials and cardholder email through phishing or database breach, but accesses the account from their own device using a browser-OS combination never previously associated with this card. The transaction amount, timing, and velocity appear completely normal—matching the cardholder's established spending habits. However, device fingerprinting reveals a first-time pairing between the card and this specific browser-OS configuration (D10=0), while other device dimensions show the fraudster's hardware has moderate prior usage with different payment instruments. The email match provides false legitimacy while the underlying device profile exposes the takeover. This pattern exploits merchant trust in behavioral consistency while the device layer reveals the compromise.",
+  "indicators": [
+    "D10 = 0 indicating first-time browser-OS combination seen with this card",
+    "D4 between 50 and 150 (p75-p90 range) showing device has moderate transaction history",
+    "card1_amt_zscore between -1.0 and +1.0 indicating amount fits cardholder baseline",
+    "D1 = 0 confirming zero prior transactions from this device-card pairing",
+    "TransactionAmt between 60 and 180 (p25-p75 corridor) appearing as routine purchase",
+    "C1 > 45 (approaching p90) showing elevated card-level counter relative to device newness"
+  ],
+  "indicator_explanations": [
+    "The browser and operating system combination has never been used with this card before",
+    "The device itself shows moderate usage history suggesting it belongs to an active fraudster",
+    "Purchase amount falls within the cardholder's typical spending pattern masking the fraud",
+    "This specific device has never successfully transacted with this payment card previously",
+    "Transaction amount appears routine and unremarkable for this cardholder's purchase behavior",
+    "Card activity counter is elevated while device history is minimal indicating credential theft"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "Valid credentials used from fraudster's own device with never-before-seen browser-OS pairing. Behavioral signals appear completely normal while device fingerprinting exposes the account takeover.",
+  "reasoning": "Legitimate cardholders rarely introduce entirely new browser-OS configurations without corresponding device history. The combination of zero device-card history, elevated card counters, and normal behavioral patterns indicates stolen credentials accessed from compromise infrastructure rather than organic cardholder behavior evolution."
+}

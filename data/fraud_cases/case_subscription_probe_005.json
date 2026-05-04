@@ -1,0 +1,27 @@
+{
+  "id": "case_subscription_probe_005",
+  "title": "Adult Content Subscription Validator with Delayed Commercial Exploitation",
+  "pattern": "subscription_probe",
+  "narrative": "Fraudster validates stolen cards through recurring adult entertainment subscriptions ($29.95-$39.95) on low-friction merchant accounts that rarely trigger issuer alerts or cardholder scrutiny. Pattern exhibits 3-7 day dormancy between initial subscription authorization and subsequent high-value fraud elsewhere. Adult content MCCs (5967, 7841) combined with privacy-conscious cardholder behavior creates detection gap. Fraudster uses these validators to identify cards with high available credit and minimal monitoring before executing larger purchases ($800-$2400) at electronics or luxury goods merchants. Subscription auto-renewals often continue uncontested for 2-3 billing cycles, providing ongoing card validity confirmation. Email domains show burner patterns (temp-mail.org, guerrillamail.com) while billing addresses frequently mismatch cardholder's issuer region by 500+ miles.",
+  "indicators": [
+    "Initial TransactionAmt exactly $29.95 or $39.95 at MCC 5967/7841",
+    "card1_txn_count_24h = 1 for subscription, then 0 activity for 72-168 hours",
+    "Subsequent transaction card1_amt_zscore > 4.5 at different MCC within 7 days",
+    "P_emaildomain in ['temp-mail.org', 'guerrillamail.com', '10minutemail.com', 'mailinator.com']",
+    "dist1 (card-address distance) > 500 miles for subscription transaction",
+    "ProductCD = 'C' (subscription) followed by ProductCD = 'W' (high-value goods)",
+    "txn_hour between 23-04 for initial subscription, normal hours for exploitation"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A card makes a single adult content subscription charge ($29.95-$39.95) using a disposable email and distant billing address, goes quiet for 3-7 days, then suddenly shows a high-value purchase at an electronics or luxury retailer with a dramatically different transaction amount.",
+  "reasoning": "Criminals use adult subscriptions as low-scrutiny validators because cardholders rarely dispute them due to embarrassment, allowing fraudsters to confirm the card works and has high credit before making expensive fraudulent purchases elsewhere while the victim remains unaware.",
+  "indicator_explanations": [
+    "Opening transaction matches standard adult subscription price points at content merchant codes",
+    "Card sits completely dormant for days after initial subscription charge",
+    "Follow-up purchase amount is drastically higher than the card's typical spending",
+    "Subscription used a disposable email address likely discarded after validation",
+    "Billing address is hundreds of miles away from subscription merchant location",
+    "Pattern shifts from digital subscription to physical goods fulfillment",
+    "Initial charge happens during late-night hours when cardholder likely asleep"
+  ]
+}

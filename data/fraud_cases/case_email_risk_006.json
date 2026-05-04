@@ -1,0 +1,27 @@
+{
+  "id": "case_email_risk_006",
+  "title": "Burner Email Account with Rapid-Fire High-Value Card Testing Sequence",
+  "pattern": "email_risk",
+  "narrative": "Fraudster creates disposable Gmail or Yahoo account with no phone recovery or secondary email, then immediately burns through multiple stolen card numbers in rapid succession. Account shows no prior transaction history. Pattern emerges when single P_emaildomain handles 8-12 transactions across 4+ distinct card1 values within 90 minutes, all to high-risk MCCs (5816 digital games, 5399 misc retail). Transaction amounts cluster $47-$89, avoiding round numbers. card1_txn_count_1day shows 0 for each new card. P_emaildomain_txn_count spikes from 0 to double digits same day. All transactions show addr1 mismatch with card billing, dist1 exceeds 500km. CVV match rate 100% but AVS shows no match, suggesting full card data but wrong address. Email domain age under 48 hours when cross-referenced. No R_emaildomain populated (digital delivery). This differentiates from account takeover by absence of any legitimate transaction history.",
+  "indicators": [
+    "P_emaildomain handles 8-12 transactions within 90 minutes, all from newly created webmail account",
+    "4+ distinct card1 values used, each showing card1_txn_count_1day = 0",
+    "Transaction amounts $47-$89 avoiding round figures, all MCC 5816 or 5399",
+    "CVV match 100% but AVS no-match on all transactions",
+    "dist1 exceeds 500km on every transaction, addr1 mismatches card billing",
+    "P_emaildomain_txn_count increases from 0 to 10+ same calendar day",
+    "No R_emaildomain present across all transactions (digital fulfillment only)"
+  ],
+  "source": "llm_v2_curated",
+  "summary": "A brand-new email account processes 8-12 transactions in 90 minutes using 4+ different card numbers that have never been seen before, with transaction amounts between $47-$89 at digital goods merchants. Every card has perfect CVV matches but fails address verification, and shipping distances exceed 500km.",
+  "reasoning": "The fraudster is testing a batch of stolen card data through a throwaway email to see which cards are still active before the banks catch on. The tight timeframe, multiple virgin cards, digital-only purchases, and perfect CVV with wrong addresses prove this isn't a real customer — it's someone racing to extract value from compromised payment credentials.",
+  "indicator_explanations": [
+    "Email address blasts through a surge of purchases in a tight timeframe",
+    "Multiple fresh cards appear, none with any transaction history before this burst",
+    "Amounts hover just under thresholds with odd cents to evade monitoring",
+    "Card security codes pass but billing addresses fail on every single transaction",
+    "Every purchase originates from a location nowhere near the cardholder's registered address",
+    "Email goes from zero transactions to double digits within a single day",
+    "All orders route to digital delivery with no recipient email domains logged"
+  ]
+}

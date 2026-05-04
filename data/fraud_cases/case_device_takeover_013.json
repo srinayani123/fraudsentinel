@@ -1,0 +1,27 @@
+{
+  "id": "case_device_takeover_013",
+  "title": "Clean-Behavior Device Takeover with Fresh Device-Card Pairing and Short Session Duration",
+  "pattern": "device_takeover",
+  "narrative": "Fraudster uses stolen card credentials from a device never previously associated with the legitimate cardholder. The transaction appears behaviorally normal with typical amounts, daytime activity, and matched email addresses to avoid triggering velocity or pattern-break alerts. However, the device-card relationship is completely new (D1=0) and the device session duration is unusually brief (D10 near zero), indicating a quick hit-and-run approach. The fraudster completes the transaction rapidly without the browsing or consideration time typical of legitimate cardholders making purchases of this amount. Additional device temporal features show limited historical depth (D4 low) while device aggregation counters (D15 low) confirm minimal prior activity from this hardware fingerprint. This pattern exploits credential theft while maintaining behavioral camouflage, relying on the legitimacy of stolen account details to mask the underlying device substitution fraud.",
+  "indicators": [
+    "D1 = 0 indicating zero prior transactions between this device fingerprint and card",
+    "D10 < 5 (well below p75 of 16.75), extremely short device session duration",
+    "D4 < 10 (well below p75 of 77), minimal time elapsed since device first seen",
+    "D15 < 20 (well below p75 of 83.25), low device-level transaction counter",
+    "card1_amt_zscore between -1.0 and +1.0, transaction amount within cardholder normal range",
+    "TransactionAmt between 75 and 200, mid-range amount avoiding scrutiny thresholds",
+    "C1 < 30 (below typical cardholder activity baseline), suppressed card counter despite new device"
+  ],
+  "indicator_explanations": [
+    "The device has never been used with this card in any previous transaction",
+    "Session lasted only seconds suggesting rushed checkout without normal browsing behavior",
+    "Device fingerprint was recently created or first observed in system history",
+    "Very few total transactions have originated from this device across all cards",
+    "Purchase amount matches the legitimate cardholder's typical spending pattern exactly",
+    "Dollar amount stays in the safe middle range where automated approvals are common",
+    "Card activity counter is low despite new device suggesting suppressed legitimate usage"
+  ],
+  "source": "llm_v3_new_archetypes",
+  "summary": "First-time device-card pairing with abnormally short session duration and minimal device history, while transaction amount and timing appear completely normal for the cardholder. The behavioral camouflage is perfect but device forensics reveal the substitution.",
+  "reasoning": "Legitimate cardholders using new devices typically exhibit normal session durations with browsing and consideration time. The combination of zero device-card history, rushed session completion, and shallow device temporal depth indicates credential theft where the fraudster operates quickly from unfamiliar hardware to minimize detection window while mimicking normal transaction characteristics."
+}
