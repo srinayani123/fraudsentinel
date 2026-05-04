@@ -252,11 +252,25 @@ def _evaluate_check(check: dict, txn_row: Any) -> dict:
     return {**check, "status": "unknown", "actual_value": None}
 
 
-def build_checklist(matched_pattern: dict, txn_row: Any) -> dict:
-    """Generate a structured investigation checklist for a transaction."""
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
+def build_checklist(
+    matched_pattern: dict,
+    txn_row: Any,
+    api_key: str | None = None,
+) -> dict:
+    """Generate a structured investigation checklist for a transaction.
+
+    Args:
+        matched_pattern: pattern dict from ChromaDB retrieval
+        txn_row: transaction row (pandas Series or dict)
+        api_key: Anthropic API key. If None, falls back to ANTHROPIC_API_KEY env var.
+                 Pass byok.get_api_key() from Streamlit context to support BYOK.
+    """
+    api_key = api_key or os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
-        return {"error": "ANTHROPIC_API_KEY not set", "checks": []}
+        return {
+            "error": "Anthropic API key required — paste it in Settings",
+            "checks": [],
+        }
 
     # Defensive: if indicators is a JSON string (legacy path), it'll still parse
     indicators_check = _coerce_to_list(matched_pattern.get("indicators"))

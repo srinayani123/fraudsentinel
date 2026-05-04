@@ -1040,8 +1040,9 @@ with tab_checklist:
             top_match = similar[0]
             with st.spinner(f"Building checklist from '{top_match.get('title', 'matched pattern')}'…"):
                 from src.agentic.pattern_coach import build_checklist
+                from src.dashboard import byok
                 t0 = _time.time()
-                coach_result = build_checklist(top_match, row)
+                coach_result = build_checklist(top_match, row, api_key=byok.get_api_key())
                 coach_duration_ms = (_time.time() - t0) * 1000
 
             if "error" in coach_result and not coach_result.get("checks"):
@@ -1240,9 +1241,10 @@ with tab_checklist:
             with st.spinner("Tailoring verification questions to this transaction…"):
                 try:
                     from src.agentic.shap_coach import enrich_checklist_with_llm
+                    from src.dashboard import byok
                     t0 = _time.time()
                     enriched_checks, enrich_meta = enrich_checklist_with_llm(
-                        shap_result.get("checks", []), xgb_attr, row.to_dict()
+                        shap_result.get("checks", []), xgb_attr, row.to_dict(), api_key=byok.get_api_key()
                     )
                     enrich_duration_ms = (_time.time() - t0) * 1000
 

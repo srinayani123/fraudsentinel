@@ -442,7 +442,9 @@ def enrich_checklist_with_llm(
     """
     api_key = api_key or os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
-        return rule_based_checklist, {"error": "No ANTHROPIC_API_KEY available"}
+        return rule_based_checklist, {
+            "error": "Anthropic API key required — paste it in Settings",
+        }
 
     enrichable = [
         c for c in rule_based_checklist
