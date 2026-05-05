@@ -75,3 +75,6 @@ data/cache/
 
 # Line endings — standardize on LF in git
 * text=auto eol=lf
+
+# Video recordings (use GitHub Issues upload trick to host)
+*.mp4
